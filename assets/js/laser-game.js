@@ -20,8 +20,6 @@ const elements = {
 let game = createGame();
 let previousTime = performance.now();
 let timerAccumulator = 0;
-let canvasTheme = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
-let themeBlend = null;
 
 const assets = {};
 for (const [name, source] of Object.entries({
@@ -33,41 +31,12 @@ for (const [name, source] of Object.entries({
   image.addEventListener('load', () => { assets[name] = image; render(traceLaser(game)); });
 }
 
-const THEME_PALETTES = {
-  dark: {
-    board: '#10191c', grid: '#2a393d', mirror: '#f2f5f3', selected: '#f1c654',
-    laser: '#00fff7', node: '#4baeff', firewall: '#ff676f', text: '#edf2ef', backgroundAlpha: 0.82
-  },
-  light: {
-    board: '#e7eeec', grid: '#c6d2d0', mirror: '#27363a', selected: '#b67c00',
-    laser: '#00fff7', node: '#087fd1', firewall: '#c74747', text: '#172126', backgroundAlpha: 0.62
-  }
+const GAME_PALETTE = {
+  board: '#10191c', grid: '#2a393d', mirror: '#f2f5f3', selected: '#f1c654',
+  laser: '#00fff7', node: '#4baeff', firewall: '#ff676f', text: '#edf2ef', backgroundAlpha: 0.82
 };
 
-function mixHex(from, to, progress) {
-  const channels = (value) => value.match(/[a-f\d]{2}/gi).map((channel) => parseInt(channel, 16));
-  const start = channels(from);
-  const end = channels(to);
-  return `rgb(${start.map((value, index) => Math.round(value + (end[index] - value) * progress)).join(' ')})`;
-}
-
-function palette(time = performance.now()) {
-  if (!themeBlend) return THEME_PALETTES[canvasTheme];
-  const progress = Math.min(1, (time - themeBlend.startedAt) / themeBlend.duration);
-  const eased = progress < 0.5 ? 2 * progress * progress : 1 - (-2 * progress + 2) ** 2 / 2;
-  if (progress >= 1) {
-    canvasTheme = themeBlend.theme;
-    themeBlend = null;
-    return THEME_PALETTES[canvasTheme];
-  }
-  const colors = {};
-  Object.keys(themeBlend.from).forEach((key) => {
-    colors[key] = typeof themeBlend.from[key] === 'number'
-      ? themeBlend.from[key] + (themeBlend.to[key] - themeBlend.from[key]) * eased
-      : mixHex(themeBlend.from[key], themeBlend.to[key], eased);
-  });
-  return colors;
-}
+function palette() { return GAME_PALETTE; }
 
 function drawBoardBackground(colors) {
   context.fillStyle = colors.board;
@@ -252,22 +221,6 @@ document.querySelectorAll('[data-game-command]').forEach((button) => button.addE
 document.querySelector('[data-game-reset]').addEventListener('click', reset);
 document.querySelector('[data-overlay-reset]').addEventListener('click', reset);
 elements.pause.addEventListener('click', () => { if (game.status === 'running') { game.paused = !game.paused; updateInterface(); } });
-window.addEventListener('site-theme-change', (event) => {
-  const theme = event.detail?.theme === 'dark' ? 'dark' : 'light';
-  if (event.detail?.animated && event.detail.duration > 0) {
-    themeBlend = {
-      from: palette(),
-      to: THEME_PALETTES[theme],
-      theme,
-      startedAt: performance.now(),
-      duration: event.detail.duration
-    };
-  } else {
-    canvasTheme = theme;
-    themeBlend = null;
-  }
-  render(traceLaser(game));
-});
 
 updateInterface();
 requestAnimationFrame(animate);

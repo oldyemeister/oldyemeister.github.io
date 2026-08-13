@@ -11,6 +11,12 @@ imu_sandbox_game: true
     <div>
       <p class="eyebrow">{{ imu.eyebrow }}</p>
       <h1>{{ imu.page_title }}</h1>
+      {% if imu.collaborator %}
+      <p class="collaborator-byline">
+        <span class="collaborator-icon" aria-hidden="true">+</span>
+        <span>{{ imu.collaborator.prefix }} <a href="{{ imu.collaborator.url }}" target="_blank" rel="noopener noreferrer">{{ imu.collaborator.name }}</a></span>
+      </p>
+      {% endif %}
     </div>
     <div>
       <p class="laser-description">{{ imu.description }}</p>

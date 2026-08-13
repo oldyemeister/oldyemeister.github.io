@@ -1,7 +1,7 @@
 site:
-  name: "[NAME PLACEHOLDER]"
-  title: "[NAME PLACEHOLDER] | [ROLE PLACEHOLDER]"
-  description: "[SITE DESCRIPTION PLACEHOLDER]"
+  name: "Jiawei (Jacky) Ye"
+  title: "Jiawei (Jacky) Ye | Computer Engineering Student & Hardware Engineer"
+  description: "Computer Engineering student at the University of Toronto building embedded systems, FPGA games, and AI-powered tools."
   language: "en"
   favicon: "/assets/images/laser-bluenode.png"
   share_image: "/assets/images/laser-preview.png"
@@ -17,70 +17,78 @@ navigation:
   imu_sandbox: "IMU Sandbox"
 
 hero:
-  eyebrow: "[INTRO LABEL PLACEHOLDER]"
-  name: "[NAME PLACEHOLDER]"
-  role: "[ROLE PLACEHOLDER]"
-  introduction: "[SHORT INTRODUCTION PLACEHOLDER: Describe what you make, study, or care about.]"
+  eyebrow: "Computer Engineering @ University of Toronto"
+  name: "Jiawei (Jacky) Ye"
+  role: "Hardware & Software Engineer"
+  introduction: "I build systems that span hardware and software — from FPGA games and RF circuit boards to AI-driven backends. Currently completing a Computer Engineering degree at the University of Toronto with a PEY co-op."
   portrait:
     path: "/assets/images/portrait-placeholder.svg"
-    alt: "[PORTRAIT ALT TEXT PLACEHOLDER]"
+    alt: "Portrait of Jiawei (Jacky) Ye"
   primary_link:
-    label: "[PRIMARY LINK LABEL]"
+    label: "Get in touch"
     url: "#contact"
 
 about:
   heading: "About"
   biography: |-
-    [BIO PLACEHOLDER]
+    I'm a Computer Engineering student at the University of Toronto (BASc + PEY Co-op, expected graduation April 2027), with a dual hardware-software background spanning embedded systems, RF/PCB design, and AI product engineering.
 
-    [SECOND BIO PARAGRAPH PLACEHOLDER]
+    My internship experience includes AI engineering work at Tencent Cloud and BesTV (Shanghai Media Group), building LLM-powered workflows, translation APIs, and speech processing pipelines. On the hardware side, I've designed RF downconversion PCBs in Altium, built FPGA games in Verilog and C on the DE1-SoC, and worked with STM32 embedded systems. I'm also a content creator on Bilibili, producing technical videos on Formula 1 engineering and motorsport technology for an audience of 10,000+ followers.
   skills_heading: "Skills and interests"
   skills:
-    - "[SKILL PLACEHOLDER 1]"
-    - "[SKILL PLACEHOLDER 2]"
-    - "[INTEREST PLACEHOLDER 1]"
-    - "[INTEREST PLACEHOLDER 2]"
+    - "Python, C/C++, Verilog"
+    - "PCB Design (Altium, LTSpice)"
+    - "FPGA Development (Quartus, ModelSim)"
+    - "AI/ML & LLM Workflows"
 
 projects_section:
   heading: "Selected projects"
-  introduction: "[PROJECTS SECTION INTRODUCTION PLACEHOLDER]"
+  introduction: "A mix of hardware and software projects — from FPGA games to embedded sensor sandboxes."
 
 projects:
   - title: "Laser Puzzle"
-    summary: "[LASER PUZZLE PROJECT DESCRIPTION PLACEHOLDER]"
+    summary: "An FPGA-based laser reflection puzzle game built for the DE1-SoC, featuring mirror rotation mechanics, timed objectives, and a VGA-rendered playfield. Recreated here as a browser-playable JavaScript/Canvas version."
     technologies:
       - "C"
       - "Assembly"
       - "RV32"
     image:
       path: "/assets/images/laser-preview.png"
-      alt: "[LASER PUZZLE IMAGE ALT TEXT PLACEHOLDER]"
+      alt: "Screenshot of the Laser Puzzle game"
     repository_url: "[LASER PUZZLE REPOSITORY URL PLACEHOLDER]"
     live_url: "/projects/laser/"
     live_label: "Play puzzle"
     featured: true
   - title: "Donkey Kong FPGA Game"
-    summary: "[DONKEY KONG FPGA PROJECT DESCRIPTION PLACEHOLDER]"
+    summary: "A hardware recreation of the classic Donkey Kong game on an FPGA, with full game logic, sprite rendering, and collision detection implemented directly in Verilog. Achieved smooth 60 FPS gameplay on the DE1-SoC through timing analysis and resource optimization."
+    collaborator:
+      prefix: "Built with"
+      name: "Nolan Young"
+      url: "https://www.linkedin.com/in/nolany/"
     technologies:
       - "Verilog"
       - "Quartus"
       - "DE1-SoC FPGA"
     image:
       path: "/assets/images/donkey-kong-preview.png"
-      alt: "[DONKEY KONG GAME IMAGE ALT TEXT PLACEHOLDER]"
+      alt: "Screenshot of the FPGA Donkey Kong game"
     repository_url: "[DONKEY KONG PROJECT REPOSITORY URL PLACEHOLDER]"
     live_url: "/projects/donkey-kong/"
     live_label: "Play game"
     featured: false
   - title: "IMU Sandbox"
-    summary: "[IMU SANDBOX PROJECT DESCRIPTION PLACEHOLDER]"
+    summary: "[IMU SANDBOX PROJECT DESCRIPTION PLACEHOLDER — resume doesn't detail this project yet; add specifics on the STM32 + BNO055 setup and what the sandbox demonstrates.]"
+    collaborator:
+      prefix: "Built with"
+      name: "Suzen Bao"
+      url: "https://www.linkedin.com/in/suzen-bao/"
     technologies:
       - "C"
       - "STM32"
       - "BNO055"
     image:
       path: "/assets/images/imu-sandbox-preview.png"
-      alt: "[IMU SANDBOX IMAGE ALT TEXT PLACEHOLDER]"
+      alt: "IMU Sandbox interactive OLED demo"
     repository_url: "[IMU SANDBOX REPOSITORY URL PLACEHOLDER]"
     live_url: "/projects/imu-sandbox/"
     live_label: "Explore OLED"
@@ -88,7 +96,7 @@ projects:
 
 writing_section:
   heading: "Writing"
-  introduction: "[WRITING SECTION INTRODUCTION PLACEHOLDER]"
+  introduction: "[WRITING SECTION INTRODUCTION PLACEHOLDER — no writing samples in your resume yet; consider removing this section from the nav/site until you have content, or fill in Bilibili video links here instead.]"
 
 writing:
   - title: "[WRITING 1 TITLE]"
@@ -104,25 +112,25 @@ writing:
 
 contact:
   heading: "Contact"
-  message: "[CONTACT MESSAGE PLACEHOLDER]"
+  message: "I'm open to internship and collaboration opportunities in hardware, embedded systems, and AI engineering. Feel free to reach out."
   email:
-    label: "[EMAIL LABEL PLACEHOLDER]"
-    address: "[EMAIL ADDRESS PLACEHOLDER]"
+    label: "Email"
+    address: "jiawei.ye@mail.utoronto.ca"
   resume:
-    label: "[RESUME LINK LABEL]"
-    path: "[RESUME FILE PATH PLACEHOLDER]"
+    label: "Download resume"
+    path: "[RESUME FILE PATH PLACEHOLDER — add your resume PDF to /assets/ and link it here]"
   social_links:
-    - label: "[SOCIAL NETWORK 1]"
-      url: "[SOCIAL URL 1 PLACEHOLDER]"
-    - label: "[SOCIAL NETWORK 2]"
-      url: "[SOCIAL URL 2 PLACEHOLDER]"
+    - label: "GitHub"
+      url: "https://github.com/oldyemeister"
+    - label: "LinkedIn"
+      url: "https://www.linkedin.com/in/jiawei-ye-a706b6287/"
 
 laser:
   page_title: "Laser Puzzle"
-  eyebrow: "[LASER PROJECT LABEL PLACEHOLDER]"
-  description: "[LASER PUZZLE PAGE DESCRIPTION PLACEHOLDER]"
-  objective: "[LASER PUZZLE OBJECTIVE PLACEHOLDER]"
-  instructions: "[LASER PUZZLE INSTRUCTIONS PLACEHOLDER]"
+  eyebrow: "FPGA Game, recreated for the browser"
+  description: "A laser reflection puzzle originally built for the DE1-SoC FPGA board. Rotate mirrors to redirect the laser and hit every target before time runs out."
+  objective: "Destroy all target nodes by redirecting the laser beam using rotatable mirrors, without hitting hazards."
+  instructions: "Select a mirror, rotate it to reflect the beam, and route the laser to every target within the time limit."
   controls_heading: "Controls"
   keyboard_controls: "Up and Down select a mirror. Left and Right rotate it. Space pauses. R resets."
   source_label: "View original source"
@@ -143,11 +151,15 @@ laser:
 
 donkey_kong:
   page_title: "Donkey Kong FPGA Game"
-  eyebrow: "[DONKEY KONG PROJECT LABEL PLACEHOLDER]"
-  description: "[DONKEY KONG GAME PAGE DESCRIPTION PLACEHOLDER]"
-  objective: "[DONKEY KONG GAME OBJECTIVE PLACEHOLDER]"
-  instructions: "[DONKEY KONG GAME INSTRUCTIONS PLACEHOLDER]"
+  eyebrow: "Hardware-implemented classic game"
+  description: "A full hardware recreation of Donkey Kong, built entirely in Verilog on a DE1-SoC FPGA — game logic, sprite rendering, and collision detection all run in custom digital circuits."
+  objective: "Reach the goal at the top of the level while avoiding barrels."
+  instructions: "Move and jump to climb the platforms, dodging barrels along the way."
   notes_heading: "From FPGA to browser"
+  collaborator:
+    prefix: "Built with"
+    name: "Nolan Young"
+    url: "https://www.linkedin.com/in/nolany/"
   controls_heading: "Controls"
   keyboard_controls: "A and D or Left and Right move. W or Up jumps. Space pauses. R resets."
   source_label: "View original source"
@@ -170,11 +182,15 @@ donkey_kong:
 
 imu_sandbox:
   page_title: "IMU Sandbox"
-  eyebrow: "[IMU SANDBOX PROJECT LABEL PLACEHOLDER]"
-  description: "[IMU SANDBOX PAGE DESCRIPTION PLACEHOLDER]"
-  objective: "[IMU SANDBOX OBJECTIVE PLACEHOLDER]"
+  eyebrow: "STM32 + BNO055 sensor demo"
+  description: "A tilt-controlled particle sandbox built on the STM32, where sand and rock particles fall and collide in real time based on the board's physical orientation."
+  objective: "Tilt the board to shift gravity and watch particles respond in real time. Switch between materials, gravity presets, and environmental effects."
   notes_heading: "From sensor to display"
-  instructions: "[IMU SANDBOX IMPLEMENTATION NOTES PLACEHOLDER]"
+  instructions: "I developed the core particle simulation: the data structures, occupancy grid, and fixed-point physics engine that drives how sand and rock particles fall and collide, adapting ideas from an open-source falling-sand engine (The Powder Toy) for embedded hardware. I extended the engine with rock material behavior and the wind, shake, and explosion effects, and handled collision tuning, 3D-printed hardware assembly, and debugging of material/effect interactions."
+  collaborator:
+    prefix: "Built with"
+    name: "Suzen Bao"
+    url: "https://www.linkedin.com/in/suzen-bao/"
   source_label: "View original source"
   source_url: "[IMU SANDBOX SOURCE URL PLACEHOLDER]"
   back_label: "Back to projects"

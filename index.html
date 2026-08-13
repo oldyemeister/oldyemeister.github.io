@@ -50,6 +50,12 @@ page_class: home
         </div>
         <div class="project-content">
           <h3>{{ project.title }}</h3>
+          {% if project.collaborator %}
+          <p class="collaborator-byline collaborator-byline-card">
+            <span class="collaborator-icon" aria-hidden="true">+</span>
+            <span>{{ project.collaborator.prefix }} <a href="{{ project.collaborator.url }}" target="_blank" rel="noopener noreferrer">{{ project.collaborator.name }}</a></span>
+          </p>
+          {% endif %}
           <p>{{ project.summary }}</p>
           <ul class="technology-list" aria-label="Technologies">
             {% for technology in project.technologies %}<li>{{ technology }}</li>{% endfor %}
@@ -96,4 +102,3 @@ page_class: home
     </div>
   </div>
 </section>
-

@@ -7,7 +7,7 @@ This document is the internal source of truth for future AI-assisted changes. Th
 1. Keep all editable portfolio copy, links, labels, and media paths in `_data/content.yml`.
 2. Do not move, rewrite, format, or delete anything under `demos/` unless the user explicitly requests changes to an original project.
 3. `demos/Laser_Puzzle/` contains the CPUlator C laser puzzle, `demos/DonkeyKong/` contains the Verilog/Quartus game, and `demos/imu_sandbox_stm32/` contains the STM32 HAL/C project.
-4. Keep `demos/`, `docs/`, `tools/`, and `test/` in `_config.yml` exclusions so GitHub Pages does not publish them.
+4. Keep `demos/` in `.gitignore`, and keep `demos/`, `docs/`, `tools/`, and `test/` in `_config.yml` exclusions so GitHub Pages does not publish them.
 5. Preserve accessibility behavior: semantic landmarks, keyboard focus, switch state, Canvas labels, reduced motion, and touch controls.
 6. Keep the root `README.md` public-facing. Put maintenance procedures and AI-specific context in this document.
 
@@ -56,7 +56,7 @@ The early inline script in `_layouts/default.html` selects a theme before CSS pa
 
 User-triggered changes temporarily add `theme-transition` to the root for 420 ms. CSS transitions only color, background-color, border-color, outline-color, box-shadow, fill, and stroke; do not replace this with `transition: all`. The toggle thumb uses a synchronized scale/glow animation. Initial theme setup and system-preference changes do not add the class, preventing a wrong-theme flash. Reduced-motion users bypass the animation in JavaScript, with the CSS media query retained as a second safeguard.
 
-`site-theme-change` includes `theme`, `animated`, and `duration` in its event detail. The laser renderer interpolates its Canvas palette and background-art opacity over that duration. Any future theme-aware Canvas should follow the same contract. There are currently no separate light/dark image assets.
+`site-theme-change` includes `theme`, `animated`, and `duration` in its event detail. Interactive project shells follow the site theme through semantic CSS variables, but gameplay screens remain theme-invariant for visual consistency. Do not attach Canvas, WebGL, or OLED renderers to this event. The Laser and Donkey Kong canvases and the IMU scene must retain their fixed palettes in both site themes.
 
 When adding colors:
 
@@ -173,4 +173,4 @@ The local machine may not have Jekyll installed. The preview builder validates t
 
 The intended repository is `username.github.io`, deployed from the default branch through GitHub Pages. `_config.yml` uses a blank `baseurl` for a user site. If this becomes a project site, update `url` and `baseurl` and retest every root-relative media path.
 
-Jekyll exclusion prevents `docs/` and `demos/` from appearing in the generated Pages site. It does not hide those files from visitors to a public GitHub repository.
+Jekyll exclusion prevents `docs/` and `demos/` from appearing in the generated Pages site. The additional `.gitignore` rule keeps the local `demos/` source tree out of this public repository entirely.

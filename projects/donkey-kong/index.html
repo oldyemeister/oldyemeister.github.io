@@ -11,6 +11,12 @@ donkey_kong_game: true
     <div>
       <p class="eyebrow">{{ game.eyebrow }}</p>
       <h1>{{ game.page_title }}</h1>
+      {% if game.collaborator %}
+      <p class="collaborator-byline">
+        <span class="collaborator-icon" aria-hidden="true">+</span>
+        <span>{{ game.collaborator.prefix }} <a href="{{ game.collaborator.url }}" target="_blank" rel="noopener noreferrer">{{ game.collaborator.name }}</a></span>
+      </p>
+      {% endif %}
     </div>
     <div>
       <p class="laser-description">{{ game.description }}</p>
