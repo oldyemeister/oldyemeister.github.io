@@ -2,20 +2,20 @@
 layout: default
 page_class: home
 ---
-{% assign content = site.data.content %}
+{% assign site_content = site.data.content %}
 <section class="hero-section" id="home">
   <div class="content-shell hero-layout">
     <div class="hero-copy">
-      <p class="eyebrow">{{ content.hero.eyebrow }}</p>
-      <h1>{{ content.hero.name }}</h1>
-      <p class="hero-role">{{ content.hero.role }}</p>
-      <p class="hero-introduction">{{ content.hero.introduction }}</p>
-      <a class="text-link text-link-primary" href="{{ content.hero.primary_link.url | relative_url }}">
-        {{ content.hero.primary_link.label }} <span aria-hidden="true">&rarr;</span>
+      <p class="eyebrow">{{ site_content.hero.eyebrow }}</p>
+      <h1>{{ site_content.hero.name }}</h1>
+      <p class="hero-role">{{ site_content.hero.role }}</p>
+      <p class="hero-introduction">{{ site_content.hero.introduction }}</p>
+      <a class="text-link text-link-primary" href="{{ site_content.hero.primary_link.url | relative_url }}">
+        {{ site_content.hero.primary_link.label }} <span aria-hidden="true">&rarr;</span>
       </a>
     </div>
     <figure class="portrait-frame">
-      <img src="{{ content.hero.portrait.path | relative_url }}" alt="{{ content.hero.portrait.alt }}">
+      <img src="{{ site_content.hero.portrait.path | relative_url }}" alt="{{ site_content.hero.portrait.alt }}">
     </figure>
   </div>
 </section>
@@ -24,13 +24,13 @@ page_class: home
   <div class="content-shell two-column-section">
     <div>
       <p class="section-index">01</p>
-      <h2>{{ content.about.heading }}</h2>
+      <h2>{{ site_content.about.heading }}</h2>
     </div>
     <div class="section-body">
-      <div class="prose">{{ content.about.biography | markdownify }}</div>
-      <h3>{{ content.about.skills_heading }}</h3>
-      <ul class="tag-list" aria-label="{{ content.about.skills_heading }}">
-        {% for skill in content.about.skills %}<li>{{ skill }}</li>{% endfor %}
+      <div class="prose">{{ site_content.about.biography | markdownify }}</div>
+      <h3>{{ site_content.about.skills_heading }}</h3>
+      <ul class="tag-list" aria-label="{{ site_content.about.skills_heading }}">
+        {% for skill in site_content.about.skills %}<li>{{ skill }}</li>{% endfor %}
       </ul>
     </div>
   </div>
@@ -39,11 +39,11 @@ page_class: home
 <section class="page-section" id="projects">
   <div class="content-shell">
     <header class="section-header">
-      <div><p class="section-index">02</p><h2>{{ content.projects_section.heading }}</h2></div>
-      <p>{{ content.projects_section.introduction }}</p>
+      <div><p class="section-index">02</p><h2>{{ site_content.projects_section.heading }}</h2></div>
+      <p>{{ site_content.projects_section.introduction }}</p>
     </header>
     <div class="project-grid">
-      {% for project in content.projects %}
+      {% for project in site_content.projects %}
       <article class="project-card{% if project.featured %} project-card-featured{% endif %}">
         <div class="project-media">
           <img src="{{ project.image.path | relative_url }}" alt="{{ project.image.alt }}" loading="lazy">
@@ -74,11 +74,11 @@ page_class: home
 <section class="page-section section-muted" id="writing">
   <div class="content-shell">
     <header class="section-header">
-      <div><p class="section-index">03</p><h2>{{ content.writing_section.heading }}</h2></div>
-      <p>{{ content.writing_section.introduction }}</p>
+      <div><p class="section-index">03</p><h2>{{ site_content.writing_section.heading }}</h2></div>
+      <p>{{ site_content.writing_section.introduction }}</p>
     </header>
     <div class="writing-list">
-      {% for item in content.writing %}
+      {% for item in site_content.writing %}
       <article class="writing-item">
         <div class="writing-meta"><time>{{ item.date }}</time><span>{{ item.publication }}</span></div>
         <div><h3><a href="{{ item.url }}">{{ item.title }}</a></h3><p>{{ item.excerpt }}</p></div>
@@ -91,13 +91,13 @@ page_class: home
 
 <section class="page-section contact-section" id="contact">
   <div class="content-shell contact-layout">
-    <div><p class="section-index">04</p><h2>{{ content.contact.heading }}</h2></div>
+    <div><p class="section-index">04</p><h2>{{ site_content.contact.heading }}</h2></div>
     <div>
-      <p class="contact-message">{{ content.contact.message }}</p>
+      <p class="contact-message">{{ site_content.contact.message }}</p>
       <div class="contact-links">
-        <a href="mailto:{{ content.contact.email.address }}">{{ content.contact.email.label }}</a>
-        <a href="{{ content.contact.resume.path | relative_url }}">{{ content.contact.resume.label }}</a>
-        {% for social in content.contact.social_links %}<a href="{{ social.url }}">{{ social.label }}</a>{% endfor %}
+        <a href="mailto:{{ site_content.contact.email.address }}">{{ site_content.contact.email.label }}</a>
+        <a href="{{ site_content.contact.resume.path | relative_url }}">{{ site_content.contact.resume.label }}</a>
+        {% for social in site_content.contact.social_links %}<a href="{{ social.url }}">{{ social.label }}</a>{% endfor %}
       </div>
     </div>
   </div>

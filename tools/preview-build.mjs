@@ -88,7 +88,7 @@ async function buildPage(sourcePath, outputPath) {
   const source = await readFile(resolve(root, sourcePath), 'utf8');
   const { page, body } = frontMatter(source);
   const pageEnvironment = {
-    site: { data: { content: data } }, content: data, laser: data.laser,
+    site: { data: { content: data } }, site_content: data, laser: data.laser,
     game: data.donkey_kong, imu: data.imu_sandbox, page
   };
   const renderedBody = render(body, pageEnvironment);

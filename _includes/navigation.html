@@ -1,22 +1,22 @@
-{% assign content = site.data.content %}
+{% assign site_content = site.data.content %}
 <header class="site-header" data-site-header>
   <div class="nav-shell">
-    <a class="site-identity" href="{{ '/' | relative_url }}" aria-label="{{ content.site.name }} home">
-      <span class="identity-mark" aria-hidden="true">{{ content.site.name | slice: 1 | upcase }}</span>
-      <span>{{ content.site.name }}</span>
+    <a class="site-identity" href="{{ '/' | relative_url }}" aria-label="{{ site_content.site.name }} home">
+      <span class="identity-mark" aria-hidden="true">{{ site_content.site.name | slice: 1 | upcase }}</span>
+      <span>{{ site_content.site.name }}</span>
     </a>
     <button class="nav-menu-button icon-button" type="button" aria-expanded="false" aria-controls="site-navigation" data-menu-toggle title="Open navigation">
       <span class="menu-icon" aria-hidden="true"></span>
       <span class="sr-only">Open navigation</span>
     </button>
     <nav class="site-navigation" id="site-navigation" aria-label="Primary" data-navigation>
-      <a href="{{ '/#about' | relative_url }}">{{ content.navigation.about }}</a>
-      <a href="{{ '/#projects' | relative_url }}">{{ content.navigation.projects }}</a>
-      <a href="{{ '/#writing' | relative_url }}">{{ content.navigation.writing }}</a>
-      <a href="{{ '/#contact' | relative_url }}">{{ content.navigation.contact }}</a>
-      <a href="{{ '/projects/laser/' | relative_url }}">{{ content.navigation.laser }}</a>
-      <a href="{{ '/projects/donkey-kong/' | relative_url }}">{{ content.navigation.donkey_kong }}</a>
-      <a href="{{ '/projects/imu-sandbox/' | relative_url }}">{{ content.navigation.imu_sandbox }}</a>
+      <a href="{{ '/#about' | relative_url }}">{{ site_content.navigation.about }}</a>
+      <a href="{{ '/#projects' | relative_url }}">{{ site_content.navigation.projects }}</a>
+      <a href="{{ '/#writing' | relative_url }}">{{ site_content.navigation.writing }}</a>
+      <a href="{{ '/#contact' | relative_url }}">{{ site_content.navigation.contact }}</a>
+      <a href="{{ '/projects/laser/' | relative_url }}">{{ site_content.navigation.laser }}</a>
+      <a href="{{ '/projects/donkey-kong/' | relative_url }}">{{ site_content.navigation.donkey_kong }}</a>
+      <a href="{{ '/projects/imu-sandbox/' | relative_url }}">{{ site_content.navigation.imu_sandbox }}</a>
     </nav>
     <div class="theme-control">
       <span class="theme-label" aria-hidden="true">Theme</span>
