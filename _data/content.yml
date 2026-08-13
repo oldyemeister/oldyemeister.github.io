@@ -1,0 +1,224 @@
+site:
+  name: "[NAME PLACEHOLDER]"
+  title: "[NAME PLACEHOLDER] | [ROLE PLACEHOLDER]"
+  description: "[SITE DESCRIPTION PLACEHOLDER]"
+  language: "en"
+  favicon: "/assets/images/laser-bluenode.png"
+  share_image: "/assets/images/laser-preview.png"
+
+navigation:
+  home: "Home"
+  about: "About"
+  projects: "Projects"
+  writing: "Writing"
+  contact: "Contact"
+  laser: "Laser Puzzle"
+  donkey_kong: "FPGA Platform Game"
+  imu_sandbox: "IMU Sandbox"
+
+hero:
+  eyebrow: "[INTRO LABEL PLACEHOLDER]"
+  name: "[NAME PLACEHOLDER]"
+  role: "[ROLE PLACEHOLDER]"
+  introduction: "[SHORT INTRODUCTION PLACEHOLDER: Describe what you make, study, or care about.]"
+  portrait:
+    path: "/assets/images/portrait-placeholder.svg"
+    alt: "[PORTRAIT ALT TEXT PLACEHOLDER]"
+  primary_link:
+    label: "[PRIMARY LINK LABEL]"
+    url: "#contact"
+
+about:
+  heading: "About"
+  biography: |-
+    [BIO PLACEHOLDER]
+
+    [SECOND BIO PARAGRAPH PLACEHOLDER]
+  skills_heading: "Skills and interests"
+  skills:
+    - "[SKILL PLACEHOLDER 1]"
+    - "[SKILL PLACEHOLDER 2]"
+    - "[INTEREST PLACEHOLDER 1]"
+    - "[INTEREST PLACEHOLDER 2]"
+
+projects_section:
+  heading: "Selected projects"
+  introduction: "[PROJECTS SECTION INTRODUCTION PLACEHOLDER]"
+
+projects:
+  - title: "Laser Puzzle"
+    summary: "[LASER PUZZLE PROJECT DESCRIPTION PLACEHOLDER]"
+    technologies:
+      - "C"
+      - "Assembly"
+      - "RV32"
+    image:
+      path: "/assets/images/laser-preview.png"
+      alt: "[LASER PUZZLE IMAGE ALT TEXT PLACEHOLDER]"
+    repository_url: "[LASER PUZZLE REPOSITORY URL PLACEHOLDER]"
+    live_url: "/projects/laser/"
+    live_label: "Play puzzle"
+    featured: true
+  - title: "Donkey Kong FPGA Game"
+    summary: "[DONKEY KONG FPGA PROJECT DESCRIPTION PLACEHOLDER]"
+    technologies:
+      - "Verilog"
+      - "Quartus"
+      - "DE1-SoC FPGA"
+    image:
+      path: "/assets/images/donkey-kong-preview.png"
+      alt: "[DONKEY KONG GAME IMAGE ALT TEXT PLACEHOLDER]"
+    repository_url: "[DONKEY KONG PROJECT REPOSITORY URL PLACEHOLDER]"
+    live_url: "/projects/donkey-kong/"
+    live_label: "Play game"
+    featured: false
+  - title: "IMU Sandbox"
+    summary: "[IMU SANDBOX PROJECT DESCRIPTION PLACEHOLDER]"
+    technologies:
+      - "C"
+      - "STM32"
+      - "BNO055"
+    image:
+      path: "/assets/images/imu-sandbox-preview.png"
+      alt: "[IMU SANDBOX IMAGE ALT TEXT PLACEHOLDER]"
+    repository_url: "[IMU SANDBOX REPOSITORY URL PLACEHOLDER]"
+    live_url: "/projects/imu-sandbox/"
+    live_label: "Explore OLED"
+    featured: false
+
+writing_section:
+  heading: "Writing"
+  introduction: "[WRITING SECTION INTRODUCTION PLACEHOLDER]"
+
+writing:
+  - title: "[WRITING 1 TITLE]"
+    date: "[WRITING 1 DATE]"
+    excerpt: "[WRITING 1 EXCERPT PLACEHOLDER]"
+    publication: "[PUBLICATION PLACEHOLDER]"
+    url: "[WRITING 1 URL PLACEHOLDER]"
+  - title: "[WRITING 2 TITLE]"
+    date: "[WRITING 2 DATE]"
+    excerpt: "[WRITING 2 EXCERPT PLACEHOLDER]"
+    publication: "[PUBLICATION PLACEHOLDER]"
+    url: "[WRITING 2 URL PLACEHOLDER]"
+
+contact:
+  heading: "Contact"
+  message: "[CONTACT MESSAGE PLACEHOLDER]"
+  email:
+    label: "[EMAIL LABEL PLACEHOLDER]"
+    address: "[EMAIL ADDRESS PLACEHOLDER]"
+  resume:
+    label: "[RESUME LINK LABEL]"
+    path: "[RESUME FILE PATH PLACEHOLDER]"
+  social_links:
+    - label: "[SOCIAL NETWORK 1]"
+      url: "[SOCIAL URL 1 PLACEHOLDER]"
+    - label: "[SOCIAL NETWORK 2]"
+      url: "[SOCIAL URL 2 PLACEHOLDER]"
+
+laser:
+  page_title: "Laser Puzzle"
+  eyebrow: "[LASER PROJECT LABEL PLACEHOLDER]"
+  description: "[LASER PUZZLE PAGE DESCRIPTION PLACEHOLDER]"
+  objective: "[LASER PUZZLE OBJECTIVE PLACEHOLDER]"
+  instructions: "[LASER PUZZLE INSTRUCTIONS PLACEHOLDER]"
+  controls_heading: "Controls"
+  keyboard_controls: "Up and Down select a mirror. Left and Right rotate it. Space pauses. R resets."
+  source_label: "View original source"
+  source_url: "[LASER PUZZLE SOURCE URL PLACEHOLDER]"
+  back_label: "Back to projects"
+  reset_label: "Reset puzzle"
+  pause_label: "Pause puzzle"
+  resume_label: "Resume puzzle"
+  status_labels:
+    selected: "Selected mirror"
+    timer: "Time"
+    lives: "Lives"
+    targets: "Targets"
+    ready: "Redirect the laser to begin."
+    won: "Mission complete. All nodes destroyed."
+    lost: "Mission failed. Reset to try again."
+    paused: "Puzzle paused."
+
+donkey_kong:
+  page_title: "Donkey Kong FPGA Game"
+  eyebrow: "[DONKEY KONG PROJECT LABEL PLACEHOLDER]"
+  description: "[DONKEY KONG GAME PAGE DESCRIPTION PLACEHOLDER]"
+  objective: "[DONKEY KONG GAME OBJECTIVE PLACEHOLDER]"
+  instructions: "[DONKEY KONG GAME INSTRUCTIONS PLACEHOLDER]"
+  notes_heading: "From FPGA to browser"
+  controls_heading: "Controls"
+  keyboard_controls: "A and D or Left and Right move. W or Up jumps. Space pauses. R resets."
+  source_label: "View original source"
+  source_url: "[DONKEY KONG SOURCE URL PLACEHOLDER]"
+  back_label: "Back to projects"
+  reset_label: "Reset game"
+  pause_label: "Pause game"
+  resume_label: "Resume game"
+  status_labels:
+    status: "State"
+    barrels: "Barrels"
+    collisions: "Restarts"
+    running: "Running"
+    paused: "Paused"
+    won: "You Win!!!"
+    ready: "Reach the goal at the top while avoiding the barrels."
+    paused_message: "Game paused."
+    won_message: "You Win!!!"
+    load_error: "Game artwork could not be loaded."
+
+imu_sandbox:
+  page_title: "IMU Sandbox"
+  eyebrow: "[IMU SANDBOX PROJECT LABEL PLACEHOLDER]"
+  description: "[IMU SANDBOX PAGE DESCRIPTION PLACEHOLDER]"
+  objective: "[IMU SANDBOX OBJECTIVE PLACEHOLDER]"
+  notes_heading: "From sensor to display"
+  instructions: "[IMU SANDBOX IMPLEMENTATION NOTES PLACEHOLDER]"
+  source_label: "View original source"
+  source_url: "[IMU SANDBOX SOURCE URL PLACEHOLDER]"
+  back_label: "Back to projects"
+  interactive_label: "Interactive OLED model"
+  canvas_label: "Interactive 3D OLED screen with particle simulation"
+  loading_label: "Loading OLED simulation..."
+  load_error: "The 3D OLED could not start. Reload the page or enable WebGL in this browser."
+  keyboard_controls: "Arrow keys change pitch and yaw. Q and E change roll. Space changes mode."
+  reset_label: "Reset OLED pose"
+  mode_heading: "Mode"
+  current_mode_label: "Current mode"
+  gravity_heading: "Base gravity"
+  gravity_magnitude_heading: "Gravity magnitude"
+  gravity_directions:
+    neutral: "Neutral"
+    up: "Up"
+    up_right: "Up right"
+    right: "Right"
+    down_right: "Down right"
+    down: "Down"
+    down_left: "Down left"
+    left: "Left"
+    up_left: "Up left"
+  modes:
+    normal: "Normal"
+    wind: "Wind"
+    shake: "Shake"
+    explosion: "Explosion"
+  planets:
+    moon:
+      label: "Moon"
+      gravity: "0.16g"
+    earth:
+      label: "Earth"
+      gravity: "1.00g"
+    jupiter:
+      label: "Jupiter"
+      gravity: "2.50g"
+  rotation_heading: "Rotation"
+  axes:
+    roll: "Roll"
+    pitch: "Pitch"
+    yaw: "Yaw"
+
+footer:
+  text: "[FOOTER TEXT PLACEHOLDER]"
+  copyright_name: "[NAME PLACEHOLDER]"

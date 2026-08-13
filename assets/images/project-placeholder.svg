@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="title desc">
+  <title id="title">Project image placeholder</title>
+  <desc id="desc">Replace this image path in the content file.</desc>
+  <rect width="800" height="500" fill="#e7ecec"/>
+  <path d="M80 330l128-126 100 92 136-154 276 252H80z" fill="#80969c"/>
+  <circle cx="634" cy="116" r="42" fill="#e7b24b"/>
+  <rect x="24" y="24" width="752" height="452" fill="none" stroke="#2f444a" stroke-width="3"/>
+  <text x="400" y="442" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#26363b">[PROJECT IMAGE PLACEHOLDER]</text>
+</svg>

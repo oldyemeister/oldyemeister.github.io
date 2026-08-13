@@ -1,0 +1,82 @@
+---
+layout: default
+title: Donkey Kong FPGA Recreation
+page_class: donkey-kong
+donkey_kong_game: true
+---
+{% assign content = site.data.content %}
+{% assign game = content.donkey_kong %}
+<section class="laser-intro dk-intro">
+  <div class="content-shell laser-intro-layout">
+    <div>
+      <p class="eyebrow">{{ game.eyebrow }}</p>
+      <h1>{{ game.page_title }}</h1>
+    </div>
+    <div>
+      <p class="laser-description">{{ game.description }}</p>
+      <p class="laser-objective">{{ game.objective }}</p>
+      <a class="text-link" href="{{ '/#projects' | relative_url }}"><span aria-hidden="true">&larr;</span> {{ game.back_label }}</a>
+    </div>
+  </div>
+</section>
+
+<section class="laser-play-section dk-play-section" aria-labelledby="dk-game-heading">
+  <div class="laser-shell">
+    <div class="game-heading-row">
+      <div><p class="section-index">Interactive project</p><h2 id="dk-game-heading">{{ game.page_title }}</h2></div>
+      <div class="game-actions">
+        <button class="game-action-button" type="button" data-dk-pause aria-label="{{ game.pause_label }}" title="{{ game.pause_label }}"><span class="pause-symbol" aria-hidden="true"></span></button>
+        <button class="game-action-button" type="button" data-dk-reset aria-label="{{ game.reset_label }}" title="{{ game.reset_label }}"><span class="reset-symbol" aria-hidden="true">&#8635;</span></button>
+      </div>
+    </div>
+
+    <div class="game-status-bar dk-status-bar" aria-live="polite">
+      <div><span>{{ game.status_labels.status }}</span><strong data-dk-status>{{ game.status_labels.running }}</strong></div>
+      <div><span>{{ game.status_labels.barrels }}</span><strong data-dk-barrels>1</strong></div>
+      <div><span>{{ game.status_labels.collisions }}</span><strong data-dk-collisions>0</strong></div>
+    </div>
+
+    <div class="game-board-wrap" data-game-wrap>
+      <p class="sr-only" id="dk-keyboard-controls">{{ game.keyboard_controls }}</p>
+      <canvas class="game-board" width="320" height="240" tabindex="0" data-donkey-kong-canvas aria-label="Playable FPGA platform game recreation" aria-describedby="dk-keyboard-controls"></canvas>
+      <div class="game-overlay dk-overlay" data-dk-overlay hidden>
+        <strong>{{ game.status_labels.won_message }}</strong>
+        <button type="button" data-dk-reset>{{ game.reset_label }}</button>
+      </div>
+    </div>
+
+    <div class="game-controls dk-controls" aria-label="{{ game.controls_heading }}">
+      <div class="control-group dk-move-controls" aria-label="Move">
+        <button type="button" data-dk-direction="left" aria-label="Move left" title="Move left"><span aria-hidden="true">&#8592;</span></button>
+        <button type="button" data-dk-direction="right" aria-label="Move right" title="Move right"><span aria-hidden="true">&#8594;</span></button>
+      </div>
+      <p class="game-message" data-dk-message>{{ game.status_labels.ready }}</p>
+      <button class="dk-jump-button" type="button" data-dk-jump aria-label="Jump" title="Jump"><span aria-hidden="true">&#8593;</span><span>Jump</span></button>
+    </div>
+
+    <script type="application/json" id="donkey-kong-content">
+      {
+        "pause": {{ game.pause_label | jsonify }},
+        "resume": {{ game.resume_label | jsonify }},
+        "running": {{ game.status_labels.running | jsonify }},
+        "paused": {{ game.status_labels.paused | jsonify }},
+        "ready": {{ game.status_labels.ready | jsonify }},
+        "pausedMessage": {{ game.status_labels.paused_message | jsonify }},
+        "won": {{ game.status_labels.won | jsonify }},
+        "wonMessage": {{ game.status_labels.won_message | jsonify }},
+        "loadError": {{ game.status_labels.load_error | jsonify }},
+        "background": {{ '/assets/images/donkey-kong-background.png' | relative_url | jsonify }},
+        "mario": {{ '/assets/images/donkey-kong-mario.png' | relative_url | jsonify }},
+        "barrel": {{ '/assets/images/donkey-kong-barrel.png' | relative_url | jsonify }},
+        "win": {{ '/assets/images/donkey-kong-win.png' | relative_url | jsonify }}
+      }
+    </script>
+  </div>
+</section>
+
+<section class="page-section section-muted laser-notes">
+  <div class="content-shell two-column-section">
+    <div><p class="section-index">Project notes</p><h2>{{ game.notes_heading }}</h2></div>
+    <div class="section-body"><p>{{ game.instructions }}</p><a class="text-link" href="{{ game.source_url }}">{{ game.source_label }} <span aria-hidden="true">&rarr;</span></a></div>
+  </div>
+</section>

@@ -1,0 +1,103 @@
+---
+layout: default
+title: IMU Sandbox OLED Explorer
+page_class: imu-sandbox
+imu_sandbox_game: true
+---
+{% assign content = site.data.content %}
+{% assign imu = content.imu_sandbox %}
+<section class="laser-intro imu-intro">
+  <div class="content-shell laser-intro-layout">
+    <div>
+      <p class="eyebrow">{{ imu.eyebrow }}</p>
+      <h1>{{ imu.page_title }}</h1>
+    </div>
+    <div>
+      <p class="laser-description">{{ imu.description }}</p>
+      <p class="laser-objective">{{ imu.objective }}</p>
+      <a class="text-link" href="{{ '/#projects' | relative_url }}"><span aria-hidden="true">&larr;</span> {{ imu.back_label }}</a>
+    </div>
+  </div>
+</section>
+
+<section class="imu-demo-section" aria-labelledby="imu-demo-heading">
+  <div class="imu-demo-heading">
+    <div>
+      <p class="section-index">{{ imu.interactive_label }}</p>
+      <h2 id="imu-demo-heading">{{ imu.page_title }}</h2>
+    </div>
+    <div class="imu-live-readouts" aria-live="polite">
+      <div class="imu-mode-readout"><span>{{ imu.current_mode_label }}</span><strong data-imu-mode-value>{{ imu.modes.normal }}</strong></div>
+      <div class="imu-gravity-readout">
+        <span>{{ imu.gravity_heading }}</span>
+        <strong><b aria-hidden="true">&darr;</b> <span>{{ imu.gravity_directions.down }}</span> <small data-imu-gravity-magnitude>{{ imu.planets.earth.label }} &middot; {{ imu.planets.earth.gravity }}</small></strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="imu-toolbar">
+    <div class="imu-toolbar-groups">
+      <div class="imu-toolbar-group">
+        <span>{{ imu.mode_heading }}</span>
+        <div class="imu-mode-control" role="group" aria-label="{{ imu.mode_heading }}">
+          <button type="button" data-imu-mode="normal" aria-pressed="false">{{ imu.modes.normal }}</button>
+          <button type="button" data-imu-mode="wind" aria-pressed="false">{{ imu.modes.wind }}</button>
+          <button type="button" data-imu-mode="shake" aria-pressed="false">{{ imu.modes.shake }}</button>
+          <button type="button" data-imu-mode="explosion" aria-pressed="false">{{ imu.modes.explosion }}</button>
+        </div>
+      </div>
+      <div class="imu-toolbar-group">
+        <span>{{ imu.gravity_magnitude_heading }}</span>
+        <div class="imu-planet-control" role="group" aria-label="{{ imu.gravity_magnitude_heading }}">
+          <button type="button" data-imu-planet="moon" aria-pressed="false">{{ imu.planets.moon.label }} <small>{{ imu.planets.moon.gravity }}</small></button>
+          <button type="button" data-imu-planet="earth" aria-pressed="false">{{ imu.planets.earth.label }} <small>{{ imu.planets.earth.gravity }}</small></button>
+          <button type="button" data-imu-planet="jupiter" aria-pressed="false">{{ imu.planets.jupiter.label }} <small>{{ imu.planets.jupiter.gravity }}</small></button>
+        </div>
+      </div>
+    </div>
+    <button class="imu-reset-button" type="button" data-imu-reset aria-label="{{ imu.reset_label }}" title="{{ imu.reset_label }}"><span aria-hidden="true">&#8635;</span></button>
+  </div>
+
+  <div class="imu-scene" data-imu-scene>
+    <p class="sr-only" id="imu-controls-description">{{ imu.keyboard_controls }}</p>
+    <p class="imu-scene-status" data-imu-status role="status">{{ imu.loading_label }}</p>
+  </div>
+
+  <div class="imu-axis-controls">
+    <fieldset>
+      <legend>{{ imu.rotation_heading }}</legend>
+      <label class="imu-axis-control">
+        <span>{{ imu.axes.roll }}</span>
+        <input type="range" min="-180" max="180" value="0" step="1" data-imu-axis="roll">
+        <output data-imu-value="roll">0&deg;</output>
+      </label>
+      <label class="imu-axis-control">
+        <span>{{ imu.axes.pitch }}</span>
+        <input type="range" min="-80" max="80" value="0" step="1" data-imu-axis="pitch">
+        <output data-imu-value="pitch">0&deg;</output>
+      </label>
+      <label class="imu-axis-control">
+        <span>{{ imu.axes.yaw }}</span>
+        <input type="range" min="-180" max="180" value="0" step="1" data-imu-axis="yaw">
+        <output data-imu-value="yaw">0&deg;</output>
+      </label>
+    </fieldset>
+  </div>
+
+  <script type="application/json" id="imu-content">
+    {
+      "canvasLabel": {{ imu.canvas_label | jsonify }},
+      "loadError": {{ imu.load_error | jsonify }},
+      "modes": {{ imu.modes | jsonify }},
+      "gravityDirections": {{ imu.gravity_directions | jsonify }},
+      "planets": {{ imu.planets | jsonify }}
+    }
+  </script>
+</section>
+
+<section class="page-section section-muted laser-notes">
+  <div class="content-shell two-column-section">
+    <div><p class="section-index">Project notes</p><h2>{{ imu.notes_heading }}</h2></div>
+    <div class="section-body"><p>{{ imu.instructions }}</p><a class="text-link" href="{{ imu.source_url }}">{{ imu.source_label }} <span aria-hidden="true">&rarr;</span></a></div>
+  </div>
+</section>

@@ -1,0 +1,93 @@
+---
+layout: default
+title: Laser Puzzle
+page_class: laser
+laser_game: true
+---
+{% assign content = site.data.content %}
+{% assign laser = content.laser %}
+<section class="laser-intro">
+  <div class="content-shell laser-intro-layout">
+    <div>
+      <p class="eyebrow">{{ laser.eyebrow }}</p>
+      <h1>{{ laser.page_title }}</h1>
+    </div>
+    <div>
+      <p class="laser-description">{{ laser.description }}</p>
+      <p class="laser-objective">{{ laser.objective }}</p>
+      <a class="text-link" href="{{ '/#projects' | relative_url }}"><span aria-hidden="true">&larr;</span> {{ laser.back_label }}</a>
+    </div>
+  </div>
+</section>
+
+<section class="laser-play-section" aria-labelledby="game-heading">
+  <div class="laser-shell">
+    <div class="game-heading-row">
+      <div>
+        <p class="section-index">Interactive project</p>
+        <h2 id="game-heading">{{ laser.page_title }}</h2>
+      </div>
+      <div class="game-actions">
+        <button class="game-action-button" type="button" data-game-pause aria-label="{{ laser.pause_label }}" title="{{ laser.pause_label }}">
+          <span class="pause-symbol" aria-hidden="true"></span>
+        </button>
+        <button class="game-action-button" type="button" data-game-reset aria-label="{{ laser.reset_label }}" title="{{ laser.reset_label }}">
+          <span class="reset-symbol" aria-hidden="true">&#8635;</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="game-status-bar" aria-live="polite">
+      <div><span>{{ laser.status_labels.timer }}</span><strong data-game-timer>2:00</strong></div>
+      <div><span>{{ laser.status_labels.lives }}</span><strong data-game-lives>2</strong></div>
+      <div><span>{{ laser.status_labels.targets }}</span><strong data-game-targets>0 / 6</strong></div>
+      <div><span>{{ laser.status_labels.selected }}</span><strong data-game-selected>1 / 13</strong></div>
+    </div>
+
+    <div class="game-board-wrap" data-game-wrap>
+      <canvas class="game-board" width="320" height="240" tabindex="0" data-laser-canvas aria-label="Playable laser puzzle board"></canvas>
+      <div class="game-overlay" data-game-overlay hidden>
+        <strong data-game-overlay-title></strong>
+        <button type="button" data-overlay-reset>{{ laser.reset_label }}</button>
+      </div>
+    </div>
+
+    <div class="game-controls" aria-label="{{ laser.controls_heading }}">
+      <div class="control-group" aria-label="Select mirror">
+        <button type="button" data-game-command="previous" aria-label="Previous mirror" title="Previous mirror"><span aria-hidden="true">&#8593;</span></button>
+        <button type="button" data-game-command="next" aria-label="Next mirror" title="Next mirror"><span aria-hidden="true">&#8595;</span></button>
+      </div>
+      <p class="game-message" data-game-message>{{ laser.status_labels.ready }}</p>
+      <div class="control-group" aria-label="Rotate mirror">
+        <button type="button" data-game-command="rotate-left" aria-label="Rotate selected mirror left" title="Rotate left"><span aria-hidden="true">&#8634;</span></button>
+        <button type="button" data-game-command="rotate-right" aria-label="Rotate selected mirror right" title="Rotate right"><span aria-hidden="true">&#8635;</span></button>
+      </div>
+    </div>
+
+    <script type="application/json" id="laser-content">
+      {
+        "pause": {{ laser.pause_label | jsonify }},
+        "resume": {{ laser.resume_label | jsonify }},
+        "ready": {{ laser.status_labels.ready | jsonify }},
+        "paused": {{ laser.status_labels.paused | jsonify }},
+        "won": {{ laser.status_labels.won | jsonify }},
+        "lost": {{ laser.status_labels.lost | jsonify }},
+        "background": {{ '/assets/images/laser-background.png' | relative_url | jsonify }},
+        "node": {{ '/assets/images/laser-bluenode.png' | relative_url | jsonify }},
+        "firewall": {{ '/assets/images/laser-firewall.png' | relative_url | jsonify }},
+        "success": {{ '/assets/images/laser-success.png' | relative_url | jsonify }},
+        "failure": {{ '/assets/images/laser-failure.png' | relative_url | jsonify }}
+      }
+    </script>
+  </div>
+</section>
+
+<section class="page-section section-muted laser-notes">
+  <div class="content-shell two-column-section">
+    <div><p class="section-index">Project notes</p><h2>From hardware to browser</h2></div>
+    <div class="section-body">
+      <p>{{ laser.instructions }}</p>
+      <a class="text-link" href="{{ laser.source_url }}">{{ laser.source_label }} <span aria-hidden="true">&rarr;</span></a>
+    </div>
+  </div>
+</section>

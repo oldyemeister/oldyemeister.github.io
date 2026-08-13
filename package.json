@@ -1,0 +1,12 @@
+{
+  "name": "personal-website",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "assets:laser": "node tools/convert-laser-assets.mjs",
+    "assets:donkey-kong": "node tools/convert-donkey-kong-assets.mjs",
+    "assets": "npm run assets:laser && npm run assets:donkey-kong",
+    "preview:build": "node tools/preview-build.mjs"
+  }
+}

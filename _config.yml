@@ -1,0 +1,18 @@
+title: Personal Website
+description: A content-driven personal website with playable browser game recreations.
+url: ""
+baseurl: ""
+permalink: pretty
+markdown: kramdown
+
+exclude:
+  - demos
+  - docs
+  - tools
+  - test
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - package.json
+  - package-lock.json

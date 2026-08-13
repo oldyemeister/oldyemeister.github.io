@@ -1,0 +1,99 @@
+---
+layout: default
+page_class: home
+---
+{% assign content = site.data.content %}
+<section class="hero-section" id="home">
+  <div class="content-shell hero-layout">
+    <div class="hero-copy">
+      <p class="eyebrow">{{ content.hero.eyebrow }}</p>
+      <h1>{{ content.hero.name }}</h1>
+      <p class="hero-role">{{ content.hero.role }}</p>
+      <p class="hero-introduction">{{ content.hero.introduction }}</p>
+      <a class="text-link text-link-primary" href="{{ content.hero.primary_link.url | relative_url }}">
+        {{ content.hero.primary_link.label }} <span aria-hidden="true">&rarr;</span>
+      </a>
+    </div>
+    <figure class="portrait-frame">
+      <img src="{{ content.hero.portrait.path | relative_url }}" alt="{{ content.hero.portrait.alt }}">
+    </figure>
+  </div>
+</section>
+
+<section class="page-section section-muted" id="about">
+  <div class="content-shell two-column-section">
+    <div>
+      <p class="section-index">01</p>
+      <h2>{{ content.about.heading }}</h2>
+    </div>
+    <div class="section-body">
+      <div class="prose">{{ content.about.biography | markdownify }}</div>
+      <h3>{{ content.about.skills_heading }}</h3>
+      <ul class="tag-list" aria-label="{{ content.about.skills_heading }}">
+        {% for skill in content.about.skills %}<li>{{ skill }}</li>{% endfor %}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="page-section" id="projects">
+  <div class="content-shell">
+    <header class="section-header">
+      <div><p class="section-index">02</p><h2>{{ content.projects_section.heading }}</h2></div>
+      <p>{{ content.projects_section.introduction }}</p>
+    </header>
+    <div class="project-grid">
+      {% for project in content.projects %}
+      <article class="project-card{% if project.featured %} project-card-featured{% endif %}">
+        <div class="project-media">
+          <img src="{{ project.image.path | relative_url }}" alt="{{ project.image.alt }}" loading="lazy">
+        </div>
+        <div class="project-content">
+          <h3>{{ project.title }}</h3>
+          <p>{{ project.summary }}</p>
+          <ul class="technology-list" aria-label="Technologies">
+            {% for technology in project.technologies %}<li>{{ technology }}</li>{% endfor %}
+          </ul>
+          <div class="project-links">
+            <a href="{{ project.live_url | relative_url }}">{{ project.live_label }} <span aria-hidden="true">&rarr;</span></a>
+            <a href="{{ project.repository_url }}">Source</a>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="page-section section-muted" id="writing">
+  <div class="content-shell">
+    <header class="section-header">
+      <div><p class="section-index">03</p><h2>{{ content.writing_section.heading }}</h2></div>
+      <p>{{ content.writing_section.introduction }}</p>
+    </header>
+    <div class="writing-list">
+      {% for item in content.writing %}
+      <article class="writing-item">
+        <div class="writing-meta"><time>{{ item.date }}</time><span>{{ item.publication }}</span></div>
+        <div><h3><a href="{{ item.url }}">{{ item.title }}</a></h3><p>{{ item.excerpt }}</p></div>
+        <a class="arrow-link" href="{{ item.url }}" aria-label="Read {{ item.title }}"><span aria-hidden="true">&rarr;</span></a>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="page-section contact-section" id="contact">
+  <div class="content-shell contact-layout">
+    <div><p class="section-index">04</p><h2>{{ content.contact.heading }}</h2></div>
+    <div>
+      <p class="contact-message">{{ content.contact.message }}</p>
+      <div class="contact-links">
+        <a href="mailto:{{ content.contact.email.address }}">{{ content.contact.email.label }}</a>
+        <a href="{{ content.contact.resume.path | relative_url }}">{{ content.contact.resume.label }}</a>
+        {% for social in content.contact.social_links %}<a href="{{ social.url }}">{{ social.label }}</a>{% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
