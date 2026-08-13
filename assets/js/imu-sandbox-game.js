@@ -2,7 +2,7 @@ import * as THREE from '../vendor/three.module.min.js';
 import {
   OLED_WIDTH, OLED_HEIGHT, createSandbox, particlePixelX, particlePixelY,
   setPoseValue, resetPose, setMode, cycleMode, setPlanet, updateSandbox
-} from './imu-sandbox-engine.js?v=10';
+} from './imu-sandbox-engine.js?v=11';
 
 const host = document.querySelector('[data-imu-scene]');
 if (!host) throw new Error('IMU Sandbox scene is missing.');
@@ -20,7 +20,7 @@ renderer.setPixelRatio(1);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x101313);
+scene.background = new THREE.Color(0x0d1212);
 const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 50);
 camera.position.set(0, 0.4, 11.5);
 
@@ -41,7 +41,22 @@ floor.position.y = -3.25;
 scene.add(floor);
 const grid = new THREE.GridHelper(22, 22, 0x41635d, 0x302f2a);
 grid.position.y = -3.23;
+grid.material.opacity = 0.85;
+grid.material.transparent = true;
 scene.add(grid);
+
+const backWall = new THREE.Mesh(
+  new THREE.PlaneGeometry(28, 18),
+  new THREE.MeshLambertMaterial({ color: 0x121918 })
+);
+backWall.position.z = -3.8;
+scene.add(backWall);
+const backGrid = new THREE.GridHelper(22, 22, 0x41635d, 0x293532);
+backGrid.rotation.x = Math.PI / 2;
+backGrid.position.z = -3.76;
+backGrid.material.opacity = 0.7;
+backGrid.material.transparent = true;
+scene.add(backGrid);
 
 const screenCanvas = document.createElement('canvas');
 screenCanvas.width = OLED_WIDTH;

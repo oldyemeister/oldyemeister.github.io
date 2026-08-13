@@ -64,6 +64,8 @@ laser_game: true
       </div>
     </div>
 
+    <p class="game-implementation-note">{{ laser.implementation_note }}</p>
+
     <script type="application/json" id="laser-content">
       {
         "pause": {{ laser.pause_label | jsonify }},
@@ -84,7 +86,7 @@ laser_game: true
 
 <section class="page-section section-muted laser-notes">
   <div class="content-shell two-column-section">
-    <div><p class="section-index">Project notes</p><h2>From hardware to browser</h2></div>
+    <div><p class="section-index">Project notes</p><h2>From hardware to gameplay</h2></div>
     <div class="section-body">
       <p>{{ laser.instructions }}</p>
       <a class="text-link" href="{{ laser.source_url }}">{{ laser.source_label }} <span aria-hidden="true">&rarr;</span></a>

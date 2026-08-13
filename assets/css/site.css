@@ -294,6 +294,13 @@ html.theme-transition .theme-switch-thumb {
 .control-group { display: grid; grid-template-columns: repeat(2, 44px); gap: 8px; }
 .control-group button { font-size: 1.35rem; }
 .game-message { margin: 0; color: var(--text-muted); text-align: center; }
+.game-implementation-note {
+  margin: 18px 0 0;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  text-align: right;
+}
 .laser-notes .section-body > p { color: var(--text-muted); }
 .dk-intro h1 { font-size: clamp(2.8rem, 7vw, 6.2rem); }
 .dk-play-section { background: var(--page); }
@@ -388,7 +395,16 @@ html.theme-transition .theme-switch-thumb {
 .imu-planet-control button.is-active::after { background: var(--accent); }
 .imu-reset-button { flex: 0 0 44px; width: 44px; padding: 0; font-size: 1.55rem; }
 .imu-reset-button:hover { color: var(--accent-strong); }
-.imu-scene { position: relative; width: 100%; height: clamp(520px, 68vh, 760px); background: #101313; }
+.imu-scene {
+  position: relative;
+  width: 100%;
+  height: clamp(520px, 68vh, 760px);
+  background-color: #101313;
+  background-image:
+    linear-gradient(rgba(85, 130, 122, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(85, 130, 122, 0.12) 1px, transparent 1px);
+  background-size: 42px 42px;
+}
 .imu-scene-status {
   position: absolute;
   inset: 0;
@@ -406,8 +422,30 @@ html.theme-transition .theme-switch-thumb {
 .imu-webgl-canvas { display: block; width: 100%; height: 100%; touch-action: none; cursor: grab; }
 .imu-webgl-canvas:active { cursor: grabbing; }
 .imu-css-stage { position: absolute; inset: 0; display: grid; place-items: center; perspective: 1100px; overflow: hidden; }
+.imu-css-stage::before,
+.imu-css-stage::after {
+  position: absolute;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(82, 145, 134, 0.32) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(82, 145, 134, 0.32) 1px, transparent 1px);
+  background-size: 44px 44px;
+  content: "";
+  pointer-events: none;
+}
+.imu-css-stage::before { inset: 0; opacity: 0.48; }
+.imu-css-stage::after {
+  right: -15%;
+  bottom: -37%;
+  left: -15%;
+  height: 68%;
+  opacity: 0.7;
+  transform: rotateX(66deg);
+  transform-origin: center top;
+}
 .imu-css-device {
   position: relative;
+  z-index: 1;
   width: min(55vw, 700px);
   aspect-ratio: 6.9 / 3.85;
   border: 10px solid #075649;
@@ -432,6 +470,7 @@ html.theme-transition .theme-switch-thumb {
   padding-block: 28px 46px;
   border-top: 1px solid var(--line);
 }
+.imu-implementation-note { width: min(720px, 100%); margin: 18px auto 0; }
 .imu-axis-controls fieldset { width: min(720px, 100%); min-width: 0; margin: 0 auto; padding: 0; border: 0; }
 .imu-axis-controls legend { margin-bottom: 14px; color: var(--accent-strong); font-size: 0.76rem; font-weight: 760; text-transform: uppercase; }
 .imu-axis-control {

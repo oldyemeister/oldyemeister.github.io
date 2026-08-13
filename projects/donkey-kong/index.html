@@ -60,6 +60,8 @@ donkey_kong_game: true
       <button class="dk-jump-button" type="button" data-dk-jump aria-label="Jump" title="Jump"><span aria-hidden="true">&#8593;</span><span>Jump</span></button>
     </div>
 
+    <p class="game-implementation-note">{{ game.implementation_note }}</p>
+
     <script type="application/json" id="donkey-kong-content">
       {
         "pause": {{ game.pause_label | jsonify }},

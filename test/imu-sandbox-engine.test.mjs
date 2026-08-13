@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  DEFAULT_POSE, MAX_PARTICLES, MODES, OLED_WIDTH, OLED_HEIGHT,
+  DEFAULT_POSE, MAX_PARTICLES, MODES, OLED_WIDTH, OLED_HEIGHT, WORLD_GRAVITY,
   createSandbox, particlePixelX, particlePixelY, setPoseValue, resetPose,
   setMode, cycleMode, setPlanet, getGravityMagnitude, getGravityVector,
   getGravityDirection, updateSandbox
@@ -35,30 +35,34 @@ test('only the original Euler rotation axes are interactive', () => {
   assert.deepEqual(state.pose, DEFAULT_POSE);
 });
 
-test('world-down gravity rotates through OLED-local edges and corners', () => {
+test('world gravity is fixed to negative Z and projects through the full 3D pose', () => {
   const state = createSandbox(0);
+  assert.deepEqual(WORLD_GRAVITY, { x: 0, y: 0, z: -1 });
   setPoseValue(state, 'roll', 0);
+  setPoseValue(state, 'pitch', 0);
+  setPoseValue(state, 'yaw', 0);
+  assert.deepEqual(getGravityVector(state), { gx: 0, gy: 0 });
+  setPoseValue(state, 'yaw', 90);
+  assert.deepEqual(getGravityVector(state), { gx: 80, gy: 0 });
+  setPoseValue(state, 'roll', 90);
   assert.deepEqual(getGravityVector(state), { gx: 0, gy: 80 });
-  setPoseValue(state, 'roll', 45);
-  assert.deepEqual(getGravityVector(state), { gx: 57, gy: 57 });
-  setPoseValue(state, 'roll', 135);
-  assert.deepEqual(getGravityVector(state), { gx: 57, gy: -57 });
-  setPoseValue(state, 'roll', 180);
-  assert.deepEqual(getGravityVector(state), { gx: 0, gy: -80 });
-  setPoseValue(state, 'roll', -180);
-  assert.deepEqual(getGravityVector(state), { gx: 0, gy: -80 });
+  setPoseValue(state, 'yaw', 0);
+  setPoseValue(state, 'pitch', 80);
+  assert.deepEqual(getGravityVector(state), { gx: 79, gy: 0 });
   assert.equal(getGravityDirection(state), 'down');
 });
 
 test('planet selector applies the original gravity magnitudes', () => {
   const state = createSandbox(0);
   setPoseValue(state, 'roll', 0);
+  setPoseValue(state, 'pitch', -80);
+  setPoseValue(state, 'yaw', 0);
   setPlanet(state, 'moon');
   assert.equal(getGravityMagnitude(state), 0.16);
   assert.deepEqual(getGravityVector(state), { gx: 0, gy: 13 });
   setPlanet(state, 'earth');
   assert.equal(getGravityMagnitude(state), 1);
-  assert.deepEqual(getGravityVector(state), { gx: 0, gy: 80 });
+  assert.deepEqual(getGravityVector(state), { gx: 0, gy: 79 });
   setPlanet(state, 'jupiter');
   assert.equal(getGravityMagnitude(state), 2.5);
   assert.deepEqual(getGravityVector(state), { gx: 0, gy: 80 });
@@ -96,7 +100,8 @@ test('explosion mode triggers at 180 updates, equivalent to three seconds at 60 
   const random = seededRandom(2718);
   const state = createSandbox(32, random);
   setPoseValue(state, 'roll', 0);
-  setPoseValue(state, 'pitch', 0);
+  setPoseValue(state, 'pitch', -80);
+  setPoseValue(state, 'yaw', 0);
   setMode(state, 'explosion');
   for (let frame = 0; frame < 179; frame += 1) updateSandbox(state, random);
   assert.equal(state.explosionFrames, 179);

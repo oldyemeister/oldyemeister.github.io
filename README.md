@@ -29,7 +29,7 @@ The second playable project recreates the active `drawmario.v` design from the Q
 
 ## STM32 IMU Sandbox
 
-The IMU Sandbox is based on STM32F4 C firmware that combines a BNO055 orientation sensor with 128x64 SSD1306 OLED displays. Its browser presentation focuses on the particle display: a locally hosted Three.js scene exposes Roll, Pitch, and Yaw orientation while switching among the four active firmware modes. Base gravity stays downward in world space and is projected through Roll into the OLED, so the sand follows the physically lower edge and corners as the model turns. A selector reproduces the firmware's Moon (0.16g), Earth (1.00g), and Jupiter (2.50g) magnitudes. The display texture is generated live on a 128x64 Canvas to preserve the embedded screen's pixel character.
+The IMU Sandbox is based on STM32F4 C firmware that combines a BNO055 orientation sensor with 128x64 SSD1306 OLED displays. Its browser presentation focuses on the particle display: a locally hosted Three.js scene exposes Roll, Pitch, and Yaw orientation while switching among the four active firmware modes. Base gravity is fixed to the downward negative-Z direction in world space and projected through the full 3D pose into the OLED, so the sand follows the physically lower edge and corners as the model turns. A selector reproduces the firmware's Moon (0.16g), Earth (1.00g), and Jupiter (2.50g) magnitudes. The display texture is generated live on a 128x64 Canvas to preserve the embedded screen's pixel character.
 
 This is a JavaScript recreation for the website, not STM32 emulation. The original HAL, sensor, display, and particle-simulation sources remain local and untracked; the web version is published from `projects/imu-sandbox/`.
 

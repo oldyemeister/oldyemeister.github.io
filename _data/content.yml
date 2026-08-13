@@ -47,7 +47,7 @@ projects_section:
 
 projects:
   - title: "Laser Puzzle"
-    summary: "An FPGA-based laser reflection puzzle game built for the DE1-SoC, featuring mirror rotation mechanics, timed objectives, and a VGA-rendered playfield. Recreated here as a browser-playable JavaScript/Canvas version."
+    summary: "An FPGA-based laser reflection puzzle game built for the DE1-SoC, featuring mirror rotation mechanics, timed objectives, and a VGA-rendered playfield."
     technologies:
       - "C"
       - "Assembly"
@@ -127,7 +127,7 @@ contact:
 
 laser:
   page_title: "Laser Puzzle"
-  eyebrow: "FPGA Game, recreated for the browser"
+  eyebrow: "FPGA laser reflection game"
   description: "A laser reflection puzzle originally built for the DE1-SoC FPGA board. Rotate mirrors to redirect the laser and hit every target before time runs out."
   objective: "Destroy all target nodes by redirecting the laser beam using rotatable mirrors, without hitting hazards."
   instructions: "Select a mirror, rotate it to reflect the beam, and route the laser to every target within the time limit."
@@ -139,6 +139,7 @@ laser:
   reset_label: "Reset puzzle"
   pause_label: "Pause puzzle"
   resume_label: "Resume puzzle"
+  implementation_note: "Web version built with JavaScript and Canvas."
   status_labels:
     selected: "Selected mirror"
     timer: "Time"
@@ -155,7 +156,7 @@ donkey_kong:
   description: "A full hardware recreation of Donkey Kong, built entirely in Verilog on a DE1-SoC FPGA — game logic, sprite rendering, and collision detection all run in custom digital circuits."
   objective: "Reach the goal at the top of the level while avoiding barrels."
   instructions: "Move and jump to climb the platforms, dodging barrels along the way."
-  notes_heading: "From FPGA to browser"
+  notes_heading: "From design to gameplay"
   collaborator:
     prefix: "Built with"
     name: "Nolan Young"
@@ -168,6 +169,7 @@ donkey_kong:
   reset_label: "Reset game"
   pause_label: "Pause game"
   resume_label: "Resume game"
+  implementation_note: "Web version built with JavaScript and Canvas."
   status_labels:
     status: "State"
     barrels: "Barrels"
@@ -200,6 +202,7 @@ imu_sandbox:
   load_error: "The 3D OLED could not start. Reload the page or enable WebGL in this browser."
   keyboard_controls: "Arrow keys change pitch and yaw. Q and E change roll. Space changes mode."
   reset_label: "Reset OLED pose"
+  implementation_note: "Web version built with JavaScript and Three.js."
   mode_heading: "Mode"
   current_mode_label: "Current mode"
   gravity_heading: "Base gravity"
