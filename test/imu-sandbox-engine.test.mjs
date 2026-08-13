@@ -41,31 +41,42 @@ test('world gravity is fixed to negative Z and projects through the full 3D pose
   setPoseValue(state, 'roll', 0);
   setPoseValue(state, 'pitch', 0);
   setPoseValue(state, 'yaw', 0);
-  assert.deepEqual(getGravityVector(state), { gx: 0, gy: 0 });
-  setPoseValue(state, 'yaw', 90);
-  assert.deepEqual(getGravityVector(state), { gx: 80, gy: 0 });
-  setPoseValue(state, 'roll', 90);
   assert.deepEqual(getGravityVector(state), { gx: 0, gy: 80 });
-  setPoseValue(state, 'yaw', 0);
+  setPoseValue(state, 'roll', 90);
+  assert.deepEqual(getGravityVector(state), { gx: -80, gy: 0 });
+  setPoseValue(state, 'roll', 0);
   setPoseValue(state, 'pitch', 80);
-  assert.deepEqual(getGravityVector(state), { gx: 79, gy: 0 });
+  assert.deepEqual(getGravityVector(state), { gx: 0, gy: 14 });
+  setPoseValue(state, 'yaw', 90);
+  assert.deepEqual(getGravityVector(state), { gx: 0, gy: 14 });
   assert.equal(getGravityDirection(state), 'down');
+});
+
+test('yaw around world Z does not move settled sand gravity', () => {
+  const state = createSandbox(0);
+  setPoseValue(state, 'roll', 45);
+  setPoseValue(state, 'pitch', 30);
+  const gravity = getGravityVector(state);
+  for (const yaw of [-180, -90, 0, 90, 180]) {
+    setPoseValue(state, 'yaw', yaw);
+    assert.deepEqual(getGravityVector(state), gravity);
+  }
 });
 
 test('planet selector applies the original gravity magnitudes', () => {
   const state = createSandbox(0);
-  setPoseValue(state, 'roll', 0);
-  setPoseValue(state, 'pitch', -80);
+  setPoseValue(state, 'roll', 80);
+  setPoseValue(state, 'pitch', 0);
   setPoseValue(state, 'yaw', 0);
   setPlanet(state, 'moon');
   assert.equal(getGravityMagnitude(state), 0.16);
-  assert.deepEqual(getGravityVector(state), { gx: 0, gy: 13 });
+  assert.deepEqual(getGravityVector(state), { gx: -13, gy: 2 });
   setPlanet(state, 'earth');
   assert.equal(getGravityMagnitude(state), 1);
-  assert.deepEqual(getGravityVector(state), { gx: 0, gy: 79 });
+  assert.deepEqual(getGravityVector(state), { gx: -79, gy: 14 });
   setPlanet(state, 'jupiter');
   assert.equal(getGravityMagnitude(state), 2.5);
-  assert.deepEqual(getGravityVector(state), { gx: 0, gy: 80 });
+  assert.deepEqual(getGravityVector(state), { gx: -80, gy: 35 });
 });
 
 test('mode selection cycles through the four active firmware modes', () => {
@@ -100,7 +111,7 @@ test('explosion mode triggers at 180 updates, equivalent to three seconds at 60 
   const random = seededRandom(2718);
   const state = createSandbox(32, random);
   setPoseValue(state, 'roll', 0);
-  setPoseValue(state, 'pitch', -80);
+  setPoseValue(state, 'pitch', 0);
   setPoseValue(state, 'yaw', 0);
   setMode(state, 'explosion');
   for (let frame = 0; frame < 179; frame += 1) updateSandbox(state, random);

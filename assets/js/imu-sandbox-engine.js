@@ -7,7 +7,7 @@ export const GRAVITY_MAG = 80;
 export const MODES = ['normal', 'wind', 'shake', 'explosion'];
 export const PLANETS = Object.freeze({ moon: 0.16, earth: 1, jupiter: 2.5 });
 export const WORLD_GRAVITY = Object.freeze({ x: 0, y: 0, z: -1 });
-export const DEFAULT_POSE = Object.freeze({ roll: -8, pitch: 12, yaw: -10 });
+export const DEFAULT_POSE = Object.freeze({ roll: 0, pitch: 0, yaw: 0 });
 export const POSE_LIMITS = Object.freeze({
   roll: [-180, 180], pitch: [-80, 80], yaw: [-180, 180]
 });
@@ -116,18 +116,16 @@ export function getGravityMagnitude(state) {
 }
 
 export function getGravityVector(state) {
-  const pitch = state.pose.pitch * Math.PI / 180;
-  const yaw = state.pose.yaw * Math.PI / 180;
   const roll = state.pose.roll * Math.PI / 180;
+  const pitch = state.pose.pitch * Math.PI / 180;
   const magnitude = GRAVITY_MAG * getGravityMagnitude(state);
 
-  // The renderer applies Euler XYZ as rotateX(-pitch), rotateY(yaw),
-  // rotateZ(roll). Transform fixed world -Z by the inverse rotation, then
-  // flip local Y because OLED pixel rows increase from top to bottom.
-  const tiltedX = -WORLD_GRAVITY.z * Math.sin(yaw) * Math.cos(pitch);
-  const tiltedY = -WORLD_GRAVITY.z * Math.sin(pitch);
-  const localX = tiltedX * Math.cos(roll) + tiltedY * Math.sin(roll);
-  const localY = -tiltedX * Math.sin(roll) + tiltedY * Math.cos(roll);
+  // The OLED starts in the vertical Y-Z plane facing +X. Its pixel X follows
+  // world +Y and its pixel-up direction follows world +Z. Transform fixed
+  // world -Z through the inverse Z-Y-X device rotation, then flip OLED-local Y
+  // because pixel rows increase downward. Yaw drops out around the gravity axis.
+  const localX = WORLD_GRAVITY.z * Math.sin(roll) * Math.cos(pitch);
+  const localY = WORLD_GRAVITY.z * Math.cos(roll) * Math.cos(pitch);
   let gx = clamp(Math.round(localX * magnitude), -GRAVITY_MAG, GRAVITY_MAG) || 0;
   let gy = clamp(Math.round(-localY * magnitude), -GRAVITY_MAG, GRAVITY_MAG) || 0;
   if (state.mode === 'wind') {

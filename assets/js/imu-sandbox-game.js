@@ -2,7 +2,7 @@ import * as THREE from '../vendor/three.module.min.js';
 import {
   OLED_WIDTH, OLED_HEIGHT, createSandbox, particlePixelX, particlePixelY,
   setPoseValue, resetPose, setMode, cycleMode, setPlanet, updateSandbox
-} from './imu-sandbox-engine.js?v=11';
+} from './imu-sandbox-engine.js?v=14';
 
 const host = document.querySelector('[data-imu-scene]');
 if (!host) throw new Error('IMU Sandbox scene is missing.');
@@ -22,25 +22,27 @@ renderer.outputColorSpace = THREE.SRGBColorSpace;
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x0d1212);
 const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 50);
-camera.position.set(0, 0.4, 11.5);
+camera.up.set(0, 0, 1);
+camera.position.set(11.5, 0, 0);
+camera.lookAt(0, 0, 0);
 
 scene.add(new THREE.HemisphereLight(0xe7fff9, 0x262019, 2.2));
 const keyLight = new THREE.DirectionalLight(0xffffff, 3.3);
-keyLight.position.set(-5, 7, 8);
+keyLight.position.set(8, -5, 7);
 scene.add(keyLight);
 const edgeLight = new THREE.DirectionalLight(0x4de4d2, 1.7);
-edgeLight.position.set(7, -1, 4);
+edgeLight.position.set(4, 7, -1);
 scene.add(edgeLight);
 
 const floor = new THREE.Mesh(
   new THREE.PlaneGeometry(28, 18),
   new THREE.MeshLambertMaterial({ color: 0x25231f })
 );
-floor.rotation.x = -Math.PI / 2;
-floor.position.y = -3.25;
+floor.position.z = -3.25;
 scene.add(floor);
 const grid = new THREE.GridHelper(22, 22, 0x41635d, 0x302f2a);
-grid.position.y = -3.23;
+grid.rotation.x = Math.PI / 2;
+grid.position.z = -3.23;
 grid.material.opacity = 0.85;
 grid.material.transparent = true;
 scene.add(grid);
@@ -49,11 +51,12 @@ const backWall = new THREE.Mesh(
   new THREE.PlaneGeometry(28, 18),
   new THREE.MeshLambertMaterial({ color: 0x121918 })
 );
-backWall.position.z = -3.8;
+backWall.rotation.y = Math.PI / 2;
+backWall.position.x = -3.8;
 scene.add(backWall);
 const backGrid = new THREE.GridHelper(22, 22, 0x41635d, 0x293532);
-backGrid.rotation.x = Math.PI / 2;
-backGrid.position.z = -3.76;
+backGrid.rotation.z = Math.PI / 2;
+backGrid.position.x = -3.76;
 backGrid.material.opacity = 0.7;
 backGrid.material.transparent = true;
 scene.add(backGrid);
@@ -72,36 +75,43 @@ screenTexture.minFilter = THREE.NearestFilter;
 
 const device = new THREE.Group();
 scene.add(device);
+const oledModel = new THREE.Group();
+oledModel.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(
+  new THREE.Vector3(0, 1, 0),
+  new THREE.Vector3(0, 0, 1),
+  new THREE.Vector3(1, 0, 0)
+));
+device.add(oledModel);
 const board = new THREE.Mesh(
   new THREE.BoxGeometry(6.9, 3.85, 0.28),
   new THREE.MeshLambertMaterial({ color: 0x064f43 })
 );
-device.add(board);
+oledModel.add(board);
 
 const bezel = new THREE.Mesh(
   new THREE.BoxGeometry(6.15, 3.1, 0.34),
   new THREE.MeshPhongMaterial({ color: 0x090b0b, shininess: 24 })
 );
 bezel.position.z = 0.18;
-device.add(bezel);
+oledModel.add(bezel);
 const display = new THREE.Mesh(
   new THREE.PlaneGeometry(5.72, 2.86),
   new THREE.MeshBasicMaterial({ map: screenTexture, color: 0xffffff })
 );
 display.position.z = 0.36;
-device.add(display);
+oledModel.add(display);
 
 const metal = new THREE.MeshPhongMaterial({ color: 0xc1cbc8, shininess: 80 });
 for (const [x, y] of [[-3.1, -1.62], [3.1, -1.62], [-3.1, 1.62], [3.1, 1.62]]) {
   const screw = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.08, 18), metal);
   screw.rotation.x = Math.PI / 2;
   screw.position.set(x, y, 0.2);
-  device.add(screw);
+  oledModel.add(screw);
 }
 for (let index = 0; index < 4; index += 1) {
   const pin = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.5, 0.1), metal);
   pin.position.set(-0.24 + index * 0.16, -2.13, 0);
-  device.add(pin);
+  oledModel.add(pin);
 }
 
 const state = createSandbox();
@@ -117,11 +127,11 @@ let dragging = null;
 host.imuSandboxState = state;
 
 function syncPose() {
-  device.rotation.order = 'XYZ';
+  device.rotation.order = 'ZYX';
   device.rotation.set(
-    THREE.MathUtils.degToRad(-state.pose.pitch),
-    THREE.MathUtils.degToRad(state.pose.yaw),
-    THREE.MathUtils.degToRad(state.pose.roll)
+    THREE.MathUtils.degToRad(state.pose.roll),
+    THREE.MathUtils.degToRad(state.pose.pitch),
+    THREE.MathUtils.degToRad(state.pose.yaw)
   );
   inputs.forEach((input) => { input.value = state.pose[input.dataset.imuAxis]; });
   values.forEach((element, axis) => {
@@ -163,7 +173,8 @@ function resize() {
   const height = Math.max(1, host.clientHeight);
   renderer.setSize(Math.ceil(width * 0.6), Math.ceil(height * 0.6), false);
   camera.aspect = width / height;
-  camera.position.z = 11.5 * Math.max(1, 1.12 / camera.aspect);
+  camera.position.x = 11.5 * Math.max(1, 1.12 / camera.aspect);
+  camera.lookAt(0, 0, 0);
   camera.updateProjectionMatrix();
 }
 

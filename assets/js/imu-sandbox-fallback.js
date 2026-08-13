@@ -7,7 +7,7 @@
     const labels = content ? JSON.parse(content.textContent) : {};
 
     try {
-      const engine = await import('./imu-sandbox-engine.js?v=11');
+      const engine = await import('./imu-sandbox-engine.js?v=14');
       host.querySelector('.imu-webgl-canvas')?.remove();
       const stage = document.createElement('div');
       stage.className = 'imu-css-stage';
@@ -68,7 +68,7 @@
       function syncPose() {
         inputs.forEach((input) => { input.value = state.pose[input.dataset.imuAxis]; });
         outputs.forEach((output, axis) => { output.textContent = `${state.pose[axis].toFixed(1)}°`; });
-        device.style.transform = `rotateX(${-state.pose.pitch}deg) rotateY(${state.pose.yaw}deg) rotateZ(${state.pose.roll}deg)`;
+        device.style.transform = `rotateY(${-state.pose.yaw}deg) rotateX(${state.pose.pitch}deg) rotateZ(${-state.pose.roll}deg)`;
         syncGravity();
       }
 

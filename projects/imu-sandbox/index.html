@@ -66,6 +66,20 @@ imu_sandbox_game: true
 
   <div class="imu-scene" data-imu-scene>
     <p class="sr-only" id="imu-controls-description">{{ imu.keyboard_controls }}</p>
+    <div class="imu-world-axes" role="img" aria-label="World axes: X points toward the camera, Y points right, Z points up, and gravity points down along negative Z.">
+      <svg viewBox="0 0 92 78" aria-hidden="true">
+        <line class="imu-axis-line is-y" x1="28" y1="54" x2="76" y2="54" />
+        <path class="imu-axis-arrow is-y" d="M76 54 68 49v10Z" />
+        <line class="imu-axis-line is-z" x1="28" y1="54" x2="28" y2="10" />
+        <path class="imu-axis-arrow is-z" d="m28 10-5 8h10Z" />
+        <circle class="imu-axis-x-ring" cx="28" cy="54" r="7" />
+        <circle class="imu-axis-x-dot" cx="28" cy="54" r="2.5" />
+        <text class="is-x" x="10" y="71">X</text>
+        <text class="is-y" x="79" y="59">Y</text>
+        <text class="is-z" x="23" y="9">Z</text>
+      </svg>
+      <span>Gravity &minus;Z</span>
+    </div>
     <p class="imu-scene-status" data-imu-status role="status">{{ imu.loading_label }}</p>
   </div>
 
