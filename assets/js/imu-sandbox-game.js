@@ -2,7 +2,7 @@ import * as THREE from '../vendor/three.module.min.js';
 import {
   OLED_WIDTH, OLED_HEIGHT, createSandbox, particlePixelX, particlePixelY,
   setPoseValue, resetPose, setMode, cycleMode, setPlanet, updateSandbox
-} from './imu-sandbox-engine.js?v=15';
+} from './imu-sandbox-engine.js?v=17';
 
 const host = document.querySelector('[data-imu-scene]');
 if (!host) throw new Error('IMU Sandbox scene is missing.');

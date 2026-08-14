@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  DEFAULT_POSE, MAX_PARTICLES, MODES, OLED_WIDTH, OLED_HEIGHT, WORLD_GRAVITY,
+  DEFAULT_POSE, FIXED_ONE, MAX_PARTICLES, MODES, OLED_WIDTH, OLED_HEIGHT, WORLD_GRAVITY,
   createSandbox, particlePixelX, particlePixelY, setPoseValue, resetPose,
   setMode, cycleMode, setPlanet, getGravityMagnitude, getGravityVector,
-  getGravityDirection, updateSandbox
+  getGravityDirection, findBuriedExplosionCenter, updateSandbox
 } from '../assets/js/imu-sandbox-engine.js';
 
 function seededRandom(seed = 12345) {
@@ -22,6 +22,7 @@ test('IMU sandbox uses the firmware display and sand capacity', () => {
   assert.equal(state.particles.length, MAX_PARTICLES);
   assert.equal(state.grid.length, 1024);
   assert.deepEqual(state.pose, DEFAULT_POSE);
+  assert.ok(new Set(state.particles.map((particle) => particle.y & (FIXED_ONE - 1))).size > 1);
 });
 
 test('only the original Euler rotation axes are interactive', () => {
@@ -79,6 +80,22 @@ test('planet selector applies the original gravity magnitudes', () => {
   assert.deepEqual(getGravityVector(state), { gx: -80, gy: 35 });
 });
 
+test('moon gravity accumulates subpixel motion without row locking', () => {
+  const state = createSandbox(0);
+  setPlanet(state, 'moon');
+  for (const [x, subpixelY] of [[20, 0], [40, 200]]) {
+    const y = 10;
+    state.grid[y * (OLED_WIDTH >> 3) + (x >> 3)] |= 1 << (x & 7);
+    state.particles.push({ x: x * FIXED_ONE, y: y * FIXED_ONE + subpixelY, vx: 0, vy: 0 });
+  }
+  updateSandbox(state, () => 0.5);
+  assert.deepEqual(state.particles.map(particlePixelY), [10, 10]);
+  assert.ok(state.particles.every((particle) => (particle.y & (FIXED_ONE - 1)) > 0));
+  updateSandbox(state, () => 0.5);
+  updateSandbox(state, () => 0.5);
+  assert.deepEqual(state.particles.map(particlePixelY), [10, 11]);
+});
+
 test('mode selection cycles through the four active firmware modes', () => {
   const state = createSandbox(0);
   MODES.forEach((mode) => {
@@ -88,6 +105,20 @@ test('mode selection cycles through the four active firmware modes', () => {
   setMode(state, 'normal');
   cycleMode(state, -1);
   assert.equal(state.mode, 'explosion');
+});
+
+test('explosions choose the particle deepest inside a buried region', () => {
+  const state = createSandbox(0);
+  for (let y = 20; y <= 26; y += 1) {
+    for (let x = 40; x <= 46; x += 1) {
+      state.grid[y * (OLED_WIDTH >> 3) + (x >> 3)] |= 1 << (x & 7);
+      state.particles.push({ x: x * FIXED_ONE, y: y * FIXED_ONE, vx: 0, vy: 0 });
+    }
+  }
+  const center = findBuriedExplosionCenter(state, () => 0);
+  assert.equal(particlePixelX(center.particle), 43);
+  assert.equal(particlePixelY(center.particle), 23);
+  assert.equal(center.depth, 4);
 });
 
 test('bit-grid collision keeps 3000 particles in unique OLED cells', () => {
@@ -118,5 +149,7 @@ test('explosion mode triggers at 180 updates, equivalent to three seconds at 60 
   assert.equal(state.explosionFrames, 179);
   updateSandbox(state, random);
   assert.equal(state.explosionFrames, 0);
-  assert.ok(state.particles.some((particle) => particle.vx !== 0 || particle.vy !== 0));
+  assert.ok(state.lastExplosion.depth > 0);
+  assert.ok(Number.isInteger(state.lastExplosion.x));
+  assert.ok(Number.isInteger(state.lastExplosion.y));
 });

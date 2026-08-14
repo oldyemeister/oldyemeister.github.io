@@ -10,9 +10,14 @@ page_class: home
       <h1>{{ site_content.hero.name }}</h1>
       <p class="hero-role">{{ site_content.hero.role }}</p>
       <p class="hero-introduction">{{ site_content.hero.introduction }}</p>
-      <a class="text-link text-link-primary" href="{{ site_content.hero.primary_link.url | relative_url }}">
-        {{ site_content.hero.primary_link.label }} <span aria-hidden="true">&rarr;</span>
-      </a>
+      <div class="hero-links">
+        <a class="text-link text-link-primary" href="{{ site_content.hero.primary_link.url | relative_url }}">
+          {{ site_content.hero.primary_link.label }} <span aria-hidden="true">&rarr;</span>
+        </a>
+        <a class="text-link" href="{{ site_content.hero.secondary_link.url | relative_url }}" target="_blank" rel="noopener noreferrer">
+          {{ site_content.hero.secondary_link.label }} <span aria-hidden="true">&nearr;</span>
+        </a>
+      </div>
     </div>
     <figure class="portrait-frame">
       <img src="{{ site_content.hero.portrait.path | relative_url }}" alt="{{ site_content.hero.portrait.alt }}">
@@ -36,10 +41,38 @@ page_class: home
   </div>
 </section>
 
+<section class="page-section experience-section" id="experience">
+  <div class="content-shell">
+    <header class="section-header">
+      <div><p class="section-index">02</p><h2>{{ site_content.experience_section.heading }}</h2></div>
+      <p>{{ site_content.experience_section.introduction }}</p>
+    </header>
+    <div class="experience-list">
+      {% for item in site_content.experience %}
+      <article class="experience-item">
+        <div class="experience-meta">
+          <time>{{ item.dates }}</time>
+          <span>{{ item.location }}</span>
+        </div>
+        <div class="experience-content">
+          <div class="experience-heading">
+            <div><p>{{ item.company }}</p><h3>{{ item.role }}</h3></div>
+            <strong>{{ item.impact }}</strong>
+          </div>
+          <ul>
+            {% for highlight in item.highlights %}<li>{{ highlight }}</li>{% endfor %}
+          </ul>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
 <section class="page-section" id="projects">
   <div class="content-shell">
     <header class="section-header">
-      <div><p class="section-index">02</p><h2>{{ site_content.projects_section.heading }}</h2></div>
+      <div><p class="section-index">03</p><h2>{{ site_content.projects_section.heading }}</h2></div>
       <p>{{ site_content.projects_section.introduction }}</p>
     </header>
     <div class="project-grid">
@@ -71,24 +104,6 @@ page_class: home
   </div>
 </section>
 
-<section class="page-section section-muted" id="writing">
-  <div class="content-shell">
-    <header class="section-header">
-      <div><p class="section-index">03</p><h2>{{ site_content.writing_section.heading }}</h2></div>
-      <p>{{ site_content.writing_section.introduction }}</p>
-    </header>
-    <div class="writing-list">
-      {% for item in site_content.writing %}
-      <article class="writing-item">
-        <div class="writing-meta"><time>{{ item.date }}</time><span>{{ item.publication }}</span></div>
-        <div><h3><a href="{{ item.url }}">{{ item.title }}</a></h3><p>{{ item.excerpt }}</p></div>
-        <a class="arrow-link" href="{{ item.url }}" aria-label="Read {{ item.title }}"><span aria-hidden="true">&rarr;</span></a>
-      </article>
-      {% endfor %}
-    </div>
-  </div>
-</section>
-
 <section class="page-section contact-section" id="contact">
   <div class="content-shell contact-layout">
     <div><p class="section-index">04</p><h2>{{ site_content.contact.heading }}</h2></div>
@@ -96,7 +111,7 @@ page_class: home
       <p class="contact-message">{{ site_content.contact.message }}</p>
       <div class="contact-links">
         <a href="mailto:{{ site_content.contact.email.address }}">{{ site_content.contact.email.label }}</a>
-        <a href="{{ site_content.contact.resume.path | relative_url }}">{{ site_content.contact.resume.label }}</a>
+        <a href="{{ site_content.contact.resume.path | relative_url }}" download>{{ site_content.contact.resume.label }}</a>
         {% for social in site_content.contact.social_links %}<a href="{{ social.url }}">{{ social.label }}</a>{% endfor %}
       </div>
     </div>

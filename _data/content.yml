@@ -9,6 +9,7 @@ site:
 navigation:
   home: "Home"
   about: "About"
+  experience: "Experience"
   projects: "Projects"
   writing: "Writing"
   contact: "Contact"
@@ -27,19 +28,57 @@ hero:
   primary_link:
     label: "Get in touch"
     url: "#contact"
+  secondary_link:
+    label: "View résumé"
+    url: "/Jiawei_Main_Resume.pdf"
 
 about:
   heading: "About"
   biography: |-
-    I'm a Computer Engineering student at the University of Toronto (BASc + PEY Co-op, expected graduation April 2027), with a dual hardware-software background spanning embedded systems, RF/PCB design, and AI product engineering.
+    I'm a Computer Engineering student at the University of Toronto (BASc + PEY Co-op, expected graduation April 2027), with a dual hardware-software background spanning embedded systems, RF/PCB design, and AI product engineering. I was named to the Dean's Honor List in Spring 2024 and Spring 2025.
 
     My internship experience includes AI engineering work at Tencent Cloud and BesTV (Shanghai Media Group), building LLM-powered workflows, translation APIs, and speech processing pipelines. On the hardware side, I've designed RF downconversion PCBs in Altium, built FPGA games in Verilog and C on the DE1-SoC, and worked with STM32 embedded systems. I'm also a content creator on Bilibili, producing technical videos on Formula 1 engineering and motorsport technology for an audience of 10,000+ followers.
   skills_heading: "Skills and interests"
   skills:
-    - "Python, C/C++, Verilog"
-    - "PCB Design (Altium, LTSpice)"
-    - "FPGA Development (Quartus, ModelSim)"
-    - "AI/ML & LLM Workflows"
+    - "Python, C/C++, Verilog, C#"
+    - "PyTorch, TensorFlow, RAG"
+    - "Flask, FastAPI, Docker, SQL"
+    - "Altium, LTSpice, ModelSim"
+    - "DE1-SoC, Quartus, PlatformIO"
+    - "Blender, AutoCAD, 3D Printing"
+
+experience_section:
+  heading: "Experience"
+  introduction: "Applied AI systems shipped across media, education, and enterprise workflows."
+
+experience:
+  - company: "Tencent Cloud"
+    role: "AI Engineering Intern"
+    location: "Shanghai, China"
+    dates: "Jun — Aug 2025"
+    impact: "3,000+ clips/week"
+    highlights:
+      - "Developed a Flask, Dify, and Python pipeline on Tencent COS that categorized more than 3,000 provincial-TV news clips each week."
+      - "Built a WeCom news-search and report-generation bot plus a secure translation API with approximately 200 ms average delay and streaming-output correction."
+      - "Created a user-behavior simulation framework with persona generation, a rule-based engine, and JSON analytics."
+  - company: "BesTV"
+    role: "AI Tech Intern"
+    location: "Shanghai, China"
+    dates: "May — Jun 2025"
+    impact: "LLM infrastructure"
+    highlights:
+      - "Deployed Docker-based AI infrastructure and custom Model Context Protocol servers for structured data and API orchestration on Ubuntu."
+      - "Implemented presentation summarization and image-generation workflows with DeepSeek and Alibaba Tongyi APIs."
+      - "Optimized local speech pipelines using Whisper for speech-to-text and CosyVoice for text-to-speech."
+  - company: "Tencent Cloud"
+    role: "AI Product Intern"
+    location: "Shanghai, China"
+    dates: "May — Aug 2024"
+    impact: "Rehired for 2025"
+    highlights:
+      - "Built kindergarten datasets with Shanghai Education Television using Selenium and PyTorch."
+      - "Deployed Dockerized scrapers for daily collection from WeChat public accounts."
+      - "Contributed to an AI-driven news-sorting system for Zhejiang Television and earned a return internship for 2025."
 
 projects_section:
   heading: "Selected projects"
@@ -77,7 +116,7 @@ projects:
     live_label: "Play game"
     featured: false
   - title: "IMU Sandbox"
-    summary: "[IMU SANDBOX PROJECT DESCRIPTION PLACEHOLDER — resume doesn't detail this project yet; add specifics on the STM32 + BNO055 setup and what the sandbox demonstrates.]"
+    summary: "An STM32 particle sandbox that uses BNO055 orientation data to drive 3,000 sand and rock particles across dual SSD1306 OLED displays, with selectable gravity presets and environmental effects."
     collaborator:
       prefix: "Built with"
       name: "Suzen Bao"
@@ -118,7 +157,7 @@ contact:
     address: "jiawei.ye@mail.utoronto.ca"
   resume:
     label: "Download resume"
-    path: "[RESUME FILE PATH PLACEHOLDER — add your resume PDF to /assets/ and link it here]"
+    path: "/Jiawei_Main_Resume.pdf"
   social_links:
     - label: "GitHub"
       url: "https://github.com/oldyemeister"

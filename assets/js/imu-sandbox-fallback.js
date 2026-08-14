@@ -7,7 +7,7 @@
     const labels = content ? JSON.parse(content.textContent) : {};
 
     try {
-      const engine = await import('./imu-sandbox-engine.js?v=15');
+      const engine = await import('./imu-sandbox-engine.js?v=17');
       host.querySelector('.imu-webgl-canvas')?.remove();
       const stage = document.createElement('div');
       stage.className = 'imu-css-stage';
