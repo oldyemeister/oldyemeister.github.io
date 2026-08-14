@@ -79,7 +79,10 @@ page_class: home
       {% for project in site_content.projects %}
       <article class="project-card{% if project.featured %} project-card-featured{% endif %}">
         <div class="project-media">
-          <img src="{{ project.image.path | relative_url }}" alt="{{ project.image.alt }}" loading="lazy">
+          <picture>
+            {% if project.image.poster %}<source media="(prefers-reduced-motion: reduce)" srcset="{{ project.image.poster | relative_url }}">{% endif %}
+            <img src="{{ project.image.path | relative_url }}" alt="{{ project.image.alt }}" loading="lazy">
+          </picture>
         </div>
         <div class="project-content">
           <h3>{{ project.title }}</h3>

@@ -92,8 +92,9 @@ projects:
       - "Assembly"
       - "RV32"
     image:
-      path: "/assets/images/laser-preview.png"
-      alt: "Screenshot of the Laser Puzzle game"
+      path: "/assets/images/laser-preview.gif"
+      poster: "/assets/images/laser-preview.png"
+      alt: "Animated gameplay preview of the Laser Puzzle game"
     repository_url: "[LASER PUZZLE REPOSITORY URL PLACEHOLDER]"
     live_url: "/projects/laser/"
     live_label: "Play puzzle"
@@ -109,8 +110,9 @@ projects:
       - "Quartus"
       - "DE1-SoC FPGA"
     image:
-      path: "/assets/images/donkey-kong-preview.png"
-      alt: "Screenshot of the FPGA Donkey Kong game"
+      path: "/assets/images/donkey-kong-preview.gif"
+      poster: "/assets/images/donkey-kong-preview.png"
+      alt: "Animated gameplay preview of the FPGA Donkey Kong game"
     repository_url: "[DONKEY KONG PROJECT REPOSITORY URL PLACEHOLDER]"
     live_url: "/projects/donkey-kong/"
     live_label: "Play game"
@@ -126,9 +128,10 @@ projects:
       - "STM32"
       - "BNO055"
     image:
-      path: "/assets/images/imu-sandbox-preview.png"
-      alt: "IMU Sandbox interactive OLED demo"
-    repository_url: "[IMU SANDBOX REPOSITORY URL PLACEHOLDER]"
+      path: "/assets/images/imu-sandbox-preview.gif"
+      poster: "/assets/images/imu-sandbox-preview.png"
+      alt: "Animated preview of the IMU Sandbox OLED rotating in roll"
+    repository_url: "https://github.com/oldyemeister/imu_sandbox_stm32"
     live_url: "/projects/imu-sandbox/"
     live_label: "Explore OLED"
     featured: false

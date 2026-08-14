@@ -33,6 +33,7 @@ This document is the internal source of truth for future AI-assisted changes. Th
 - `assets/vendor/three.module.min.js` and `three.core.min.js`: pinned local Three.js 0.185.1 runtime; keep versions matched.
 - `tools/convert-laser-assets.mjs`: extracts owned RGB565 arrays from the original C source and generates browser PNGs.
 - `tools/convert-donkey-kong-assets.mjs`: converts original 3-bit Quartus MIF memories into browser PNGs.
+- `tools/capture-game-previews.mjs`: captures the live games through Chrome DevTools and builds the looping project-card GIFs.
 - `tools/preview-build.mjs`: dependency-free local renderer used when Jekyll is unavailable.
 - `test/laser-engine.test.mjs`: Node test coverage for puzzle rules.
 - `test/imu-sandbox-engine.test.mjs`: Node test coverage for modes, pose limits, and OLED bounds.
@@ -134,7 +135,17 @@ The firmware caps the full loop near 30 FPS because each SSD1306 framebuffer is 
 
 The Three.js scene must remain self-contained and static-hosting compatible. Do not replace the local imports with a CDN URL. If its module graph or WebGL context fails, `imu-sandbox-bootstrap.js` starts the CSS 3D compatibility renderer so the project remains usable in embedded and restricted browsers. Both renderers import the same engine and standard IMU axis presentation: Roll rotates around X, Pitch around Y, and Yaw around Z, composed in Z-Y-X order. The OLED is centered at `(0, 0, 0)` in the Y-Z plane, its front faces +X, the camera looks toward the origin from +X with +Z as camera-up, and the ground is parallel to X-Y. Pointer drag changes Yaw/Pitch, Q/E changes Roll, Arrow keys change Pitch/Yaw, and Space cycles modes. Gravity must remain fixed at world-space negative Z and be transformed into OLED-local coordinates using the inverse of that same rendered pose. Yaw must not change the projected gravity. Keep the corner axis gizmo synchronized with these conventions and both display canvases exactly 128x64 with nearest-neighbor rendering.
 
-`imu-sandbox-preview.png` is a capture of the actual 3D scene. Regenerate it from the live scene if the model changes. Do not substitute a generic electronics image.
+`imu-sandbox-preview.png` is the reduced-motion poster for the actual 3D scene. The animated `imu-sandbox-preview.gif` must vary Roll only: keep Pitch and Yaw at zero throughout the capture. Do not substitute a generic electronics image.
+
+## Animated project previews
+
+Each Selected Projects card uses a live-game GIF and falls back to its PNG poster when `prefers-reduced-motion: reduce` is active. The capture script expects the dependency-free preview at `http://127.0.0.1:8766`, a headless Chrome debugging page at `http://127.0.0.1:9234`, macOS `sips`, and giflib's `gif2rgb`. Run:
+
+```sh
+node tools/capture-game-previews.mjs
+```
+
+The script captures a five-second Laser Puzzle sequence that rotates mirror 1 left and then selects later mirrors, a five-second Donkey Kong sequence that holds Right, and a six-second IMU Roll gesture. IMU eases from 0° to 180° in two seconds, then from 180° to −180° in four seconds; Pitch and Yaw stay at zero. Pass a preview name such as `imu-sandbox` to regenerate only that asset. Validate all generated GIFs with `gifbuild -d` before publishing.
 
 ## Verification workflow
 
