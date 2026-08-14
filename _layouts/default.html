@@ -20,7 +20,7 @@
         document.documentElement.dataset.theme = theme;
       }());
     </script>
-    <link rel="stylesheet" href="{{ '/assets/css/site.css' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/site.css?v=15' | relative_url }}">
   </head>
   <body class="page-{{ page.page_class | default: 'default' }}">
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -37,8 +37,8 @@
       <script type="module" src="{{ '/assets/js/donkey-kong-game.js' | relative_url }}"></script>
     {% endif %}
     {% if page.imu_sandbox_game %}
-      <script src="{{ '/assets/js/imu-sandbox-fallback.js?v=14' | relative_url }}" defer></script>
-      <script src="{{ '/assets/js/imu-sandbox-bootstrap.js?v=14' | relative_url }}" data-module="{{ '/assets/js/imu-sandbox-game.js?v=14' | relative_url }}" defer></script>
+      <script src="{{ '/assets/js/imu-sandbox-fallback.js?v=15' | relative_url }}" defer></script>
+      <script src="{{ '/assets/js/imu-sandbox-bootstrap.js?v=15' | relative_url }}" data-module="{{ '/assets/js/imu-sandbox-game.js?v=15' | relative_url }}" defer></script>
     {% endif %}
   </body>
 </html>
