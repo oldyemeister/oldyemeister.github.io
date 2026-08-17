@@ -21,7 +21,8 @@ This document is the internal source of truth for future AI-assisted changes. Th
 - `projects/donkey-kong/index.html`: live FPGA platform game page and editable text bindings.
 - `projects/imu-sandbox/index.html`: interactive 3D OLED page and editable text bindings.
 - `assets/css/site.css`: responsive layout and light/dark design tokens.
-- `assets/js/site.js`: theme persistence and mobile navigation.
+- `assets/js/site.js`: theme persistence, animated mobile navigation, and IntersectionObserver-based content reveals.
+- `assets/js/viewport-loop.js`: shared lifecycle helper that runs Canvas/WebGL animation frames only while their viewport is visible.
 - `assets/js/laser-engine.js`: pure puzzle state, ray tracing, target progress, cooldown, timer, and lives.
 - `assets/js/laser-game.js`: Canvas renderer, browser controls, HUD, and animation loop.
 - `assets/js/donkey-kong-engine.js`: pure fixed-step movement, jump, barrel, collision, and win rules.
@@ -31,6 +32,7 @@ This document is the internal source of truth for future AI-assisted changes. Th
 - `assets/js/imu-sandbox-fallback.js`: Canvas and CSS 3D compatibility renderer used when Three.js or WebGL cannot start.
 - `assets/js/imu-sandbox-game.js`: Three.js OLED model, CanvasTexture display, direct manipulation, and controls.
 - `assets/vendor/three.module.min.js` and `three.core.min.js`: pinned local Three.js 0.185.1 runtime; keep versions matched.
+- `assets/documents/resume/`: résumé documents published by the site. These are organized away from the repository root but remain public on GitHub and GitHub Pages.
 - `tools/convert-laser-assets.mjs`: extracts owned RGB565 arrays from the original C source and generates browser PNGs.
 - `tools/convert-donkey-kong-assets.mjs`: converts original 3-bit Quartus MIF memories into browser PNGs.
 - `tools/capture-game-previews.mjs`: captures the live games through Chrome DevTools and builds the looping project-card GIFs.
@@ -56,6 +58,8 @@ Do not move editable prose into templates. Fixed application mechanics and acces
 The early inline script in `_layouts/default.html` selects a theme before CSS paints. `assets/js/site.js` synchronizes the switch, stores explicit choices in `localStorage`, and follows `prefers-color-scheme` until the user chooses a theme.
 
 User-triggered changes temporarily add `theme-transition` to the root for 420 ms. CSS transitions only color, background-color, border-color, outline-color, box-shadow, fill, and stroke; do not replace this with `transition: all`. The toggle thumb uses a synchronized scale/glow animation. Initial theme setup and system-preference changes do not add the class, preventing a wrong-theme flash. Reduced-motion users bypass the animation in JavaScript, with the CSS media query retained as a second safeguard.
+
+Scroll reveals are progressively enhanced by `site.js`: content remains visible when JavaScript or IntersectionObserver is unavailable, linked sections are revealed immediately, and observed elements animate only once. Do not apply reveal transforms directly to Canvas or WebGL surfaces. All three interactive demos use `viewport-loop.js` so physics and rendering stop outside the viewport and reset their time accumulator when resumed. The IMU bootstrap additionally defers importing Three.js until the scene first enters the viewport.
 
 `site-theme-change` includes `theme`, `animated`, and `duration` in its event detail. Interactive project shells follow the site theme through semantic CSS variables, but gameplay screens remain theme-invariant for visual consistency. Do not attach Canvas, WebGL, or OLED renderers to this event. The Laser and Donkey Kong canvases and the IMU scene must retain their fixed palettes in both site themes.
 

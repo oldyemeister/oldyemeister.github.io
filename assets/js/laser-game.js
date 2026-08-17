@@ -2,6 +2,7 @@ import {
   WIDTH, HEIGHT, HIT_THRESHOLD, createGame, selectMirror, rotateMirror,
   selectMirrorAt, traceLaser, updateTargetProgress, advanceTimer
 } from './laser-engine.js';
+import { createViewportLoop } from './viewport-loop.js';
 
 const canvas = document.querySelector('[data-laser-canvas]');
 if (!canvas) throw new Error('Laser puzzle canvas is missing.');
@@ -201,7 +202,6 @@ function animate(time) {
   }
   render(trace);
   updateInterface();
-  requestAnimationFrame(animate);
 }
 
 canvas.addEventListener('keydown', (event) => {
@@ -223,4 +223,7 @@ document.querySelector('[data-overlay-reset]').addEventListener('click', reset);
 elements.pause.addEventListener('click', () => { if (game.status === 'running') { game.paused = !game.paused; updateInterface(); } });
 
 updateInterface();
-requestAnimationFrame(animate);
+createViewportLoop(canvas, animate, (time) => {
+  previousTime = time;
+  timerAccumulator = 0;
+});

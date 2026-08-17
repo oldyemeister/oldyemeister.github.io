@@ -3,6 +3,7 @@ import {
   OLED_WIDTH, OLED_HEIGHT, createSandbox, particlePixelX, particlePixelY,
   setPoseValue, resetPose, setMode, cycleMode, setPlanet, updateSandbox
 } from './imu-sandbox-engine.js?v=17';
+import { createViewportLoop } from './viewport-loop.js';
 
 const host = document.querySelector('[data-imu-scene]');
 if (!host) throw new Error('IMU Sandbox scene is missing.');
@@ -243,7 +244,6 @@ function animate(time) {
     host.classList.add('is-ready');
     window.dispatchEvent(new CustomEvent('imu-sandbox-ready'));
   }
-  requestAnimationFrame(animate);
 }
 
 new ResizeObserver(resize).observe(host);
@@ -251,4 +251,7 @@ syncPose();
 syncMode();
 syncGravity();
 resize();
-requestAnimationFrame(animate);
+createViewportLoop(host, animate, (time) => {
+  previousTime = time;
+  physicsAccumulator = 0;
+});

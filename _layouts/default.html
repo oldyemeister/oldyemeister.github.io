@@ -20,7 +20,7 @@
         document.documentElement.dataset.theme = theme;
       }());
     </script>
-    <link rel="stylesheet" href="{{ '/assets/css/site.css?v=19' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/site.css?v=20' | relative_url }}">
   </head>
   <body class="page-{{ page.page_class | default: 'default' }}">
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -29,16 +29,16 @@
       {{ content }}
     </main>
     {% include footer.html %}
-    <script src="{{ '/assets/js/site.js' | relative_url }}" defer></script>
+    <script src="{{ '/assets/js/site.js?v=20' | relative_url }}" defer></script>
     {% if page.laser_game %}
-      <script type="module" src="{{ '/assets/js/laser-game.js' | relative_url }}"></script>
+      <script type="module" src="{{ '/assets/js/laser-game.js?v=20' | relative_url }}"></script>
     {% endif %}
     {% if page.donkey_kong_game %}
-      <script type="module" src="{{ '/assets/js/donkey-kong-game.js' | relative_url }}"></script>
+      <script type="module" src="{{ '/assets/js/donkey-kong-game.js?v=20' | relative_url }}"></script>
     {% endif %}
     {% if page.imu_sandbox_game %}
-      <script src="{{ '/assets/js/imu-sandbox-fallback.js?v=17' | relative_url }}" defer></script>
-      <script src="{{ '/assets/js/imu-sandbox-bootstrap.js?v=17' | relative_url }}" data-module="{{ '/assets/js/imu-sandbox-game.js?v=17' | relative_url }}" defer></script>
+      <script src="{{ '/assets/js/imu-sandbox-fallback.js?v=20' | relative_url }}" defer></script>
+      <script src="{{ '/assets/js/imu-sandbox-bootstrap.js?v=20' | relative_url }}" data-module="{{ '/assets/js/imu-sandbox-game.js?v=20' | relative_url }}" defer></script>
     {% endif %}
   </body>
 </html>

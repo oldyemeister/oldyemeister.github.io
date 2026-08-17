@@ -7,7 +7,10 @@
     const labels = content ? JSON.parse(content.textContent) : {};
 
     try {
-      const engine = await import('./imu-sandbox-engine.js?v=17');
+      const [engine, { createViewportLoop }] = await Promise.all([
+        import('./imu-sandbox-engine.js?v=17'),
+        import('./viewport-loop.js')
+      ]);
       host.querySelector('.imu-webgl-canvas')?.remove();
       const stage = document.createElement('div');
       stage.className = 'imu-css-stage';
@@ -148,7 +151,6 @@
           accumulator -= 1 / 60;
         }
         draw();
-        requestAnimationFrame(animate);
       }
 
       syncPose();
@@ -156,7 +158,10 @@
       draw();
       document.querySelector('[data-imu-status]').hidden = true;
       host.classList.add('is-ready', 'is-fallback');
-      requestAnimationFrame(animate);
+      createViewportLoop(host, animate, (time) => {
+        previous = time;
+        accumulator = 0;
+      });
     } catch (error) {
       console.error('IMU Sandbox compatibility renderer failed.', error);
       const status = document.querySelector('[data-imu-status]');

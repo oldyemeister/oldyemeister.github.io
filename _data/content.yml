@@ -30,7 +30,7 @@ hero:
     url: "#contact"
   secondary_link:
     label: "View résumé"
-    url: "/Jiawei_Main_Resume.pdf"
+    url: "/assets/documents/resume/Jiawei_Ye_Resume.pdf"
 
 about:
   heading: "About"
@@ -91,13 +91,14 @@ projects:
       - "C"
       - "Assembly"
       - "RV32"
+      - "Computer Architecture"
     image:
       path: "/assets/images/laser-preview.gif"
       poster: "/assets/images/laser-preview.png"
       alt: "Animated gameplay preview of the Laser Puzzle game"
-    repository_url: "[LASER PUZZLE REPOSITORY URL PLACEHOLDER]"
+    repository_url: "https://github.com/oldyemeister/RISC-V_lasergame"
     live_url: "/projects/laser/"
-    live_label: "Play puzzle"
+    live_label: "Solve puzzle"
     featured: true
   - title: "Donkey Kong FPGA Game"
     summary: "A hardware recreation of the classic Donkey Kong game on an FPGA, with full game logic, sprite rendering, and collision detection implemented directly in Verilog. Achieved smooth 60 FPS gameplay on the DE1-SoC through timing analysis and resource optimization."
@@ -108,6 +109,7 @@ projects:
     technologies:
       - "Verilog"
       - "Quartus"
+      - "ModelSim"
       - "DE1-SoC FPGA"
     image:
       path: "/assets/images/donkey-kong-preview.gif"
@@ -133,7 +135,7 @@ projects:
       alt: "Animated preview of the IMU Sandbox OLED rotating in roll"
     repository_url: "https://github.com/oldyemeister/imu_sandbox_stm32"
     live_url: "/projects/imu-sandbox/"
-    live_label: "Explore OLED"
+    live_label: "Alter gravity"
     featured: false
 
 writing_section:
@@ -160,7 +162,7 @@ contact:
     address: "jiawei.ye@mail.utoronto.ca"
   resume:
     label: "Download resume"
-    path: "/Jiawei_Main_Resume.pdf"
+    path: "/assets/documents/resume/Jiawei_Ye_Resume.pdf"
   social_links:
     - label: "GitHub"
       url: "https://github.com/oldyemeister"
@@ -172,11 +174,14 @@ laser:
   eyebrow: "FPGA laser reflection game"
   description: "A laser reflection puzzle originally built for the DE1-SoC FPGA board. Rotate mirrors to redirect the laser and hit every target before time runs out."
   objective: "Destroy all target nodes by redirecting the laser beam using rotatable mirrors, without hitting hazards."
+  notes_heading: "From low-level graphics to a complete game"
+  overview: "Laser Puzzle is a complete game designed for the DE1-SoC's RV32 environment, combining a 320 × 240 VGA framebuffer with an interactive ray-reflection challenge. The project brings together 13 selectable mirrors, continuous beam tracing, six destructible target nodes, four hazards, a two-life system, and a two-minute timer in one deterministic game loop. I built the gameplay around integer framebuffer coordinates so the visual beam, mirror geometry, collisions, controls, and HUD remain synchronized on the target platform."
+  results: "The result is a self-contained puzzle that runs as a low-level hardware-oriented application and is also playable here as a faithful browser recreation. Building it taught me how much precision matters when graphics double as collision data: a one-pixel offset can change an entire reflection path. I also learned to separate game state, geometry, timing, and rendering clearly, which made the original mechanics easier to test and reproduce across platforms."
   instructions: "Select a mirror, rotate it to reflect the beam, and route the laser to every target within the time limit."
   controls_heading: "Controls"
   keyboard_controls: "Up and Down select a mirror. Left and Right rotate it. Space pauses. R resets."
   source_label: "View original source"
-  source_url: "[LASER PUZZLE SOURCE URL PLACEHOLDER]"
+  source_url: "https://github.com/oldyemeister/RISC-V_lasergame"
   back_label: "Back to projects"
   reset_label: "Reset puzzle"
   pause_label: "Pause puzzle"
@@ -197,6 +202,8 @@ donkey_kong:
   eyebrow: "Hardware-implemented classic game"
   description: "A full hardware recreation of Donkey Kong, built entirely in Verilog on a DE1-SoC FPGA — game logic, sprite rendering, and collision detection all run in custom digital circuits."
   objective: "Reach the goal at the top of the level while avoiding barrels."
+  overview: "This project is a hardware recreation of Donkey Kong developed with Nolan Young for the DE1-SoC. Instead of running a software game loop, the player movement, jumping, barrel behavior, collision detection, sprite selection, and win logic are expressed as clocked Verilog logic. The level and sprites are stored in FPGA memory, while the VGA pipeline continuously combines those assets with the live positions of Mario and the barrels."
+  results: "The finished design delivers smooth 60 FPS VGA gameplay with responsive controls, moving hazards, collision-based respawning, and a complete path to the goal. The project strengthened my understanding of synchronous design, clock-rate division, memory-backed graphics, and timing analysis. It also showed me how edge cases that are trivial in software—platform boundaries, simultaneous movement, and collision timing—must be made explicit and deterministic in hardware."
   instructions: "Move and jump to climb the platforms, dodging barrels along the way."
   notes_heading: "From design to gameplay"
   collaborator:
@@ -230,13 +237,15 @@ imu_sandbox:
   description: "A tilt-controlled particle sandbox built on the STM32, where sand and rock particles fall and collide in real time based on the board's physical orientation."
   objective: "Tilt the board to shift gravity and watch particles respond in real time. Switch between materials, gravity presets, and environmental effects."
   notes_heading: "From sensor to display"
+  overview: "IMU Sandbox is a handheld STM32F446ZE particle simulator that turns BNO055 orientation readings into a gravity vector for sand and rock particles on a 128 × 64 OLED. A second OLED reports material, mode, planet, and gravity state, while a 3D-printed enclosure brings the sensor, controls, and displays into one physical device. I developed the particle data structures, bit-packed occupancy grid, fixed-point motion and collision engine, and the Wind, Shake, and Explosion effects, while also contributing to enclosure assembly, tuning, debugging, and system testing."
+  results: "The completed system simulates as many as 3,000 particles at approximately 30 FPS and responds directly to physical rotation under Moon, Earth, and Jupiter gravity presets. The work taught me how to trade numerical precision, memory use, and update cost on a microcontroller, and how to reason carefully about IMU and display coordinate systems. Integrating the full device also reinforced that embedded performance is system-wide: sensor transforms, collision behavior, I2C framebuffer transfers, and mechanical assembly all affect how convincing the final interaction feels."
   instructions: "I developed the core particle simulation: the data structures, occupancy grid, and fixed-point physics engine that drives how sand and rock particles fall and collide, adapting ideas from an open-source falling-sand engine (The Powder Toy) for embedded hardware. I extended the engine with rock material behavior and the wind, shake, and explosion effects, and handled collision tuning, 3D-printed hardware assembly, and debugging of material/effect interactions."
   collaborator:
     prefix: "Built with"
     name: "Suzen Bao"
     url: "https://www.linkedin.com/in/suzen-bao/"
   source_label: "View original source"
-  source_url: "[IMU SANDBOX SOURCE URL PLACEHOLDER]"
+  source_url: "https://github.com/oldyemeister/imu_sandbox_stm32"
   back_label: "Back to projects"
   interactive_label: "Interactive OLED model"
   canvas_label: "Interactive 3D OLED screen with particle simulation"

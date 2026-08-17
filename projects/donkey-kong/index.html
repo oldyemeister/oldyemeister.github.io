@@ -84,7 +84,13 @@ donkey_kong_game: true
 
 <section class="page-section section-muted laser-notes">
   <div class="content-shell two-column-section">
-    <div><p class="section-index">Project notes</p><h2>{{ game.notes_heading }}</h2></div>
-    <div class="section-body"><p>{{ game.instructions }}</p><a class="text-link" href="{{ game.source_url }}">{{ game.source_label }} <span aria-hidden="true">&rarr;</span></a></div>
+    <div><p class="section-index">Project summary</p><h2>{{ game.notes_heading }}</h2></div>
+    <div class="section-body">
+      <p>{{ game.overview }}</p>
+      <p>{{ game.results }}</p>
+      <h3>How to play</h3>
+      <p>{{ game.instructions }}</p>
+      <a class="text-link" href="{{ game.source_url }}">{{ game.source_label }} <span aria-hidden="true">&rarr;</span></a>
+    </div>
   </div>
 </section>

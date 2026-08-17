@@ -15,15 +15,30 @@
     input.addEventListener('input', () => updateReadout(input));
   });
 
-  import(script.dataset.module).catch((error) => {
-    console.error('IMU Sandbox failed to start.', error);
-    if (typeof window.startImuSandboxFallback === 'function') {
-      Promise.resolve(window.startImuSandboxFallback()).catch(console.error);
-      return;
-    }
-    if (status) {
-      status.textContent = labels.loadError || 'The 3D OLED could not start.';
-      status.classList.add('is-error');
-    }
-  });
+  let started = false;
+  function start() {
+    if (started) return;
+    started = true;
+    import(script.dataset.module).catch((error) => {
+      console.error('IMU Sandbox failed to start.', error);
+      if (typeof window.startImuSandboxFallback === 'function') {
+        Promise.resolve(window.startImuSandboxFallback()).catch(console.error);
+        return;
+      }
+      if (status) {
+        status.textContent = labels.loadError || 'The 3D OLED could not start.';
+        status.classList.add('is-error');
+      }
+    });
+  }
+
+  const scene = document.querySelector('[data-imu-scene]');
+  if ('IntersectionObserver' in window && scene) {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      observer.disconnect();
+      start();
+    }, { threshold: 0.01 });
+    observer.observe(scene);
+  } else start();
 }());

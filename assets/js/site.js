@@ -65,7 +65,41 @@
     document.body.classList.toggle('navigation-open', open);
   });
   navigation?.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeNavigation));
-  window.addEventListener('resize', () => { if (window.innerWidth > 760) closeNavigation(); });
+  window.addEventListener('resize', () => { if (window.innerWidth > 1080) closeNavigation(); });
+
+  const revealTargets = [...document.querySelectorAll([
+    '.hero-copy', '.portrait-frame', '.section-header > *',
+    '.two-column-section > *', '.contact-layout > *',
+    '.laser-intro-layout > *', '.game-heading-row',
+    '.experience-item', '.project-card'
+  ].join(','))];
+
+  if (!reducedMotion.matches && 'IntersectionObserver' in window && revealTargets.length) {
+    document.querySelectorAll('.experience-list, .project-grid').forEach((group) => {
+      [...group.children].forEach((item, index) => {
+        item.style.setProperty('--reveal-delay', `${Math.min(index * 90, 270)}ms`);
+      });
+    });
+    revealTargets.forEach((element) => element.classList.add('reveal-item'));
+    root.classList.add('reveal-enabled');
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-revealed');
+        observer.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    let linkedSection = null;
+    if (window.location.hash) {
+      try { linkedSection = document.querySelector(window.location.hash); } catch (error) {}
+    }
+    revealTargets.forEach((element) => {
+      const bounds = element.getBoundingClientRect();
+      const initiallyVisible = bounds.top < window.innerHeight * 0.92 && bounds.bottom > 0;
+      if (initiallyVisible || linkedSection?.contains(element)) element.classList.add('is-revealed');
+      else revealObserver.observe(element);
+    });
+  } else revealTargets.forEach((element) => element.classList.add('is-revealed'));
 
   const year = document.querySelector('[data-current-year]');
   if (year) year.textContent = new Date().getFullYear();

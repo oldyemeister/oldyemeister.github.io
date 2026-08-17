@@ -107,7 +107,6 @@ async function buildPage(sourcePath, outputPath) {
 await rm(destination, { recursive: true, force: true });
 await mkdir(destination, { recursive: true });
 await cp(resolve(root, 'assets'), resolve(destination, 'assets'), { recursive: true });
-await cp(resolve(root, 'Jiawei_Main_Resume.pdf'), resolve(destination, 'Jiawei_Main_Resume.pdf'));
 await buildPage('index.html', 'index.html');
 await buildPage('projects/laser/index.html', 'projects/laser/index.html');
 await buildPage('projects/donkey-kong/index.html', 'projects/donkey-kong/index.html');

@@ -1,4 +1,5 @@
 import { WIDTH, HEIGHT, TICK_RATE, createMask, createGame, setControl, jump, tick, resetGame } from './donkey-kong-engine.js';
+import { createViewportLoop } from './viewport-loop.js';
 
 const canvas = document.querySelector('[data-donkey-kong-canvas]');
 if (!canvas) throw new Error('Donkey Kong canvas is missing.');
@@ -96,7 +97,6 @@ function animate(time) {
   }
   render();
   updateInterface();
-  requestAnimationFrame(animate);
 }
 
 function directionForKey(key) {
@@ -136,5 +136,8 @@ Promise.all([
 ]).then(() => {
   game = createGame(maskFromBackground(assets.background));
   updateInterface();
-  requestAnimationFrame(animate);
+  createViewportLoop(canvas, animate, (time) => {
+    previousTime = time;
+    accumulator = 0;
+  });
 }).catch(() => { elements.message.textContent = labels.loadError; });
