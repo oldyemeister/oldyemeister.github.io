@@ -11,24 +11,129 @@ const data = JSON.parse(execFileSync('ruby', [
 
 function frontMatter(source) {
   const match = source.match(/^---\n([\s\S]*?)\n---\n/);
-  const page = {};
-  if (match) {
-    for (const line of match[1].split('\n')) {
-      const separator = line.indexOf(':');
-      if (separator > 0) {
-        const key = line.slice(0, separator).trim();
-        const raw = line.slice(separator + 1).trim();
-        page[key] = raw === 'true' ? true : raw === 'false' ? false : raw;
-      }
-    }
-  }
+  const page = match ? JSON.parse(execFileSync('ruby', [
+    '-ryaml', '-rjson', '-e', 'puts JSON.generate(YAML.load(STDIN.read))'
+  ], { input: match[1], encoding: 'utf8' })) : {};
   return { page, body: match ? source.slice(match[0].length) : source };
 }
 
 function valueOf(expression, environment) {
   const path = expression.trim();
+  const notEmpty = path.match(/^(.+?)\s*!=\s*empty$/);
+  if (notEmpty) {
+    const value = valueOf(notEmpty[1], environment);
+    return value !== undefined && value !== null && value !== '';
+  }
+  const isEmpty = path.match(/^(.+?)\s*==\s*empty$/);
+  if (isEmpty) {
+    const value = valueOf(isEmpty[1], environment);
+    return value === undefined || value === null || value === '';
+  }
   if ((path.startsWith('"') && path.endsWith('"')) || (path.startsWith("'") && path.endsWith("'"))) return path.slice(1, -1);
   return path.split('.').reduce((value, key) => value?.[key], environment);
+}
+
+function inlineMarkdown(text) {
+  return text
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1">')
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*([^*]+)\*/g, '<em>$1</em>');
+}
+
+function markdownToHtml(source) {
+  const lines = source.replace(/\r\n/g, '\n').split('\n');
+  const blocks = [];
+  let paragraph = [];
+  const flushParagraph = () => {
+    if (!paragraph.length) return;
+    blocks.push(`<p>${inlineMarkdown(paragraph.join(' '))}</p>`);
+    paragraph = [];
+  };
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index];
+    const trimmed = line.trim();
+    if (!trimmed) { flushParagraph(); continue; }
+
+    const attribute = trimmed.match(/^\{:\s*\.([\w-]+)\s*}$/);
+    if (attribute) {
+      flushParagraph();
+      const last = blocks.pop();
+      if (last) blocks.push(last.replace(/^<([a-z0-9]+)/, `<$1 class="${attribute[1]}"`));
+      continue;
+    }
+
+    const heading = trimmed.match(/^(#{2,4})\s+(.+)$/);
+    if (heading) {
+      flushParagraph();
+      const level = heading[1].length;
+      blocks.push(`<h${level}>${inlineMarkdown(heading[2])}</h${level}>`);
+      continue;
+    }
+
+    if (/^\|.+\|$/.test(trimmed) && /^\|[\s:|-]+\|$/.test(lines[index + 1]?.trim() || '')) {
+      flushParagraph();
+      const rows = [];
+      const cells = (row) => row.slice(1, -1).split('|').map((cell) => cell.trim());
+      rows.push(cells(trimmed));
+      index += 2;
+      while (index < lines.length && /^\|.+\|$/.test(lines[index].trim())) {
+        rows.push(cells(lines[index].trim()));
+        index += 1;
+      }
+      index -= 1;
+      const header = `<thead><tr>${rows[0].map((cell) => `<th>${inlineMarkdown(cell)}</th>`).join('')}</tr></thead>`;
+      const body = `<tbody>${rows.slice(1).map((row) => `<tr>${row.map((cell) => `<td>${inlineMarkdown(cell)}</td>`).join('')}</tr>`).join('')}</tbody>`;
+      blocks.push(`<table>${header}${body}</table>`);
+      continue;
+    }
+
+    if (/^!\[[^\]]*\]\([^)]+\)$/.test(trimmed)) {
+      flushParagraph();
+      blocks.push(`<p>${inlineMarkdown(trimmed)}</p>`);
+      continue;
+    }
+
+    if (trimmed.startsWith('> ')) {
+      flushParagraph();
+      blocks.push(`<blockquote><p>${inlineMarkdown(trimmed.slice(2))}</p></blockquote>`);
+      continue;
+    }
+
+    const unordered = trimmed.match(/^[-*]\s+(.+)$/);
+    if (unordered) {
+      flushParagraph();
+      const items = [unordered[1]];
+      while (index + 1 < lines.length) {
+        const next = lines[index + 1].trim().match(/^[-*]\s+(.+)$/);
+        if (!next) break;
+        items.push(next[1]);
+        index += 1;
+      }
+      blocks.push(`<ul>${items.map((item) => `<li>${inlineMarkdown(item)}</li>`).join('')}</ul>`);
+      continue;
+    }
+
+    const ordered = trimmed.match(/^\d+\.\s+(.+)$/);
+    if (ordered) {
+      flushParagraph();
+      const items = [ordered[1]];
+      while (index + 1 < lines.length) {
+        const next = lines[index + 1].trim().match(/^\d+\.\s+(.+)$/);
+        if (!next) break;
+        items.push(next[1]);
+        index += 1;
+      }
+      blocks.push(`<ol>${items.map((item) => `<li>${inlineMarkdown(item)}</li>`).join('')}</ol>`);
+      continue;
+    }
+
+    paragraph.push(trimmed);
+  }
+  flushParagraph();
+  return blocks.join('\n');
 }
 
 function applyFilters(expression, environment) {
@@ -91,7 +196,12 @@ async function buildPage(sourcePath, outputPath) {
     site: { data: { content: data } }, site_content: data, laser: data.laser,
     game: data.donkey_kong, imu: data.imu_sandbox, page
   };
-  const renderedBody = render(body, pageEnvironment);
+  let renderedBody = sourcePath.endsWith('.md') ? markdownToHtml(body) : render(body, pageEnvironment);
+  if (page.layout && page.layout !== 'default') {
+    const nestedLayoutSource = await readFile(resolve(root, `_layouts/${page.layout}.html`), 'utf8');
+    const nestedLayout = frontMatter(nestedLayoutSource).body;
+    renderedBody = render(nestedLayout, { ...pageEnvironment, content: renderedBody });
+  }
   const layout = await readFile(resolve(root, '_layouts/default.html'), 'utf8');
   const navigation = render(await readFile(resolve(root, '_includes/navigation.html'), 'utf8'), pageEnvironment);
   const footer = render(await readFile(resolve(root, '_includes/footer.html'), 'utf8'), pageEnvironment);
@@ -111,5 +221,6 @@ await buildPage('index.html', 'index.html');
 await buildPage('projects/laser/index.html', 'projects/laser/index.html');
 await buildPage('projects/donkey-kong/index.html', 'projects/donkey-kong/index.html');
 await buildPage('projects/imu-sandbox/index.html', 'projects/imu-sandbox/index.html');
+await buildPage('projects/rf-receiver/index.md', 'projects/rf-receiver/index.html');
 await buildPage('404.html', '404.html');
 process.stdout.write(`${destination}\n`);

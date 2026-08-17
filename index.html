@@ -57,7 +57,7 @@ page_class: home
         <div class="experience-content">
           <div class="experience-heading">
             <div><p>{{ item.company }}</p><h3>{{ item.role }}</h3></div>
-            <strong>{{ item.impact }}</strong>
+            <strong class="achievement-badge">{{ item.impact }}</strong>
           </div>
           <ul>
             {% for highlight in item.highlights %}<li>{{ highlight }}</li>{% endfor %}
@@ -79,10 +79,13 @@ page_class: home
       {% for project in site_content.projects %}
       <article class="project-card{% if project.featured %} project-card-featured{% endif %}">
         <div class="project-media">
+          {% if project.placeholder %}<div class="project-media-placeholder" aria-hidden="true"><span>{{ project.placeholder_index }}</span><small>Project slot</small></div>{% endif %}
+          {% if project.image.path %}
           <picture>
             {% if project.image.poster %}<source media="(prefers-reduced-motion: reduce)" srcset="{{ project.image.poster | relative_url }}">{% endif %}
             <img src="{{ project.image.path | relative_url }}" alt="{{ project.image.alt }}" loading="lazy">
           </picture>
+          {% endif %}
         </div>
         <div class="project-content">
           <h3>{{ project.title }}</h3>
@@ -92,13 +95,25 @@ page_class: home
             <span>{{ project.collaborator.prefix }} <a href="{{ project.collaborator.url }}" target="_blank" rel="noopener noreferrer">{{ project.collaborator.name }}</a></span>
           </p>
           {% endif %}
+          {% if project.collaborators %}
+          <p class="collaborator-byline collaborator-byline-card collaborator-byline-multiple">
+            <span class="collaborator-icon" aria-hidden="true">+</span>
+            <span>Built with</span>
+            {% for collaborator in project.collaborators %}
+              {% if collaborator.url != empty %}<a href="{{ collaborator.url }}" target="_blank" rel="noopener noreferrer">{{ collaborator.name }}</a>{% endif %}
+              {% if collaborator.url == empty %}<span>{{ collaborator.name }}</span>{% endif %}
+            {% endfor %}
+          </p>
+          {% endif %}
           <p>{{ project.summary }}</p>
           <ul class="technology-list" aria-label="Technologies">
             {% for technology in project.technologies %}<li>{{ technology }}</li>{% endfor %}
           </ul>
           <div class="project-links">
-            <a href="{{ project.live_url | relative_url }}">{{ project.live_label }} <span aria-hidden="true">&rarr;</span></a>
-            <a href="{{ project.repository_url }}">Source</a>
+            {% if project.live_url %}<a class="project-demo-link" href="{{ project.live_url | relative_url }}">{{ project.live_label }} <span aria-hidden="true">&rarr;</span></a>{% endif %}
+            {% if project.repository_url %}<a class="source-link" href="{{ project.repository_url }}" target="_blank" rel="noopener noreferrer">Source <span aria-hidden="true">&nearr;</span></a>{% endif %}
+            {% if project.repository_pending %}<span class="source-link source-link-pending" aria-label="Source repository link pending">Source <small>URL pending</small></span>{% endif %}
+            {% if project.draft_label %}<span class="project-draft-label">{{ project.draft_label }}</span>{% endif %}
           </div>
         </div>
       </article>

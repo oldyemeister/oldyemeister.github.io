@@ -1,5 +1,6 @@
 site:
   name: "Jiawei (Jacky) Ye"
+  initials: "JY"
   title: "Jiawei (Jacky) Ye | Computer Engineering Student & Hardware Engineer"
   description: "Computer Engineering student at the University of Toronto building embedded systems, FPGA games, and AI-powered tools."
   language: "en"
@@ -41,10 +42,10 @@ about:
   skills_heading: "Skills and interests"
   skills:
     - "Python, C/C++, Verilog, C#"
-    - "PyTorch, TensorFlow, RAG"
     - "Flask, FastAPI, Docker, SQL"
     - "Altium, LTSpice, ModelSim"
     - "DE1-SoC, Quartus, PlatformIO"
+    - "PyTorch, TensorFlow, RAG"
     - "Blender, AutoCAD, 3D Printing"
 
 experience_section:
@@ -99,7 +100,6 @@ projects:
     repository_url: "https://github.com/oldyemeister/RISC-V_lasergame"
     live_url: "/projects/laser/"
     live_label: "Solve puzzle"
-    featured: true
   - title: "Donkey Kong FPGA Game"
     summary: "A hardware recreation of the classic Donkey Kong game on an FPGA, with full game logic, sprite rendering, and collision detection implemented directly in Verilog. Achieved smooth 60 FPS gameplay on the DE1-SoC through timing analysis and resource optimization."
     collaborator:
@@ -115,12 +115,13 @@ projects:
       path: "/assets/images/donkey-kong-preview.gif"
       poster: "/assets/images/donkey-kong-preview.png"
       alt: "Animated gameplay preview of the FPGA Donkey Kong game"
-    repository_url: "[DONKEY KONG PROJECT REPOSITORY URL PLACEHOLDER]"
+    repository_url: ""
+    repository_pending: true
     live_url: "/projects/donkey-kong/"
     live_label: "Play game"
     featured: false
   - title: "IMU Sandbox"
-    summary: "An STM32 particle sandbox that uses BNO055 orientation data to drive 3,000 sand and rock particles across dual SSD1306 OLED displays, with selectable gravity presets and environmental effects."
+    summary: "An IMU-controlled STM32 sandbox running up to 3,000 sand particles at approximately 30 FPS, with dual OLEDs, selectable gravity, materials, and environmental effects."
     collaborator:
       prefix: "Built with"
       name: "Suzen Bao"
@@ -136,6 +137,69 @@ projects:
     repository_url: "https://github.com/oldyemeister/imu_sandbox_stm32"
     live_url: "/projects/imu-sandbox/"
     live_label: "Alter gravity"
+    featured: false
+
+  # EDITABLE PROJECT CARD 4
+  - title: "RF Frequency Downconversion System"
+    summary: "A three-person analog receiver project combining an 8–16 MHz bandpass filter, ±0.7 V limiter, Gilbert-cell mixer, and low-pass filter to produce an approximately 100 kHz downconverted output with 18 dB measured chain gain."
+    collaborators:
+      - name: "Michael Wei"
+        url: ""
+      - name: "Enpei Gu"
+        url: ""
+    technologies:
+      - "RF Circuit Design"
+      - "Altium Designer"
+      - "LTspice"
+      - "PCB Validation"
+    placeholder: false
+    placeholder_index: "04"
+    image:
+      path: "/assets/images/mixer_prototype_output.png"
+      poster: ""
+      alt: "Oscilloscope measurement of the RF receiver chain producing an approximately 100 kHz output"
+    repository_url: ""
+    live_url: "/projects/rf-receiver/"
+    live_label: "Read project"
+    draft_label: ""
+    featured: false
+
+  # EDITABLE PROJECT CARD 5
+  - title: "Project Five"
+    summary: "Replace this sentence with a concise description of the problem, your contribution, and the result."
+    technologies:
+      - "Technology"
+      - "Tool"
+      - "Platform"
+    placeholder: true
+    placeholder_index: "05"
+    image:
+      path: ""
+      poster: ""
+      alt: "Preview image for Project Five"
+    repository_url: ""
+    live_url: ""
+    live_label: "View project"
+    draft_label: "Project details coming soon"
+    featured: false
+
+  # EDITABLE PROJECT CARD 6
+  - title: "Project Six"
+    summary: "Replace this sentence with a concise description of the problem, your contribution, and the result."
+    technologies:
+      - "Technology"
+      - "Tool"
+      - "Platform"
+    placeholder: true
+    placeholder_index: "06"
+    image:
+      path: ""
+      poster: ""
+      alt: "Preview image for Project Six"
+    repository_url: ""
+    live_url: ""
+    live_label: "View project"
+    draft_label: "Project details coming soon"
     featured: false
 
 writing_section:
@@ -234,12 +298,24 @@ donkey_kong:
 imu_sandbox:
   page_title: "IMU Sandbox"
   eyebrow: "STM32 + BNO055 sensor demo"
-  description: "A tilt-controlled particle sandbox built on the STM32, where sand and rock particles fall and collide in real time based on the board's physical orientation."
+  description: "A tilt-controlled STM32 sandbox running up to 3,000 sand particles at approximately 30 FPS from BNO055 orientation data."
   objective: "Tilt the board to shift gravity and watch particles respond in real time. Switch between materials, gravity presets, and environmental effects."
-  notes_heading: "From sensor to display"
-  overview: "IMU Sandbox is a handheld STM32F446ZE particle simulator that turns BNO055 orientation readings into a gravity vector for sand and rock particles on a 128 × 64 OLED. A second OLED reports material, mode, planet, and gravity state, while a 3D-printed enclosure brings the sensor, controls, and displays into one physical device. I developed the particle data structures, bit-packed occupancy grid, fixed-point motion and collision engine, and the Wind, Shake, and Explosion effects, while also contributing to enclosure assembly, tuning, debugging, and system testing."
-  results: "The completed system simulates as many as 3,000 particles at approximately 30 FPS and responds directly to physical rotation under Moon, Earth, and Jupiter gravity presets. The work taught me how to trade numerical precision, memory use, and update cost on a microcontroller, and how to reason carefully about IMU and display coordinate systems. Integrating the full device also reinforced that embedded performance is system-wide: sensor transforms, collision behavior, I2C framebuffer transfers, and mechanical assembly all affect how convincing the final interaction feels."
-  instructions: "I developed the core particle simulation: the data structures, occupancy grid, and fixed-point physics engine that drives how sand and rock particles fall and collide, adapting ideas from an open-source falling-sand engine (The Powder Toy) for embedded hardware. I extended the engine with rock material behavior and the wind, shake, and explosion effects, and handled collision tuning, 3D-printed hardware assembly, and debugging of material/effect interactions."
+  notes_heading: "Embedded physics at 3,000 particles"
+  metrics:
+    - value: "3,000"
+      label: "sand particles"
+    - value: "≈30 FPS"
+      label: "simulation rate"
+    - value: "1 KB"
+      label: "occupancy grid"
+    - value: "0.16g–2.5g"
+      label: "gravity range"
+  overview: "We implemented a handheld STM32F446ZE particle sandbox controlled by BNO055 roll and pitch data. One 128 × 64 OLED renders the simulation, while a second displays the material, effect mode, planet, and gravity level. Users can select sand or rock, four environmental modes, and Moon (0.16g), Earth (1.0g), or Jupiter (2.5g) gravity."
+  contribution_heading: "contribution"
+  contribution: "I developed the particle data structures, 1 KB bit-packed occupancy grid, and core collision logic. Particle position and velocity use Q8 fixed-point values, avoiding floating-point work in the main update loop. Constant-time grid checks, inactive-particle skipping, velocity limits, and two gravity-relative fallback cells keep collision processing efficient. I also implemented rock behavior, Wind, Shake, and Explosion effects, parameter tuning, debugging, and part of the 3D-printed assembly."
+  performance_heading: "Performance and next iteration"
+  results: "The system runs up to 3,000 sand particles at approximately 30 FPS. Its main bottleneck is the OLED interface: each frame sends a complete 1,024-byte framebuffer through blocking transfers on the 400 kHz I²C bus shared with the IMU. A future version could use SPI, partial redraws, DMA, and separate physics and display rates to improve performance."
+  instructions: "I developed the Q8 fixed-point particle structures, 1 KB bit-packed occupancy grid, and optimized collision engine that support up to 3,000 sand particles at approximately 30 FPS. I also added the larger-particle rock behavior and the Wind, Shake, and Explosion effects, then tuned and debugged their interactions on the assembled hardware."
   collaborator:
     prefix: "Built with"
     name: "Suzen Bao"

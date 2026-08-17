@@ -4,7 +4,7 @@ This document is the internal source of truth for future AI-assisted changes. Th
 
 ## Non-negotiable constraints
 
-1. Keep all editable portfolio copy, links, labels, and media paths in `_data/content.yml`.
+1. Keep shared and homepage portfolio copy, links, labels, and media paths in `_data/content.yml`. Long-form case-study prose belongs in its project Markdown file.
 2. Do not move, rewrite, format, or delete anything under `demos/` unless the user explicitly requests changes to an original project.
 3. `demos/Laser_Puzzle/` contains the CPUlator C laser puzzle, `demos/DonkeyKong/` contains the Verilog/Quartus game, and `demos/imu_sandbox_stm32/` contains the STM32 HAL/C project.
 4. Keep `demos/` in `.gitignore`, and keep `demos/`, `docs/`, `tools/`, and `test/` in `_config.yml` exclusions so GitHub Pages does not publish them.
@@ -13,15 +13,19 @@ This document is the internal source of truth for future AI-assisted changes. Th
 
 ## Architecture
 
-- `_data/content.yml`: only file a non-developer should need to edit for portfolio content.
+- `_data/content.yml`: primary file for portfolio copy, links, labels, and project metadata.
 - `_layouts/default.html`: shared document shell, metadata, early theme initialization, and scripts.
+- `_layouts/project_case_study.html`: long-form Markdown project shell with hero media, sticky project metadata, and engineering-read typography.
 - `_includes/`: shared navigation and footer.
 - `index.html`: content-driven portfolio sections.
 - `projects/laser/index.html`: live puzzle page and its editable text bindings.
 - `projects/donkey-kong/index.html`: live FPGA platform game page and editable text bindings.
 - `projects/imu-sandbox/index.html`: interactive 3D OLED page and editable text bindings.
+- `projects/rf-receiver/index.md`: RF receiver-chain case study generated from the two presentation decks and supporting status/design reports.
+- `projects/custom-pcb/index.md`: unpublished PCB case-study boilerplate. Replace its placeholders and set `published: true` when its media and measurements are ready.
 - `assets/css/site.css`: responsive layout and light/dark design tokens.
 - `assets/js/site.js`: theme persistence, animated mobile navigation, and IntersectionObserver-based content reveals.
+- `assets/js/project-bootstrap.js`: defers Laser and Donkey Kong module initialization until the corresponding Canvas enters the viewport.
 - `assets/js/viewport-loop.js`: shared lifecycle helper that runs Canvas/WebGL animation frames only while their viewport is visible.
 - `assets/js/laser-engine.js`: pure puzzle state, ray tracing, target progress, cooldown, timer, and lives.
 - `assets/js/laser-game.js`: Canvas renderer, browser controls, HUD, and animation loop.
@@ -36,7 +40,7 @@ This document is the internal source of truth for future AI-assisted changes. Th
 - `tools/convert-laser-assets.mjs`: extracts owned RGB565 arrays from the original C source and generates browser PNGs.
 - `tools/convert-donkey-kong-assets.mjs`: converts original 3-bit Quartus MIF memories into browser PNGs.
 - `tools/capture-game-previews.mjs`: captures the live games through Chrome DevTools and builds the looping project-card GIFs.
-- `tools/preview-build.mjs`: dependency-free local renderer used when Jekyll is unavailable.
+- `tools/preview-build.mjs`: dependency-free local renderer used when Jekyll is unavailable; it renders the homepage, interactive pages, and Markdown case studies used by the local preview.
 - `test/laser-engine.test.mjs`: Node test coverage for puzzle rules.
 - `test/imu-sandbox-engine.test.mjs`: Node test coverage for modes, pose limits, and OLED bounds.
 
@@ -51,7 +55,11 @@ To add a project or writing item:
 3. Store local media under `assets/images/` and use a root-relative path such as `/assets/images/example.png`.
 4. Run `npm run preview:build` and inspect desktop and mobile layouts.
 
+The remaining homepage placeholders are labeled `EDITABLE PROJECT CARD 5` and `6` inside `_data/content.yml`. Edit each card's `title`, `summary`, `technologies`, URLs, and image metadata there. Put preview images in `assets/images/`, set `image.path`, remove `placeholder: true`, and clear `draft_label` when the project is ready. `live_url` and `repository_url` may remain empty until valid destinations exist. Project Card 4 is the RF receiver case study and its long-form content is in `projects/rf-receiver/index.md`.
+
 Do not move editable prose into templates. Fixed application mechanics and accessibility labels may remain in code when they are not personal content.
+
+Case studies use native Jekyll Markdown with `layout: project_case_study`. Keep their project-specific front matter and prose in `projects/<slug>/index.md`, and put images under `assets/images/case-studies/<slug>/`. The layout expects `role`, `team_size`, `timeline`, and a `tools` list. Use `{:.case-study-wide-image}` after a schematic image to break it beyond the reading column, and `{:.image-caption}` after an italic caption. Leave draft studies as `published: false`; only add their homepage card after replacing every placeholder and supplying the referenced media.
 
 ## Theme behavior
 
@@ -59,7 +67,7 @@ The early inline script in `_layouts/default.html` selects a theme before CSS pa
 
 User-triggered changes temporarily add `theme-transition` to the root for 420 ms. CSS transitions only color, background-color, border-color, outline-color, box-shadow, fill, and stroke; do not replace this with `transition: all`. The toggle thumb uses a synchronized scale/glow animation. Initial theme setup and system-preference changes do not add the class, preventing a wrong-theme flash. Reduced-motion users bypass the animation in JavaScript, with the CSS media query retained as a second safeguard.
 
-Scroll reveals are progressively enhanced by `site.js`: content remains visible when JavaScript or IntersectionObserver is unavailable, linked sections are revealed immediately, and observed elements animate only once. Do not apply reveal transforms directly to Canvas or WebGL surfaces. All three interactive demos use `viewport-loop.js` so physics and rendering stop outside the viewport and reset their time accumulator when resumed. The IMU bootstrap additionally defers importing Three.js until the scene first enters the viewport.
+Scroll reveals are progressively enhanced by `site.js`: content remains visible when JavaScript or IntersectionObserver is unavailable, linked sections are revealed immediately, and observed elements animate only once. Do not apply reveal transforms directly to Canvas or WebGL surfaces. Laser and Donkey Kong initialize through `project-bootstrap.js` only when their Canvas first enters the viewport; the IMU bootstrap applies the same rule to Three.js. After initialization, all three demos use `viewport-loop.js` so physics and rendering stop outside the viewport and reset their time accumulator when resumed.
 
 `site-theme-change` includes `theme`, `animated`, and `duration` in its event detail. Interactive project shells follow the site theme through semantic CSS variables, but gameplay screens remain theme-invariant for visual consistency. Do not attach Canvas, WebGL, or OLED renderers to this event. The Laser and Donkey Kong canvases and the IMU scene must retain their fixed palettes in both site themes.
 

@@ -71,7 +71,8 @@
     '.hero-copy', '.portrait-frame', '.section-header > *',
     '.two-column-section > *', '.contact-layout > *',
     '.laser-intro-layout > *', '.game-heading-row',
-    '.experience-item', '.project-card'
+    '.experience-item', '.project-card', '.case-study-hero-copy',
+    '.case-study-hero-media', '.case-study-meta', '.case-study-prose'
   ].join(','))];
 
   if (!reducedMotion.matches && 'IntersectionObserver' in window && revealTargets.length) {

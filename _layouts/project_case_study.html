@@ -1,0 +1,52 @@
+---
+layout: default
+---
+<article class="case-study">
+  <header class="case-study-hero">
+    <div class="content-shell case-study-hero-copy">
+      <p class="eyebrow">{{ page.eyebrow | default: "Engineering case study" }}</p>
+      <h1>{{ page.title }}</h1>
+      {% if page.summary %}<p class="case-study-summary">{{ page.summary }}</p>{% endif %}
+    </div>
+    {% if page.hero_image %}
+    <figure class="case-study-hero-media">
+      <img src="{{ page.hero_image | relative_url }}" alt="{{ page.hero_alt }}" width="1600" height="700" fetchpriority="high">
+      {% if page.hero_caption %}<figcaption>{{ page.hero_caption }}</figcaption>{% endif %}
+    </figure>
+    {% endif %}
+  </header>
+
+  <div class="content-shell case-study-layout">
+    <aside class="case-study-meta" aria-label="Project details">
+      <dl>
+        <div><dt>Role</dt><dd>{{ page.role }}</dd></div>
+        <div><dt>Team</dt><dd>{{ page.team_size }}</dd></div>
+        <div><dt>Timeline</dt><dd>{{ page.timeline }}</dd></div>
+        {% if page.collaborators %}
+        <div>
+          <dt>Built with</dt>
+          <dd class="case-study-collaborators">
+            {% for collaborator in page.collaborators %}
+              {% if collaborator.url != empty %}<a href="{{ collaborator.url }}" target="_blank" rel="noopener noreferrer">{{ collaborator.name }}</a>{% endif %}
+              {% if collaborator.url == empty %}<span>{{ collaborator.name }}</span>{% endif %}
+            {% endfor %}
+          </dd>
+        </div>
+        {% endif %}
+        <div>
+          <dt>Tools</dt>
+          <dd>
+            <ul class="case-study-tools">
+              {% for tool in page.tools %}<li>{{ tool }}</li>{% endfor %}
+            </ul>
+          </dd>
+        </div>
+      </dl>
+      {% if page.source_url != empty %}<a class="case-study-source" href="{{ page.source_url }}" target="_blank" rel="noopener noreferrer">View source <span aria-hidden="true">&nearr;</span></a>{% endif %}
+    </aside>
+
+    <div class="case-study-prose">
+      {{ content }}
+    </div>
+  </div>
+</article>
