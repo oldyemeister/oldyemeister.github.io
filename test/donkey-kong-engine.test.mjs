@@ -14,7 +14,7 @@ function platformMask(y = 221) {
 }
 
 async function originalMapMask() {
-  const source = await readFile(new URL('../demos/DonkeyKong/map320magenta.mif', import.meta.url), 'utf8');
+  const source = await readFile(new URL('../tools/.reference/demos/DonkeyKong/map320magenta.mif', import.meta.url), 'utf8');
   const values = new Uint8Array(WIDTH * HEIGHT);
   for (const statement of source.slice(source.search(/\bBEGIN\b/i) + 5).split(';')) {
     const fill = statement.match(/\[(\d+)\.\.(\d+)\]\s*:\s*([01]+)/);

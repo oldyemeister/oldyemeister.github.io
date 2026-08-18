@@ -3,7 +3,7 @@ import { resolve } from 'node:path';
 import { deflateSync } from 'node:zlib';
 
 const root = resolve(import.meta.dirname, '..');
-const source = resolve(root, 'demos/DonkeyKong');
+const source = resolve(root, 'tools/.reference/demos/DonkeyKong');
 const output = resolve(root, 'assets/images');
 const palette = [
   [0, 0, 0, 255], [0, 0, 255, 255], [0, 255, 0, 255], [0, 255, 255, 255],

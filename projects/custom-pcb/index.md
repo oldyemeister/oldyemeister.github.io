@@ -8,7 +8,7 @@ hero_image: "/assets/images/case-studies/custom-pcb/board-render.webp"
 hero_alt: "3D render of the assembled custom PCB"
 hero_caption: "Replace with a concise caption naming the board revision and the important visible subsystems."
 role: "PCB Design & Hardware Validation"
-team_size: "4 engineers"
+team_size: "3 engineers"
 timeline: "Month YYYY — Month YYYY"
 tools:
   - "Altium Designer"
@@ -39,6 +39,8 @@ Explain the major functional blocks, signal flow, power domains, and external in
 ![System architecture block diagram](/assets/images/case-studies/custom-pcb/system-architecture.webp)
 {: .case-study-wide-image}
 
+![PCB layout showing the critical routing regions](/assets/images/case-studies/custom-pcb/layout-routing.webp)
+
 *Replace with a caption that helps a reader understand the diagram without repeating the body text.*
 {: .image-caption}
 
@@ -64,7 +66,7 @@ Document the LTSpice or signal-integrity checks you performed and what changed a
 
 Describe the stack-up, placement strategy, return-current paths, controlled-impedance routes, plane splits, decoupling, and design-rule constraints that mattered to this board.
 
-![PCB layout showing the critical routing regions](/assets/images/case-studies/custom-pcb/layout-routing.webp)
+
 
 *Highlight the specific routing decision the reader should notice.*
 {: .image-caption}
