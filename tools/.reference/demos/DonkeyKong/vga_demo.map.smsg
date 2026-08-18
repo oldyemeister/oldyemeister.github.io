@@ -1,0 +1,7 @@
+Warning (10268): Verilog HDL information at drawmario.v(357): always construct contains both blocking and non-blocking assignments File: C:/gamelogic1123/gamelogic1121/drawmario.v Line: 357
+Warning (10268): Verilog HDL information at drawmario.v(665): always construct contains both blocking and non-blocking assignments File: C:/gamelogic1123/gamelogic1121/drawmario.v Line: 665
+Warning (10268): Verilog HDL information at drawmario.v(758): always construct contains both blocking and non-blocking assignments File: C:/gamelogic1123/gamelogic1121/drawmario.v Line: 758
+Warning (10268): Verilog HDL information at drawmario.v(803): always construct contains both blocking and non-blocking assignments File: C:/gamelogic1123/gamelogic1121/drawmario.v Line: 803
+Warning (10268): Verilog HDL information at drawmario.v(844): always construct contains both blocking and non-blocking assignments File: C:/gamelogic1123/gamelogic1121/drawmario.v Line: 844
+Warning (10268): Verilog HDL information at drawmario.v(889): always construct contains both blocking and non-blocking assignments File: C:/gamelogic1123/gamelogic1121/drawmario.v Line: 889
+Warning (10268): Verilog HDL information at drawmario.v(923): always construct contains both blocking and non-blocking assignments File: C:/gamelogic1123/gamelogic1121/drawmario.v Line: 923

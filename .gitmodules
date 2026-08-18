@@ -1,0 +1,3 @@
+[submodule "tools/.reference/demos/imu_sandbox_stm32"]
+	path = tools/.reference/demos/imu_sandbox_stm32
+	url = https://github.com/oldyemeister/imu_sandbox_stm32.git
