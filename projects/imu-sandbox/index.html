@@ -64,6 +64,13 @@ imu_sandbox_game: true
     <button class="imu-reset-button" type="button" data-imu-reset aria-label="{{ imu.reset_label }}" title="{{ imu.reset_label }}"><span aria-hidden="true">&#8635;</span></button>
   </div>
 
+  <aside class="keyboard-guide imu-keyboard-guide" aria-label="Keyboard controls">
+    <strong>Keyboard</strong>
+    <ul>
+      {% for control in imu.keyboard_guide %}<li><kbd>{{ control.keys }}</kbd><span>{{ control.action }}</span></li>{% endfor %}
+    </ul>
+  </aside>
+
   <div class="imu-scene" data-imu-scene>
     <p class="sr-only" id="imu-controls-description">{{ imu.keyboard_controls }}</p>
     <div class="imu-world-axes" role="img" aria-label="World axes: X points toward the camera, Y points right, Z points up, and gravity points down along negative Z.">
@@ -130,7 +137,7 @@ imu_sandbox_game: true
       <p>{{ imu.contribution }}</p>
       <h3>{{ imu.performance_heading }}</h3>
       <p>{{ imu.results }}</p>
-      <a class="text-link" href="{{ imu.source_url }}">{{ imu.source_label }} <span aria-hidden="true">&rarr;</span></a>
+      <a class="text-link" href="{{ imu.source_url }}" target="_blank" rel="noopener noreferrer">{{ imu.source_label }} <span aria-hidden="true">&nearr;</span></a>
     </div>
   </div>
 </section>

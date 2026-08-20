@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 900" role="img" aria-labelledby="title desc">
+  <title id="title">JY monogram</title>
+  <desc id="desc">A geometric JY monogram representing Jiawei Ye.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#122a2b"/>
+      <stop offset="1" stop-color="#071314"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="72%" cy="18%" r="75%">
+      <stop offset="0" stop-color="#36d7c3" stop-opacity=".34"/>
+      <stop offset="1" stop-color="#36d7c3" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="720" height="900" fill="url(#background)"/>
+  <rect width="720" height="900" fill="url(#glow)"/>
+  <g fill="none" stroke="#a7fff2" stroke-width="3" opacity=".18">
+    <path d="M-40 165h800M-40 285h800M-40 405h800M-40 525h800M-40 645h800M-40 765h800"/>
+    <path d="M120-40v980M240-40v980M360-40v980M480-40v980M600-40v980"/>
+  </g>
+  <circle cx="360" cy="450" r="238" fill="#0b1c1d" stroke="#53e5d1" stroke-width="4"/>
+  <circle cx="360" cy="450" r="214" fill="none" stroke="#a7fff2" stroke-width="1" opacity=".35"/>
+  <text x="360" y="512" fill="#effffb" font-family="Arial, Helvetica, sans-serif" font-size="190" font-weight="700" letter-spacing="-20" text-anchor="middle">JY</text>
+  <path d="M236 592h248" stroke="#53e5d1" stroke-width="8"/>
+  <text x="360" y="646" fill="#a7fff2" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="600" letter-spacing="8" text-anchor="middle">ENGINEERING</text>
+</svg>

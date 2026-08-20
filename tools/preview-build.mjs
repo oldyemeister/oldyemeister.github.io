@@ -4,10 +4,14 @@ import { resolve, dirname } from 'node:path';
 
 const root = resolve(import.meta.dirname, '..');
 const destination = resolve('/private/tmp/personal-website-preview');
-const data = JSON.parse(execFileSync('ruby', [
+function loadYaml(path) {
+  return JSON.parse(execFileSync('ruby', [
   '-ryaml', '-rjson', '-e', 'puts JSON.generate(YAML.load_file(ARGV[0]))',
-  resolve(root, '_data/content.yml')
-], { encoding: 'utf8' }));
+  resolve(root, path)
+  ], { encoding: 'utf8' }));
+}
+const data = loadYaml('_data/content.yml');
+const config = loadYaml('_config.yml');
 
 function frontMatter(source) {
   const match = source.match(/^---\n([\s\S]*?)\n---\n/);
@@ -143,6 +147,14 @@ function applyFilters(expression, environment) {
     const [name, argument] = filter.split(':').map((part) => part.trim());
     if (name === 'default' && (value === undefined || value === null || value === '')) value = valueOf(argument, environment);
     if (name === 'relative_url') value = value ?? '';
+    if (name === 'absolute_url') {
+      const path = String(value ?? '');
+      if (!/^https?:\/\//.test(path)) {
+        const origin = String(environment.site?.url || '').replace(/\/$/, '');
+        const baseurl = String(environment.site?.baseurl || '').replace(/^\/?/, '/').replace(/\/$/, '');
+        value = `${origin}${baseurl}${path.startsWith('/') ? '' : '/'}${path}`;
+      }
+    }
     if (name === 'jsonify') value = JSON.stringify(value);
     if (name === 'upcase') value = String(value).toUpperCase();
     if (name === 'slice') value = String(value).slice(Number(argument), Number(argument) + 1);
@@ -174,7 +186,11 @@ function findBlock(template, type) {
 }
 
 function render(template, environment) {
-  template = template.replace(/{%\s*assign\s+\w+\s*=\s*[^%]+%}/g, '');
+  environment = { ...environment };
+  template = template.replace(/{%\s*assign\s+(\w+)\s*=\s*([^%]+)%}/g, (_, name, expression) => {
+    environment[name] = applyFilters(expression, environment);
+    return '';
+  });
   let block;
   while ((block = findBlock(template, 'for'))) {
     const match = block.expression.match(/^(\w+)\s+in\s+(.+)$/);
@@ -193,7 +209,7 @@ async function buildPage(sourcePath, outputPath) {
   const source = await readFile(resolve(root, sourcePath), 'utf8');
   const { page, body } = frontMatter(source);
   const pageEnvironment = {
-    site: { data: { content: data } }, site_content: data, laser: data.laser,
+    site: { ...config, data: { content: data } }, site_content: data, laser: data.laser,
     game: data.donkey_kong, imu: data.imu_sandbox, page
   };
   let renderedBody = sourcePath.endsWith('.md') ? markdownToHtml(body) : render(body, pageEnvironment);

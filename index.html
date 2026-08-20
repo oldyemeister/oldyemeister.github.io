@@ -128,9 +128,11 @@ page_class: home
     <div>
       <p class="contact-message">{{ site_content.contact.message }}</p>
       <div class="contact-links">
-        <a href="mailto:{{ site_content.contact.email.address }}">{{ site_content.contact.email.label }}</a>
-        <a href="{{ site_content.contact.resume.path | relative_url }}" download>{{ site_content.contact.resume.label }}</a>
-        {% for social in site_content.contact.social_links %}<a href="{{ social.url }}">{{ social.label }}</a>{% endfor %}
+        <a class="contact-email-link" href="mailto:{{ site_content.contact.email.address }}">{{ site_content.contact.email.label }}: {{ site_content.contact.email.address }}</a>
+        <nav class="contact-secondary-links" aria-label="Other contact links">
+        {% for social in site_content.contact.social_links %}<a href="{{ social.url }}" target="_blank" rel="noopener noreferrer">{{ social.label }}</a>{% endfor %}
+          <a href="{{ site_content.contact.resume.path | relative_url }}" download>{{ site_content.contact.resume.label }}</a>
+        </nav>
       </div>
     </div>
   </div>
