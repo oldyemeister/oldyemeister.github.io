@@ -79,6 +79,7 @@ function updateInterface() {
 }
 
 function reset() {
+  if (!game) return;
   resetGame(game);
   accumulator = 0;
   previousTime = performance.now();
@@ -107,6 +108,7 @@ function directionForKey(key) {
 
 window.addEventListener('keydown', (event) => {
   if (event.target.matches('input, textarea, select')) return;
+  if (!game) return;
   const direction = directionForKey(event.key);
   if (direction) { event.preventDefault(); setControl(game, direction, true); }
   if ((event.key === 'w' || event.key === 'ArrowUp') && !event.repeat) { event.preventDefault(); jump(game); }
@@ -114,21 +116,27 @@ window.addEventListener('keydown', (event) => {
   if (event.key.toLowerCase() === 'r') reset();
 });
 window.addEventListener('keyup', (event) => {
+  if (!game) return;
   const direction = directionForKey(event.key);
   if (direction) setControl(game, direction, false);
 });
 
 document.querySelectorAll('[data-dk-direction]').forEach((button) => {
   const direction = button.dataset.dkDirection;
-  const release = () => setControl(game, direction, false);
-  button.addEventListener('pointerdown', (event) => { event.preventDefault(); button.setPointerCapture(event.pointerId); setControl(game, direction, true); });
+  const release = () => { if (game) setControl(game, direction, false); };
+  button.addEventListener('pointerdown', (event) => {
+    if (!game) return;
+    event.preventDefault();
+    button.setPointerCapture(event.pointerId);
+    setControl(game, direction, true);
+  });
   button.addEventListener('pointerup', release);
   button.addEventListener('pointercancel', release);
   button.addEventListener('lostpointercapture', release);
 });
-document.querySelector('[data-dk-jump]').addEventListener('click', () => jump(game));
+document.querySelector('[data-dk-jump]').addEventListener('click', () => { if (game) jump(game); });
 document.querySelectorAll('[data-dk-reset]').forEach((button) => button.addEventListener('click', reset));
-elements.pause.addEventListener('click', () => { if (game.status === 'running') game.paused = !game.paused; });
+elements.pause.addEventListener('click', () => { if (game?.status === 'running') game.paused = !game.paused; });
 
 Promise.all([
   loadImage('background', labels.background), loadImage('mario', labels.mario),

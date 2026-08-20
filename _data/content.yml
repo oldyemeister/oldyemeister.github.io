@@ -12,7 +12,6 @@ navigation:
   about: "About"
   experience: "Experience"
   projects: "Projects"
-  writing: "Writing"
   contact: "Contact"
   laser: "Laser Puzzle"
   donkey_kong: "FPGA Platform Game"
@@ -24,8 +23,8 @@ hero:
   role: "Hardware & Software Engineer"
   introduction: "I build systems that span hardware and software — from FPGA games and RF circuit boards to AI-driven backends. Currently completing a Computer Engineering degree at the University of Toronto with a PEY co-op."
   portrait:
-    path: "/assets/images/portrait-placeholder.svg"
-    alt: "Portrait of Jiawei (Jacky) Ye"
+    path: "/assets/images/profile-monogram.svg"
+    alt: "JY monogram for Jiawei Ye"
   primary_link:
     label: "Get in touch"
     url: "#contact"
@@ -144,9 +143,9 @@ projects:
     summary: "A three-person analog receiver project combining an 8–16 MHz bandpass filter, ±0.7 V limiter, Gilbert-cell mixer, and low-pass filter to produce an approximately 100 kHz downconverted output with 18 dB measured chain gain."
     collaborators:
       - name: "Michael Wei"
-        url: ""
+        url: "https://www.linkedin.com/in/minghan-wei-420802241/"
       - name: "Enpei Gu"
-        url: ""
+        url: "https://www.linkedin.com/in/enpei-gu-04520327b/"
     technologies:
       - "RF Circuit Design"
       - "Altium Designer"
@@ -202,22 +201,6 @@ projects:
     draft_label: "Project details coming soon"
     featured: false
 
-writing_section:
-  heading: "Writing"
-  introduction: "[WRITING SECTION INTRODUCTION PLACEHOLDER — no writing samples in your resume yet; consider removing this section from the nav/site until you have content, or fill in Bilibili video links here instead.]"
-
-writing:
-  - title: "[WRITING 1 TITLE]"
-    date: "[WRITING 1 DATE]"
-    excerpt: "[WRITING 1 EXCERPT PLACEHOLDER]"
-    publication: "[PUBLICATION PLACEHOLDER]"
-    url: "[WRITING 1 URL PLACEHOLDER]"
-  - title: "[WRITING 2 TITLE]"
-    date: "[WRITING 2 DATE]"
-    excerpt: "[WRITING 2 EXCERPT PLACEHOLDER]"
-    publication: "[PUBLICATION PLACEHOLDER]"
-    url: "[WRITING 2 URL PLACEHOLDER]"
-
 contact:
   heading: "Contact"
   message: "I'm open to internship and collaboration opportunities in hardware, embedded systems, and AI engineering. Feel free to reach out."
@@ -244,6 +227,15 @@ laser:
   instructions: "Select a mirror, rotate it to reflect the beam, and route the laser to every target within the time limit."
   controls_heading: "Controls"
   keyboard_controls: "Up and Down select a mirror. Left and Right rotate it. Space pauses. R resets."
+  keyboard_guide:
+    - keys: "↑ ↓"
+      action: "Select mirror"
+    - keys: "← →"
+      action: "Rotate mirror"
+    - keys: "Space"
+      action: "Pause"
+    - keys: "R"
+      action: "Reset"
   source_label: "View original source"
   source_url: "https://github.com/oldyemeister/RISC-V_lasergame"
   back_label: "Back to projects"
@@ -276,8 +268,17 @@ donkey_kong:
     url: "https://www.linkedin.com/in/nolany/"
   controls_heading: "Controls"
   keyboard_controls: "A and D or Left and Right move. W or Up jumps. Space pauses. R resets."
+  keyboard_guide:
+    - keys: "A D / ← →"
+      action: "Move"
+    - keys: "W / ↑"
+      action: "Jump"
+    - keys: "Space"
+      action: "Pause"
+    - keys: "R"
+      action: "Reset"
   source_label: "View original source"
-  source_url: "[DONKEY KONG SOURCE URL PLACEHOLDER]"
+  source_url: ""
   back_label: "Back to projects"
   reset_label: "Reset game"
   pause_label: "Pause game"
@@ -311,7 +312,7 @@ imu_sandbox:
     - value: "0.16g–2.5g"
       label: "gravity range"
   overview: "We implemented a handheld STM32F446ZE particle sandbox controlled by BNO055 roll and pitch data. One 128 × 64 OLED renders the simulation, while a second displays the material, effect mode, planet, and gravity level. Users can select sand or rock, four environmental modes, and Moon (0.16g), Earth (1.0g), or Jupiter (2.5g) gravity."
-  contribution_heading: "contribution"
+  contribution_heading: "Contribution"
   contribution: "I developed the particle data structures, 1 KB bit-packed occupancy grid, and core collision logic. Particle position and velocity use Q8 fixed-point values, avoiding floating-point work in the main update loop. Constant-time grid checks, inactive-particle skipping, velocity limits, and two gravity-relative fallback cells keep collision processing efficient. I also implemented rock behavior, Wind, Shake, and Explosion effects, parameter tuning, debugging, and part of the 3D-printed assembly."
   performance_heading: "Performance and next iteration"
   results: "The system runs up to 3,000 sand particles at approximately 30 FPS. Its main bottleneck is the OLED interface: each frame sends a complete 1,024-byte framebuffer through blocking transfers on the 400 kHz I²C bus shared with the IMU. A future version could use SPI, partial redraws, DMA, and separate physics and display rates to improve performance."
@@ -328,6 +329,13 @@ imu_sandbox:
   loading_label: "Loading OLED simulation..."
   load_error: "The 3D OLED could not start. Reload the page or enable WebGL in this browser."
   keyboard_controls: "Arrow keys change pitch and yaw. Q and E change roll. Space changes mode."
+  keyboard_guide:
+    - keys: "Arrow keys"
+      action: "Pitch and yaw"
+    - keys: "Q E"
+      action: "Roll"
+    - keys: "Space"
+      action: "Change mode"
   reset_label: "Reset OLED pose"
   implementation_note: "Web version built with JavaScript and Three.js."
   mode_heading: "Mode"
@@ -366,5 +374,5 @@ imu_sandbox:
     yaw: "Yaw"
 
 footer:
-  text: "[FOOTER TEXT PLACEHOLDER]"
-  copyright_name: "[NAME PLACEHOLDER]"
+  text: "Engineering across hardware and software."
+  copyright_name: "Jiawei (Jacky) Ye"

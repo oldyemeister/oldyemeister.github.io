@@ -19,7 +19,6 @@ tools:
   - "Altium Designer"
   - "LTspice"
   - "Oscilloscope"
-  - "Function Generator"
 source_url: ""
 permalink: /projects/rf-receiver/
 published: true
@@ -71,8 +70,6 @@ Our first discrete mixer prototype produced approximately 33.75 dB of conversion
 
 *Output near 100 kHz during prototype validation.*
 {: .image-caption}
-
-This test shows the capability of the Gilbert-cell mixer and we decide to move on with this design that consists of 6 2N3904 BJTs
 
 ## PCB implementation
 
