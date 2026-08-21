@@ -238,5 +238,6 @@ await buildPage('projects/laser/index.html', 'projects/laser/index.html');
 await buildPage('projects/donkey-kong/index.html', 'projects/donkey-kong/index.html');
 await buildPage('projects/imu-sandbox/index.html', 'projects/imu-sandbox/index.html');
 await buildPage('projects/rf-receiver/index.md', 'projects/rf-receiver/index.html');
+await buildPage('projects/aps380/index.md', 'projects/aps380/index.html');
 await buildPage('404.html', '404.html');
 process.stdout.write(`${destination}\n`);

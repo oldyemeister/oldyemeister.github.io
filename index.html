@@ -83,7 +83,7 @@ page_class: home
           {% if project.image.path %}
           <picture>
             {% if project.image.poster %}<source media="(prefers-reduced-motion: reduce)" srcset="{{ project.image.poster | relative_url }}">{% endif %}
-            <img src="{{ project.image.path | relative_url }}" alt="{{ project.image.alt }}" loading="lazy">
+            <img src="{{ project.image.path | relative_url }}" alt="{{ project.image.alt }}" loading="lazy" decoding="async">
           </picture>
           {% endif %}
         </div>
