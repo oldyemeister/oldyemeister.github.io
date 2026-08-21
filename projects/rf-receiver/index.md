@@ -4,7 +4,7 @@ title: "RF Frequency Downconversion System"
 description: "Design and validation of an analog receiver chain with an RF limiter, 8–16 MHz bandpass filter, Gilbert-cell mixer, and low-pass filter."
 eyebrow: "Analog hardware · RF and PCB design"
 summary: "A three-person receiver project that filters and protects an incoming RF signal, downconverts it through a Gilbert-cell-style mixer, and isolates an approximately 100 kHz output for downstream processing."
-hero_image: "/assets/images/pcb_manufacturing.jpg"
+hero_image: "/assets/images/projects/rf-receiver/pcb_manufacturing.jpg"
 hero_alt: "PCB during manufacturing and assembly"
 hero_caption: "PCB with all surface mount components."
 role: "RF design, prototyping, and validation"
@@ -56,17 +56,17 @@ Opposing 1N4148 diodes clamp both polarities of the incoming signal near ±0.7 V
 
 Our first discrete mixer prototype produced approximately 33.75 dB of conversion loss, so the team redesigned the stage around a Gilbert-cell topology. We modelled the differential transistor network in LTspice, verified it on a breadboard, and implemented the final version with an HFA3101 transistor array. Compared with the initial design, the Gilbert cell produced a cleaner, more measurable downconverted output and was easier to isolate during debugging.
 
-![LTspice schematic of the Gilbert-cell mixer and low-pass filter](/assets/images/LTspice_Schematic_Mixer.png)
+![LTspice schematic of the Gilbert-cell mixer and low-pass filter](/assets/images/projects/rf-receiver/LTspice_Schematic_Mixer.png)
 
 *LTspice model used to evaluate the Gilbert-cell mixer, differential output, low-pass filter, and output stage.*
 {: .image-caption}
 
-![Breadboard prototype of the receiver mixer](/assets/images/mixer_prototype.png)
+![Breadboard prototype of the receiver mixer](/assets/images/projects/rf-receiver/mixer_prototype.png)
 
 *Breadboard prototype used to test the mixer before committing the complete signal path to PCB.*
 {: .image-caption}
 
-![Oscilloscope output from the receiver-chain test](/assets/images/mixer_prototype_output.png)
+![Oscilloscope output from the receiver-chain test](/assets/images/projects/rf-receiver/mixer_prototype_output.png)
 
 *Output near 100 kHz during prototype validation.*
 {: .image-caption}
@@ -75,22 +75,22 @@ Our first discrete mixer prototype produced approximately 33.75 dB of conversion
 
 The Altium design contained more than 100 components across matched I and Q paths. The layout used compact surface-mount components, accessible through-hole test points, thicker RF-carrying traces, and a via fence around the local-oscillator region to reduce coupling. The board was assembled through a combination of reflow and through-hole soldering.
 
-![PCB design](/assets/images/pcb_footprint.png)
+![PCB design](/assets/images/projects/rf-receiver/pcb_footprint.png)
 
 *PCB footprint in Altium Designer.*
 {: .image-caption}
 
-![PCB during manufacturing and assembly](/assets/images/pcb_manufacturing.jpg)
+![PCB during manufacturing and assembly](/assets/images/projects/rf-receiver/pcb_manufacturing.jpg)
 
 *PCB with all surface mount components.*
 {: .image-caption}
 
-![Completed receiver subsystem during final integration](/assets/images/final_integration.png)
+![Completed receiver subsystem during final integration](/assets/images/projects/rf-receiver/final_integration.png)
 
 *Receiver subsystems with other subsystems for final test.*
 {: .image-caption}
 
-![Received target signal of final device](/assets/images/final_test.png)
+![Received target signal of final device](/assets/images/projects/rf-receiver/final_test.png)
 
 *Received signal as shown by peak in this image.*
 {: .image-caption}

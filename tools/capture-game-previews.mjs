@@ -1,11 +1,11 @@
 import { execFileSync } from 'node:child_process';
-import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
 const DEBUG_URL = process.env.GAME_PREVIEW_DEBUG_URL || 'http://127.0.0.1:9234';
 const SITE_URL = process.env.GAME_PREVIEW_SITE_URL || 'http://127.0.0.1:8766';
-const OUTPUT_DIRECTORY = resolve('assets/images');
+const OUTPUT_DIRECTORY = resolve('assets/images/projects');
 const FRAME_WIDTH = 480;
 const FRAME_HEIGHT = 320;
 const FRAME_DELAY = 20;
@@ -190,7 +190,9 @@ async function capture(session, definition, rootDirectory) {
     await sleep(definition.captureDelay ?? 180);
     frames.push(await screenshotToIndices(session, definition.selector, directory, frame));
   }
-  const outputPath = join(OUTPUT_DIRECTORY, `${definition.name}-preview.gif`);
+  const outputDirectory = join(OUTPUT_DIRECTORY, definition.name);
+  await mkdir(outputDirectory, { recursive: true });
+  const outputPath = join(outputDirectory, `${definition.name}-preview.gif`);
   await writeFile(outputPath, encodeGif(frames, definition.frameDelay));
   process.stdout.write(`${outputPath}: ${frames.length} frames\n`);
 }

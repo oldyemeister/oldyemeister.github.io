@@ -20,7 +20,7 @@
         document.documentElement.dataset.theme = theme;
       }());
     </script>
-    <link rel="stylesheet" href="{{ '/assets/css/site.css?v=21' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/site.css?v=24' | relative_url }}">
   </head>
   <body class="page-{{ page.page_class | default: 'default' }}">
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -29,7 +29,7 @@
       {{ content }}
     </main>
     {% include footer.html %}
-    <script src="{{ '/assets/js/site.js?v=21' | relative_url }}" defer></script>
+    <script src="{{ '/assets/js/site.js?v=24' | relative_url }}" defer></script>
     {% if page.laser_game %}
       <script src="{{ '/assets/js/project-bootstrap.js?v=21' | relative_url }}" data-target="[data-laser-canvas]" data-module="{{ '/assets/js/laser-game.js?v=21' | relative_url }}" defer></script>
     {% endif %}

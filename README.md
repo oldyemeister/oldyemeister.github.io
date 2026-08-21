@@ -2,7 +2,7 @@
 
 A content-driven personal website built for GitHub Pages. The site combines a responsive portfolio with browser recreations of a CPUlator laser puzzle, a Verilog FPGA platform game, and an STM32 IMU-driven OLED sandbox.
 
-![Laser puzzle preview](assets/images/laser-preview.png)
+![Laser puzzle preview](assets/images/projects/laser/laser-preview.png)
 
 ## Highlights
 

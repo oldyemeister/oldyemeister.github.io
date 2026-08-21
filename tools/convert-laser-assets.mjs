@@ -4,7 +4,7 @@ import { resolve } from 'node:path';
 
 const root = resolve(import.meta.dirname, '..');
 const source = await readFile(resolve(root, 'tools', '.reference', 'demos', 'Laser_Puzzle', 'Laser_Puzzle_CPUlator.c'), 'utf8');
-const outputDirectory = resolve(root, 'assets/images');
+const outputDirectory = resolve(root, 'assets/images/projects/laser');
 
 const assets = [
   { name: 'background', width: 320, height: 240, output: 'laser-background.png' },
