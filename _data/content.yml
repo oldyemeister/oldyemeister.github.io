@@ -79,7 +79,7 @@ experience:
 
 projects_section:
   heading: "Selected projects"
-  introduction: "A mix of hardware and software projects — from FPGA games to embedded sensor sandboxes."
+  introduction: "A mix of hardware, software, and engineering storytelling — from FPGA games to embedded sensor sandboxes and motorsport explainers."
 
 projects:
   - title: "Laser Puzzle"
@@ -186,23 +186,24 @@ projects:
     draft_label: ""
     featured: false
 
-  # EDITABLE PROJECT CARD 6
-  - title: "Project Six"
-    summary: "Replace this sentence with a concise description of the problem, your contribution, and the result."
+  - title: "F1 Engineering on Bilibili"
+    summary: "Technical videos that turn Formula 1 engineering, team history, and motorsport design into researched, accessible stories for an audience of more than 10,000 followers."
     technologies:
-      - "Technology"
-      - "Tool"
-      - "Platform"
-    placeholder: true
+      - "Technical Research"
+      - "Scriptwriting"
+      - "Video Production"
+      - "10K+ Followers"
+    placeholder: false
     placeholder_index: "06"
     image:
-      path: ""
+      path: "/assets/images/projects/bilibili/bilibili-preview.svg"
       poster: ""
-      alt: "Preview image for Project Six"
+      alt: "F1 engineering video essays by oldyemeister on Bilibili"
     repository_url: ""
-    live_url: ""
-    live_label: "View project"
-    draft_label: "Project details coming soon"
+    live_url: "https://space.bilibili.com/302146460"
+    live_label: "Watch on Bilibili"
+    external: true
+    draft_label: ""
     featured: false
 
 contact:

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" role="img" aria-labelledby="title description">
+  <title id="title">F1 engineering on Bilibili</title>
+  <desc id="description">A graphic representing Formula 1 engineering video essays for an audience of more than ten thousand followers.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#111719"/>
+      <stop offset="1" stop-color="#1e292c"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fb7299"/>
+      <stop offset="1" stop-color="#58c6e8"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#d7ebe7" stroke-opacity=".07"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="480" fill="url(#background)"/>
+  <rect width="800" height="480" fill="url(#grid)"/>
+  <path d="M-40 390C120 260 238 424 392 289S670 170 850 55" fill="none" stroke="#d7ebe7" stroke-opacity=".11" stroke-width="54"/>
+  <path d="M-40 390C120 260 238 424 392 289S670 170 850 55" fill="none" stroke="url(#accent)" stroke-width="3" stroke-dasharray="10 13"/>
+
+  <g transform="translate(54 52)">
+    <rect width="124" height="42" rx="21" fill="#fb7299"/>
+    <path d="M26 15v12l12-6z" fill="#fff"/>
+    <text x="49" y="27" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">BILIBILI</text>
+  </g>
+
+  <text x="54" y="164" fill="#f2f7f6" font-family="Arial, Helvetica, sans-serif" font-size="56" font-weight="760" letter-spacing="-2">F1 ENGINEERING</text>
+  <text x="54" y="218" fill="#aabbb8" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="600" letter-spacing="3">RESEARCH · SCRIPT · VIDEO</text>
+
+  <g transform="translate(54 292)">
+    <text x="0" y="62" fill="#fb7299" font-family="Arial, Helvetica, sans-serif" font-size="74" font-weight="800">10K+</text>
+    <text x="5" y="95" fill="#d7e5e2" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" letter-spacing="2">FOLLOWERS</text>
+  </g>
+
+  <g transform="translate(520 294)" fill="none" stroke-linejoin="round">
+    <path d="M16 75h45l24-33h78l28 33h44l15 27H0z" stroke="#f2f7f6" stroke-width="5"/>
+    <path d="M91 42l18-28h37l17 28M78 75h100" stroke="#58c6e8" stroke-width="5"/>
+    <circle cx="51" cy="105" r="25" fill="#111719" stroke="#fb7299" stroke-width="7"/>
+    <circle cx="199" cy="105" r="25" fill="#111719" stroke="#fb7299" stroke-width="7"/>
+  </g>
+</svg>
