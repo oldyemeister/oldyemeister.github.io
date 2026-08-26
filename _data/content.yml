@@ -198,7 +198,7 @@ projects:
     image:
       path: "/assets/images/projects/bilibili/bilibili-preview.svg"
       poster: ""
-      alt: "F1 engineering video essays by oldyemeister on Bilibili"
+      alt: "Bilibili logo"
     repository_url: ""
     live_url: "https://space.bilibili.com/302146460"
     live_label: "Watch on Bilibili"
