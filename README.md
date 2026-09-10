@@ -63,27 +63,47 @@ Open <http://localhost:8000> in a browser.
 npm test                 # Run the interactive engine tests
 npm run assets           # Regenerate game assets from archived hardware sources
 npm run preview:build    # Build a local static preview
+npm run build            # Build the published site into _site/
 ```
 
 The asset conversion scripts expect the original project sources under `tools/.reference/demos/`. Those reference files are used for local regeneration and are not part of the deployed site.
 
 ## Updating the portfolio
 
-Most site copy and project metadata lives in [`_data/content.yml`](_data/content.yml). Edit that file to update the biography, experience, project cards, contact details, and interactive-project descriptions.
+The repository preserves the original Jekyll design and keeps Persona as the
+new design template. Both share portfolio data, project pages, images, documents,
+and game engines. No content or asset copies are needed when changing designs.
 
-The main implementation areas are:
+| Location | Purpose |
+| --- | --- |
+| `_data/content.yml` | Shared portfolio content |
+| `index.html`, `projects/`, `404.html` | Shared page content and structure |
+| `_layouts/`, `_includes/` | Preserved original Jekyll layouts and components |
+| `assets/css/site.css`, `assets/js/site.js` | Original styling and site behavior; also the Persona base |
+| `templates/persona/render.mjs` | Persona page decoration and route generation |
+| `assets/themes/persona/` | Persona CSS, effects, start controls, and web fonts |
+| `assets/js/` | Shared game engines and supporting scripts |
+| `assets/images/`, `assets/documents/`, `assets/vendor/` | Shared runtime assets, where present |
+| `references/fonts/` | Supplied font source files, excluded from site output |
+| `docs/` | Editing guide, attribution, and publishing notes |
+| `tools/`, `test/` | Build tools, asset converters, and engine tests |
 
-```text
-_data/content.yml      Portfolio content and project metadata
-_layouts/              Shared Jekyll page layouts
-_includes/             Navigation and footer components
-assets/css/            Site styles and responsive behavior
-assets/js/             Site scripts and interactive project engines
-projects/              Playable projects and case studies
-test/                  Node.js engine tests
-tools/                 Preview and asset-generation scripts
-```
+Run `npm run preview:build`, then serve the output as described above. The
+original stays at `/`, and Persona is available at `/persona/`.
+
+- [Design editing guide](docs/DESIGN.md)
+- [Design and font attribution](docs/ATTRIBUTION.md)
+- [GitHub preparation and publishing](docs/PUBLISHING.md)
 
 ## Deployment
 
-The site is configured for GitHub Pages in [`_config.yml`](_config.yml). Pushing changes to the repository's publishing branch triggers the native Jekyll build; generated preview files should not be committed.
+Pushing to `main` runs `.github/workflows/pages.yml`: engine tests, the Node
+static build, and deployment to GitHub Pages. GitHub Pages uses GitHub Actions
+as its publishing source.
+
+`npm run build` writes `_site/` with Persona at `/` and the preserved original
+at `/original/`. `/persona/` remains available for existing preview links.
+All designs share `/assets/`. The output directory is ignored by Git.
+
+`npm run preview:build` keeps the comparison preview unchanged: original at `/`,
+Persona at `/persona/`. See [publishing notes](docs/PUBLISHING.md).

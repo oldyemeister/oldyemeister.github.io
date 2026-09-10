@@ -6,6 +6,9 @@ permalink: pretty
 markdown: kramdown
 
 exclude:
+  - templates
+  - references
+  - docs
   - tools
   - test
   - README.md

@@ -1,9 +1,11 @@
 import { execFileSync } from 'node:child_process';
 import { readFile, writeFile, mkdir, cp, rm } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
+import { personaPreview } from '../templates/persona/render.mjs';
 
 const root = resolve(import.meta.dirname, '..');
-const destination = resolve('/private/tmp/personal-website-preview');
+const production = process.argv.includes('--production');
+const destination = production ? resolve(root, '_site') : resolve('/private/tmp/personal-website-preview');
 function loadYaml(path) {
   return JSON.parse(execFileSync('ruby', [
   '-ryaml', '-rjson', '-e', 'puts JSON.generate(YAML.load_file(ARGV[0]))',
@@ -227,12 +229,29 @@ async function buildPage(sourcePath, outputPath) {
     .replace('{{ content }}', renderedBody);
   const output = render(assembled, { ...pageEnvironment, content: renderedBody });
   await mkdir(dirname(resolve(destination, outputPath)), { recursive: true });
-  await writeFile(resolve(destination, outputPath), output);
+  await writeFile(resolve(destination, outputPath), production ? personaPreview(output, '') : output);
+  if (production) {
+    const originalPath = resolve(destination, 'original', outputPath);
+    const original = output.replace(/href="(\/[^"#?]*)([^" ]*)"/g, (match, path, suffix) =>
+      path === '/' || path.startsWith('/projects/') || path === '/404.html'
+        ? `href="/original${path}${suffix}"` : match);
+    await mkdir(dirname(originalPath), { recursive: true });
+    await writeFile(originalPath, original);
+  }
+  // Retain /persona/ for preview links and existing bookmarks.
+  const alternatePath = resolve(destination, 'persona', outputPath);
+  await mkdir(dirname(alternatePath), { recursive: true });
+  await writeFile(alternatePath, personaPreview(output));
 }
 
 await rm(destination, { recursive: true, force: true });
 await mkdir(destination, { recursive: true });
-await cp(resolve(root, 'assets'), resolve(destination, 'assets'), { recursive: true });
+await cp(resolve(root, 'assets'), resolve(destination, 'assets'), {
+  recursive: true,
+  filter: source => !source.endsWith('/.DS_Store') &&
+    (!production || source !== resolve(root, 'assets/images/projects/aps380/APS380_Group8.mp4'))
+});
+if (production) await writeFile(resolve(destination, '.nojekyll'), '');
 await buildPage('index.html', 'index.html');
 await buildPage('projects/laser/index.html', 'projects/laser/index.html');
 await buildPage('projects/donkey-kong/index.html', 'projects/donkey-kong/index.html');
