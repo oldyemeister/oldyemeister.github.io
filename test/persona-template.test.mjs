@@ -25,3 +25,22 @@ test('comparison preview retains its Persona route prefix', () => {
   assert.match(result, /href="\/persona\/projects\/laser\/"/);
   assert.match(result, /href="\/persona\/#home" data-hud-home/);
 });
+
+test('redesign adds a semantic image caption before the project heading', () => {
+  const project = page.replace('</body>', `<article class="project-card">
+    <div class="project-media"><picture><img src="/demo.png" alt="FPGA gameplay preview"></picture></div>
+    <div class="project-content"><h3>FPGA game</h3></div>
+    </article></body>`);
+  const result = personaPreview(project, '');
+  assert.match(result, /<figure class="project-visual">/);
+  assert.match(result, /<figcaption>FPGA gameplay preview<\/figcaption>/);
+  assert.ok(result.indexOf('<figcaption>') < result.indexOf('<h3>'));
+});
+
+test('disabling the redesign restores the original presentation without changing routes', () => {
+  const result = personaPreview(page, '', false);
+  assert.doesNotMatch(result, /assets\/css\/(palette|redesign)\.css/);
+  assert.doesNotMatch(result, /project-visual|hero-visual-caption/);
+  assert.match(result, /assets\/themes\/persona\/style\.css/);
+  assert.match(result, /href="\/projects\/laser\/"/);
+});

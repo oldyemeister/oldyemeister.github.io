@@ -11,7 +11,8 @@ Edit `assets/themes/persona/style.css` to customize the new design. Its opening
 variables control `--persona-yellow`, `--persona-sky`, `--persona-ink`, and
 `--persona-paper`; `--wipe-first`, `--wipe-second`, and `--wipe-third` independently
 control the transition panels. `--wipe-duration` is the duration of each movement
-in milliseconds. `interface.js` implements letter hover and focus animations,
+in milliseconds (default `550`); `--wipe-stagger` is the delay between panels
+(default `80`). Use unitless numbers for both. `interface.js` implements letter hover and focus animations,
 section wipes, and transitions between real pages. Reduced-motion preferences
 bypass the effects. External links and résumé downloads retain native behavior.
 
@@ -52,3 +53,20 @@ a server, run `python3 -m http.server 8000 --directory /private/tmp/personal-web
 Open `/persona/` for Persona and `/` for the original.
 
 See [attribution](ATTRIBUTION.md) for design and font sources.
+
+## Adjusting transitions locally
+
+Run `npm run watch` in a second terminal while your `_site/` server is running.
+It rebuilds after source changes; wait for “Rebuilt”, then refresh the browser.
+For a one-off rebuild, use `npm run build`.
+
+The three `.page-wipe` panels are defined in `templates/persona/render.mjs` and
+styled in `assets/themes/persona/style.css`. `interface.js` animates them with
+the Web Animations API: cover the current page, navigate, then uncover the new
+page. `arrival.js` reads a short-lived session-storage marker before first paint
+so the new document starts covered. Same-page links cover, scroll, then uncover.
+Browser Back/Forward uses native restoration without replaying that overlay.
+
+Change `--wipe-duration` and `--wipe-stagger` near the top of the theme CSS to
+adjust speed. For example, `800` and `100` make each sweep take about one second.
+The easing curve and horizontal travel are in `sweep()` in `interface.js`.

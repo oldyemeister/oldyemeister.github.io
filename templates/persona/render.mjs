@@ -1,6 +1,9 @@
 // Decorate the already-rendered pages so both designs share content and assets.
 // Used by the local preview and production static builds.
-export function personaPreview(html, prefix = '/persona') {
+import { redesignContent } from './redesign.mjs';
+
+export function personaPreview(html, prefix = '/persona', redesign = true) {
+  if (redesign) html = redesignContent(html);
   const home = /<body class="page-home">/.test(html);
   const guide = html.match(/<aside class="keyboard-guide[^"]*"[^>]*>[\s\S]*?<\/aside>/);
   const gameKeys = guide ? [...guide[0].matchAll(/<li>([\s\S]*?)<\/li>/g)]
@@ -25,6 +28,7 @@ export function personaPreview(html, prefix = '/persona') {
     })
     .replace('</head>', `
       <link rel="stylesheet" href="/assets/themes/persona/style.css">
+      ${redesign ? '<link rel="stylesheet" href="/assets/css/palette.css">\n      <link rel="stylesheet" href="/assets/css/redesign.css">' : ''}
       <script src="/assets/themes/persona/arrival.js"></script>
     </head>`)
     .replace(/<body class="([^"]*)">/, `<body class="$1 persona-design" data-persona-base="${prefix}/">
@@ -32,6 +36,7 @@ export function personaPreview(html, prefix = '/persona') {
     .replace(/<figure class="portrait-frame">[\s\S]*?<\/figure>/, `
       <figure class="portrait-frame persona-monogram" role="img" aria-label="JY monogram for Jiawei Ye">
         <span aria-hidden="true">JY<span class="monogram-dot">.</span></span>
+        ${redesign ? '<figcaption class="hero-visual-caption">JY monogram</figcaption>' : ''}
       </figure>`)
     .replace('</body>', `
       <nav class="persona-hud" aria-label="Keyboard shortcuts">

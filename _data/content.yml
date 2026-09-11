@@ -20,7 +20,6 @@ hero:
   introduction: "I build systems that span hardware and software — from FPGA games and RF circuit boards to AI-driven backends. Currently completing a Computer Engineering degree at the University of Toronto with a PEY co-op."
   portrait:
     path: "/assets/images/site/profile-monogram.svg"
-    alt: "JY monogram for Jiawei Ye"
   primary_link:
     label: "Get in touch"
     url: "#contact"
@@ -91,7 +90,6 @@ projects:
     image:
       path: "/assets/images/projects/laser/laser-preview.gif"
       poster: "/assets/images/projects/laser/laser-preview.png"
-      alt: "Animated gameplay preview of the Laser Puzzle game"
     repository_url: "https://github.com/oldyemeister/RISC-V_lasergame"
     live_url: "/projects/laser/"
     live_label: "Solve puzzle"
@@ -109,9 +107,6 @@ projects:
     image:
       path: "/assets/images/projects/donkey-kong/donkey-kong-preview.gif"
       poster: "/assets/images/projects/donkey-kong/donkey-kong-preview.png"
-      alt: "Animated gameplay preview of the FPGA Donkey Kong game"
-    repository_url: ""
-    repository_pending: true
     live_url: "/projects/donkey-kong/"
     live_label: "Play game"
     featured: false
@@ -128,7 +123,6 @@ projects:
     image:
       path: "/assets/images/projects/imu-sandbox/imu-sandbox-preview.gif"
       poster: "/assets/images/projects/imu-sandbox/imu-sandbox-preview.png"
-      alt: "Animated preview of the IMU Sandbox OLED rotating in roll"
     repository_url: "https://github.com/oldyemeister/imu_sandbox_stm32"
     live_url: "/projects/imu-sandbox/"
     live_label: "Alter gravity"
@@ -152,7 +146,6 @@ projects:
     image:
       path: "/assets/images/projects/rf-receiver/pcb_manufacturing.jpg"
       poster: ""
-      alt: "RF receiver PCB with all surface-mount components installed"
     repository_url: ""
     live_url: "/projects/rf-receiver/"
     live_label: "Read project"
@@ -178,7 +171,6 @@ projects:
     image:
       path: "/assets/images/projects/aps380/hero.jpg"
       poster: ""
-      alt: "Completed APS380 autonomous vehicle with its custom silver body"
     repository_url: ""
     live_url: "/projects/aps380/"
     live_label: "Read project"
@@ -197,7 +189,6 @@ projects:
     image:
       path: "/assets/images/projects/bilibili/bilibili-preview.svg"
       poster: ""
-      alt: "Bilibili logo"
     repository_url: ""
     live_url: "https://space.bilibili.com/302146460"
     live_label: "Watch on Bilibili"
@@ -280,8 +271,6 @@ donkey_kong:
       action: "Pause"
     - keys: "R"
       action: "Reset"
-  source_label: "View original source"
-  source_url: ""
   back_label: "Back to projects"
   reset_label: "Reset game"
   pause_label: "Pause game"

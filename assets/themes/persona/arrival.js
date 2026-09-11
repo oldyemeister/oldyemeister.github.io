@@ -8,8 +8,7 @@
     sessionStorage.removeItem('persona-arrival');
     linkedArrival = arrival?.url === location.href && Date.now() - arrival.time < 15000;
   } catch { /* Storage can be unavailable; navigation still works. */ }
-  const historyArrival = performance.getEntriesByType('navigation')[0]?.type === 'back_forward';
-  if ((linkedArrival || historyArrival) && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  if (linkedArrival && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
     root.classList.add('persona-arriving');
     window.personaArrivalTimeout = setTimeout(() => root.classList.remove('persona-arriving'), 2000);
   }

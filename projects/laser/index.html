@@ -54,6 +54,11 @@ laser_game: true
     <div class="game-board-wrap" data-game-wrap>
       <p class="sr-only" id="laser-keyboard-controls">{{ laser.keyboard_controls }}</p>
       <canvas class="game-board" width="320" height="240" tabindex="0" data-laser-canvas aria-label="Playable laser puzzle board" aria-describedby="laser-keyboard-controls"></canvas>
+      <div class="game-pause-overlay persona-game-start" data-game-pause-overlay hidden>
+        <div class="game-start-prompt">
+          <button class="game-start-button" type="button" data-game-resume aria-label="{{ laser.resume_label }}"><span aria-hidden="true">▶</span><span data-start-label>Resume</span></button>
+        </div>
+      </div>
       <div class="game-overlay" data-game-overlay hidden>
         <strong data-game-overlay-title></strong>
         <button type="button" data-overlay-reset>{{ laser.reset_label }}</button>

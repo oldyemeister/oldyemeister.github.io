@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "node tools/preview-build.mjs --production",
+    "watch": "node tools/watch-build.mjs",
     "test": "node --test test/*.test.mjs",
     "assets:laser": "node tools/convert-laser-assets.mjs",
     "assets:donkey-kong": "node tools/convert-donkey-kong-assets.mjs",

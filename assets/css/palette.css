@@ -1,0 +1,79 @@
+/* Single-version palette, with the requested original TV/HUD exceptions.
+   Keep both selectors so saved/system theme preferences cannot change it. */
+:root,
+:root[data-theme] {
+  --palette-yellow: #FFF000;
+  --palette-olive: #4B4A30;
+  --palette-gold: #DDB800;
+  --palette-muted: #62614C;
+  --palette-black: #080808;
+  --palette-white: #FFFDF3;
+  --palette-blue: #0C75A1;
+
+  --field: var(--palette-yellow);
+  --panel: var(--palette-olive);
+  --border: var(--palette-gold);
+  --interactive: var(--palette-yellow);
+  --inactive: var(--palette-muted);
+  --on-panel: var(--palette-white);
+  --on-field: var(--palette-black);
+  --on-interactive: var(--palette-black);
+  --secondary: var(--palette-blue);
+  --on-secondary: var(--palette-white);
+  --offset-shadow: 8px 8px 0 var(--palette-yellow);
+  --control-shadow: 4px 4px 0 var(--palette-yellow);
+  --small-shadow: 2px 2px 0 var(--palette-yellow);
+
+  /* Bridge the preserved base styles to one palette. */
+  --page: var(--field);
+  --surface: var(--panel);
+  --surface-muted: var(--panel);
+  --text: var(--on-panel);
+  --text-muted: var(--on-panel);
+  --line: var(--border);
+  --line-strong: var(--border);
+  --accent: var(--secondary);
+  --accent-strong: var(--on-panel);
+  --signal: var(--on-panel);
+  --danger: var(--interactive);
+  --focus: var(--interactive);
+  --header-bg: var(--panel);
+  --shadow: var(--control-shadow);
+  --shadow-raised: var(--offset-shadow);
+  --persona-yellow: var(--palette-yellow);
+  --persona-sky: var(--palette-gold);
+  --persona-ink: var(--palette-olive);
+  --persona-paper: var(--palette-yellow);
+  --wipe-first: var(--palette-gold);
+  --wipe-second: var(--palette-olive);
+  --wipe-third: var(--palette-yellow);
+  color-scheme: dark;
+}
+
+/* Original keyboard instructions are the only fully preserved component. */
+.persona-hud {
+  --persona-yellow: #ffe348;
+  --persona-sky: #67cef6;
+  --persona-ink: #132938;
+  --persona-paper: #fffdf3;
+  --page: var(--persona-paper);
+  --surface: #fffef9;
+  --surface-muted: #dff3fb;
+  --text: var(--persona-ink);
+  --text-muted: #405462;
+  --line: #acbdc5;
+  --line-strong: var(--persona-ink);
+  --accent: #096387;
+  --accent-strong: #075575;
+  --focus: #075575;
+}
+
+/* Only the physical TV casing retains its original black finish. */
+.persona-tv {
+  --tv-black: #080808;
+  --tv-deep-shadow: #000000;
+  --tv-highlight: #424242;
+  --tv-bezel: #242424;
+  --tv-edge: #505050;
+  --tv-shadow: #132938;
+}

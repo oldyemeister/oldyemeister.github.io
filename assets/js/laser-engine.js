@@ -82,15 +82,18 @@ export function createGame() {
 }
 
 export function selectMirror(game, offset) {
+  if (game.paused || game.status !== 'running') return;
   game.selectedMirror = (game.selectedMirror + offset + game.mirrors.length) % game.mirrors.length;
 }
 
 export function rotateMirror(game, offset) {
+  if (game.paused || game.status !== 'running') return;
   const mirror = game.mirrors[game.selectedMirror];
   mirror.angle = (mirror.angle + offset + 360) % 360;
 }
 
 export function selectMirrorAt(game, x, y, radius = 12) {
+  if (game.paused || game.status !== 'running') return -1;
   let nearest = -1;
   let distance = radius * radius;
   game.mirrors.forEach((mirror, index) => {

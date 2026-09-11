@@ -29,6 +29,37 @@ test('initial board produces a bounded laser trace', () => {
   assert.ok(trace.points.every(({ x, y }) => x >= 0 && x < 320 && y >= 0 && y < 240));
 });
 
+test('pause blocks mirror selection and rotation until resumed', () => {
+  const game = createGame();
+  game.paused = true;
+  const pausedState = structuredClone(game);
+  selectMirror(game, 1);
+  selectMirror(game, -1);
+  rotateMirror(game, 45);
+  rotateMirror(game, -45);
+  assert.equal(selectMirrorAt(game, 170, 175), -1);
+  assert.deepEqual(game, pausedState);
+
+  game.paused = false;
+  selectMirror(game, 1);
+  rotateMirror(game, 45);
+  assert.equal(game.selectedMirror, 1);
+  assert.equal(game.mirrors[1].angle, 315);
+  assert.equal(selectMirrorAt(game, 259, 175), 2);
+});
+
+test('finished games reject mirror controls', () => {
+  for (const status of ['won', 'lost']) {
+    const game = createGame();
+    game.status = status;
+    const endedState = structuredClone(game);
+    selectMirror(game, 1);
+    rotateMirror(game, 45);
+    assert.equal(selectMirrorAt(game, 170, 175), -1);
+    assert.deepEqual(game, endedState);
+  }
+});
+
 test('laser advances one pixel to a mirror center before reflecting', () => {
   const game = createGame();
   game.mirrors = [{ x: 84, y: 90, angle: 90 }];

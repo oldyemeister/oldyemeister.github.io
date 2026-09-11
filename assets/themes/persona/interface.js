@@ -8,7 +8,6 @@
   let animations = [];
   let recoveryTimer;
   let transitionVersion = 0;
-  let historyURL = location.href;
 
   // Split visible text only. Preserve spaces, word wrapping, existing icons,
   // semantic headings, and one continuous accessible label for each text node.
@@ -64,13 +63,28 @@
     busy = false;
   }
 
+  function wipeTiming() {
+    const style = getComputedStyle(root);
+    const duration = Number.parseFloat(style.getPropertyValue('--wipe-duration'));
+    const stagger = Number.parseFloat(style.getPropertyValue('--wipe-stagger'));
+    return {
+      duration: Number.isFinite(duration) ? Math.max(0, duration) : 550,
+      stagger: Number.isFinite(stagger) ? Math.max(0, stagger) : 80
+    };
+  }
+
+  function recoveryDelay() {
+    const { duration, stagger } = wipeTiming();
+    return 2 * (duration + stagger * (panes.length - 1)) + 5000;
+  }
+
   async function sweep(entering) {
-    const duration = Number.parseFloat(getComputedStyle(root).getPropertyValue('--wipe-duration')) || 300;
+    const { duration, stagger } = wipeTiming();
     const offset = entering ? -130 : 130;
     animations = panes.map((pane, index) => pane.animate([
       { transform: `translateX(${entering ? offset : 0}%) skewX(-12deg)` },
       { transform: `translateX(${entering ? 0 : offset}%) skewX(-12deg)` }
-    ], { duration, delay: index * 55, easing: 'cubic-bezier(.75,0,.2,1)', fill: 'both' }));
+    ], { duration, delay: index * stagger, easing: 'cubic-bezier(.75,0,.2,1)', fill: 'both' }));
     await Promise.all(animations.map(animation => animation.finished.catch(() => {})));
   }
 
@@ -80,20 +94,16 @@
     busy = true;
     root.classList.add('persona-arriving');
     const version = transitionVersion;
-    recoveryTimer = setTimeout(reset, 2000);
+    recoveryTimer = setTimeout(reset, recoveryDelay());
     sweep(false).finally(() => { if (version === transitionVersion) reset(); });
   }
   if (root.classList.contains('persona-arriving')) arrive();
   window.addEventListener('pageshow', event => {
-    historyURL = location.href;
-    if (event.persisted) arrive();
+    // A cached page is already visible. Covering it now creates a yellow flash.
+    if (event.persisted) reset();
   });
-  window.addEventListener('popstate', () => {
-    // Same-document section history does not fire pageshow. Let the browser
-    // restore its scroll position while the arrival panels uncover the page.
-    if (historyURL !== location.href) arrive();
-    historyURL = location.href;
-  });
+  // Native Back/Forward restores scroll without an extra arrival curtain.
+  window.addEventListener('popstate', reset);
   window.addEventListener('pagehide', reset);
   motion.addEventListener('change', () => { if (motion.matches) reset(); });
 
@@ -155,13 +165,14 @@
     }
     event.preventDefault();
     busy = true;
+    const version = transitionVersion;
     root.classList.add('persona-navigating');
     // Also recovers from failed/cancelled document loads.
-    recoveryTimer = setTimeout(reset, 5000);
+    recoveryTimer = setTimeout(reset, recoveryDelay());
     await sweep(true);
+    if (version !== transitionVersion) return;
     if (samePage) {
       history.pushState(null, '', url);
-      historyURL = location.href;
       destination.querySelectorAll('.reveal-item').forEach(el => el.classList.add('is-revealed'));
       destination.scrollIntoView({ behavior: 'instant', block: 'start' });
       const hadTabindex = destination.hasAttribute('tabindex');
@@ -170,7 +181,7 @@
       if (!hadTabindex) destination.addEventListener('blur', () => destination.removeAttribute('tabindex'), { once: true });
       animations.forEach(animation => animation.cancel());
       await sweep(false);
-      reset();
+      if (version === transitionVersion) reset();
     } else {
       try { sessionStorage.setItem('persona-arrival', JSON.stringify({ url: url.href, time: Date.now() })); }
       catch { /* The outgoing wipe still works without storage. */ }

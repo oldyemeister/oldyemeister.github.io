@@ -47,26 +47,62 @@ page_class: home
       <div><p class="section-index">02</p><h2>{{ site_content.experience_section.heading }}</h2></div>
       <p>{{ site_content.experience_section.introduction }}</p>
     </header>
-    <div class="experience-list">
+    <div class="experience-carousel" data-experience-carousel>
+      <button class="experience-scroll-arrow experience-scroll-previous" type="button" aria-label="Scroll experience left" aria-controls="experience-cards" data-experience-previous hidden><span aria-hidden="true">&#8592;</span></button>
+      <div class="experience-card-track" id="experience-cards" tabindex="0" role="region" aria-label="Experience cards">
       {% for item in site_content.experience %}
-      <article class="experience-item">
-        <div class="experience-meta">
-          <time>{{ item.dates }}</time>
-          <span>{{ item.location }}</span>
+      <article class="experience-card">
+        <div class="experience-card-visual" role="img" aria-label="{{ item.company }} logo placeholder">
+          <span aria-hidden="true">{{ item.company | slice: 0, 1 }}</span>
+          <small aria-hidden="true">{{ item.company }}</small>
         </div>
-        <div class="experience-content">
-          <div class="experience-heading">
-            <div><p>{{ item.company }}</p><h3>{{ item.role }}</h3></div>
-            <strong class="achievement-badge">{{ item.impact }}</strong>
-          </div>
+        <div class="experience-card-copy">
+          <h3>{{ item.role }}<span>{{ item.company }}</span></h3>
+          <p class="experience-card-meta"><time>{{ item.dates }}</time><span>{{ item.location }}</span></p>
+          <p class="experience-card-impact">{{ item.impact }}</p>
           <ul>
             {% for highlight in item.highlights %}<li>{{ highlight }}</li>{% endfor %}
           </ul>
         </div>
       </article>
       {% endfor %}
+      </div>
+      <button class="experience-scroll-arrow experience-scroll-next" type="button" aria-label="Scroll experience right" aria-controls="experience-cards" data-experience-next hidden><span aria-hidden="true">&#8594;</span></button>
     </div>
   </div>
+  <script>
+    (() => {
+      const section = document.currentScript.closest('#experience');
+      const carousel = section.querySelector('[data-experience-carousel]');
+      const track = section.querySelector('#experience-cards');
+      const previous = section.querySelector('[data-experience-previous]');
+      const next = section.querySelector('[data-experience-next]');
+      const motion = matchMedia('(prefers-reduced-motion: reduce)');
+      function update() {
+        const maximum = track.scrollWidth - track.clientWidth;
+        previous.hidden = next.hidden = maximum < 2;
+        previous.disabled = track.scrollLeft < 2;
+        next.disabled = track.scrollLeft >= maximum - 2;
+      }
+      function scroll(direction) {
+        const card = track.querySelector('.experience-card');
+        const distance = card.getBoundingClientRect().width + parseFloat(getComputedStyle(track).columnGap);
+        track.scrollBy({ left: direction * distance, behavior: motion.matches ? 'instant' : 'smooth' });
+      }
+      previous.addEventListener('click', () => scroll(-1));
+      next.addEventListener('click', () => scroll(1));
+      track.addEventListener('scroll', update, { passive: true });
+      track.addEventListener('keydown', event => {
+        if (event.target !== track || !['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+        event.preventDefault();
+        scroll(event.key === 'ArrowLeft' ? -1 : 1);
+      });
+      if ('ResizeObserver' in window) new ResizeObserver(update).observe(track);
+      else window.addEventListener('resize', update);
+      document.fonts?.ready.then(update);
+      update();
+    })();
+  </script>
 </section>
 
 <section class="page-section" id="projects">

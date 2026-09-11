@@ -15,6 +15,9 @@ const elements = {
   selected: document.querySelector('[data-game-selected]'),
   message: document.querySelector('[data-game-message]'),
   pause: document.querySelector('[data-game-pause]'),
+  pauseOverlay: document.querySelector('[data-game-pause-overlay]'),
+  resume: document.querySelector('[data-game-resume]'),
+  commands: [...document.querySelectorAll('[data-game-command]')],
   overlay: document.querySelector('[data-game-overlay]'),
   overlayTitle: document.querySelector('[data-game-overlay-title]')
 };
@@ -167,6 +170,9 @@ function updateInterface() {
   elements.pause.classList.toggle('is-paused', game.paused);
   elements.message.textContent = game.status === 'won' ? labels.won : game.status === 'lost' ? labels.lost : game.paused ? labels.paused : labels.ready;
   const ended = game.status !== 'running';
+  elements.pauseOverlay.hidden = !game.paused || ended;
+  elements.commands.forEach((button) => { button.disabled = game.paused || ended; });
+  canvas.tabIndex = game.paused || ended ? -1 : 0;
   elements.overlay.hidden = !ended;
   elements.overlayTitle.textContent = game.status === 'won' ? labels.won : labels.lost;
   elements.overlay.style.setProperty('--result-art', ended && assets[game.status === 'won' ? 'success' : 'failure']
@@ -183,12 +189,21 @@ function reset() {
 }
 
 function command(name) {
+  if (game.paused || game.status !== 'running') return;
   if (name === 'previous') selectMirror(game, -1);
   if (name === 'next') selectMirror(game, 1);
   if (name === 'rotate-left') rotateMirror(game, -45);
   if (name === 'rotate-right') rotateMirror(game, 45);
   updateInterface();
   render(traceLaser(game));
+}
+
+function setPaused(paused) {
+  if (game.status !== 'running') return;
+  game.paused = paused;
+  previousTime = performance.now();
+  updateInterface();
+  (paused ? elements.resume : canvas).focus({ preventScroll: true });
 }
 
 function animate(time) {
@@ -207,10 +222,14 @@ function animate(time) {
 canvas.addEventListener('keydown', (event) => {
   const commands = { ArrowUp: 'previous', ArrowDown: 'next', ArrowLeft: 'rotate-left', ArrowRight: 'rotate-right' };
   if (commands[event.key]) { event.preventDefault(); command(commands[event.key]); }
-  if (event.key === ' ' && game.status === 'running') { event.preventDefault(); game.paused = !game.paused; updateInterface(); }
+  if (event.key === ' ' && game.status === 'running') {
+    event.preventDefault();
+    if (!event.repeat) setPaused(!game.paused);
+  }
   if (event.key.toLowerCase() === 'r') { event.preventDefault(); reset(); }
 });
 canvas.addEventListener('pointerdown', (event) => {
+  if (game.paused || game.status !== 'running') return;
   const bounds = canvas.getBoundingClientRect();
   const x = (event.clientX - bounds.left) * WIDTH / bounds.width;
   const y = (event.clientY - bounds.top) * HEIGHT / bounds.height;
@@ -220,7 +239,8 @@ canvas.addEventListener('pointerdown', (event) => {
 document.querySelectorAll('[data-game-command]').forEach((button) => button.addEventListener('click', () => command(button.dataset.gameCommand)));
 document.querySelector('[data-game-reset]').addEventListener('click', reset);
 document.querySelector('[data-overlay-reset]').addEventListener('click', reset);
-elements.pause.addEventListener('click', () => { if (game.status === 'running') { game.paused = !game.paused; updateInterface(); } });
+elements.pause.addEventListener('click', () => setPaused(!game.paused));
+elements.resume.addEventListener('click', () => setPaused(false));
 
 updateInterface();
 createViewportLoop(canvas, animate, (time) => {

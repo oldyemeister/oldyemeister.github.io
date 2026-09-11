@@ -19,8 +19,26 @@
   const readouts = section.querySelector(imu ? '.imu-live-readouts' : '.game-status-bar');
   if (readouts) panel.append(readouts);
   const actions = section.querySelector('.game-actions');
-  if (actions) panel.append(actions);
+  if (actions) {
+    panel.querySelector('.tv-knob').remove();
+    panel.append(actions);
+  }
   television.append(panel);
+  // Keep the existing controls and their bindings, mounted in the TV feet.
+  const gameControls = !imu && section.querySelector('.game-controls');
+  if (gameControls) {
+    television.classList.add('persona-tv-with-legs');
+    gameControls.classList.add('tv-leg-controls');
+    const message = gameControls.querySelector('.game-message');
+    if (message) television.after(message);
+    for (const control of [...gameControls.children]) {
+      const leg = document.createElement('div');
+      leg.className = 'tv-leg';
+      control.before(leg);
+      leg.append(control);
+    }
+    television.append(gameControls);
+  }
   section.querySelector('.game-heading-row, .imu-demo-heading')?.remove();
   const controls = [...section.querySelectorAll('button, input')];
   const disabled = controls.map(control => control.disabled);
