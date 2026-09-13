@@ -86,7 +86,7 @@ body.persona-design :is(.achievement-badge, .collaborator-icon) {
 body.persona-design .achievement-badge::before { background: var(--panel); }
 
 /* A single theme: keep the old switch available for rollback, but out of the UI. */
-body.persona-design .theme-control { display: none; }
+body.persona-design .theme-control { display: none !important; }
 body.persona-design :is(.site-header, .site-navigation, .persona-hud, .site-footer) {
   color: var(--on-panel); background: var(--panel); border-color: var(--border);
   backdrop-filter: none;
@@ -319,6 +319,25 @@ body.persona-design .theme-switch[aria-checked='true'] {
 body.persona-design .theme-switch-thumb { background: var(--on-interactive); }
 body.persona-design :is(.tag-list li, .technology-list li, .case-study-tools li) a { color: inherit; }
 
+/* Hero actions: yellow primary contact CTA and olive résumé action. */
+body.persona-design .hero-links .text-link-primary {
+  background: var(--palette-yellow) !important;
+  color: var(--palette-black) !important;
+  border-color: var(--palette-yellow) !important;
+  box-shadow: var(--control-shadow) !important;
+}
+body.persona-design .hero-links .text-link:not(.text-link-primary) {
+  background: var(--palette-olive) !important;
+  color: var(--palette-white) !important;
+  border-color: var(--palette-gold) !important;
+  box-shadow: var(--control-shadow) !important;
+}
+body.persona-design .hero-links .text-link:hover,
+body.persona-design .hero-links .text-link:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
 /* Restore only the black cabinet and bezel, not its buttons or screen UI. */
 body.persona-design .persona-tv {
   background: var(--tv-black);
@@ -455,6 +474,18 @@ body.persona-design #experience .experience-scroll-arrow:disabled {
   cursor: default;
 }
 body.persona-design #experience .experience-scroll-arrow:active { transform: translateY(-50%); }
+
+/* Keep the project introduction readable on the yellow field. */
+body.persona-design #projects .section-header > p {
+  color: var(--palette-black) !important;
+}
+
+/* Footer copy sits on the same olive foundation as the rest of the interface. */
+body.persona-design .site-footer {
+  background: var(--palette-olive) !important;
+  color: var(--palette-white) !important;
+}
+body.persona-design .site-footer p { color: var(--palette-white) !important; }
 @media (max-width: 1000px) {
   body.persona-design #experience .experience-card-track { grid-auto-columns: calc((100% - 24px) / 2); }
 }
