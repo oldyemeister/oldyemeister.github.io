@@ -92,11 +92,11 @@
 .persona-design .laser-intro h1,
 .persona-design .game-start-button [data-start-label] {
   font-family: 'Persona Slim Wide', 'Persona Slim Local', Arial, sans-serif;
-  font-weight: 500;
+  font-weight: 300;
   color: #000;
   -webkit-text-stroke: 3px #fff;
   paint-order: stroke fill;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
 }
 
 .persona-design h2 .kinetic-word,

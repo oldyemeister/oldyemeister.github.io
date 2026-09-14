@@ -3,7 +3,10 @@
   const nav = document.querySelector('[data-navigation]');
   if (!trigger || !nav) return;
   // Animation speed: 1.25 is 25% faster. Durations below are milliseconds.
-  const MENU_SPEED = 1.25;
+  const MENU_SPEED = 1.05;
+  // Entry curvature and temporary space between neighboring bands.
+  const RIBBON_BEND = 1.6;
+  const RIBBON_GAP = 150; // Maximum moving gap in pixels; scales down on narrow screens.
   const OPEN_DURATION = 600 / MENU_SPEED;
   const CLOSE_DURATION = 420 / MENU_SPEED;
   const links = [...nav.querySelectorAll('a')];
@@ -122,24 +125,39 @@
     document.body.style.setProperty('--menu-chrome-progress', 1 - (1 - progress) ** 3);
     bands.forEach(([x, width], index) => {
       const direction = index < groupSize ? -1 : 1;
-      // Stagger the bundles, never their individual stripes: all neighboring
-      // bands share travel and control points and stay joined in parallel.
+      // Both groups enter already curved. Their parallel bands have small
+      // gaps that close as the curves straighten, rather than bending mid-flight.
       const delay = direction < 0 ? 0 : .025;
       const t = clamp((progress - delay) / (1 - delay));
-      const arrival = 1 - (1 - t) ** 3;
-      const fan = Math.sin(Math.PI * smooth(t));
+      // Cubic ease-in-out: accelerate into the sweep, then settle smoothly.
+      const arrival = t < .5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2;
+      const curved = 1 - smooth((t - .2) / .8);
       const scale = menuWidth / 520;
       const stripeWidth = width * scale;
       const destination = menuLeft + x * scale;
       const seam = menuLeft + seamPosition * scale;
-      const travel = direction < 0 ? -seam - 180 : viewportWidth - seam + 180;
-      const left = destination + travel * (1 - arrival);
+      const maxBow = Math.min(240, viewportWidth * .26) * RIBBON_BEND;
+      const gap = RIBBON_GAP * Math.min(1, menuWidth / 400) * curved;
+      const separation = (index % groupSize - (groupSize - 1) / 2) * gap;
+      const clearance = maxBow + groupSize * RIBBON_GAP + 60;
+      const travel = direction < 0 ? -seam - clearance : viewportWidth - seam + clearance;
+      const left = destination + travel * (1 - arrival) + separation;
       const right = left + stripeWidth;
-      // Same-sign handles make a single arch: left bundle ')' and right '('.
-      const bow = -direction * Math.min(160, viewportWidth * .18) * fan;
+      // Elongated parenthesis: curved ends join one uninterrupted straight middle.
+      const bow = -direction * maxBow * curved;
       const top = -20;
       const bottom = 660;
-      paths[index].setAttribute('d', `M ${left} ${top} C ${left + bow} ${top + 175}, ${left + bow} ${bottom - 180}, ${left} ${bottom} L ${right} ${bottom} C ${right + bow} ${bottom - 180}, ${right + bow} ${top + 175}, ${right} ${top} Z`);
+      paths[index].setAttribute('d', `M ${left} ${top}
+        C ${left + bow} 20, ${left + bow} 80, ${left + bow} 160
+        C ${left + bow} 210, ${left + bow} 230, ${left + bow} 320
+        C ${left + bow} 410, ${left + bow} 430, ${left + bow} 480
+        C ${left + bow} 560, ${left + bow} 620, ${left} ${bottom}
+        L ${right} ${bottom}
+        C ${right + bow} 620, ${right + bow} 560, ${right + bow} 480
+        C ${right + bow} 430, ${right + bow} 410, ${right + bow} 320
+        C ${right + bow} 230, ${right + bow} 210, ${right + bow} 160
+        C ${right + bow} 80, ${right + bow} 20, ${right} ${top} Z`);
+
     });
     links.forEach((link, index) => {
       const reveal = motion.matches ? progress : smooth((progress - .68 - index * .045) / .18);

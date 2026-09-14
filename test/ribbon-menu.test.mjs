@@ -34,8 +34,12 @@ function setup(reduced = false, viewport = 1440) {
   const step = (count = 1) => { for (let i = 0; i < count; i++) {
     now += 16; const pending = [...frames.values()]; frames.clear(); pending.forEach(fn => fn(now));
   } };
+  const finish = () => {
+    for (let count = 0; frames.size && count < 1000; count++) step();
+    assert.equal(frames.size, 0, 'animation must finish');
+  };
   const event = (key, target = trigger) => ({ key, target, preventDefault() { this.defaultPrevented = true; } });
-  return { document, trigger, nav, links, motion, step, event, frames };
+  return { document, trigger, nav, links, motion, step, event, frames, finish };
 }
 test('ribbon menu opens and closes with synchronized accessibility state', () => {
   const { trigger, nav, links, step } = setup(); step(2);
@@ -107,7 +111,7 @@ for (const viewport of [320, 390, 1440]) {
   });
 }
 
-test('bundles form opposing arches and keep neighboring edges connected in motion', () => {
+test('bands enter as separated opposing arches and settle into connected straight bars', () => {
   const { trigger, nav, step } = setup();
   trigger.events.click(); step(15);
   const paths = nav.children[0].children;
@@ -115,13 +119,25 @@ test('bundles form opposing arches and keep neighboring edges connected in motio
   for (let i = 0; i < paths.length; i++) {
     const p = coords(paths[i]);
     assert.ok(i < paths.length / 2 ? p[2] > p[0] : p[2] < p[0]);
-    assert.equal(p[2], p[4]); // both handles bow in the same direction
+    assert.equal(p[2], p[4]);
+    // Every handle and endpoint across the extended middle has the same x.
+    for (const xIndex of [8, 10, 12, 14, 16, 18]) assert.equal(p[xIndex], p[6]);
+    assert.equal(p[7], 160);
+    assert.equal(p[19], 480);
     if (i !== paths.length / 2 - 1 && i !== paths.length - 1) {
       const next = coords(paths[i + 1]);
-      assert.ok(Math.abs(p[8] - next[0]) < 1e-8);
-      assert.ok(Math.abs(p[10] - next[4]) < 1e-8);
-      assert.ok(Math.abs(p[12] - next[2]) < 1e-8);
+      const gap = next[0] - p[26];
+      assert.ok(Number.isFinite(gap) && gap > 0);
+      assert.ok(Math.abs(next[4] - p[46] - gap) < 1e-8);
+      assert.ok(Math.abs(next[2] - p[48] - gap) < 1e-8);
     }
+  }
+  step(35);
+  for (let i = 0; i < paths.length; i++) {
+    const p = coords(paths[i]);
+    assert.equal(p[0], p[2]);
+    assert.equal(p[0], p[4]);
+    if (i + 1 < paths.length) assert.ok(Math.abs(p[26] - coords(paths[i + 1])[0]) < 1e-8);
   }
 });
 
@@ -131,8 +147,8 @@ test('the two middle bands are the thickest and the layer escapes the header', (
   trigger.events.click(); step(45);
   const widths = nav.children[0].children.map(path => {
     const p = path.attrs.d.match(/-?\d+(?:\.\d+)?(?:e[+-]?\d+)?/g).map(Number);
-    assert.ok(p[1] <= 0 && p[7] >= 640);
-    return p[8] - p[0];
+    assert.ok(p[1] <= 0 && p[25] >= 640);
+    return p[26] - p[0];
   });
   const mid = widths.length / 2;
   assert.ok(widths.every((width, i) => i === mid - 1 || i === mid || width < Math.min(widths[mid - 1], widths[mid])));
@@ -158,16 +174,16 @@ test('keyboard hints settle immediately for reduced motion', () => {
 });
 
 test('header and bottom hints share the ribbon timeline and reverse smoothly', () => {
-  const { trigger, document, nav, step } = setup();
+  const { trigger, document, nav, step, finish } = setup();
   trigger.events.click(); step(12);
   const partial = document.body.style['--menu-chrome-progress'];
   assert.ok(partial > 0 && partial < 1);
   trigger.events.click(); step(4);
   assert.ok(document.body.style['--menu-chrome-progress'] < partial);
-  trigger.events.click(); step(35);
+  trigger.events.click(); finish();
   assert.equal(document.body.style['--menu-chrome-progress'], 1);
   nav.children.find(child => child.className === 'ribbon-menu-close').events.click();
-  step(25);
+  finish();
   assert.equal(document.body.style['--menu-chrome-progress'], 0);
   assert.equal(nav.hidden, true);
 });
