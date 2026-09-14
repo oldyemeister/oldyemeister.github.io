@@ -1,5 +1,6 @@
 ---
 layout: project_case_study
+page_class: rf-receiver
 title: "RF Frequency Downconversion System"
 description: "Design and validation of an analog receiver chain with an RF limiter, 8–16 MHz bandpass filter, Gilbert-cell mixer, and low-pass filter."
 eyebrow: "Analog hardware · RF and PCB design"

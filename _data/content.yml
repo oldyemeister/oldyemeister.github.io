@@ -243,9 +243,9 @@ laser:
   keyboard_controls: "Up and Down select a mirror. Left and Right rotate it. Space pauses. R resets."
   keyboard_guide:
     - keys: "↑ ↓"
-      action: "Select mirror"
+      action: "Select"
     - keys: "← →"
-      action: "Rotate mirror"
+      action: "Rotate"
     - keys: "Space"
       action: "Pause"
     - keys: "R"
@@ -283,9 +283,9 @@ donkey_kong:
   controls_heading: "Controls"
   keyboard_controls: "A and D or Left and Right move. W or Up jumps. Space pauses. R resets."
   keyboard_guide:
-    - keys: "A D / ← →"
+    - keys: "← →"
       action: "Move"
-    - keys: "W / ↑"
+    - keys: "↑"
       action: "Jump"
     - keys: "Space"
       action: "Pause"

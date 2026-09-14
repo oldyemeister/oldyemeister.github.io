@@ -1,5 +1,6 @@
 ---
 layout: project_case_study
+page_class: aps380
 title: "Vision-Assisted Adaptive Cruise Control"
 description: "Design and validation of a Raspberry Pi autonomous vehicle with adaptive cruise control, lane keeping, emergency braking, and vision-based stop-sign detection."
 eyebrow: "Autonomous vehicle · Controls and perception"

@@ -9,6 +9,8 @@
   --palette-black: #080808;
   --palette-white: #FFFDF3;
   --palette-blue: #0C75A1;
+  --key-hint-shadow: #858585;
+  --key-hint-fill: #C8C8C2;
 
   --field: var(--palette-yellow);
   --panel: var(--palette-olive);
@@ -52,6 +54,7 @@
 
 /* Original keyboard instructions are the only fully preserved component. */
 .persona-hud {
+  --signal: #FFF000;
   --persona-yellow: #ffe348;
   --persona-sky: #67cef6;
   --persona-ink: #132938;

@@ -7,7 +7,7 @@ export function personaPreview(html, prefix = '/persona', redesign = true) {
   const home = /<body class="page-home">/.test(html);
   const guide = html.match(/<aside class="keyboard-guide[^"]*"[^>]*>[\s\S]*?<\/aside>/);
   const gameKeys = guide ? [...guide[0].matchAll(/<li>([\s\S]*?)<\/li>/g)]
-    .map(([, instruction]) => `<span class="hud-instruction hud-game-key">${instruction.replace(/<kbd>([^<]+)<\/kbd>/g, (_, keys) => keys.trim().split(/\s+/).map(key => `<kbd${/[↑↓←→]/.test(key) ? ' class="hud-arrow"' : ''}>${key}</kbd>`).join(''))}</span>`).join('') : '';
+    .map(([, instruction]) => `<span class="hud-instruction hud-game-key">${instruction}</span>`).join('') : '';
   if (guide) {
     html = html
       .replace(/<p class="section-index">Project summary<\/p>\s*<h2>[^<]*<\/h2>/, '<h2>Summary</h2>')
@@ -29,7 +29,6 @@ export function personaPreview(html, prefix = '/persona', redesign = true) {
     .replace('</head>', `
       <link rel="stylesheet" href="/assets/themes/persona/style.css">
       ${redesign ? '<link rel="stylesheet" href="/assets/css/palette.css">\n      <link rel="stylesheet" href="/assets/css/redesign.css">' : ''}
-      <link rel="stylesheet" href="/assets/css/key-instructions.css">
       <script src="/assets/themes/persona/arrival.js"></script>
     </head>`)
     .replace(/<body class="([^"]*)">/, `<body class="$1 persona-design" data-persona-base="${prefix}/">
@@ -42,8 +41,8 @@ export function personaPreview(html, prefix = '/persona', redesign = true) {
     .replace('</body>', `
       <nav class="persona-hud" aria-label="Keyboard shortcuts">
         ${gameKeys}
-        <span class="hud-instruction">${home ? '<kbd class="hud-arrow">↑</kbd><kbd class="hud-arrow">↓</kbd>' : '<kbd>Tab</kbd>'}<span>Navigate</span></span>
-        <span class="hud-instruction"><kbd>Enter</kbd><span>Open</span></span>
+        <span class="hud-instruction"><kbd>${home ? '↑ ↓ / Tab' : 'Tab'}</kbd><span>Select</span></span>
+        <span class="hud-instruction"><kbd>Enter</kbd><span>Confirm</span></span>
         <a class="hud-home" href="${prefix}/${home ? '#home' : ''}" data-hud-home aria-keyshortcuts="Escape"><kbd>Esc</kbd><span>Home</span><span aria-hidden="true">↗</span></a>
       </nav>
       <script src="/assets/themes/persona/interface.js" defer></script>

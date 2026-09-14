@@ -1,0 +1,123 @@
+@font-face {
+  font-family: 'Persona Hints Bold';
+  src: url('../themes/persona/fonts/slim-latin-bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+/* Active keyboard hints. Original implementation: docs/backups/original-key-instructions/. */
+body.persona-design .persona-hud {
+  --key-strip-height: 50px;
+  position: fixed;
+  inset: auto 0 0;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  gap: 9px 15px;
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+  min-height: 0;
+  padding: 30px 18px max(6px, env(safe-area-inset-bottom));
+  border: 0;
+  background: linear-gradient(to top,
+      var(--signal) 0 var(--key-strip-height),
+      transparent var(--key-strip-height)) !important;
+  color: var(--palette-black);
+  box-shadow: none;
+  font: 700 11.25px/1.3 'Persona Hints Bold', Arial, sans-serif;
+  -webkit-text-stroke: 2.25px var(--palette-white);
+  paint-order: stroke fill;
+  transform: none;
+}
+
+body.persona-design .persona-hud :is(.hud-instruction, .hud-home) {
+  display: inline-flex;
+  flex: 0 0 auto;
+  white-space: nowrap;
+  align-items: center;
+  gap: 4.5px;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  text-decoration: none;
+  transform: rotate(-17deg);
+  transform-origin: left bottom;
+}
+
+/* Long game instructions stay in one row, with headroom for the tilted text. */
+body.persona-design .persona-hud:has(.hud-game-key) {
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  overflow-x: auto;
+  padding: 45px 18px max(6px, env(safe-area-inset-bottom));
+  box-sizing: border-box;
+  scrollbar-width: thin;
+}
+
+body.persona-design .persona-hud kbd {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 26px;
+  width: 26px;
+  min-width: 26px;
+  height: 26px;
+  box-sizing: border-box;
+  padding: 0;
+  border: 2px solid var(--palette-white);
+  border-radius: 50%;
+  outline: none;
+  background: var(--palette-black) !important;
+  color: var(--palette-white) !important;
+  box-shadow: none !important;
+  transform: none;
+  font: 700 8px/1 Arial, sans-serif;
+  -webkit-text-stroke: 0;
+  paint-order: stroke fill;
+}
+
+body.persona-design .persona-hud kbd.hud-arrow {
+  width: 26px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 13.5px;
+}
+
+body.persona-design .persona-hud .hud-home:hover,
+body.persona-design .persona-hud .hud-home:focus-visible {
+  color: var(--palette-black);
+  outline-color: var(--palette-black);
+}
+
+/* Shared progress also reverses smoothly when the menu is interrupted. */
+body.persona-design .persona-hud {
+  translate: 0 calc(120% * var(--menu-chrome-progress, 0));
+}
+
+@media (min-width: 541px) {
+  body.persona-design .persona-hud:has(.hud-game-key) {
+    transform: none;
+  }
+}
+
+@media (max-width: 540px),
+(max-height: 700px) {
+  body.persona-design .persona-hud {
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: auto;
+    max-width: none;
+    gap: 7.5px 10.5px;
+    font-size: 10px;
+    transform: none;
+  }
+}
+
+@media (any-hover: none) and (any-pointer: coarse) {
+  body.persona-design .persona-hud {
+    display: none;
+  }
+}

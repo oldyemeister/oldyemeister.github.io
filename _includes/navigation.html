@@ -5,21 +5,15 @@
       <span class="identity-mark" aria-hidden="true">{{ site_content.site.initials }}</span>
       <span>{{ site_content.site.name }}</span>
     </a>
-    <button class="nav-menu-button icon-button" type="button" aria-expanded="false" aria-controls="site-navigation" data-menu-toggle title="Open navigation">
+    <button class="nav-menu-button icon-button" type="button" aria-expanded="false" aria-controls="site-navigation" data-menu-toggle data-ribbon-trigger title="Open navigation">
       <span class="menu-icon" aria-hidden="true"></span>
       <span class="sr-only">Open navigation</span>
     </button>
-    <nav class="site-navigation" id="site-navigation" aria-label="Primary" data-navigation>
+    <nav class="site-navigation" id="site-navigation" aria-label="Primary" data-navigation hidden inert aria-hidden="true">
       <a href="{{ '/#about' | relative_url }}">{{ site_content.navigation.about }}</a>
       <a href="{{ '/#experience' | relative_url }}">{{ site_content.navigation.experience }}</a>
       <a href="{{ '/#projects' | relative_url }}">{{ site_content.navigation.projects }}</a>
       <a href="{{ '/#contact' | relative_url }}">{{ site_content.navigation.contact }}</a>
     </nav>
-    <div class="theme-control">
-      <span class="theme-label" aria-hidden="true">Theme</span>
-      <button class="theme-switch" type="button" role="switch" aria-checked="false" aria-label="Use dark theme" data-theme-toggle>
-        <span class="theme-switch-thumb" aria-hidden="true"></span>
-      </button>
-    </div>
   </div>
 </header>

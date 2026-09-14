@@ -1,0 +1,223 @@
+(() => {
+  const trigger = document.querySelector('[data-ribbon-trigger]');
+  const nav = document.querySelector('[data-navigation]');
+  if (!trigger || !nav) return;
+  // Animation speed: 1.25 is 25% faster. Durations below are milliseconds.
+  const MENU_SPEED = 1.25;
+  const OPEN_DURATION = 600 / MENU_SPEED;
+  const CLOSE_DURATION = 420 / MENU_SPEED;
+  const links = [...nav.querySelectorAll('a')];
+  const motion = matchMedia('(prefers-reduced-motion: reduce)');
+  const ns = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(ns, 'svg');
+  svg.classList.add('menu-ribbons');
+  svg.setAttribute('viewBox', '0 0 520 640');
+  svg.setAttribute('preserveAspectRatio', 'none');
+  svg.setAttribute('aria-hidden', 'true');
+  svg.setAttribute('focusable', 'false');
+  // [relative width, reference color, opacity], ordered left to right.
+  // The settled reference has a broad yellow/orange core framed by fine
+  // olive, lime, ivory, green and cyan lines. Widths are normalized below.
+  // Split the two moving bundles between the yellow and orange core bands.
+  const stripes = [
+    [2, '#827B24', .35],
+    [3, '#F6EBA0', .65],
+    [3, '#A31C08', .85],
+    [4, '#FFFDE0', 1],
+    [6, '#D5F318', .95],
+    [5, '#687D18', .80],
+    [8, '#C6EE10', .95],
+    [4, '#FFFFB0', 1],
+    [12, '#F4D51C', .95],
+    [53, '#FFF52B', .97],
+    [36, '#FFAD08', 1],
+    [14, '#FF6500', 1],
+    [3, '#FFFAC1', 1],
+    [5, '#E1FF00', 1],
+    [4, '#009B3A', 1],
+    [5, '#FFD229', 1],
+    [3, '#FFFCE0', 1],
+    [8, '#20C9D3', 1],
+    [6, '#BEE617', .95],
+    [3, '#FFFFEB', 1]
+  ];
+  const groupSize = stripes.length / 2;
+  const totalWidth = stripes.reduce((sum, [width]) => sum + width, 0);
+  const seamPosition = 22 + stripes.slice(0, groupSize)
+    .reduce((sum, [width]) => sum + width, 0) * 480 / totalWidth;
+  let edge = 22;
+  const bands = stripes.map(([units, color, opacity]) => {
+    const width = units * 480 / totalWidth;
+    const band = [edge, width, color, opacity];
+    edge += width;
+    return band;
+  });
+  const paths = bands.map(([, , color, opacity]) => {
+    const path = document.createElementNS(ns, 'path');
+    path.style.fill = color;
+    path.style.opacity = opacity;
+    svg.append(path);
+    return path;
+  });
+  nav.prepend(svg);
+  // A body-level fixed layer escapes the sticky header's stacking context.
+  document.body.append(nav);
+  nav.classList.add('ribbon-navigation');
+  const closeButton = document.createElement('button');
+  closeButton.className = 'ribbon-menu-close';
+  closeButton.type = 'button';
+  closeButton.textContent = '×';
+  closeButton.setAttribute('aria-label', 'Close navigation');
+  nav.append(closeButton);
+  links.forEach(link => {
+    const word = document.createElement('span');
+    word.className = 'menu-word';
+    word.textContent = link.textContent;
+    link.replaceChildren(word);
+  });
+  const hints = document.createElement('div');
+  hints.className = 'menu-input-hints';
+  hints.setAttribute('role', 'group');
+  hints.setAttribute('aria-label', 'Menu keyboard instructions');
+  for (const [keys, action] of [[['↑', '↓'], 'Navigate'], [['Enter'], 'Open'], [['Esc'], 'Close']]) {
+    const group = document.createElement('span');
+    group.className = 'menu-input-hint';
+    group.setAttribute('role', 'group');
+    group.setAttribute('aria-label', `${action}: ${action === 'Navigate' ? 'Up or Down arrow' : keys[0]}`);
+    for (const key of keys) {
+      const symbol = document.createElement('kbd');
+      symbol.className = action === 'Navigate' ? 'menu-hint-arrow' : 'menu-hint-key';
+      symbol.textContent = key;
+      symbol.setAttribute('aria-hidden', 'true');
+      group.append(symbol);
+    }
+    const label = document.createElement('span');
+    label.textContent = action;
+    label.setAttribute('aria-hidden', 'true');
+    group.append(label);
+    hints.append(group);
+  }
+  nav.append(hints);
+  let progress = 0;
+  let open = false;
+  let frame = 0;
+  let previousTime;
+  const clamp = value => Math.max(0, Math.min(1, value));
+  const smooth = value => { const t = clamp(value); return t * t * (3 - 2 * t); };
+
+  let viewportWidth = window.innerWidth;
+  let menuLeft = 0;
+  let menuWidth = 480;
+  function measure() {
+    const rect = nav.getBoundingClientRect();
+    viewportWidth = window.innerWidth;
+    menuLeft = rect.left;
+    menuWidth = rect.width;
+    svg.setAttribute('viewBox', `0 0 ${viewportWidth} 640`);
+    svg.style.left = `${-menuLeft}px`;
+  }
+
+  function draw() {
+    // Chrome uses the same reversible timeline as the ribbons.
+    document.body.style.setProperty('--menu-chrome-progress', 1 - (1 - progress) ** 3);
+    bands.forEach(([x, width], index) => {
+      const direction = index < groupSize ? -1 : 1;
+      // Stagger the bundles, never their individual stripes: all neighboring
+      // bands share travel and control points and stay joined in parallel.
+      const delay = direction < 0 ? 0 : .025;
+      const t = clamp((progress - delay) / (1 - delay));
+      const arrival = 1 - (1 - t) ** 3;
+      const fan = Math.sin(Math.PI * smooth(t));
+      const scale = menuWidth / 520;
+      const stripeWidth = width * scale;
+      const destination = menuLeft + x * scale;
+      const seam = menuLeft + seamPosition * scale;
+      const travel = direction < 0 ? -seam - 180 : viewportWidth - seam + 180;
+      const left = destination + travel * (1 - arrival);
+      const right = left + stripeWidth;
+      // Same-sign handles make a single arch: left bundle ')' and right '('.
+      const bow = -direction * Math.min(160, viewportWidth * .18) * fan;
+      const top = -20;
+      const bottom = 660;
+      paths[index].setAttribute('d', `M ${left} ${top} C ${left + bow} ${top + 175}, ${left + bow} ${bottom - 180}, ${left} ${bottom} L ${right} ${bottom} C ${right + bow} ${bottom - 180}, ${right + bow} ${top + 175}, ${right} ${top} Z`);
+    });
+    links.forEach((link, index) => {
+      const reveal = motion.matches ? progress : smooth((progress - .68 - index * .045) / .18);
+      link.style.opacity = reveal;
+      link.style.translate = `0 ${(1 - reveal) * 12}px`;
+    });
+    const hintReveal = motion.matches ? progress : smooth((progress - .82) / .18);
+    hints.style.opacity = hintReveal;
+    hints.style.translate = `0 ${(1 - hintReveal) * 8}px`;
+  }
+  function tick(time) {
+    const delta = previousTime === undefined ? 0 : Math.min(time - previousTime, 40);
+    previousTime = time;
+    progress = clamp(progress + (open ? 1 : -1) * delta / (open ? OPEN_DURATION : CLOSE_DURATION));
+    draw();
+    if (progress !== (open ? 1 : 0)) frame = requestAnimationFrame(tick);
+    else {
+      frame = 0;
+      previousTime = undefined;
+      if (!open) nav.hidden = true;
+    }
+  }
+  function setOpen(value, restoreFocus = false) {
+    open = value;
+    trigger.setAttribute('aria-expanded', String(open));
+    trigger.title = open ? 'Close navigation' : 'Open navigation';
+    trigger.querySelector('.sr-only').textContent = trigger.title;
+    document.body.classList.toggle('navigation-open', open);
+    nav.inert = !open;
+    nav.setAttribute('aria-hidden', String(!open));
+    if (open) { nav.hidden = false; measure(); }
+    if (open && document.activeElement === trigger) links[0]?.focus({ preventScroll: true });
+    if (restoreFocus) trigger.focus({ preventScroll: true });
+    if (motion.matches) {
+      cancelAnimationFrame(frame);
+      frame = 0;
+      previousTime = undefined;
+      progress = open ? 1 : 0;
+      draw();
+      nav.hidden = !open;
+    } else if (!frame) frame = requestAnimationFrame(tick);
+  }
+  setOpen(false);
+  trigger.addEventListener('click', () => setOpen(!open));
+  closeButton.addEventListener('click', () => setOpen(false, true));
+  trigger.addEventListener('keydown', event => {
+    if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+    event.preventDefault();
+    setOpen(true);
+    links[event.key === 'ArrowDown' ? 0 : links.length - 1].focus();
+  });
+  nav.addEventListener('keydown', event => {
+    const index = links.indexOf(document.activeElement);
+    let next;
+    if (event.key === 'ArrowDown') next = (index + 1) % links.length;
+    if (event.key === 'ArrowUp') next = (index - 1 + links.length) % links.length;
+    if (event.key === 'Home') next = 0;
+    if (event.key === 'End') next = links.length - 1;
+    if (next === undefined) return;
+    event.preventDefault();
+    links[next].focus();
+  });
+  document.addEventListener('keydown', event => {
+    if (open && event.key === 'Escape') {
+      event.preventDefault();
+      setOpen(false, true);
+    }
+  });
+  document.addEventListener('pointerdown', event => {
+    if (open && !nav.contains(event.target) && !trigger.contains(event.target)) {
+      setOpen(false, nav.contains(document.activeElement));
+    }
+  });
+  document.addEventListener('focusin', event => {
+    if (open && !nav.contains(event.target) && !trigger.contains(event.target)) setOpen(false);
+  });
+  links.forEach(link => link.addEventListener('click', () => setOpen(false, true)));
+  motion.addEventListener('change', () => setOpen(open));
+  window.addEventListener('resize', () => { if (!nav.hidden) { measure(); draw(); } });
+  window.addEventListener('pagehide', () => setOpen(false));
+})();

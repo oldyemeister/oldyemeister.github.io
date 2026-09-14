@@ -53,20 +53,6 @@
     if (!storedTheme()) setTheme(event.matches ? 'dark' : 'light', false);
   });
 
-  const menuToggle = document.querySelector('[data-menu-toggle]');
-  const navigation = document.querySelector('[data-navigation]');
-  function closeNavigation() {
-    menuToggle?.setAttribute('aria-expanded', 'false');
-    document.body.classList.remove('navigation-open');
-  }
-  menuToggle?.addEventListener('click', () => {
-    const open = menuToggle.getAttribute('aria-expanded') !== 'true';
-    menuToggle.setAttribute('aria-expanded', String(open));
-    document.body.classList.toggle('navigation-open', open);
-  });
-  navigation?.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeNavigation));
-  window.addEventListener('resize', () => { if (window.innerWidth > 1080) closeNavigation(); });
-
   const revealTargets = [...document.querySelectorAll([
     '.hero-copy', '.portrait-frame', '.section-header > *',
     '.two-column-section > *', '.contact-layout > *',

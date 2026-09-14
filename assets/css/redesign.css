@@ -532,3 +532,41 @@ body.persona-design #projects :is(button:disabled, [aria-disabled='true']) {
 @media (prefers-reduced-motion: reduce) {
   body.persona-design #projects :is(.project-demo-link, button, [role='button']) { transition: none; }
 }
+
+/* Text directly on the electric-yellow field uses the existing black token.
+   Stop at panels and overlays, which supply their own surface/text pairing. */
+@scope (body.persona-design) to (
+  .site-header, .site-footer, .persona-hud, .ribbon-navigation,
+  .hero-section > .content-shell,
+  .page-section:not(#experience) > .content-shell,
+  .laser-intro > .content-shell, .case-study-hero, .case-study-layout,
+  .laser-shell, .imu-demo-section, .experience-card
+) {
+  :scope :is(h1, h2, h3, h4, p, li, dt, dd, span, small, strong, em, time, label) {
+    color: var(--palette-black) !important;
+    -webkit-text-fill-color: currentColor;
+  }
+}
+
+/* Yellow controls must also keep nested text black in interactive states. */
+body.persona-design :is(.skip-link, .text-link-primary, .game-start-button),
+body.persona-design :is(.skip-link, .text-link-primary, .game-start-button) :is(span, strong, small),
+body.persona-design #projects :is(.project-demo-link, button, [role='button']):is(:hover, :focus-visible):not(:disabled, [aria-disabled='true']),
+body.persona-design #projects :is(.project-demo-link, button, [role='button']):is(:hover, :focus-visible):not(:disabled, [aria-disabled='true']) :is(span, strong, small) {
+  color: var(--palette-black) !important;
+  -webkit-text-fill-color: currentColor;
+}
+
+/* Requested exception for the hero contact action, including its arrow. */
+body.persona-design .hero-links .text-link-primary,
+body.persona-design .hero-links .text-link-primary * {
+  color: var(--palette-yellow) !important;
+  -webkit-text-fill-color: var(--palette-yellow);
+}
+
+/* Black project copy on the RF/PCB and autonomous car detail pages only. */
+body.persona-design:is(.page-rf-receiver, .page-aps380) .case-study,
+body.persona-design:is(.page-rf-receiver, .page-aps380) .case-study :is(h1, h2, h3, h4, p, a, li, dt, dd, figcaption, span, strong, em, code, th, td) {
+  color: var(--palette-black) !important;
+  -webkit-text-fill-color: var(--palette-black);
+}
