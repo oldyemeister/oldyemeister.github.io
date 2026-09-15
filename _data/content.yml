@@ -10,9 +10,18 @@ site:
 navigation:
   home: "Home"
   about: "About"
+  skills: "Skills"
   experience: "Experience"
   projects: "Projects"
   contact: "Contact"
+
+navigation_descriptions:
+  home: "Meet Jacky"
+  about: "Background & interests"
+  skills: "Tools & technical strengths"
+  experience: "Roles & contributions"
+  projects: "Games, circuits & robotics"
+  contact: "Get in touch"
 
 hero:
   name: "Jiawei (Jacky) Ye"
@@ -30,15 +39,46 @@ about:
   heading: "About"
   biography: |-
     I'm a Computer Engineering student at the University of Toronto, building systems that connect hardware and software. I enjoy turning ideas into practical projects and making engineering easier to understand.
-  skills_heading: "Skills and interests"
-  skills:
-    - "Python, C/C++, Verilog, C#"
-    - "Flask, FastAPI, Docker, SQL"
-    - "Altium, LTSpice, ModelSim"
-    - "DE1-SoC, Quartus, PlatformIO"
-    - "PyTorch, TensorFlow, RAG"
-    - "Blender, AutoCAD, 3D Printing"
-    - "Chinese (native), English (native/bilingual), Shanghainese (native), Japanese (limited working proficiency)"
+
+skills_section:
+  heading: "Skills"
+  introduction: "A dual-track background spanning embedded hardware, AI software, and robotics data systems."
+  categories:
+    - name: "Embedded & Hardware"
+      skills:
+        - "STM32"
+        - "Verilog"
+        - "Altium Designer"
+        - "LTspice"
+        - "ModelSim"
+        - "Quartus Prime"
+        - "PlatformIO"
+        - "RF Circuit Design"
+    - name: "AI & Software Engineering"
+      skills:
+        - "Python"
+        - "C/C++"
+        - "C#"
+        - "Flask"
+        - "FastAPI"
+        - "Docker"
+        - "SQLite"
+    - name: "Robotics & Data Systems"
+      skills:
+        - "QA Pipeline Design"
+        - "SLAM / VIO"
+        - "Dataset Tooling"
+
+    - name: "Design & Fabrication"
+      skills:
+        - "Blender"
+        - "Rhino8"
+        - "3D Printing"
+    - name: "Content & Communication"
+      skills:
+        - "Technical Scriptwriting"
+        - "Video Production (Premiere, After Effects)"
+        - "Bilingual: Mandarin / English"
 
 experience_section:
   heading: "Experience"
@@ -106,6 +146,7 @@ projects:
       - "Computer Architecture"
     image:
       path: "/assets/images/projects/laser/laser-preview.gif"
+      crt_effect: true
       poster: "/assets/images/projects/laser/laser-preview.png"
     repository_url: "https://github.com/oldyemeister/RISC-V_lasergame"
     live_url: "/projects/laser/"
@@ -123,6 +164,7 @@ projects:
       - "DE1-SoC FPGA"
     image:
       path: "/assets/images/projects/donkey-kong/donkey-kong-preview.gif"
+      crt_effect: true
       poster: "/assets/images/projects/donkey-kong/donkey-kong-preview.png"
     live_url: "/projects/donkey-kong/"
     live_label: "Play game"
@@ -139,6 +181,7 @@ projects:
       - "BNO055"
     image:
       path: "/assets/images/projects/imu-sandbox/imu-sandbox-preview.gif"
+      crt_effect: true
       poster: "/assets/images/projects/imu-sandbox/imu-sandbox-preview.png"
     repository_url: "https://github.com/oldyemeister/imu_sandbox_stm32"
     live_url: "/projects/imu-sandbox/"
@@ -162,6 +205,7 @@ projects:
     placeholder_index: "04"
     image:
       path: "/assets/images/projects/rf-receiver/pcb_manufacturing.jpg"
+      crt_effect: true
       poster: ""
     repository_url: ""
     live_url: "/projects/rf-receiver/"
@@ -187,6 +231,7 @@ projects:
     placeholder_index: "05"
     image:
       path: "/assets/images/projects/aps380/hero.jpg"
+      crt_effect: true
       poster: ""
     repository_url: ""
     live_url: "/projects/aps380/"
@@ -205,6 +250,7 @@ projects:
     placeholder_index: "06"
     image:
       path: "/assets/images/projects/bilibili/bilibili-preview.svg"
+      crt_effect: true
       poster: ""
     repository_url: ""
     live_url: "https://space.bilibili.com/302146460"

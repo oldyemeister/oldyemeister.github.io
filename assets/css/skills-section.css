@@ -1,0 +1,60 @@
+/* One existing olive section panel; categories are groups, not separate cards. */
+body.persona-design #skills {
+  --skill-chip-fill: var(--hero-yellow-light);
+  --skill-chip-ink: var(--palette-olive);
+}
+html[data-theme="dark"] body.persona-design #skills {
+  --skill-chip-fill: var(--palette-blue);
+  --skill-chip-ink: var(--palette-white);
+}
+body.persona-design #skills .section-header > p {
+  color: var(--on-panel);
+  max-width: 42ch;
+}
+body.persona-design #skills .skills-categories {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 36px 48px;
+}
+body.persona-design #skills .skills-category {
+  min-width: 0;
+  padding-top: 20px;
+  border-top: 2px solid var(--palette-gold);
+}
+body.persona-design #skills .skills-category h3 {
+  margin: 0 0 16px;
+  color: var(--on-panel);
+  font-size: clamp(1.1rem, 2vw, 1.45rem);
+  font-weight: 800;
+  line-height: 1.25;
+}
+body.persona-design #skills .skill-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+body.persona-design #skills .skill-chips li {
+  max-width: 100%;
+  padding: 8px 13px;
+  border-left: 4px solid var(--palette-gold);
+  border-radius: 6px 14px 14px 6px;
+  background: var(--skill-chip-fill);
+  color: var(--skill-chip-ink);
+  font: 700 .9rem/1.4 Arial, sans-serif;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 760px) {
+  body.persona-design #skills .skills-categories { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+}
+/* Explicitly reuse the panel treatment even where legacy scoped CSS is unsupported. */
+body.persona-design #skills > .content-shell {
+  background: var(--panel);
+  color: var(--on-panel);
+  border: 3px solid var(--border);
+  border-radius: 28px;
+  padding: clamp(22px, 3.5vw, 44px);
+}
+/* The Skills title inherits the shared Persona section-heading styles. */

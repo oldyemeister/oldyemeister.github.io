@@ -3,10 +3,10 @@
   const nav = document.querySelector('[data-navigation]');
   if (!trigger || !nav) return;
   // Animation speed: 1.25 is 25% faster. Durations below are milliseconds.
-  const MENU_SPEED = 1.05;
+  const MENU_SPEED = 1.0;
   // Entry curvature and temporary space between neighboring bands.
   const RIBBON_BEND = 1.6;
-  const RIBBON_GAP = 150; // Maximum moving gap in pixels; scales down on narrow screens.
+  const RIBBON_GAP = 180; // Maximum moving gap in pixels; scales down on narrow screens.
   const OPEN_DURATION = 600 / MENU_SPEED;
   const CLOSE_DURATION = 420 / MENU_SPEED;
   const links = [...nav.querySelectorAll('a')];
@@ -101,6 +101,20 @@
     hints.append(group);
   }
   nav.append(hints);
+  const description = document.createElement('p');
+  description.className = 'menu-selection-description';
+  description.setAttribute('role', 'status');
+  description.setAttribute('aria-live', 'polite');
+  description.setAttribute('aria-atomic', 'true');
+  nav.append(description);
+  function describe(link) {
+    description.textContent = link?.dataset?.menuDescription || link?.textContent || '';
+  }
+  links.forEach(link => {
+    link.addEventListener('pointerenter', () => describe(link));
+    link.addEventListener('focus', () => describe(link));
+    link.addEventListener('pointerleave', () => describe(links.includes(document.activeElement) ? document.activeElement : links[0]));
+  });
   let progress = 0;
   let open = false;
   let frame = 0;
@@ -159,14 +173,18 @@
         C ${right + bow} 80, ${right + bow} 20, ${right} ${top} Z`);
 
     });
+    // Fit all labels into the same timeline, even when navigation grows.
+    const labelStagger = Math.min(.045, .135 / Math.max(1, links.length - 1));
     links.forEach((link, index) => {
-      const reveal = motion.matches ? progress : smooth((progress - .68 - index * .045) / .18);
+      const reveal = motion.matches ? progress : smooth((progress - .68 - index * labelStagger) / .18);
       link.style.opacity = reveal;
       link.style.translate = `0 ${(1 - reveal) * 12}px`;
     });
     const hintReveal = motion.matches ? progress : smooth((progress - .82) / .18);
     hints.style.opacity = hintReveal;
     hints.style.translate = `0 ${(1 - hintReveal) * 8}px`;
+    description.style.opacity = hintReveal;
+    description.style.translate = `0 ${(1 - hintReveal) * 8}px`;
   }
   function tick(time) {
     const delta = previousTime === undefined ? 0 : Math.min(time - previousTime, 40);
@@ -188,7 +206,7 @@
     document.body.classList.toggle('navigation-open', open);
     nav.inert = !open;
     nav.setAttribute('aria-hidden', String(!open));
-    if (open) { nav.hidden = false; measure(); }
+    if (open) { nav.hidden = false; describe(links[0]); measure(); }
     if (open && document.activeElement === trigger) links[0]?.focus({ preventScroll: true });
     if (restoreFocus) trigger.focus({ preventScroll: true });
     if (motion.matches) {

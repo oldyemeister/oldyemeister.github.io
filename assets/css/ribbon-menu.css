@@ -98,7 +98,7 @@ body #site-navigation.ribbon-navigation .menu-ribbons {
   pointer-events: none;
 }
 
-/* Compact, heavy lettering with a clean pale outline. */
+/* Match the section-topic font face and spacing, retaining the menu outline. */
 body #site-navigation.ribbon-navigation a {
   position: relative;
   flex: 0 0 auto;
@@ -117,9 +117,9 @@ body #site-navigation.ribbon-navigation a {
 
   font-family: 'Persona Slim Wide', 'Persona Slim Local', Arial, sans-serif;
   font-size: clamp(32px, 3.8vw, 52px);
-  font-weight: 700;
+  font-weight: 300;
   line-height: 1.12;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
 
   -webkit-text-stroke: 5px var(--ribbon-white);
   paint-order: stroke fill;
@@ -354,4 +354,26 @@ body #site-navigation.ribbon-navigation:not(:has(a:hover)) a:focus-visible ~ a {
 }
 body #site-navigation.ribbon-navigation:has(a:hover) a:focus-visible:not(:hover) .menu-word {
   transform: scale(.75);
+}
+
+/* A stable two-line slot keeps selection changes from moving the menu words. */
+body #site-navigation.ribbon-navigation .menu-selection-description {
+  flex: 0 0 auto;
+  width: 100%;
+  min-height: 2.8em;
+  margin: 24px 0 0;
+  padding: 0;
+  color: var(--ribbon-charcoal);
+  font: 700 14px/1.4 ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  text-align: center;
+  text-wrap: balance;
+  -webkit-text-stroke: 2px var(--ribbon-white);
+  paint-order: stroke fill;
+  pointer-events: none;
+}
+@media (max-height: 500px) {
+  body #site-navigation.ribbon-navigation .menu-selection-description {
+    margin-top: 12px;
+    font-size: 12px;
+  }
 }

@@ -64,28 +64,35 @@
   if (!reducedMotion.matches && 'IntersectionObserver' in window && revealTargets.length) {
     document.querySelectorAll('.experience-list, .project-grid').forEach((group) => {
       [...group.children].forEach((item, index) => {
-        item.style.setProperty('--reveal-delay', `${Math.min(index * 90, 270)}ms`);
+        item.style.setProperty('--reveal-delay', `${Math.min(index * 30, 60)}ms`);
       });
     });
     revealTargets.forEach((element) => element.classList.add('reveal-item'));
-    root.classList.add('reveal-enabled');
     const revealObserver = new IntersectionObserver((entries, observer) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
+        // A scroll jump may land directly on this item: don't queue a stagger.
+        if (entry.boundingClientRect.top < window.innerHeight && entry.boundingClientRect.bottom > 0) {
+          entry.target.style.setProperty('--reveal-delay', '0ms');
+        }
         entry.target.classList.add('is-revealed');
         observer.unobserve(entry.target);
       });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    // Pixel margins use viewport height (IO percentage margins use width).
+    // Pre-reveal in either scroll direction, about 20vh before entering view.
+    }, { rootMargin: `${Math.round(window.innerHeight * 0.2)}px 0px`, threshold: 0 });
     let linkedSection = null;
     if (window.location.hash) {
       try { linkedSection = document.querySelector(window.location.hash); } catch (error) {}
     }
     revealTargets.forEach((element) => {
       const bounds = element.getBoundingClientRect();
-      const initiallyVisible = bounds.top < window.innerHeight * 0.92 && bounds.bottom > 0;
+      const initiallyVisible = bounds.top < window.innerHeight && bounds.bottom > 0;
       if (initiallyVisible || linkedSection?.contains(element)) element.classList.add('is-revealed');
       else revealObserver.observe(element);
     });
+    // Apply the enhanced state only after visible/deep-linked content is ready.
+    root.classList.add('reveal-enabled');
   } else revealTargets.forEach((element) => element.classList.add('is-revealed'));
 
   const year = document.querySelector('[data-current-year]');

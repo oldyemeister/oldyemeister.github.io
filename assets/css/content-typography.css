@@ -1,0 +1,49 @@
+/* Supporting type roles. Persona topic lettering and letter interactions stay
+   in the theme stylesheet; this file can be removed independently to roll back. */
+body.persona-design {
+  --content-font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --content-body-size: 1rem;
+  --content-label-size: .875rem;
+  --content-title-size: clamp(1.25rem, 2vw, 1.65rem);
+}
+body.persona-design :is(#about, #skills, #experience, #projects, #contact) :is(p, li, time, small, h3) {
+  font-family: var(--content-font);
+}
+body.persona-design :is(#about .prose, #contact .contact-layout, #skills .section-header, #experience .section-header, #projects .section-header) > p,
+body.persona-design #projects .project-content > p:not(.collaborator-byline),
+body.persona-design #experience .experience-card ul {
+  font-size: var(--content-body-size);
+  font-weight: 400;
+  line-height: 1.65;
+  letter-spacing: normal;
+}
+body.persona-design :is(#experience .experience-card, #projects .project-content) h3 {
+  font-size: var(--content-title-size);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -.015em;
+  -webkit-text-stroke: 0;
+  text-shadow: none;
+}
+body.persona-design #skills .skills-category h3 {
+  font-size: clamp(1.125rem, 1.6vw, 1.35rem);
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: normal;
+}
+body.persona-design #experience .experience-card h3 > span {
+  font-size: var(--content-body-size);
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: normal;
+}
+body.persona-design #experience :is(.experience-card-meta, .experience-card-impact, .experience-card-visual small),
+body.persona-design #projects :is(.technology-list, .collaborator-byline),
+body.persona-design #skills .skill-chips li {
+  font-size: var(--content-label-size);
+  line-height: 1.4;
+  letter-spacing: normal;
+}
+body.persona-design #experience .experience-card-meta { font-weight: 500; }
+body.persona-design #skills .skill-chips li,
+body.persona-design #projects .technology-list { font-weight: 700; }

@@ -10,10 +10,12 @@
       <span class="sr-only">Open navigation</span>
     </button>
     <nav class="site-navigation" id="site-navigation" aria-label="Primary" data-navigation hidden inert aria-hidden="true">
-      <a href="{{ '/#about' | relative_url }}">{{ site_content.navigation.about }}</a>
-      <a href="{{ '/#experience' | relative_url }}">{{ site_content.navigation.experience }}</a>
-      <a href="{{ '/#projects' | relative_url }}">{{ site_content.navigation.projects }}</a>
-      <a href="{{ '/#contact' | relative_url }}">{{ site_content.navigation.contact }}</a>
+      <a href="{{ '/#home' | relative_url }}" data-menu-description="{{ site_content.navigation_descriptions.home }}">{{ site_content.navigation.home }}</a>
+      <a href="{{ '/#about' | relative_url }}" data-menu-description="{{ site_content.navigation_descriptions.about }}">{{ site_content.navigation.about }}</a>
+      <a href="{{ '/#skills' | relative_url }}" data-menu-description="{{ site_content.navigation_descriptions.skills }}">{{ site_content.navigation.skills }}</a>
+      <a href="{{ '/#experience' | relative_url }}" data-menu-description="{{ site_content.navigation_descriptions.experience }}">{{ site_content.navigation.experience }}</a>
+      <a href="{{ '/#projects' | relative_url }}" data-menu-description="{{ site_content.navigation_descriptions.projects }}">{{ site_content.navigation.projects }}</a>
+      <a href="{{ '/#contact' | relative_url }}" data-menu-description="{{ site_content.navigation_descriptions.contact }}">{{ site_content.navigation.contact }}</a>
     </nav>
   </div>
 </header>

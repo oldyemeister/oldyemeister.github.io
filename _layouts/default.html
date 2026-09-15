@@ -31,7 +31,7 @@
     </main>
     {% include footer.html %}
     <script src="{{ '/assets/js/site.js?v=24' | relative_url }}" defer></script>
-    <script src="{{ '/assets/js/ribbon-menu.js' | relative_url }}" defer></script>
+    <script src="{{ '/assets/js/ribbon-menu.js' | relative_url }}?v=2" defer></script>
     {% if page.laser_game %}
       <script src="{{ '/assets/js/project-bootstrap.js?v=21' | relative_url }}" data-target="[data-laser-canvas]" data-module="{{ '/assets/js/laser-game.js?v=21' | relative_url }}" defer></script>
     {% endif %}

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { runInNewContext } from 'node:vm';
 const source = readFileSync(new URL('../assets/js/ribbon-menu.js', import.meta.url), 'utf8');
-function setup(reduced = false, viewport = 1440) {
+function setup(reduced = false, viewport = 1440, labels = ['About', 'Experience', 'Projects', 'Contact']) {
   let document;
   const element = (textContent = '') => ({
     getBoundingClientRect() { return { left: viewport - Math.min(480, viewport - 24) - 12, width: Math.min(480, viewport - 24) }; },
@@ -15,12 +15,13 @@ function setup(reduced = false, viewport = 1440) {
     prepend(child) { this.children.unshift(child); },
     replaceChildren(...children) { this.children = children; },
     contains(target) { return target === this || this.children.includes(target); },
-    focus() { document.activeElement = this; }
+    focus() { document.activeElement = this; this.events.focus?.(); }
   });
   const trigger = element();
   const label = element();
   trigger.querySelector = () => label;
-  const links = ['About', 'Experience', 'Projects', 'Contact'].map(element);
+  const links = labels.map(element);
+  links.forEach(link => { link.dataset = { menuDescription: `${link.textContent} details` }; });
   const nav = element(); nav.children = [...links]; nav.querySelectorAll = () => links;
   document = element(); document.body = element();
   document.querySelector = s => s === '[data-ribbon-trigger]' ? trigger : nav;
@@ -50,6 +51,23 @@ test('ribbon menu opens and closes with synchronized accessibility state', () =>
   assert.ok(links.every(link => link.style.opacity === 1));
   trigger.events.click(); assert.equal(nav.inert, true); step(30);
   assert.equal(nav.hidden, true); assert.equal(trigger.attrs['aria-expanded'], 'false');
+});
+test('selection description follows hover and keyboard focus and shares reduced-motion state', () => {
+  const { trigger, nav, links, event } = setup(true);
+  const description = nav.children.find(child => child.className === 'menu-selection-description');
+  trigger.events.click();
+  assert.equal(description.textContent, 'About details');
+  assert.equal(description.style.opacity, 1);
+  links[2].events.pointerenter();
+  assert.equal(description.textContent, 'Projects details');
+  links[1].focus();
+  assert.equal(description.textContent, 'Experience details');
+  links[2].events.pointerleave();
+  assert.equal(description.textContent, 'Experience details');
+  nav.events.keydown(event('End'));
+  assert.equal(description.textContent, 'Contact details');
+  trigger.events.click();
+  assert.equal(description.style.opacity, 0);
 });
 test('rapid reversal preserves ribbon geometry on the toggle frame and settles', () => {
   const { trigger, nav, step, frames } = setup();
@@ -186,4 +204,18 @@ test('header and bottom hints share the ribbon timeline and reverse smoothly', (
   finish();
   assert.equal(document.body.style['--menu-chrome-progress'], 0);
   assert.equal(nav.hidden, true);
+});
+
+test('six-link navigation fully reveals every label and reverses cleanly', () => {
+  const { trigger, links, step, finish } = setup(false, 1440,
+    ['Home', 'About', 'Skills', 'Experience', 'Projects', 'Contact']);
+  trigger.events.click(); step(20);
+  trigger.events.click(); step(5);
+  trigger.events.click(); finish();
+  for (const link of links) {
+    assert.equal(link.style.opacity, 1, link.textContent);
+    assert.equal(link.style.translate, '0 0px');
+  }
+  trigger.events.click(); finish();
+  assert.ok(links.every(link => link.style.opacity === 0));
 });

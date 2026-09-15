@@ -1,0 +1,57 @@
+/* Ambient effects are deliberately confined to the opening section. */
+body.persona-design #home {
+  --hero-glow-white: var(--palette-white);
+  --hero-glow-accent: color-mix(in srgb, var(--palette-gold) 65%, var(--palette-white));
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+html[data-theme="dark"] body.persona-design #home {
+  --hero-glow-white: color-mix(in srgb, var(--palette-white) 90%, var(--palette-blue));
+  --hero-glow-accent: var(--palette-blue);
+}
+body.persona-design #home .hero-ambient {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  contain: paint;
+  mask-image: linear-gradient(to bottom, black 0% 70%, transparent 100%);
+}
+body.persona-design #home .hero-ambient-orb {
+  position: absolute;
+  width: clamp(280px, 42vw, 600px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--hero-glow-white) 0% 22%, var(--hero-glow-accent) 48%, transparent 74%);
+  filter: blur(50px);
+  opacity: .20;
+  pointer-events: none;
+  animation: hero-ambient-drift 26s ease-in-out infinite;
+}
+body.persona-design #home .hero-ambient-orb:nth-child(1) { top: -8%; left: 26%; }
+body.persona-design #home .hero-ambient-orb:nth-child(2) {
+  top: 28%; right: -4%;
+  opacity: .20;
+  animation-duration: 30s;
+  animation-delay: -11s;
+  animation-direction: reverse;
+}
+body.persona-design #home .hero-ambient-orb:nth-child(3) {
+  top: 42%; left: 4%;
+  animation-duration: 23s;
+  animation-delay: -7s;
+}
+/* SVG paint order places this surface above the fills, below the lettering. */
+body.persona-design #home .hero-visual-stage { position: relative; z-index: 1; }
+@keyframes hero-ambient-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(60px, 40px, 0) scale(1.1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.persona-design #home .hero-ambient-orb { animation: none; transform: none; }
+}
+
+body.persona-design #home .hero-ambient-surface { overflow: hidden; pointer-events: none; }

@@ -23,6 +23,14 @@ page_class: home
       <use href="#hero-crescent" />
       <use href="#hero-ribbon" />
     </g>
+    <!-- Paint glows after the gold fills but before either lettering layer. -->
+    <foreignObject class="hero-ambient-surface" x="0" y="0" width="1440" height="720" pointer-events="none">
+      <div xmlns="http://www.w3.org/1999/xhtml" class="hero-ambient" aria-hidden="true" inert>
+        <span class="hero-ambient-orb"></span>
+        <span class="hero-ambient-orb"></span>
+        <span class="hero-ambient-orb"></span>
+      </div>
+    </foreignObject>
     <g class="hero-poster-outline">
       <g transform="rotate(-6 70 360)">
         <text class="hero-poster-name" x="70" y="360" font-size="84" font-family="Arial Black, Arial, sans-serif" font-weight="900">{{ site_content.hero.name }}</text>
@@ -36,10 +44,37 @@ page_class: home
       </g>
     </g>
   </svg>
-  <figure class="hero-portrait-frame" role="img" aria-label="JY monogram for Jiawei Ye">
-    <span class="hero-portrait-monogram" aria-hidden="true">JY<span class="monogram-dot">.</span></span>
-  </figure>
-  </div>
+  <!-- Decorative corner stripes: palette sampled from the existing ribbon menu. -->
+  <svg class="hero-corner-ribbons" viewBox="0 0 600 480" aria-hidden="true" focusable="false">
+    <g class="hero-corner-ribbon-bands">
+      <!-- Paint the steepest, upper stripe last; 8-unit overlaps close fan seams. -->
+      <!-- Outer corner extension: height controls thickness; fill controls color. -->
+      <rect style="--stripe-index: -6" x="-1200" y="197" width="2400" height="180" fill="#F4D51C" />
+      <rect style="--stripe-index: -5" x="-1200" y="165" width="2400" height="40" fill="#F6EBA0" />
+      <rect style="--stripe-index: -3" x="-1200" y="125" width="2400" height="48" fill="#FFF52B" />
+      <rect style="--stripe-index: -1" x="-1200" y="93" width="2400" height="40" fill="#FFD229" />
+      <rect style="--stripe-index: 0" x="-1200" y="88.57" width="2400" height="12.48" fill="#FFFFEB" />
+      <rect style="--stripe-index: 1" x="-1200" y="78.11" width="2400" height="16.96" fill="#BEE617" />
+      <rect style="--stripe-index: 2" x="-1200" y="66.53" width="2400" height="18.08" fill="#20C9D3" />
+      <rect style="--stripe-index: 3" x="-1200" y="60.55" width="2400" height="12.48" fill="#FFFCE0" />
+      <rect style="--stripe-index: 4" x="-1200" y="50.09" width="2400" height="16.96" fill="#FFD229" />
+      <rect style="--stripe-index: 5" x="-1200" y="41.87" width="2400" height="14.72" fill="#009B3A" />
+      <rect style="--stripe-index: 6" x="-1200" y="31.41" width="2400" height="16.96" fill="#E1FF00" />
+      <rect style="--stripe-index: 7" x="-1200" y="25.43" width="2400" height="12.48" fill="#FFFAC1" />
+      <rect style="--stripe-index: 8" x="-1200" y="8.25" width="2400" height="23.68" fill="#FF6500" />
+      <rect style="--stripe-index: 9" x="-1200" y="-10.05" width="2400" height="24.80" fill="#FFAD08" />
+      <rect style="--stripe-index: 10" x="-1200" y="-32.83" width="2400" height="29.28" fill="#FFF52B" />
+      <rect style="--stripe-index: 11" x="-1200" y="-43.29" width="2400" height="16.96" fill="#F4D51C" />
+      <rect style="--stripe-index: 12" x="-1200" y="-50.39" width="2400" height="13.60" fill="#FFFFB0" />
+      <rect style="--stripe-index: 13" x="-1200" y="-63.09" width="2400" height="19.20" fill="#C6EE10" />
+      <rect style="--stripe-index: 14" x="-1200" y="-71.31" width="2400" height="14.72" fill="#687D18" />
+      <rect style="--stripe-index: 15" x="-1200" y="-82.89" width="2400" height="18.08" fill="#D5F318" />
+      <rect style="--stripe-index: 16" x="-1200" y="-89.99" width="2400" height="13.60" fill="#FFFDE0" />
+      <rect style="--stripe-index: 17" x="-1200" y="-95.97" width="2400" height="12.48" fill="#A31C08" />
+      <rect style="--stripe-index: 18" x="-1200" y="-103.07" width="2400" height="13.60" fill="#F6EBA0" />
+      <rect style="--stripe-index: 19" x="-1200" y="-109.05" width="2400" height="12.48" fill="#827B24" />
+    </g>
+  </svg>
   <div class="hero-actions">
   <div class="content-shell hero-layout">
     <div class="hero-copy">
@@ -54,6 +89,10 @@ page_class: home
     </div>
   </div>
   </div>
+  <figure class="hero-portrait-frame" role="img" aria-label="JY monogram for Jiawei Ye">
+    <span class="hero-portrait-monogram" aria-hidden="true">JY<span class="monogram-dot">.</span></span>
+  </figure>
+  </div>
 </section>
 
 <section class="page-section section-muted" id="about">
@@ -64,10 +103,25 @@ page_class: home
     </div>
     <div class="section-body">
       <div class="prose">{{ site_content.about.biography | markdownify }}</div>
-      <h3>{{ site_content.about.skills_heading }}</h3>
-      <ul class="tag-list" aria-label="{{ site_content.about.skills_heading }}">
-        {% for skill in site_content.about.skills %}<li>{{ skill }}</li>{% endfor %}
-      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="page-section skills-section" id="skills" aria-labelledby="skills-heading">
+  <div class="content-shell">
+    <header class="section-header">
+      <div><p class="section-index">02</p><h2 id="skills-heading">{{ site_content.skills_section.heading }}</h2></div>
+      <p>{{ site_content.skills_section.introduction }}</p>
+    </header>
+    <div class="skills-categories">
+      {% for category in site_content.skills_section.categories %}
+      <div class="skills-category">
+        <h3>{{ category.name }}</h3>
+        <ul class="skill-chips" aria-label="{{ category.name }}">
+          {% for skill in category.skills %}<li>{{ skill }}</li>{% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
     </div>
   </div>
 </section>
@@ -75,7 +129,7 @@ page_class: home
 <section class="page-section experience-section" id="experience">
   <div class="content-shell">
     <header class="section-header">
-      <div><p class="section-index">02</p><h2>{{ site_content.experience_section.heading }}</h2></div>
+      <div><p class="section-index">03</p><h2>{{ site_content.experience_section.heading }}</h2></div>
       <p>{{ site_content.experience_section.introduction }}</p>
     </header>
     <div class="experience-carousel" data-experience-carousel>
@@ -139,7 +193,7 @@ page_class: home
 <section class="page-section" id="projects">
   <div class="content-shell">
     <header class="section-header">
-      <div><p class="section-index">03</p><h2>{{ site_content.projects_section.heading }}</h2></div>
+      <div><p class="section-index">04</p><h2>{{ site_content.projects_section.heading }}</h2></div>
       <p>{{ site_content.projects_section.introduction }}</p>
     </header>
     <div class="project-grid">
@@ -148,7 +202,7 @@ page_class: home
         <div class="project-media">
           {% if project.placeholder %}<div class="project-media-placeholder" aria-hidden="true"><span>{{ project.placeholder_index }}</span><small>Project slot</small></div>{% endif %}
           {% if project.image.path %}
-          <picture>
+          <picture{% if project.image.crt_effect %} class="tv-effect-container"{% endif %}>
             {% if project.image.poster %}<source media="(prefers-reduced-motion: reduce)" srcset="{{ project.image.poster | relative_url }}">{% endif %}
             <img src="{{ project.image.path | relative_url }}" alt="{{ project.image.alt }}" loading="lazy" decoding="async">
           </picture>
@@ -191,7 +245,7 @@ page_class: home
 
 <section class="page-section contact-section" id="contact">
   <div class="content-shell contact-layout">
-    <div><p class="section-index">04</p><h2>{{ site_content.contact.heading }}</h2></div>
+    <div><p class="section-index">05</p><h2>{{ site_content.contact.heading }}</h2></div>
     <div>
       <p class="contact-message">{{ site_content.contact.message }}</p>
       <div class="contact-links">

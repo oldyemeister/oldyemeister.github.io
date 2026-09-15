@@ -12,7 +12,7 @@ The SVG defines two gold concentric circular bands: `hero-crescent` and `hero-ri
 - Font sizes control natural text width; do not add `textLength` or `spacingAndGlyphs`.
 - Palette variables remain in `assets/css/palette.css`.
 
-The SVG scales as one composition on mobile, keeping the complete name visible. The links remain HTML in a compact gold strip below it. The introduction is in About, and home-page key instructions are hidden. The semantic heading is visually hidden; SVG duplicates are decorative and hidden from assistive technology.
+The SVG scales as one composition on mobile, keeping the complete name visible. The links remain HTML positioned over the lower gold ring. On mobile they flow between the SVG lettering and the monogram. The introduction is in About, and home-page key instructions are hidden. The semantic heading is visually hidden; SVG duplicates are decorative and hidden from assistive technology.
 
 The `.hero-portrait-frame` in `index.html` restores the GitHub JY monogram design: a rounded square olive panel, gold border and yellow offset shadow. Its position and mobile arrangement are in the active hero stylesheet.
 

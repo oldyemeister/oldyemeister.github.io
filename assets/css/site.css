@@ -112,11 +112,12 @@ h3 { margin-bottom: 10px; font-size: 1.25rem; }
 .content-shell { width: min(1180px, calc(100% - 56px)); margin-inline: auto; }
 
 html.reveal-enabled .reveal-item {
-  opacity: 0;
-  transform: translate3d(0, 22px, 0);
+  /* Content stays readable even when a fast scroll outruns the observer. */
+  opacity: 0.85;
+  transform: translate3d(0, 12px, 0);
   transition:
-    opacity 680ms var(--premium-ease) var(--reveal-delay, 0ms),
-    transform 680ms var(--premium-ease) var(--reveal-delay, 0ms),
+    opacity 240ms var(--premium-ease) var(--reveal-delay, 0ms),
+    transform 300ms var(--premium-ease) var(--reveal-delay, 0ms),
     border-color var(--motion-medium) ease,
     box-shadow var(--motion-medium) var(--premium-ease);
   will-change: opacity, transform;

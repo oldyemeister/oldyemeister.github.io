@@ -132,5 +132,51 @@ body.persona-design #home .hero-poster-fill text {
   -webkit-text-fill-color: var(--palette-olive);
 }
 
-/* Compact, full-width gold area behind the home CTAs. */
-body.persona-design #home .hero-actions { background: var(--palette-gold); }
+/* CTAs sit on the outer circular band, with no separate rectangular strip. */
+body.persona-design #home .hero-actions {
+  position: absolute;
+  left: 6%;
+  bottom: 7%;
+  z-index: 2;
+  max-width: 88%;
+  background: transparent;
+}
+body.persona-design #home .hero-actions .hero-layout { width: auto; margin: 0; padding: 0; }
+body.persona-design #home .hero-actions .hero-copy { width: auto; margin: 0; }
+@media (max-width: 760px) {
+  body.persona-design #home .hero-visual-stage { background: var(--palette-gold); padding-bottom: 28px; }
+  body.persona-design #home .hero-poster-art { margin-top: 0; background: var(--palette-yellow); }
+  body.persona-design #home .hero-actions {
+    position: relative;
+    left: auto;
+    bottom: auto;
+    max-width: none;
+    margin: -38px 24px 32px;
+  }
+  body.persona-design #home .hero-portrait-frame { margin: 0 auto; }
+}
+
+/* Intro-only ribbon corner. Change the angle or width here to tune the motif. */
+body.persona-design #home .hero-corner-ribbons {
+  --hero-corner-angle: 30deg;
+  --hero-corner-angle-step: .4deg;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: min(42%, 640px);
+  height: auto;
+  overflow: visible;
+  pointer-events: none;
+  user-select: none;
+}
+body.persona-design #home .hero-corner-ribbon-bands {
+  transform: translate(440px, 340px);
+}
+@media (max-width: 760px) {
+  body.persona-design #home .hero-corner-ribbons { width: min(32%, 180px); }
+}
+
+/* Individual angles: 27.6°–37.6° (outer bands extend below the 30° base). The hero clips the extended bands at its edges. */
+body.persona-design #home .hero-corner-ribbon-bands rect {
+  transform: rotate(calc(-1 * (var(--hero-corner-angle) + var(--stripe-index) * var(--hero-corner-angle-step))));
+}
