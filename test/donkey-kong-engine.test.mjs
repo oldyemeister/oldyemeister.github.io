@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
+import { inflateSync } from 'node:zlib';
 import {
   WIDTH, HEIGHT, PLAYER_SIZE, JUMP_HEIGHT, JUMP_SPEED, MARIO_SPEED, BARREL_SPEED,
   BARREL_ROTATION_STEP, BARREL_PIXELS_PER_ROTATION_STEP,
@@ -14,19 +15,20 @@ function platformMask(y = 221) {
 }
 
 async function originalMapMask() {
-  const source = await readFile(new URL('../tools/.reference/demos/DonkeyKong/map320magenta.mif', import.meta.url), 'utf8');
+  const png = await readFile(new URL('../assets/images/projects/donkey-kong/donkey-kong-background.png', import.meta.url));
+  const compressed = [];
+  for (let offset = 8; offset < png.length;) {
+    const length = png.readUInt32BE(offset);
+    const type = png.toString('ascii', offset + 4, offset + 8);
+    if (type === 'IDAT') compressed.push(png.subarray(offset + 8, offset + 8 + length));
+    offset += 12 + length;
+    if (type === 'IEND') break;
+  }
+  const rgba = inflateSync(Buffer.concat(compressed));
   const values = new Uint8Array(WIDTH * HEIGHT);
-  for (const statement of source.slice(source.search(/\bBEGIN\b/i) + 5).split(';')) {
-    const fill = statement.match(/\[(\d+)\.\.(\d+)\]\s*:\s*([01]+)/);
-    if (fill) {
-      values.fill(parseInt(fill[3], 2) === 5 ? 1 : 0, Number(fill[1]), Number(fill[2]) + 1);
-      continue;
-    }
-    const row = statement.match(/(\d+)\s*:\s*((?:[01]{3}\s*)+)/);
-    if (!row) continue;
-    row[2].trim().split(/\s+/).forEach((value, offset) => {
-      values[Number(row[1]) + offset] = parseInt(value, 2) === 5 ? 1 : 0;
-    });
+  for (let pixel = 0; pixel < values.length; pixel += 1) {
+    const offset = Math.floor(pixel / WIDTH) * (1 + WIDTH * 4) + 1 + (pixel % WIDTH) * 4;
+    values[pixel] = rgba[offset] > 200 && rgba[offset + 2] > 200 && rgba[offset + 1] < 80 ? 1 : 0;
   }
   return createMask(values);
 }
