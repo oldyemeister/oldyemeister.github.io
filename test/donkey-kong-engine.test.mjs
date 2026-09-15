@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 import {
   WIDTH, HEIGHT, PLAYER_SIZE, JUMP_HEIGHT, JUMP_SPEED, MARIO_SPEED, BARREL_SPEED,
   BARREL_ROTATION_STEP, BARREL_PIXELS_PER_ROTATION_STEP,
-  createMask, createGame, setControl, jump, tick, resetGame
+  createMask, createGame, setControl, jump, tick, resetGame, setPaused
 } from '../assets/js/donkey-kong-engine.js';
 
 function platformMask(y = 221) {
@@ -170,4 +170,47 @@ test('reset restores an ended game', () => {
   assert.equal(game.collisions, 0);
   assert.equal(game.player.y, 205);
   assert.equal(PLAYER_SIZE, 16);
+});
+
+test('Mario retains his left-facing pose after release without drifting or jumping sideways', () => {
+  const game = createGame(platformMask());
+  setControl(game, 'left', true); tick(game);
+  assert.equal(game.player.facing, -1);
+  setControl(game, 'left', false); tick(game);
+  const x = game.player.x;
+  for (let i = 0; i < 5; i++) tick(game);
+  assert.equal(game.player.facing, -1);
+  assert.equal(game.player.direction, 0);
+  assert.equal(game.player.x, x);
+  assert.equal(jump(game), true); tick(game);
+  assert.equal(game.player.x, x);
+  assert.equal(game.player.facing, -1);
+});
+test('Mario turns right on right input and reset restores the default facing', () => {
+  const game = createGame(platformMask());
+  setControl(game, 'left', true); tick(game);
+  setControl(game, 'left', false); setControl(game, 'right', true); tick(game);
+  assert.equal(game.player.facing, 1);
+  setControl(game, 'right', false); tick(game);
+  assert.equal(game.player.facing, 1);
+  setControl(game, 'left', true); tick(game);
+  resetGame(game);
+  assert.equal(game.player.facing, 1);
+});
+test('pause freezes actors and resume continues without stuck movement', () => {
+  const game = createGame(platformMask());
+  setControl(game, 'left', true); tick(game);
+  setPaused(game, true);
+  const pausedActors = JSON.stringify([game.player, game.barrels]);
+  setControl(game, 'right', true);
+  assert.equal(jump(game), false);
+  for (let i = 0; i < 30; i++) tick(game);
+  assert.equal(JSON.stringify([game.player, game.barrels]), pausedActors);
+  setPaused(game, false); tick(game);
+  assert.equal(game.paused, false);
+  assert.equal(game.player.direction, 0);
+  assert.equal(game.player.facing, -1);
+  assert.notEqual(JSON.stringify(game.barrels), JSON.stringify(JSON.parse(pausedActors)[1]));
+  setControl(game, 'right', true); tick(game);
+  assert.equal(game.player.direction, 1);
 });

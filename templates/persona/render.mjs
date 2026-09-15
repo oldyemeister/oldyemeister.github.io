@@ -30,6 +30,7 @@ export function personaPreview(html, prefix = '/persona', redesign = true) {
       <link rel="stylesheet" href="/assets/themes/persona/style.css">
       ${redesign ? '<link rel="stylesheet" href="/assets/css/palette.css">\n      <link rel="stylesheet" href="/assets/css/redesign.css">' : ''}
       <link rel="stylesheet" href="/assets/css/key-instructions.css">
+      <link rel="stylesheet" href="/assets/css/hero-poster.css?v=10">
       <script src="/assets/themes/persona/arrival.js"></script>
     </head>`)
     .replace(/<body class="([^"]*)">/, `<body class="$1 persona-design" data-persona-base="${prefix}/">

@@ -5,9 +5,10 @@
   font-style: normal;
   font-display: swap;
 }
+
 /* Active keyboard hints. Original implementation: docs/backups/original-key-instructions/. */
 body.persona-design .persona-hud {
-  --key-strip-height: 50px;
+  --key-strip-height: 0px;
   position: fixed;
   inset: auto 0 0;
   display: flex;
@@ -120,4 +121,9 @@ body.persona-design .persona-hud {
   body.persona-design .persona-hud {
     display: none;
   }
+}
+
+/* Hide the fixed instruction strip only on the portfolio home page. */
+body.page-home.persona-design .persona-hud {
+  display: none;
 }

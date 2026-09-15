@@ -1,0 +1,111 @@
+/* Hero only: portrait left, copy right, with a shared circular color/text edge. */
+body.persona-design #home {
+  max-height: none;
+}
+body.persona-design #home .hero-layout {
+  grid-template-columns: minmax(0, .8fr) minmax(0, 1.4fr);
+  align-items: center;
+  gap: clamp(28px, 4vw, 64px);
+  background: var(--palette-gold);
+}
+body.persona-design #home .hero-copy {
+  min-width: 0;
+  grid-column: 2;
+  grid-row: 1;
+}
+body.persona-design #home .portrait-frame {
+  grid-column: 1;
+  grid-row: 1;
+  width: 100%;
+  margin: 0 0 32px;
+}
+body.persona-design #home .persona-monogram > span {
+  font-size: clamp(6rem, 15vw, 12rem);
+}
+body.persona-design #home :is(.eyebrow, .hero-introduction, .hero-visual-caption) {
+  color: var(--palette-black) !important;
+  -webkit-text-fill-color: var(--palette-black) !important;
+}
+body.persona-design #home .hero-visual-caption {
+  background: transparent;
+}
+/* The filled text AND its yellow background are clipped as a single layer.
+   Center at the top, radius half the width: exactly the lower half of a circle. */
+body.persona-design #home .hero-title-art {
+  --hero-circle-x: 50%;
+  --hero-circle-y: 0px;
+  --hero-circle-radius: 50cqw;
+  --hero-name-size: clamp(30px, 4.2vw, 62px);
+  --hero-role-size: clamp(19px, 2.2vw, 30px);
+  --hero-outline-width: 1.5px;
+  --hero-title-padding: clamp(18px, 3vw, 32px);
+  position: relative;
+  container-type: inline-size;
+  min-height: clamp(280px, 30vw, 400px);
+  isolation: isolate;
+  margin-bottom: 24px;
+  overflow: hidden;
+  border-radius: 0;
+  background: var(--palette-gold);
+}
+body.persona-design #home .hero-title-layer {
+  display: grid;
+  align-content: center;
+  gap: 18px;
+  box-sizing: border-box;
+  padding: var(--hero-title-padding);
+}
+body.persona-design #home .hero-title-outline { min-height: inherit; }
+body.persona-design #home .hero-title-layer :is(.hero-art-name, .hero-art-role) {
+  margin: 0;
+  padding: 0;
+  border: 0 !important;
+  background: none;
+  font-family: 'Arial Black', Arial, sans-serif;
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -.025em;
+  text-align: left;
+  text-shadow: none !important;
+  paint-order: stroke fill;
+}
+body.persona-design #home .hero-title-layer .hero-art-name { font-size: var(--hero-name-size); }
+body.persona-design #home .hero-title-layer .hero-art-role { font-size: var(--hero-role-size); }
+body.persona-design #home .hero-title-outline :is(.hero-art-name, .hero-art-role) {
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: var(--hero-outline-width) var(--palette-black) !important;
+}
+body.persona-design #home .hero-title-ink {
+  position: absolute;
+  inset: 0;
+  background: var(--palette-yellow);
+  clip-path: circle(var(--hero-circle-radius) at var(--hero-circle-x) var(--hero-circle-y));
+  pointer-events: none;
+  user-select: none;
+}
+body.persona-design #home .hero-title-ink :is(.hero-art-name, .hero-art-role) {
+  color: var(--palette-black) !important;
+  -webkit-text-fill-color: var(--palette-black) !important;
+  -webkit-text-stroke: var(--hero-outline-width) var(--palette-black) !important;
+}
+@media (max-width: 760px) {
+  body.persona-design #home .hero-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  body.persona-design #home .portrait-frame {
+    grid-column: 1;
+    grid-row: 1;
+    width: min(65vw, 280px);
+  }
+  body.persona-design #home .hero-copy {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  body.persona-design #home .hero-title-art {
+    --hero-name-size: clamp(28px, 7vw, 46px);
+    --hero-role-size: clamp(18px, 4vw, 26px);
+    --hero-title-padding: 16px;
+    min-height: clamp(260px, 60vw, 340px);
+  }
+}

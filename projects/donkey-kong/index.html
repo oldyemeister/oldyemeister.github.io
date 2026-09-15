@@ -52,6 +52,11 @@ donkey_kong_game: true
     <div class="game-board-wrap" data-game-wrap>
       <p class="sr-only" id="dk-keyboard-controls">{{ game.keyboard_controls }}</p>
       <canvas class="game-board" width="320" height="240" tabindex="0" data-donkey-kong-canvas aria-label="Playable FPGA platform game recreation" aria-describedby="dk-keyboard-controls"></canvas>
+      <div class="game-pause-overlay persona-game-start" data-dk-pause-overlay hidden>
+        <div class="game-start-prompt">
+          <button class="game-start-button" type="button" data-dk-resume aria-label="{{ game.resume_label }}"><span aria-hidden="true">▶</span><span data-start-label>Resume</span></button>
+        </div>
+      </div>
       <div class="game-overlay dk-overlay" data-dk-overlay hidden>
         <strong>{{ game.status_labels.won_message }}</strong>
         <button type="button" data-dk-reset>{{ game.reset_label }}</button>

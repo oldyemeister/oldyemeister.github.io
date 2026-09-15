@@ -4,12 +4,45 @@ page_class: home
 ---
 {% assign site_content = site.data.content %}
 <section class="hero-section" id="home">
+  <h1 class="hero-accessible-title">{{ site_content.hero.name }} — {{ site_content.hero.role }}</h1>
+  <div class="hero-visual-stage">
+  <svg class="hero-poster-art" viewBox="0 0 1440 720" aria-hidden="true" focusable="false">
+    <defs>
+      <!-- Shared shape definitions keep the text mask and color edges identical. -->
+      <!-- Concentric rings: shared center (950, -180).
+           Inner band: radii 700–840 (140 thick).
+           Yellow gap: 24. Outer band: radii 864–1600 (736 thick). -->
+      <path id="hero-crescent" fill-rule="evenodd" clip-rule="evenodd" d="M 1790 -180 A 840 840 0 1 0 110 -180 A 840 840 0 1 0 1790 -180 Z M 1650 -180 A 700 700 0 1 0 250 -180 A 700 700 0 1 0 1650 -180 Z" />
+      <path id="hero-ribbon" fill-rule="evenodd" clip-rule="evenodd" d="M 2550 -180 A 1600 1600 0 1 0 -650 -180 A 1600 1600 0 1 0 2550 -180 Z M 1814 -180 A 864 864 0 1 0 86 -180 A 864 864 0 1 0 1814 -180 Z" />
+      <clipPath id="hero-gold-mask">
+        <use href="#hero-crescent" />
+        <use href="#hero-ribbon" />
+      </clipPath>
+    </defs>
+    <g class="hero-poster-shapes">
+      <use href="#hero-crescent" />
+      <use href="#hero-ribbon" />
+    </g>
+    <g class="hero-poster-outline">
+      <g transform="rotate(-6 70 360)">
+        <text class="hero-poster-name" x="70" y="360" font-size="84" font-family="Arial Black, Arial, sans-serif" font-weight="900">{{ site_content.hero.name }}</text>
+        <text class="hero-poster-role" x="75" y="420" font-size="34" font-family="Arial Black, Arial, sans-serif" font-weight="900">{{ site_content.hero.role }}</text>
+      </g>
+    </g>
+    <g class="hero-poster-fill" clip-path="url(#hero-gold-mask)">
+      <g transform="rotate(-6 70 360)">
+        <text class="hero-poster-name" x="70" y="360" font-size="84" font-family="Arial Black, Arial, sans-serif" font-weight="900">{{ site_content.hero.name }}</text>
+        <text class="hero-poster-role" x="75" y="420" font-size="34" font-family="Arial Black, Arial, sans-serif" font-weight="900">{{ site_content.hero.role }}</text>
+      </g>
+    </g>
+  </svg>
+  <figure class="hero-portrait-frame" role="img" aria-label="JY monogram for Jiawei Ye">
+    <span class="hero-portrait-monogram" aria-hidden="true">JY<span class="monogram-dot">.</span></span>
+  </figure>
+  </div>
+  <div class="hero-actions">
   <div class="content-shell hero-layout">
     <div class="hero-copy">
-      <p class="eyebrow">{{ site_content.hero.eyebrow }}</p>
-      <h1>{{ site_content.hero.name }}</h1>
-      <p class="hero-role">{{ site_content.hero.role }}</p>
-      <p class="hero-introduction">{{ site_content.hero.introduction }}</p>
       <div class="hero-links">
         <a class="text-link text-link-primary" href="{{ site_content.hero.primary_link.url | relative_url }}">
           {{ site_content.hero.primary_link.label }} <span aria-hidden="true">&rarr;</span>
@@ -19,9 +52,7 @@ page_class: home
         </a>
       </div>
     </div>
-    <figure class="portrait-frame">
-      <img src="{{ site_content.hero.portrait.path | relative_url }}" alt="{{ site_content.hero.portrait.alt }}">
-    </figure>
+  </div>
   </div>
 </section>
 

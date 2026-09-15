@@ -17,6 +17,7 @@
     'h1', 'h2', '.project-content h3'
   ].join(','));
   targets.forEach(target => {
+    if (target.closest('.hero-title-art')) return;
     target.classList.add('kinetic-text');
     const walker = document.createTreeWalker(target, NodeFilter.SHOW_TEXT, {
       acceptNode(node) {

@@ -17,7 +17,6 @@ navigation:
 hero:
   name: "Jiawei (Jacky) Ye"
   role: "Hardware & Software Engineer"
-  introduction: "I build systems that span hardware and software — from FPGA games and RF circuit boards to AI-driven backends. Currently completing a Computer Engineering degree at the University of Toronto with a PEY co-op."
   portrait:
     path: "/assets/images/site/profile-monogram.svg"
   primary_link:
@@ -30,9 +29,7 @@ hero:
 about:
   heading: "About"
   biography: |-
-    I'm a Computer Engineering student at the University of Toronto (BASc + PEY Co-op, expected graduation April 2028), with a dual hardware-software background spanning embedded systems, RF/PCB design, and AI product engineering. I was named to the Dean's Honor List in Spring 2024 and Spring 2025.
-
-    My internship experience includes AI engineering work at Tencent Cloud and BesTV (Shanghai Media Group), building LLM-powered workflows, translation APIs, and speech processing pipelines. On the hardware side, I've designed RF downconversion PCBs in Altium, built FPGA games in Verilog and C on the DE1-SoC, and worked with STM32 embedded systems. I'm also a content creator on Bilibili, producing technical videos on Formula 1 engineering and motorsport technology for an audience of 10,000+ followers.
+    I'm a Computer Engineering student at the University of Toronto, building systems that connect hardware and software. I enjoy turning ideas into practical projects and making engineering easier to understand.
   skills_heading: "Skills and interests"
   skills:
     - "Python, C/C++, Verilog, C#"

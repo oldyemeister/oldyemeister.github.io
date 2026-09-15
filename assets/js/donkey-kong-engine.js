@@ -23,7 +23,7 @@ export function createMask(values = new Uint8Array(WIDTH * HEIGHT)) {
 export function createGame(mask) {
   return {
     mask,
-    player: { x: 35, y: 205, direction: 0, jumping: false, descending: false, jumpStart: 205, jumpDirection: 0 },
+    player: { x: 35, y: 205, direction: 0, facing: 1, jumping: false, descending: false, jumpStart: 205, jumpDirection: 0 },
     barrels: [
       { x: 16, y: 16, rotation: 0, rollDistance: 0, active: true },
       { x: -100, y: -100, rotation: 0, rollDistance: 0, active: false }
@@ -59,7 +59,7 @@ function barrelHitsPlayer(player, barrel) {
 }
 
 function resetPlayer(game) {
-  Object.assign(game.player, { x: 35, y: 205, direction: 0, jumping: false, descending: false, jumpStart: 205, jumpDirection: 0 });
+  Object.assign(game.player, { x: 35, y: 205, direction: 0, facing: 1, jumping: false, descending: false, jumpStart: 205, jumpDirection: 0 });
 }
 
 function resetActors(game) {
@@ -76,7 +76,16 @@ export function resetGame(game) {
   game.respawnGrace = 0;
 }
 
+export function setPaused(game, paused) {
+  if (game.status !== 'running') return;
+  game.paused = paused;
+  game.controls.left = false;
+  game.controls.right = false;
+  game.player.direction = 0;
+}
+
 export function setControl(game, direction, active) {
+  if (active && (game.paused || game.status !== 'running')) return;
   if (direction === 'left' || direction === 'right') game.controls[direction] = active;
 }
 
@@ -152,6 +161,7 @@ function movePlayer(game) {
 
   const direction = Number(game.controls.right) - Number(game.controls.left);
   player.direction = direction;
+  if (direction !== 0) player.facing = direction;
   for (let step = 0; step < MARIO_SPEED && direction !== 0; step += 1) {
     player.x = Math.max(0, Math.min(WIDTH - PLAYER_SIZE, player.x + direction));
     const leftSlope = game.mask.solid(player.x + 1, player.y + PLAYER_SIZE - 1);

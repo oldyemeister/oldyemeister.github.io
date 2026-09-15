@@ -3,6 +3,7 @@
 :root,
 :root[data-theme] {
   --palette-yellow: #FFF000;
+  --hero-yellow-light: #FCFF89;
   --palette-olive: #4B4A30;
   --palette-gold: #DDB800;
   --palette-muted: #62614C;

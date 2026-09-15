@@ -1,4 +1,4 @@
-import { WIDTH, HEIGHT, TICK_RATE, createMask, createGame, setControl, jump, tick, resetGame } from './donkey-kong-engine.js';
+import { WIDTH, HEIGHT, TICK_RATE, createMask, createGame, setControl, jump, tick, resetGame, setPaused } from './donkey-kong-engine.js';
 import { createViewportLoop } from './viewport-loop.js';
 
 const canvas = document.querySelector('[data-donkey-kong-canvas]');
@@ -12,7 +12,9 @@ const elements = {
   barrels: document.querySelector('[data-dk-barrels]'),
   message: document.querySelector('[data-dk-message]'),
   pause: document.querySelector('[data-dk-pause]'),
-  overlay: document.querySelector('[data-dk-overlay]')
+  overlay: document.querySelector('[data-dk-overlay]'),
+  pauseOverlay: document.querySelector('[data-dk-pause-overlay]'),
+  resume: document.querySelector('[data-dk-resume]')
 };
 const assets = {};
 let game;
@@ -56,7 +58,7 @@ function render() {
     context.restore();
   });
   context.save();
-  if (game.player.direction < 0) {
+  if (game.player.facing < 0) {
     context.translate(Math.round(game.player.x) * 2 + 16, 0);
     context.scale(-1, 1);
     context.drawImage(assets.mario, Math.round(game.player.x), Math.round(game.player.y));
@@ -76,6 +78,17 @@ function updateInterface() {
   elements.pause.setAttribute('aria-label', game.paused ? labels.resume : labels.pause);
   elements.pause.title = game.paused ? labels.resume : labels.pause;
   elements.overlay.hidden = game.status !== 'won';
+  elements.pauseOverlay.hidden = !game.paused || game.status !== 'running';
+}
+
+function pause(paused) {
+  if (!game || game.status !== 'running') return;
+  setPaused(game, paused);
+  accumulator = 0;
+  previousTime = performance.now();
+  updateInterface();
+  if (paused) elements.resume.focus({ preventScroll: true });
+  else canvas.focus({ preventScroll: true });
 }
 
 function reset() {
@@ -107,12 +120,13 @@ function directionForKey(key) {
 }
 
 window.addEventListener('keydown', (event) => {
-  if (event.target.matches('input, textarea, select')) return;
+  if (event.defaultPrevented || document.body.classList.contains('navigation-open') ||
+      event.target.matches('input, textarea, select')) return;
   if (!game) return;
   const direction = directionForKey(event.key);
   if (direction) { event.preventDefault(); setControl(game, direction, true); }
   if ((event.key === 'w' || event.key === 'ArrowUp') && !event.repeat) { event.preventDefault(); jump(game); }
-  if (event.key === ' ' && !event.repeat && game.status === 'running') { event.preventDefault(); game.paused = !game.paused; }
+  if (event.key === ' ' && !event.repeat && game.status === 'running') { event.preventDefault(); pause(!game.paused); }
   if (event.key.toLowerCase() === 'r') reset();
 });
 window.addEventListener('keyup', (event) => {
@@ -136,7 +150,8 @@ document.querySelectorAll('[data-dk-direction]').forEach((button) => {
 });
 document.querySelector('[data-dk-jump]').addEventListener('click', () => { if (game) jump(game); });
 document.querySelectorAll('[data-dk-reset]').forEach((button) => button.addEventListener('click', reset));
-elements.pause.addEventListener('click', () => { if (game?.status === 'running') game.paused = !game.paused; });
+elements.pause.addEventListener('click', () => { if (game?.status === 'running') pause(!game.paused); });
+elements.resume.addEventListener('click', () => pause(false));
 
 Promise.all([
   loadImage('background', labels.background), loadImage('mario', labels.mario),
