@@ -50,7 +50,7 @@ body.persona-design #skills .skill-chips li {
   body.persona-design #skills .skills-categories { grid-template-columns: minmax(0, 1fr); gap: 28px; }
 }
 /* Explicitly reuse the panel treatment even where legacy scoped CSS is unsupported. */
-body.persona-design #skills > .content-shell {
+body.persona-design :is(#skills, #education) > .content-shell {
   background: var(--panel);
   color: var(--on-panel);
   border: 3px solid var(--border);

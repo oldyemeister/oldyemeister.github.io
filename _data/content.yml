@@ -10,6 +10,7 @@ site:
 navigation:
   home: "Home"
   about: "About"
+  education: "Education"
   skills: "Skills"
   experience: "Experience"
   projects: "Projects"
@@ -18,6 +19,7 @@ navigation:
 navigation_descriptions:
   home: "Meet Jacky"
   about: "Background & interests"
+  education: "University & PEY co-op"
   skills: "Tools & technical strengths"
   experience: "Roles & contributions"
   projects: "Games, circuits & robotics"
@@ -39,6 +41,15 @@ about:
   heading: "About"
   biography: |-
     I'm a Computer Engineering student at the University of Toronto, building systems that connect hardware and software. I enjoy turning ideas into practical projects and making engineering easier to understand.
+
+education_section:
+  heading: "Education"
+  institution: "University of Toronto"
+  program: "Electrical & Computer Engineering — BASc, PEY Co-op program"
+  start_year: "2023"
+  graduation: "April 2028 (expected graduation)"
+  description: "Includes PEY and co-op work experience."
+  # Optional GPA/honors line: add only if Jacky provides and approves it.
 
 skills_section:
   heading: "Skills"
@@ -82,7 +93,7 @@ skills_section:
 
 experience_section:
   heading: "Experience"
-  introduction: "Applied AI systems shipped across media, education, and enterprise workflows."
+  introduction: "Applied AI systems across media, education, and enterprise workflows."
 
 experience:
   - company: "Neoteai"
@@ -261,13 +272,10 @@ projects:
 
 contact:
   heading: "Contact"
-  message: "I'm open to internship and collaboration opportunities in hardware, embedded systems, and AI engineering. Feel free to reach out."
+  message: "Let's talk hardware, embedded systems, or AI."
   email:
     label: "Email"
     address: "jiawei.ye@mail.utoronto.ca"
-  resume:
-    label: "Download resume"
-    path: "/assets/documents/resume/Jiawei_Ye_Resume.pdf"
   social_links:
     - label: "GitHub"
       url: "https://github.com/oldyemeister"

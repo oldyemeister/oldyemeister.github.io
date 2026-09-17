@@ -35,6 +35,10 @@ export function personaPreview(html, prefix = '/persona', redesign = true) {
       <link rel="stylesheet" href="/assets/css/hero-poster.css?v=11">
       <link rel="stylesheet" href="/assets/css/hero-ambient.css?v=5">
       <link rel="stylesheet" href="/assets/css/content-typography.css">
+      ${redesign ? '<link rel="stylesheet" href="/assets/css/section-backgrounds.css">' : ''}
+      ${redesign ? '<link rel="stylesheet" href="/assets/css/education-settings.css">' : ''}
+      <link rel="stylesheet" href="/assets/css/experience-save-menu.css">
+      ${redesign ? '<script src="/assets/js/about-pills.js" defer></script>' : ''}
       <script src="/assets/themes/persona/arrival.js"></script>
     </head>`)
     .replace(/<body class="([^"]*)">/, `<body class="$1 persona-design" data-persona-base="${prefix}/">

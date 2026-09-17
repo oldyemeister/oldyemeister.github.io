@@ -6,10 +6,18 @@
   --hero-yellow-light: #FCFF89;
   --palette-olive: #4B4A30;
   --palette-gold: #DDB800;
+  --palette-amber: #F4A006;
   --palette-muted: #62614C;
   --palette-black: #080808;
   --palette-white: #FFFDF3;
   --palette-blue: #0C75A1;
+  /* Education ribbon colors from the settings reference's Config footer. */
+  --config-orange: #FFAA00;
+  --config-silver: #BFC3C4;
+  --config-ice: #F4FFFF;
+  --config-taupe: #B99E96;
+  --config-violet: #5A25F5;
+  --config-lime: #DFFF00;
   --key-hint-shadow: #858585;
   --key-hint-fill: #C8C8C2;
 

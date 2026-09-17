@@ -1,6 +1,6 @@
 # Persona reference follow-ups
 
-Reference: local-only `p4greference.mp4` in the project root. Preserve the Persona 4
+Reference: local-only `reference/p4greference.mp4`. Preserve the Persona 4
 identity, outlined topic lettering, centered menu word enlargement, existing
 palette, TV frames and keyboard instructions.
 

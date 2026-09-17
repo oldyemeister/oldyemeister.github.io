@@ -107,10 +107,24 @@ page_class: home
   </div>
 </section>
 
+<section class="page-section education-section" id="education" aria-labelledby="education-heading">
+  <div class="education-pill-field" aria-hidden="true"></div>
+  <div class="content-shell two-column-section">
+    <div><p class="section-index">02</p><h2 id="education-heading">{{ site_content.education_section.heading }}</h2></div>
+    <div class="section-body">
+      <h3>{{ site_content.education_section.institution }}</h3>
+      <p>{{ site_content.education_section.program }}</p>
+      <p>{{ site_content.education_section.start_year }} — {{ site_content.education_section.graduation }}</p>
+      <p class="education-descriptor">{{ site_content.education_section.description }}</p>
+      <!-- Optional GPA/honors line: intentionally omitted until supplied and approved. -->
+    </div>
+  </div>
+</section>
+
 <section class="page-section skills-section" id="skills" aria-labelledby="skills-heading">
   <div class="content-shell">
     <header class="section-header">
-      <div><p class="section-index">02</p><h2 id="skills-heading">{{ site_content.skills_section.heading }}</h2></div>
+      <div><p class="section-index">03</p><h2 id="skills-heading">{{ site_content.skills_section.heading }}</h2></div>
       <p>{{ site_content.skills_section.introduction }}</p>
     </header>
     <div class="skills-categories">
@@ -129,71 +143,37 @@ page_class: home
 <section class="page-section experience-section" id="experience">
   <div class="content-shell">
     <header class="section-header">
-      <div><p class="section-index">03</p><h2>{{ site_content.experience_section.heading }}</h2></div>
+      <div><p class="section-index">04</p><h2>{{ site_content.experience_section.heading }}</h2></div>
       <p>{{ site_content.experience_section.introduction }}</p>
     </header>
-    <div class="experience-carousel" data-experience-carousel>
-      <button class="experience-scroll-arrow experience-scroll-previous" type="button" aria-label="Scroll experience left" aria-controls="experience-cards" data-experience-previous hidden><span aria-hidden="true">&#8592;</span></button>
-      <div class="experience-card-track" id="experience-cards" tabindex="0" role="region" aria-label="Experience cards">
-      {% for item in site_content.experience %}
-      <article class="experience-card">
-        <div class="experience-card-visual" role="img" aria-label="{{ item.company }} logo placeholder">
-          <span aria-hidden="true">{{ item.company | slice: 0, 1 }}</span>
-          <small aria-hidden="true">{{ item.company }}</small>
-        </div>
-        <div class="experience-card-copy">
-          <h3>{{ item.role }}<span>{{ item.company }}</span></h3>
-          <p class="experience-card-meta"><time>{{ item.dates }}</time><span>{{ item.location }}</span></p>
-          <p class="experience-card-impact">{{ item.impact }}</p>
-          <ul>
-            {% for highlight in item.highlights %}<li>{{ highlight }}</li>{% endfor %}
-          </ul>
-        </div>
-      </article>
-      {% endfor %}
-      </div>
-      <button class="experience-scroll-arrow experience-scroll-next" type="button" aria-label="Scroll experience right" aria-controls="experience-cards" data-experience-next hidden><span aria-hidden="true">&#8594;</span></button>
-    </div>
   </div>
-  <script>
-    (() => {
-      const section = document.currentScript.closest('#experience');
-      const carousel = section.querySelector('[data-experience-carousel]');
-      const track = section.querySelector('#experience-cards');
-      const previous = section.querySelector('[data-experience-previous]');
-      const next = section.querySelector('[data-experience-next]');
-      const motion = matchMedia('(prefers-reduced-motion: reduce)');
-      function update() {
-        const maximum = track.scrollWidth - track.clientWidth;
-        previous.hidden = next.hidden = maximum < 2;
-        previous.disabled = track.scrollLeft < 2;
-        next.disabled = track.scrollLeft >= maximum - 2;
-      }
-      function scroll(direction) {
-        const card = track.querySelector('.experience-card');
-        const distance = card.getBoundingClientRect().width + parseFloat(getComputedStyle(track).columnGap);
-        track.scrollBy({ left: direction * distance, behavior: motion.matches ? 'instant' : 'smooth' });
-      }
-      previous.addEventListener('click', () => scroll(-1));
-      next.addEventListener('click', () => scroll(1));
-      track.addEventListener('scroll', update, { passive: true });
-      track.addEventListener('keydown', event => {
-        if (event.target !== track || !['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
-        event.preventDefault();
-        scroll(event.key === 'ArrowLeft' ? -1 : 1);
-      });
-      if ('ResizeObserver' in window) new ResizeObserver(update).observe(track);
-      else window.addEventListener('resize', update);
-      document.fonts?.ready.then(update);
-      update();
-    })();
-  </script>
+  <div class="experience-save-menu" data-experience-save-menu>
+    <div class="experience-save-controls" aria-label="Experience navigation">
+      <button type="button" data-experience-up aria-label="Previous experience" aria-controls="experience-options"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5 22 20H2Z"/></svg></button>
+      <button type="button" data-experience-down aria-label="Next experience" aria-controls="experience-options"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 19 10-15H2Z"/></svg></button>
+    </div>
+    <div class="experience-save-list" id="experience-options" role="listbox" aria-label="Experience" aria-orientation="vertical" tabindex="0" aria-describedby="experience-save-help">
+      {% for item in site_content.experience %}
+      <div class="experience-save-option" role="option" aria-selected="false">
+        <div class="experience-save-stars" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+              <span class="experience-save-sphere" aria-hidden="true"><span class="experience-save-number"></span></span>
+        <div class="experience-save-copy">
+          <h3>{{ item.role }} <span>— {{ item.company }}</span></h3>
+          <p class="experience-save-meta"><span class="experience-save-date">{{ item.dates }}</span> · {{ item.location }}</p>
+          <ul class="experience-save-summary">{% for highlight in item.highlights %}<li>{{ highlight }}</li>{% endfor %}</ul>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <p class="experience-save-help" id="experience-save-help">Select a role, or use the arrow buttons to browse.</p>
+  </div>
+  <script src="{{ '/assets/js/experience-save-menu.js' | relative_url }}" defer></script>
 </section>
 
 <section class="page-section" id="projects">
   <div class="content-shell">
     <header class="section-header">
-      <div><p class="section-index">04</p><h2>{{ site_content.projects_section.heading }}</h2></div>
+      <div><p class="section-index">05</p><h2>{{ site_content.projects_section.heading }}</h2></div>
       <p>{{ site_content.projects_section.introduction }}</p>
     </header>
     <div class="project-grid">
@@ -245,14 +225,13 @@ page_class: home
 
 <section class="page-section contact-section" id="contact">
   <div class="content-shell contact-layout">
-    <div><p class="section-index">05</p><h2>{{ site_content.contact.heading }}</h2></div>
+    <div><p class="section-index">06</p><h2>{{ site_content.contact.heading }}</h2></div>
     <div>
-      <p class="contact-message">{{ site_content.contact.message }}</p>
       <div class="contact-links">
-        <a class="contact-email-link" href="mailto:{{ site_content.contact.email.address }}">{{ site_content.contact.email.label }}: {{ site_content.contact.email.address }}</a>
-        <nav class="contact-secondary-links" aria-label="Other contact links">
+        <div class="contact-intro">{{ site_content.contact.message }}</div>
+        <nav class="contact-secondary-links" aria-label="Contact links">
+        <a href="mailto:{{ site_content.contact.email.address }}">{{ site_content.contact.email.label }}</a>
         {% for social in site_content.contact.social_links %}<a href="{{ social.url }}" target="_blank" rel="noopener noreferrer">{{ social.label }}</a>{% endfor %}
-          <a href="{{ site_content.contact.resume.path | relative_url }}" download>{{ site_content.contact.resume.label }}</a>
         </nav>
       </div>
     </div>

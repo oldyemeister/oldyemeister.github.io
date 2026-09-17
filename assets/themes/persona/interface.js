@@ -113,7 +113,11 @@
   const hud = document.querySelector('.persona-hud');
   const homeLink = document.querySelector('[data-hud-home]');
   const homePage = document.body.classList.contains('page-home');
-  const sizeHud = () => root.style.setProperty('--hud-height', `${hud.getBoundingClientRect().height}px`);
+  const sizeHud = () => {
+    root.style.setProperty('--hud-height', `${hud.getBoundingClientRect().height}px`);
+    // Keep the visible end of an overflowing game strip aligned with articles.
+    if (hud.querySelector('.hud-game-key')) hud.scrollLeft = Math.max(0, hud.scrollWidth - hud.clientWidth);
+  };
   if ('ResizeObserver' in window) new ResizeObserver(sizeHud).observe(hud);
   else window.addEventListener('resize', sizeHud);
   sizeHud();

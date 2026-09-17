@@ -58,6 +58,13 @@ body.persona-design .persona-hud:has(.hud-game-key) {
   scrollbar-width: thin;
 }
 
+/* The first group's auto margin packs every hint against the right edge.
+   If game hints exceed the viewport, the margin collapses so earlier keys
+   remain reachable through the existing horizontal scroll. */
+body.persona-design .persona-hud > .hud-instruction:first-child {
+  margin-inline-start: auto;
+}
+
 body.persona-design .persona-hud kbd {
   display: inline-grid;
   place-items: center;

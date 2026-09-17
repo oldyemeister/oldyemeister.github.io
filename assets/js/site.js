@@ -6,6 +6,43 @@
   const themeDuration = 420;
   let transitionTimer;
 
+  // Decorative stripes: 25% thinner, with a minimum of two rendered pixels.
+  const heroStripes = document.querySelector('#home .hero-corner-ribbons');
+  if (heroStripes) {
+    const stripeGeometry = [...heroStripes.querySelectorAll('rect')].map(rect => ({
+      rect, y: Number(rect.getAttribute('y')), height: Number(rect.getAttribute('height'))
+    }));
+    const sizeHeroStripes = () => {
+      const scale = heroStripes.getBoundingClientRect().width / 600;
+      if (!scale) return;
+      stripeGeometry.forEach(({ rect, y, height }) => {
+        rect.setAttribute('y', y * .75);
+        rect.setAttribute('height', Math.max(2 / scale, height * .75));
+      });
+    };
+    sizeHeroStripes();
+    if ('ResizeObserver' in window) new ResizeObserver(sizeHeroStripes).observe(heroStripes);
+    else window.addEventListener('resize', sizeHeroStripes);
+  }
+
+  const contactFlower = document.querySelector('#contact .contact-flower');
+  if (contactFlower) {
+    let flowerVisible = false;
+    const updateFlower = () => {
+      contactFlower.dataset.rotating = String(flowerVisible && !document.hidden);
+    };
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(([entry]) => {
+        flowerVisible = entry.isIntersecting;
+        updateFlower();
+      }).observe(contactFlower);
+    } else {
+      flowerVisible = true;
+      updateFlower();
+    }
+    document.addEventListener('visibilitychange', updateFlower);
+  }
+
   function storedTheme() {
     try {
       const value = localStorage.getItem('theme');

@@ -10,6 +10,7 @@ function setup(reduced = false, viewport = 1440, labels = ['About', 'Experience'
     textContent, style: { setProperty(name, value) { this[name] = value; } }, attrs: {}, events: {}, children: [],
     classList: { add() {}, toggle() {} },
     setAttribute(k, v) { this.attrs[k] = v; },
+    removeAttribute(k) { delete this.attrs[k]; },
     addEventListener(k, v) { this.events[k] = v; },
     append(child) { this.children.push(child); },
     prepend(child) { this.children.unshift(child); },
@@ -68,6 +69,22 @@ test('selection description follows hover and keyboard focus and shares reduced-
   assert.equal(description.textContent, 'Contact details');
   trigger.events.click();
   assert.equal(description.style.opacity, 0);
+});
+test('Home is selected by default and selection stays unique across hover, focus, and reopening', () => {
+  const { trigger, links } = setup(true, 1440, ['Home', 'About', 'Skills', 'Experience', 'Projects', 'Contact']);
+  const selected = () => links.filter(link => link.attrs['data-menu-selected'] === 'true');
+  assert.deepEqual(selected(), [links[0]]);
+  trigger.events.click();
+  assert.deepEqual(selected(), [links[0]]);
+  links[4].events.pointerenter();
+  assert.deepEqual(selected(), [links[4]]);
+  links[4].events.pointerleave();
+  assert.deepEqual(selected(), [links[4]]);
+  links[2].focus();
+  assert.deepEqual(selected(), [links[2]]);
+  trigger.events.click();
+  trigger.events.click();
+  assert.deepEqual(selected(), [links[0]]);
 });
 test('rapid reversal preserves ribbon geometry on the toggle frame and settles', () => {
   const { trigger, nav, step, frames } = setup();

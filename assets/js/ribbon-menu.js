@@ -23,6 +23,10 @@
   // olive, lime, ivory, green and cyan lines. Widths are normalized below.
   // Split the two moving bundles between the yellow and orange core bands.
   const stripes = [
+    [2, '#f9ad5d', .50],
+    [2, '#000000', .00],
+    [5, '#f9ad5d', .50],
+    [2, '#000000', .00],
     [2, '#827B24', .35],
     [3, '#F6EBA0', .65],
     [3, '#A31C08', .85],
@@ -42,12 +46,14 @@
     [3, '#FFFCE0', 1],
     [8, '#20C9D3', 1],
     [6, '#BEE617', .95],
-    [3, '#FFFFEB', 1]
+    [3, '#FFFFEB', 1],
+    [2, '#f7e55b', .00],
+    [5, '#f9ad5d', .50],
+    [2, '#f7e55b', .00],
+    [2, '#f9ad5d', .50],
   ];
   const groupSize = stripes.length / 2;
   const totalWidth = stripes.reduce((sum, [width]) => sum + width, 0);
-  const seamPosition = 22 + stripes.slice(0, groupSize)
-    .reduce((sum, [width]) => sum + width, 0) * 480 / totalWidth;
   let edge = 22;
   const bands = stripes.map(([units, color, opacity]) => {
     const width = units * 480 / totalWidth;
@@ -110,10 +116,19 @@
   function describe(link) {
     description.textContent = link?.dataset?.menuDescription || link?.textContent || '';
   }
+  let selectedLink;
+  function select(link) {
+    if (!link) return;
+    if (selectedLink !== link) selectedLink?.removeAttribute('data-menu-selected');
+    selectedLink = link;
+    link.setAttribute('data-menu-selected', 'true');
+    describe(link);
+  }
+  select(links[0]);
   links.forEach(link => {
-    link.addEventListener('pointerenter', () => describe(link));
-    link.addEventListener('focus', () => describe(link));
-    link.addEventListener('pointerleave', () => describe(links.includes(document.activeElement) ? document.activeElement : links[0]));
+    link.addEventListener('pointerenter', () => select(link));
+    link.addEventListener('focus', () => select(link));
+    link.addEventListener('pointerleave', () => select(links.includes(document.activeElement) ? document.activeElement : selectedLink));
   });
   let progress = 0;
   let open = false;
@@ -125,11 +140,23 @@
   let viewportWidth = window.innerWidth;
   let menuLeft = 0;
   let menuWidth = 480;
+  let renderedBands = [];
+  let renderedSeam = 0;
   function measure() {
     const rect = nav.getBoundingClientRect();
     viewportWidth = window.innerWidth;
     menuLeft = rect.left;
     menuWidth = rect.width;
+    const scale = menuWidth / 520;
+    // Original menu thickness, with a minimum of two rendered pixels.
+    const widths = bands.map(([, width]) => Math.max(2, width * scale));
+    let edge = menuLeft + 262 * scale - widths.reduce((sum, width) => sum + width, 0) / 2;
+    renderedBands = widths.map(width => {
+      const band = [edge, width];
+      edge += width;
+      return band;
+    });
+    renderedSeam = renderedBands[groupSize][0];
     svg.setAttribute('viewBox', `0 0 ${viewportWidth} 640`);
     svg.style.left = `${-menuLeft}px`;
   }
@@ -137,7 +164,7 @@
   function draw() {
     // Chrome uses the same reversible timeline as the ribbons.
     document.body.style.setProperty('--menu-chrome-progress', 1 - (1 - progress) ** 3);
-    bands.forEach(([x, width], index) => {
+    bands.forEach((band, index) => {
       const direction = index < groupSize ? -1 : 1;
       // Both groups enter already curved. Their parallel bands have small
       // gaps that close as the curves straighten, rather than bending mid-flight.
@@ -146,10 +173,8 @@
       // Cubic ease-in-out: accelerate into the sweep, then settle smoothly.
       const arrival = t < .5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2;
       const curved = 1 - smooth((t - .2) / .8);
-      const scale = menuWidth / 520;
-      const stripeWidth = width * scale;
-      const destination = menuLeft + x * scale;
-      const seam = menuLeft + seamPosition * scale;
+      const [destination, stripeWidth] = renderedBands[index];
+      const seam = renderedSeam;
       const maxBow = Math.min(240, viewportWidth * .26) * RIBBON_BEND;
       const gap = RIBBON_GAP * Math.min(1, menuWidth / 400) * curved;
       const separation = (index % groupSize - (groupSize - 1) / 2) * gap;
@@ -206,7 +231,7 @@
     document.body.classList.toggle('navigation-open', open);
     nav.inert = !open;
     nav.setAttribute('aria-hidden', String(!open));
-    if (open) { nav.hidden = false; describe(links[0]); measure(); }
+    if (open) { nav.hidden = false; select(links[0]); measure(); }
     if (open && document.activeElement === trigger) links[0]?.focus({ preventScroll: true });
     if (restoreFocus) trigger.focus({ preventScroll: true });
     if (motion.matches) {
@@ -218,6 +243,7 @@
       nav.hidden = !open;
     } else if (!frame) frame = requestAnimationFrame(tick);
   }
+  measure();
   setOpen(false);
   trigger.addEventListener('click', () => setOpen(!open));
   closeButton.addEventListener('click', () => setOpen(false, true));

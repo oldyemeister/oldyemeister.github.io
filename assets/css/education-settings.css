@@ -1,0 +1,72 @@
+/* Education-only settings-screen preview; existing palette and section type. */
+body.persona-design #education {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  --education-right-yellow: color-mix(in srgb, var(--hero-yellow-light) 85%, var(--palette-yellow));
+  --pill-gap: clamp(3px, .5vw, 8px);
+  --pill-height: clamp(8px, 2vw, 30px);
+  --education-pill-top: 116px;
+  background: linear-gradient(90deg, var(--palette-gold), var(--education-right-yellow));
+  color: var(--on-field);
+  border-bottom: 2px solid var(--palette-amber);
+  padding-top: calc(var(--education-pill-top) + 6 * var(--pill-height) + 5 * var(--pill-gap) + 40px);
+  padding-bottom: 96px;
+}
+body.persona-design #education > .content-shell {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  color: var(--on-field);
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: clamp(32px, 5vw, 72px);
+}
+body.persona-design #education #education-heading { white-space: nowrap; }
+body.persona-design #education .section-body { color: var(--on-field); }
+body.persona-design #education .education-horizontal-ribbons {
+  position: absolute;
+  inset: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+}
+body.persona-design #education .education-horizontal-ribbons > span {
+  flex: 0 0 var(--band-height);
+  background: var(--band-color);
+}
+body.persona-design #education .education-descriptor {
+  margin: 24px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--palette-amber);
+  color: var(--on-field);
+}
+body.persona-design #education .education-pill-field {
+  position: absolute;
+  left: -24px;
+  top: var(--education-pill-top);
+  width: min(85%, 1100px);
+  height: calc(6 * var(--pill-height) + 5 * var(--pill-gap));
+  display: flex;
+  gap: var(--pill-gap);
+  opacity: .65;
+  pointer-events: none;
+  z-index: 0;
+}
+body.persona-design #education .about-pill-column {
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--pill-gap);
+}
+body.persona-design #education .about-pill {
+  flex: 0 0 var(--pill-height);
+  border-radius: calc(var(--pill-height) / 2);
+  background: var(--hero-yellow-light);
+}
+@media (max-width: 760px) {
+  body.persona-design #education > .content-shell { grid-template-columns: 1fr; gap: 24px; }
+}

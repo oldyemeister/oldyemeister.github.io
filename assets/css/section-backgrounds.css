@@ -1,0 +1,77 @@
+/* Section fields and the reference-inspired Contact corner decoration. */
+body.persona-design #about {
+  background: var(--palette-gold);
+}
+body.persona-design #about .prose p {
+  color: var(--on-field);
+}
+
+body.persona-design #contact .contact-intro {
+  font-family: 'Persona Slim Local', Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+body.persona-design #projects {
+  background: var(--palette-gold);
+}
+
+body.persona-design #contact {
+  --contact-flower-size: clamp(150px, 14vw, 210px);
+  --contact-flower-scale: 1.2;
+  --contact-flower-period: 30s; /* Two counterclockwise revolutions per minute. */
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--palette-yellow);
+}
+
+body.persona-design #contact > .content-shell {
+  position: relative;
+  z-index: 1;
+}
+
+/* Education's band pattern turned clockwise: top band becomes rightmost. */
+body.persona-design #contact .contact-edge-ribbons {
+  position: absolute;
+  inset: 0 20px 0 auto;
+  display: flex;
+  flex-direction: row-reverse;
+  z-index: 0;
+  pointer-events: none;
+}
+
+body.persona-design #contact .contact-edge-ribbons > span {
+  flex: 0 0 var(--band-height);
+  width: var(--band-height);
+  background: var(--band-color);
+}
+
+body.persona-design #contact .contact-flower {
+  position: absolute;
+  top: calc(var(--contact-flower-size) * -.3 + 35px);
+  right: calc(var(--contact-flower-size) * -.13 + 10px);
+  width: calc(var(--contact-flower-size) * var(--contact-flower-scale));
+  height: calc(var(--contact-flower-size) * var(--contact-flower-scale));
+  z-index: 0;
+  pointer-events: none;
+}
+
+.contact-flower-shadow { fill: var(--palette-amber); }
+.contact-flower-face { fill: var(--hero-yellow-light); }
+
+/* Rotate both silhouettes together; the outer shadow offset stays down/right. */
+.contact-flower-spin {
+  transform-origin: 160px 160px;
+  animation: contact-flower-turn var(--contact-flower-period) linear infinite;
+  animation-play-state: paused;
+}
+.contact-flower[data-rotating="true"] .contact-flower-spin {
+  animation-play-state: running;
+}
+@keyframes contact-flower-turn {
+  to { transform: rotate(-360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .contact-flower-spin { animation: none; }
+}
