@@ -20,7 +20,7 @@ function setup(reduced = false) {
     }
   });
   const options = Array.from({ length: 5 }, () => {
-    const option = element(); option.querySelector = () => (option.sphere ||= {}); return option;
+    const option = element(); option.querySelector = () => (option.sphere ||= element()); return option;
   });
   const list = element(); list.querySelectorAll = () => options;
   const up = element(), down = element(), menu = element();
@@ -32,7 +32,7 @@ function setup(reduced = false) {
   const selected = () => options.filter(o => o.attrs['aria-selected'] === 'true');
   return { options, list, menu, up, down, key, visible, selected, animations };
 }
-test('Experience always exposes three complete options and exactly one selection', () => {
+test('Experience starts with three complete options and exactly one selection', () => {
   const s = setup();
   assert.deepEqual(s.visible(), [0, 1, 2]);
   assert.equal(s.selected().length, 1);
@@ -40,15 +40,18 @@ test('Experience always exposes three complete options and exactly one selection
   assert.equal(s.list.attrs['aria-activedescendant'], 'experience-option-2');
   assert.equal(s.options[0].attrs['aria-setsize'], '5');
 });
-test('Experience shifts use nonlinear easing, cancel on rapid input, and respect reduced motion', () => {
+test('Experience copies slide and spheres bounce; rapid input and reduced motion settle cleanly', () => {
   const s = setup();
   s.key('ArrowDown');
-  assert.ok(s.animations.length > 0);
-  assert.equal(s.animations[0].timing.duration, 240);
-  assert.equal(s.animations[0].timing.easing, 'cubic-bezier(0.25, 0.8, 0.25, 1)');
-  assert.equal(s.animations[0].frames[0].transform, 'translateY(24px)');
+  const slide = s.animations.find(animation => animation.timing.duration === 520);
+  const bounce = s.animations.find(animation => animation.frames[0].transform === 'rotate(20deg) scale(0.88)');
+  const sphere = s.animations.find(animation => animation.frames[1].transform === 'translateY(-50%) scale(1.12, 0.86)');
+  assert.equal(slide.timing.easing, 'cubic-bezier(0.22, 0.8, 0.25, 1)');
+  assert.ok(s.animations.some(animation => animation.timing.duration === 520 && animation.frames[0].top === '160px'));
+  assert.equal(bounce.timing.duration, 440);
+  assert.equal(sphere.frames.at(-1).transform, 'translateY(-50%) scale(1, 1)');
   assert.equal(s.menu.style['--experience-row-height'], '220px');
-  const previous = s.animations[0];
+  const previous = slide;
   s.key('ArrowUp');
   assert.equal(previous.cancelled, true);
   assert.equal(s.selected().length, 1);
@@ -73,11 +76,17 @@ test('Experience supports click, touch controls, Home/End and bounded selection'
   assert.equal(s.list.focused, true);
   s.down.events.click();
   assert.deepEqual(s.visible(), [2, 3, 4]);
+  assert.ok(s.animations.some(animation => animation.frames[1]?.transform === 'translateX(-3px) rotate(-6deg)'));
   s.key('End'); s.key('ArrowDown');
-  assert.deepEqual(s.visible(), [2, 3, 4]);
+  assert.deepEqual(s.visible(), [3, 4]);
+  assert.equal(s.options[4].dataset.position, 'selected');
+  assert.equal(s.options[3].dataset.position, 'above');
   assert.equal(s.down.disabled, true);
   assert.equal(s.list.attrs['aria-activedescendant'], 'experience-option-5');
   s.key('Home'); s.key('ArrowUp');
+  assert.deepEqual(s.visible(), [0, 1]);
+  assert.equal(s.options[0].dataset.position, 'selected');
+  assert.equal(s.options[1].dataset.position, 'below');
   assert.equal(s.list.attrs['aria-activedescendant'], 'experience-option-1');
   assert.equal(s.selected().length, 1);
 });

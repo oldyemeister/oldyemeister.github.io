@@ -3,6 +3,13 @@ layout: default
 page_class: home
 ---
 {% assign site_content = site.data.content %}
+<!-- Continue the hero's existing circles through the space exposed by the sliding header. -->
+<div class="hero-top-extension" aria-hidden="true" hidden>
+  <svg viewBox="0 0 1440 720" focusable="false" aria-hidden="true">
+    <use href="#hero-crescent" />
+    <use href="#hero-ribbon" />
+  </svg>
+</div>
 <section class="hero-section" id="home">
   <h1 class="hero-accessible-title">{{ site_content.hero.name }} — {{ site_content.hero.role }}</h1>
   <div class="hero-visual-stage">

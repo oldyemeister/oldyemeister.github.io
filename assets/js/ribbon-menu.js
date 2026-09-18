@@ -2,6 +2,7 @@
   const trigger = document.querySelector('[data-ribbon-trigger]');
   const nav = document.querySelector('[data-navigation]');
   if (!trigger || !nav) return;
+  const hudTriggers = [...document.querySelectorAll('[data-hud-menu-toggle]')];
   // Animation speed: 1.25 is 25% faster. Durations below are milliseconds.
   const MENU_SPEED = 1.0;
   // Entry curvature and temporary space between neighboring bands.
@@ -126,7 +127,8 @@
   }
   select(links[0]);
   links.forEach(link => {
-    link.addEventListener('pointerenter', () => select(link));
+    // Pointer selection shares focus with arrow navigation and Enter activation.
+    link.addEventListener('pointerenter', () => link.focus({ preventScroll: true }));
     link.addEventListener('focus', () => select(link));
     link.addEventListener('pointerleave', () => select(links.includes(document.activeElement) ? document.activeElement : selectedLink));
   });
@@ -134,6 +136,7 @@
   let open = false;
   let frame = 0;
   let previousTime;
+  let bendPolarity = 1;
   const clamp = value => Math.max(0, Math.min(1, value));
   const smooth = value => { const t = clamp(value); return t * t * (3 - 2 * t); };
 
@@ -182,8 +185,9 @@
       const travel = direction < 0 ? -seam - clearance : viewportWidth - seam + clearance;
       const left = destination + travel * (1 - arrival) + separation;
       const right = left + stripeWidth;
-      // Elongated parenthesis: curved ends join one uninterrupted straight middle.
-      const bow = -direction * maxBow * curved;
+      // Closing reverses the arches: left bands become ( and right bands ).
+      // Interpolate polarity so reversing mid-flight does not snap the paths.
+      const bow = -direction * maxBow * curved * bendPolarity;
       const top = -20;
       const bottom = 660;
       paths[index].setAttribute('d', `M ${left} ${top}
@@ -215,17 +219,19 @@
     const delta = previousTime === undefined ? 0 : Math.min(time - previousTime, 40);
     previousTime = time;
     progress = clamp(progress + (open ? 1 : -1) * delta / (open ? OPEN_DURATION : CLOSE_DURATION));
+    bendPolarity += ((open ? 1 : -1) - bendPolarity) * (1 - Math.exp(-delta / 45));
     draw();
     if (progress !== (open ? 1 : 0)) frame = requestAnimationFrame(tick);
     else {
       frame = 0;
       previousTime = undefined;
-      if (!open) nav.hidden = true;
+      if (!open) { nav.hidden = true; bendPolarity = 1; }
     }
   }
   function setOpen(value, restoreFocus = false) {
     open = value;
     trigger.setAttribute('aria-expanded', String(open));
+    hudTriggers.forEach(button => button.setAttribute('aria-expanded', String(open)));
     trigger.title = open ? 'Close navigation' : 'Open navigation';
     trigger.querySelector('.sr-only').textContent = trigger.title;
     document.body.classList.toggle('navigation-open', open);
@@ -239,6 +245,7 @@
       frame = 0;
       previousTime = undefined;
       progress = open ? 1 : 0;
+      bendPolarity = open ? 1 : -1;
       draw();
       nav.hidden = !open;
     } else if (!frame) frame = requestAnimationFrame(tick);

@@ -12,7 +12,9 @@ test('production Persona uses root routes and leaves shared assets and external 
   assert.match(result, /data-persona-base="\/"/);
   assert.match(result, /href="\/#projects"/);
   assert.match(result, /href="\/projects\/laser\/"/);
-  assert.match(result, /href="\/#home" data-hud-home/);
+  assert.match(result, /<kbd>Tab<\/kbd><span>Menu<\/span>/);
+  assert.match(result, /<kbd>Esc<\/kbd><span>Menu<\/span>/);
+  assert.doesNotMatch(result, /data-hud-home/);
   assert.match(result, /href="\/assets\/documents\/resume.pdf"/);
   assert.match(result, /href="https:\/\/example.com\/"/);
   assert.doesNotMatch(result, /href="\/persona\//);
@@ -23,7 +25,7 @@ test('comparison preview retains its Persona route prefix', () => {
   assert.match(result, /data-persona-base="\/persona\/"/);
   assert.match(result, /href="\/persona\/#projects"/);
   assert.match(result, /href="\/persona\/projects\/laser\/"/);
-  assert.match(result, /href="\/persona\/#home" data-hud-home/);
+  assert.match(result, /data-hud-menu-toggle aria-controls="site-navigation"/);
 });
 
 test('redesign adds a semantic image caption before the project heading', () => {

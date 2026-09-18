@@ -113,6 +113,13 @@
   const hud = document.querySelector('.persona-hud');
   const homeLink = document.querySelector('[data-hud-home]');
   const homePage = document.body.classList.contains('page-home');
+  const menuTrigger = document.querySelector('[data-menu-toggle]');
+  hud.querySelectorAll('[data-hud-menu-toggle]').forEach(button => {
+    button.addEventListener('click', () => {
+      menuTrigger?.focus({ preventScroll: true });
+      menuTrigger?.click();
+    });
+  });
   const sizeHud = () => {
     root.style.setProperty('--hud-height', `${hud.getBoundingClientRect().height}px`);
     // Keep the visible end of an overflowing game strip aligned with articles.
@@ -130,13 +137,24 @@
       event.preventDefault();
       if (event.repeat || busy) return;
       if (document.body.classList.contains('navigation-open')) {
-        document.querySelector('[data-menu-toggle]')?.click();
-        document.querySelector('[data-menu-toggle]')?.focus();
+        menuTrigger?.click();
+        menuTrigger?.focus();
+        return;
+      }
+      if (homePage) {
+        menuTrigger?.focus({ preventScroll: true });
+        menuTrigger?.click();
         return;
       }
       // Use the link's existing click path, including reduced-motion handling,
       // the outgoing wipe and the destination page's arrival wipe.
       homeLink.click();
+    } else if (homePage && event.key === 'Tab' && !event.shiftKey &&
+        !document.body.classList.contains('navigation-open') &&
+        (document.activeElement === document.body || document.activeElement === document.documentElement)) {
+      event.preventDefault();
+      menuTrigger?.focus({ preventScroll: true });
+      menuTrigger?.click();
     } else if (homePage && !event.shiftKey && (event.key === 'ArrowDown' || event.key === 'ArrowUp')) {
       const links = [...document.querySelectorAll('.site-navigation a, main a[href], .persona-hud a')]
         .filter(link => link.getClientRects().length && getComputedStyle(link).visibility !== 'hidden');

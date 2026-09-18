@@ -1,4 +1,27 @@
 /* Section fields and the reference-inspired Contact corner decoration. */
+body.persona-design :is(#about, #skills, #projects) { position: relative; isolation: isolate; }
+body.persona-design :is(#about, #skills, #projects) > .content-shell { position: relative; z-index: 1; }
+.section-motifs {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.section-motif { position: absolute; width: 64px; height: 64px; fill: currentColor; }
+#about .section-motif--star { right: 7%; top: 12px; transform: rotate(-14deg); }
+#about .section-motif--ring { right: 2%; top: 52px; width: 36px; height: 36px; }
+#skills .section-motif--sparkle { left: 2%; bottom: 16px; width: 50px; height: 50px; }
+#skills .section-motif--flower { right: 4%; bottom: 8px; transform: rotate(15deg); }
+#projects .section-motif--rings { right: -18px; top: -38px; width: 150px; height: 150px; }
+#contact .section-motif--flower { left: 16px; bottom: 8px; width: 70px; height: 70px; transform: rotate(-10deg); }
+#contact .section-motif--sparkle { left: 100px; bottom: 30px; width: 30px; height: 30px; }
+@media (max-width: 760px) {
+  #about .section-motif--star { width: 44px; height: 44px; top: 8px; right: 14%; }
+  #about .section-motif--ring { top: 27px; right: 4%; width: 28px; height: 28px; }
+  #projects .section-motif--rings { width: 100px; height: 100px; top: -30px; }
+  #skills .section-motif--flower, #contact .section-motif--flower { width: 48px; height: 48px; }
+}
 body.persona-design #about {
   background: var(--palette-gold);
 }

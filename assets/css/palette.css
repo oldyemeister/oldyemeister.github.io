@@ -11,6 +11,7 @@
   --palette-black: #080808;
   --palette-white: #FFFDF3;
   --palette-blue: #0C75A1;
+  --palette-cyan: #20C9D3; /* Shared with the hero's cyan color bar. */
   /* Education ribbon colors from the settings reference's Config footer. */
   --config-orange: #FFAA00;
   --config-silver: #BFC3C4;

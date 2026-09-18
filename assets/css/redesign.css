@@ -511,6 +511,28 @@ body.persona-design #projects :is(.project-demo-link, button, [role='button']) {
     box-shadow 650ms cubic-bezier(.34, 1.56, .64, 1);
 }
 
+/* The JY badge's outer hover ring, adapted to the existing project palette. */
+body.persona-design #projects .project-demo-link {
+  position: relative;
+  isolation: isolate;
+}
+body.persona-design #projects .project-demo-link::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border: 2px solid var(--palette-black);
+  border-radius: 28px;
+  opacity: 0;
+  transform: scale(.94);
+  pointer-events: none;
+  transition: opacity 240ms ease-out,
+    transform 360ms cubic-bezier(.34, 1.56, .64, 1);
+}
+body.persona-design #projects .project-demo-link:is(:hover, :focus-visible)::before {
+  opacity: .7;
+  transform: scale(1);
+}
+
 /* Project image windows: keep their olive treatment, with a slightly shorter
    yellow drop so it does not peek around the rounded corners. */
 body.persona-design #projects .project-media {
@@ -531,6 +553,7 @@ body.persona-design #projects :is(button:disabled, [aria-disabled='true']) {
 }
 @media (prefers-reduced-motion: reduce) {
   body.persona-design #projects :is(.project-demo-link, button, [role='button']) { transition: none; }
+  body.persona-design #projects .project-demo-link::before { transition: none; }
 }
 
 /* Text directly on the electric-yellow field uses the existing black token.

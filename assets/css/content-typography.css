@@ -6,6 +6,10 @@ body.persona-design {
   --content-label-size: .875rem;
   --content-title-size: clamp(1.25rem, 2vw, 1.65rem);
 }
+/* Shift section topics toward the page edge without clipping narrow viewports. */
+body.persona-design :is(#about, #education, #skills, #experience, #projects, #contact) h2 {
+  translate: calc(-1 * clamp(0px, (100vw - 1180px) / 2 - 16px, 100px)) 0;
+}
 body.persona-design :is(#about, #education, #skills, #experience, #projects, #contact) :is(p, li, time, small, h3) {
   font-family: var(--content-font);
 }

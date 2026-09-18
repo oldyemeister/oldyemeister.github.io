@@ -1,4 +1,30 @@
 /* Home poster: one SVG coordinate system for curved shapes and split-fill type. */
+body.persona-design.page-home #main-content { position: relative; }
+body.persona-design .hero-top-extension {
+  --hero-header-height: 78px;
+  display: block;
+  position: absolute;
+  top: calc(-1 * var(--hero-header-height));
+  left: 0;
+  width: 100%;
+  height: var(--hero-header-height);
+  overflow: hidden;
+  z-index: 2;
+  background: var(--palette-yellow);
+  pointer-events: none;
+}
+body.persona-design .hero-top-extension svg {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  fill: var(--palette-gold);
+}
+@media (max-width: 760px) {
+  body.persona-design .hero-top-extension svg { width: 150%; }
+}
 body.persona-design #home {
   position: relative;
   isolation: isolate;
@@ -33,10 +59,11 @@ body.persona-design #home .hero-poster-art {
 }
 body.persona-design #home .hero-poster-shapes { fill: var(--palette-gold); }
 body.persona-design #home .hero-poster-art text {
-  font-family: 'Arial Black', Arial, sans-serif;
-  font-weight: 900;
+  font-family: 'Persona Slim Local', Arial, sans-serif;
+  font-weight: 400;
+  font-synthesis: none;
   text-transform: none;
-  letter-spacing: -.055em;
+  letter-spacing: normal;
   paint-order: stroke fill;
 }
 body.persona-design #home .hero-poster-name { font-size: 84px; }
@@ -78,6 +105,11 @@ body.persona-design #home .eyebrow {
   -webkit-text-fill-color: var(--palette-muted) !important;
 }
 body.persona-design #home .hero-links .text-link-primary { background: var(--palette-olive); }
+body.persona-design #home .hero-links .text-link {
+  font-family: 'Persona Slim Local', Arial, sans-serif;
+  font-weight: 400;
+  font-synthesis: none;
+}
 body.persona-design #home .hero-links .text-link-primary:is(:hover, :focus-visible) { background: var(--palette-muted); }
 @media (max-width: 760px) {
   /* Keep the entire name visible rather than cropping it like decorative text. */

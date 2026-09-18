@@ -1,5 +1,24 @@
 // Small semantic additions for the optional redesign; original pages stay intact.
 export function redesignContent(html) {
+  // Reference motifs: flat rings, tapered sparkles, and round-petal flowers.
+  // Deliberately scattered, stable positions keep decoration away from content.
+  const motifs = {
+    star: '<path d="M50 3 60 34 94 22 72 49 96 69 63 67 55 98 42 69 9 82 29 54 4 34 38 36Z"/>',
+    sparkle: '<path d="M50 2C55 39 61 45 98 50C61 55 55 61 50 98C45 61 39 55 2 50C39 45 45 39 50 2Z"/>',
+    ring: '<circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" stroke-width="15"/>',
+    rings: '<circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="10"/><circle cx="50" cy="50" r="24" fill="none" stroke="currentColor" stroke-width="8"/>',
+    flower: Array.from({ length: 6 }, (_, i) => `<path transform="rotate(${i * 60} 50 50)" d="M50 50C41 38 33 24 39 15C44 7 56 7 61 15C67 24 59 38 50 50Z"/>`).join('')
+  };
+  const decorations = {
+    about: [['star', 'palette-cyan', 'star'], ['ring', 'config-orange', 'ring']],
+    skills: [['sparkle', 'config-lime', 'sparkle'], ['flower', 'config-violet', 'flower']],
+    projects: [['rings', 'config-violet', 'rings']],
+    contact: [['flower', 'config-orange', 'flower'], ['sparkle', 'palette-cyan', 'sparkle']]
+  };
+  for (const [section, shapes] of Object.entries(decorations)) {
+    const artwork = shapes.map(([shape, color, position]) => `<svg class="section-motif section-motif--${position}" style="color:var(--${color})" viewBox="0 0 100 100" focusable="false">${motifs[shape]}</svg>`).join('');
+    html = html.replace(new RegExp(`(<section[^>]*id="${section}"[^>]*>)`), `$1<div class="section-motifs" aria-hidden="true">${artwork}</div>`);
+  }
   // Shared settings-reference bands: horizontal in Education, vertical in Contact.
   const settingsBands = [
     ['config-orange', 5], ['config-silver', 6], ['palette-yellow', 4],

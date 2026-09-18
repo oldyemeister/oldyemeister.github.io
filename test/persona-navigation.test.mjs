@@ -26,7 +26,7 @@ function setup() {
     body: { dataset: { personaBase: '/' }, classList: { contains: () => false } },
     querySelectorAll: () => [],
     querySelector: selector => selector === '.page-wipe' ? overlay : {
-      getBoundingClientRect: () => ({ height: 60 }), querySelector: () => null
+      getBoundingClientRect: () => ({ height: 60 }), querySelector: () => null, querySelectorAll: () => []
     },
     addEventListener: (name, handler) => { events[name] = handler; }
   };

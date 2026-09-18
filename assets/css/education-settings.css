@@ -28,6 +28,7 @@ body.persona-design #education #education-heading { white-space: nowrap; }
 body.persona-design #education .section-body { color: var(--on-field); }
 body.persona-design #education .education-horizontal-ribbons {
   position: absolute;
+  z-index: 1;
   inset: 0 0 auto;
   display: flex;
   flex-direction: column;
@@ -45,9 +46,10 @@ body.persona-design #education .education-descriptor {
 }
 body.persona-design #education .education-pill-field {
   position: absolute;
-  left: -24px;
-  top: var(--education-pill-top);
-  width: min(85%, 1100px);
+  left: 0;
+  top: calc(var(--education-pill-top) - 40px);
+  /* Preserve the old 15-column pill width while extending to 22 columns. */
+  width: calc((min(85vw, 1100px) - 14 * var(--pill-gap)) / 15 * 22 + 21 * var(--pill-gap));
   height: calc(6 * var(--pill-height) + 5 * var(--pill-gap));
   display: flex;
   gap: var(--pill-gap);

@@ -1,7 +1,7 @@
 (() => {
   function initializePills(field) {
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
-  const columns = Array.from({ length: 15 }, () => {
+  const columns = Array.from({ length: 22 }, () => {
     const column = document.createElement('div');
     column.className = 'about-pill-column';
     const pills = Array.from({ length: 6 }, () => {
@@ -14,7 +14,7 @@
     return pills;
   });
   function randomize() {
-    const counts = columns.map(() => 1 + Math.floor(Math.random() * 6));
+    const counts = columns.map(() => 2 + Math.floor(Math.random() * 5));
     // Write all columns together, with no geometry reads or node rebuilding.
     columns.forEach((pills, column) => pills.forEach((pill, row) => {
       pill.style.visibility = row < counts[column] ? 'visible' : 'hidden';

@@ -32,7 +32,7 @@ body.persona-design .persona-hud {
   transform: none;
 }
 
-body.persona-design .persona-hud :is(.hud-instruction, .hud-home) {
+body.persona-design .persona-hud :is(.hud-instruction, .hud-home, .hud-menu-toggle) {
   display: inline-flex;
   flex: 0 0 auto;
   white-space: nowrap;
@@ -46,6 +46,14 @@ body.persona-design .persona-hud :is(.hud-instruction, .hud-home) {
   text-decoration: none;
   transform: rotate(-17deg);
   transform-origin: left bottom;
+}
+
+body.persona-design .persona-hud .hud-menu-toggle {
+  border: 0;
+  font: inherit;
+  -webkit-text-stroke: inherit;
+  paint-order: inherit;
+  cursor: pointer;
 }
 
 /* Long game instructions stay in one row, with headroom for the tilted text. */
@@ -94,7 +102,9 @@ body.persona-design .persona-hud kbd.hud-arrow {
 }
 
 body.persona-design .persona-hud .hud-home:hover,
-body.persona-design .persona-hud .hud-home:focus-visible {
+body.persona-design .persona-hud .hud-home:focus-visible,
+body.persona-design .persona-hud .hud-menu-toggle:hover,
+body.persona-design .persona-hud .hud-menu-toggle:focus-visible {
   color: var(--palette-black);
   outline-color: var(--palette-black);
 }
@@ -128,9 +138,9 @@ body.persona-design .persona-hud {
   body.persona-design .persona-hud {
     display: none;
   }
-}
 
-/* Hide the fixed instruction strip only on the portfolio home page. */
-body.page-home.persona-design .persona-hud {
-  display: none;
+  /* The home hints are real menu controls, so keep them available to touch. */
+  body.page-home.persona-design .persona-hud {
+    display: flex;
+  }
 }

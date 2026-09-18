@@ -50,10 +50,13 @@ export function personaPreview(html, prefix = '/persona', redesign = true) {
       </figure>`)
     .replace('</body>', `
       <nav class="persona-hud" aria-label="Keyboard shortcuts">
+        ${home ? `
+        <button class="hud-menu-toggle" type="button" data-hud-menu-toggle aria-controls="site-navigation" aria-keyshortcuts="Tab"><kbd>Tab</kbd><span>Menu</span></button>
+        <button class="hud-menu-toggle" type="button" data-hud-menu-toggle aria-controls="site-navigation" aria-keyshortcuts="Escape"><kbd>Esc</kbd><span>Menu</span></button>` : `
         ${gameKeys}
-        <span class="hud-instruction">${home ? '<kbd class="hud-arrow">↑</kbd><kbd class="hud-arrow">↓</kbd>' : '<kbd>Tab</kbd>'}<span>Navigate</span></span>
+        <span class="hud-instruction"><kbd>Tab</kbd><span>Navigate</span></span>
         <span class="hud-instruction"><kbd>Enter</kbd><span>Open</span></span>
-        <a class="hud-home" href="${prefix}/${home ? '#home' : ''}" data-hud-home aria-keyshortcuts="Escape"><kbd>Esc</kbd><span>Home</span><span aria-hidden="true">↗</span></a>
+        <a class="hud-home" href="${prefix}/" data-hud-home aria-keyshortcuts="Escape"><kbd>Esc</kbd><span>Home</span><span aria-hidden="true">↗</span></a>`}
       </nav>
       <script src="/assets/themes/persona/interface.js" defer></script>
     </body>`);

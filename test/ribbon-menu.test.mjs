@@ -26,6 +26,7 @@ function setup(reduced = false, viewport = 1440, labels = ['About', 'Experience'
   const nav = element(); nav.children = [...links]; nav.querySelectorAll = () => links;
   document = element(); document.body = element();
   document.querySelector = s => s === '[data-ribbon-trigger]' ? trigger : nav;
+  document.querySelectorAll = () => [];
   document.createElement = document.createElementNS = () => element();
   const frames = new Map(); let id = 0; let now = 0;
   const motion = { matches: reduced, addEventListener(k, handler) { this.change = handler; } };
@@ -71,15 +72,18 @@ test('selection description follows hover and keyboard focus and shares reduced-
   assert.equal(description.style.opacity, 0);
 });
 test('Home is selected by default and selection stays unique across hover, focus, and reopening', () => {
-  const { trigger, links } = setup(true, 1440, ['Home', 'About', 'Skills', 'Experience', 'Projects', 'Contact']);
+  const { trigger, links, document, nav, event } = setup(true, 1440, ['Home', 'About', 'Skills', 'Experience', 'Projects', 'Contact']);
   const selected = () => links.filter(link => link.attrs['data-menu-selected'] === 'true');
   assert.deepEqual(selected(), [links[0]]);
   trigger.events.click();
   assert.deepEqual(selected(), [links[0]]);
   links[4].events.pointerenter();
   assert.deepEqual(selected(), [links[4]]);
+  assert.equal(document.activeElement, links[4]);
   links[4].events.pointerleave();
   assert.deepEqual(selected(), [links[4]]);
+  nav.events.keydown(event('ArrowDown'));
+  assert.deepEqual(selected(), [links[5]]);
   links[2].focus();
   assert.deepEqual(selected(), [links[2]]);
   trigger.events.click();
@@ -174,6 +178,25 @@ test('bands enter as separated opposing arches and settle into connected straigh
     assert.equal(p[0], p[4]);
     if (i + 1 < paths.length) assert.ok(Math.abs(p[26] - coords(paths[i + 1])[0]) < 1e-8);
   }
+});
+
+test('closing bows left ribbons like ( and right ribbons like ) without snapping on reversal', () => {
+  const { trigger, nav, step, finish } = setup();
+  trigger.events.click(); finish();
+  const paths = nav.children[0].children;
+  const coords = path => path.attrs.d.match(/-?\d+(?:\.\d+)?(?:e[+-]?\d+)?/g).map(Number);
+  trigger.events.click();
+  const before = paths.map(path => path.attrs.d);
+  assert.deepEqual(paths.map(path => path.attrs.d), before);
+  step(12);
+  const middle = paths.length / 2;
+  assert.ok(coords(paths[0])[2] < coords(paths[0])[0]);
+  assert.ok(coords(paths[middle])[2] > coords(paths[middle])[0]);
+  const reversing = paths.map(path => path.attrs.d);
+  trigger.events.click();
+  assert.deepEqual(paths.map(path => path.attrs.d), reversing);
+  step(12);
+  assert.ok(paths.every(path => !/NaN|Infinity/.test(path.attrs.d)));
 });
 
 test('the two middle bands are the thickest and the layer escapes the header', () => {
