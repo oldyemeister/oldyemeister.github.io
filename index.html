@@ -16,16 +16,19 @@ page_class: home
           <stop offset=".55" stop-color="var(--flower-green)"/>
           <stop offset="1" stop-color="var(--flower-cyan)"/>
         </linearGradient>
-        <clipPath id="hero-sky-clip"><path d="M-1000 -1000H1800V1800H-1000Z M500 -45a315 315 0 1 0 0 630a315 315 0 1 0 0 -630" clip-rule="evenodd"/></clipPath>
+        <clipPath id="hero-sky-clip"><path d="M945 270a445 445 0 1 0 -890 0a445 445 0 1 0 890 0Z M500 -45a315 315 0 1 0 0 630a315 315 0 1 0 0 -630" clip-rule="evenodd"/></clipPath>
         <pattern id="hero-sky-lines" width="4" height="3" patternUnits="userSpaceOnUse"><path d="M0 0H4" stroke="var(--palette-white)" stroke-opacity=".13" stroke-width=".6"/></pattern>
         <pattern id="hero-faint-dots" width="45" height="45" patternUnits="userSpaceOnUse"><circle cx="22.5" cy="22.5" r="21" fill="var(--hero-yellow-light)"/></pattern>
       </defs>
+      <g class="hero-circle-composition">
       <g clip-path="url(#hero-sky-clip)">
         <circle class="hero-side-field" cx="500" cy="270" r="445"/>
         <g class="hero-sky-clouds">
           <path d="M-40 155 Q0 144 20 151 Q36 129 58 148 Q86 136 107 158 Q141 162 155 175 H-40Z"/>
           <path d="M25 265 Q45 249 62 256 Q75 236 92 253 Q128 246 155 268Z"/>
           <path d="M660 16 Q690 0 720 15 Q750 -2 775 18 L815 35 H645Z"/>
+          <path d="M265 603 Q287 582 312 592 Q333 565 360 589 Q392 578 425 606 L432 620 H260Z"/>
+          <path d="M735 480 Q759 461 782 475 Q805 445 833 469 Q862 458 893 486 L902 500 H728Z"/>
         </g>
         <circle cx="500" cy="270" r="445" fill="url(#hero-sky-lines)"/>
         <circle class="hero-side-highlight" cx="500" cy="270" r="395"/>
@@ -34,19 +37,22 @@ page_class: home
       <circle class="hero-ring hero-ring-middle" cx="500" cy="270" r="282"/>
       <circle class="hero-ring hero-ring-inner" cx="500" cy="270" r="251"/>
       <circle class="hero-dot-field" cx="500" cy="270" r="249" fill="url(#hero-faint-dots)"/>
-      <g class="hero-flower hero-flower-dark" transform="translate(715 22) scale(.20)" data-contact-petals></g>
-      <g class="hero-flower hero-flower-light" transform="translate(756 74) scale(.12)" data-contact-petals></g>
+      </g>
+
     </svg>
     <svg class="hero-left-flower" viewBox="-25 -25 370 370" aria-hidden="true" focusable="false">
       <g class="hero-flower-new" data-contact-petals></g>
     </svg>
+      <svg class="hero-name-flower" viewBox="-25 -25 370 370" aria-hidden="true" focusable="false">
+        <g data-contact-petals></g>
+      </svg>
+    <svg class="hero-right-dark-flower" viewBox="-25 -25 370 370" aria-hidden="true" focusable="false"><g class="hero-flower-dark" data-contact-petals></g></svg>
+    <svg class="hero-right-light-flower" viewBox="-25 -25 370 370" aria-hidden="true" focusable="false"><g class="hero-flower-light" data-contact-petals></g></svg>
     <div class="hero-ambient" aria-hidden="true" inert>
       <span class="hero-ambient-orb"></span><span class="hero-ambient-orb"></span><span class="hero-ambient-orb"></span>
     </div>
     <div class="hero-reference-copy">
-      <svg class="hero-name-flower" viewBox="-25 -25 370 370" aria-hidden="true" focusable="false">
-        <g data-contact-petals></g>
-      </svg>
+
       <h1>{{ site_content.hero.name }}</h1>
       <p>{{ site_content.hero.role }}</p>
     </div>
@@ -66,7 +72,7 @@ page_class: home
   <svg class="about-legacy-art" viewBox="0 0 1440 720" aria-hidden="true" focusable="false">
     <g class="about-growing-rings">
     <path fill-rule="evenodd" clip-rule="evenodd" d="M1790-180A840 840 0 1 0 110-180 840 840 0 1 0 1790-180ZM1650-180A700 700 0 1 1 250-180 700 700 0 1 1 1650-180Z"/>
-    <circle class="about-outer-ring" cx="950" cy="-180" r="1232" stroke-width="736"/>
+    <circle class="about-outer-ring" cx="950" cy="-180" r="948" stroke-width="168"/>
       </g>
     <circle class="about-shockwave" cx="950" cy="-180" r="1800"/>
   </svg>
@@ -108,7 +114,13 @@ page_class: home
     <div class="section-body">
       <div class="prose">{{ site_content.about.biography | markdownify }}</div>
     </div>
+
   </div>
+    <div class="about-picture-placeholders" aria-label="Future About photos">
+      <!-- Replace each span with an img using a real src and descriptive alt text. -->
+      <div class="about-picture-frame"><span>Photo 01</span></div>
+      <div class="about-picture-frame"><span>Photo 02</span></div>
+    </div>
 </section>
 
 <section class="page-section education-section" id="education" aria-labelledby="education-heading">

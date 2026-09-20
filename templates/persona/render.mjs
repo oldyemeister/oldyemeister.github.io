@@ -32,14 +32,14 @@ export function personaPreview(html, prefix = '/persona', redesign = true) {
       <link rel="stylesheet" href="/assets/css/key-instructions.css">
       <link rel="stylesheet" href="/assets/css/project-tv-effect.css?v=2">
       <link rel="stylesheet" href="/assets/css/skills-section.css?v=3">
-      <link rel="stylesheet" href="/assets/css/hero-poster.css?v=28">
+      <link rel="stylesheet" href="/assets/css/hero-poster.css?v=34">
       <link rel="stylesheet" href="/assets/css/hero-ambient.css?v=5">
       <link rel="stylesheet" href="/assets/css/content-typography.css">
       ${redesign ? '<link rel="stylesheet" href="/assets/css/section-backgrounds.css">' : ''}
       ${redesign ? '<link rel="stylesheet" href="/assets/css/education-settings.css">' : ''}
       <link rel="stylesheet" href="/assets/css/experience-save-menu.css">
       ${redesign ? '<script src="/assets/js/about-pills.js" defer></script>' : ''}
-      ${home ? '<link rel="stylesheet" href="/assets/css/scroll-presence.css?v=4">\n      <script type="module" src="/assets/js/scroll-presence.js?v=4"></script>' : ''}
+      ${home ? '<link rel="stylesheet" href="/assets/css/scroll-presence.css?v=6">\n      <script type="module" src="/assets/js/scroll-presence.js?v=6"></script>' : ''}
       ${home ? `<script>
         if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
           document.documentElement.classList.add('about-scroll-pending');

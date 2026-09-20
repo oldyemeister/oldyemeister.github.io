@@ -6,10 +6,11 @@ export function aboutScrollProgress(top, height, viewport) {
   return { progress, text: Math.min(1, progress / settings.about.textCompleteAt) };
 }
 
-// Keep the inner edge at 864 SVG units. Thickness catches up late in the reveal.
+// Inner ring is 840 - 700 = 140 units thick; outer thickness is 1.2 × 140 = 168.
+// Keep its inner edge at 864 SVG units and grow thickness with the reveal.
 export function aboutOuterRing(progress) {
   const p = Math.max(0, Math.min(1, progress));
-  const width = 16 + (736 - 16) * p ** 1.8;
+  const width = 16 + (168 - 16) * p ** 1.8;
   return { width, radius: 864 + width / 2 };
 }
 

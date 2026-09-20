@@ -21,7 +21,7 @@ body.persona-design.page-home [data-scroll-presence]:focus-within {
 /* About has its own scroll timeline; backgrounds meet without a separator. */
 body.persona-design.page-home #home { border-bottom: 0; }
 body.persona-design.page-home :is(#home, #about) { background-color: var(--palette-yellow); }
-body.persona-design.page-home #about[data-about-scroll] > .content-shell {
+body.persona-design.page-home #about[data-about-scroll] > .content-shell > .section-body {
   opacity: var(--about-copy-opacity, 1);
 }
 /* Move the complete fan along its diagonal, preserving the connected stripes. */
@@ -39,7 +39,7 @@ body.persona-design.page-home #about .reveal-item {
   transition: none;
 }
 html.about-scroll-pending body.persona-design #about > :is(.about-legacy-art, .content-shell, .about-corner-ribbons) { opacity: 0; }
-body.persona-design.page-home #about[data-about-scroll] > .content-shell:focus-within { opacity: 1; }
+body.persona-design.page-home #about[data-about-scroll] > .content-shell > :focus-within { opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
   body.persona-design.page-home #about > :is(.about-legacy-art, .content-shell, .about-corner-ribbons) { opacity: 1 !important; }
   body.persona-design.page-home #about .about-growing-rings { transform: none !important; }
@@ -71,4 +71,18 @@ body.persona-design #education[data-decor-scroll] .education-pill-field {
   body.persona-design #education :is(.education-horizontal-ribbons, .education-pill-field) {
     transform: none !important;
   }
+}
+
+/* Portrait frames turn in from opposite sides, tied to the About scroll reveal. */
+body.persona-design #about[data-about-scroll] .about-picture-frame {
+  --picture-angle: -12deg;
+  opacity: var(--picture-progress, 1);
+  transform-origin: center 80%;
+  transform: translateY(calc((1 - var(--picture-progress, 1)) * 40px))
+    rotate(calc((1 - var(--picture-progress, 1)) * var(--picture-angle)))
+    scale(calc(.94 + var(--picture-progress, 1) * .06));
+}
+body.persona-design #about[data-about-scroll] .about-picture-frame:nth-child(2) { --picture-angle: 12deg; }
+@media (prefers-reduced-motion: reduce) {
+  body.persona-design #about .about-picture-frame { transform: none !important; opacity: 1 !important; }
 }

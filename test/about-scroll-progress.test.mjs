@@ -43,9 +43,9 @@ test('About ribbons start later and still reverse', () => {
 test('outer ring grows thinner at intermediate progress and preserves final edges', () => {
   const start = aboutOuterRing(0), middle = aboutOuterRing(.5), end = aboutOuterRing(1);
   assert.equal(start.width, 16);
-  assert.ok(middle.width > start.width && middle.width < 736 * .5);
+  assert.ok(middle.width > start.width && middle.width < 168 * .5);
   assert.equal(middle.radius - middle.width / 2, 864);
-  assert.deepEqual(end, {width:736, radius:1232});
+  assert.deepEqual(end, {width:168, radius:948});
 });
 
  test('Education overlaps About settling, then pills follow', () => {

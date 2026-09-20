@@ -44,14 +44,22 @@ body.persona-design #home .hero-reference-art {
 }
 
 /* Sky is deliberately bluer than the teal used in the original rainbow bands. */
-body.persona-design { --hero-sky: #04C4EB; }
-body.persona-design :is(#home, .hero-top-extension) .hero-side-field { fill: var(--hero-sky); }
-body.persona-design :is(#home, .hero-top-extension) .hero-side-highlight { fill: none; stroke: var(--palette-white); stroke-width: 5px; }
-body.persona-design :is(#home, .hero-top-extension) .hero-sky-clouds { fill: var(--palette-white); opacity: .3; filter: blur(3px); }
-body.persona-design :is(#home, .hero-top-extension) .hero-ring-outer { fill: var(--palette-yellow); stroke: var(--config-orange); stroke-width: 14px; }
-body.persona-design :is(#home, .hero-top-extension) .hero-ring-middle { fill: none; stroke: var(--config-orange); stroke-width: 5px; }
-body.persona-design :is(#home, .hero-top-extension) .hero-ring-inner { fill: var(--palette-yellow); stroke: none; }
-body.persona-design :is(#home, .hero-top-extension) .hero-dot-field { opacity: .1; }
+body.persona-design {
+  --hero-sky: #04C4EB;
+  --hero-circle-offset-y: -60px; /* SVG units: more negative moves all hero circles upward. */
+}
+body.persona-design :is(#home, .hero-top-extension, #about) .hero-circle-composition {
+  transform-origin: 500px 270px;
+  transform-box: view-box;
+  transform: translateY(calc(var(--hero-circle-offset-y) + var(--hero-circle-lift-svg, 0px))) scale(var(--hero-circle-scale, .9));
+}
+body.persona-design :is(#home, .hero-top-extension, #about) .hero-side-field { fill: var(--hero-sky); }
+body.persona-design :is(#home, .hero-top-extension, #about) .hero-side-highlight { fill: none; stroke: var(--palette-white); stroke-width: 5px; }
+body.persona-design :is(#home, .hero-top-extension, #about) .hero-sky-clouds { fill: var(--palette-white); opacity: .65; filter: blur(2px); }
+body.persona-design :is(#home, .hero-top-extension, #about) .hero-ring-outer { fill: var(--palette-yellow); stroke: var(--config-orange); stroke-width: 14px; }
+body.persona-design :is(#home, .hero-top-extension, #about) .hero-ring-middle { fill: none; stroke: var(--config-orange); stroke-width: 5px; }
+body.persona-design :is(#home, .hero-top-extension, #about) .hero-ring-inner { fill: var(--palette-yellow); stroke: none; }
+body.persona-design :is(#home, .hero-top-extension, #about) .hero-dot-field { opacity: .1; }
 body.persona-design #home .hero-visual-stage > .hero-ambient { opacity: .2; }
 
 body.persona-design {
@@ -226,7 +234,6 @@ body.persona-design #about > .content-shell { position: relative; z-index: 2; }
     transform: none;
   }
   body.persona-design #home .hero-left-flower { left: 74px; top: 64%; width: 44px; }
-  body.persona-design #home .hero-flower-dark { transform: translate(660px, 22px) scale(.20); }
   body.persona-design #home .hero-reference-copy {
     position: relative;
     top: auto;
@@ -325,4 +332,103 @@ body.persona-design #home :is(.hero-flower-dark, .hero-name-flower) .hero-flower
 @keyframes hero-flower-turn { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) {
   body.persona-design #home .hero-flower-spin { animation: none; }
+}
+
+/* Optional seamless continuation: clipped horizontally by About, behind its rings/text. */
+body.persona-design #about .hero-about-art {
+  position: absolute;
+  height: auto;
+  max-width: none;
+  overflow: visible;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* About begins directly beneath the hero actions. */
+body.persona-design #about {
+  padding-top: 24px;
+  min-height: var(--about-section-min-height, max(850px, 110svh));
+  box-sizing: border-box;
+}
+body.persona-design #about > .content-shell {
+  display: block;
+  width: min(600px, calc(100% - 48px));
+  margin-left: clamp(24px, 5vw, 72px);
+  margin-right: auto;
+  padding: 0;
+  box-sizing: border-box;
+  background: transparent;
+}
+body.persona-design #about > .content-shell h2 { transform: none; translate: none; margin-left: 0; }
+body.persona-design #about > .content-shell .section-body { margin-top: 24px; }
+@media (max-width: 760px) {
+  body.persona-design #about > .content-shell { padding: 0; }
+}
+
+body.persona-design #about .about-picture-placeholders {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(16px, 3vw, 32px);
+  margin-top: 36px;
+  padding-bottom: 48px;
+}
+body.persona-design #about .about-picture-frame {
+  aspect-ratio: 3 / 4;
+  border: 3px solid var(--palette-olive);
+  border-radius: 12px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: var(--palette-yellow);
+  color: var(--palette-olive);
+  font-size: .875rem;
+  font-weight: 700;
+}
+body.persona-design #about .about-picture-frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Flowers are placed on the visible blue annulus by the responsive geometry pass. */
+body.persona-design #home :is(.hero-name-flower, .hero-left-flower, .hero-right-dark-flower, .hero-right-light-flower) {
+  position: absolute;
+  bottom: auto;
+  z-index: 2;
+  height: auto;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+body.persona-design #home .hero-right-dark-flower { width: clamp(48px, 7vw, 110px); }
+body.persona-design #home .hero-right-light-flower { width: clamp(34px, 4vw, 64px); }
+body.persona-design #about > .about-picture-placeholders {
+  position: absolute;
+  z-index: 2;
+  width: var(--arch-photos-width, 560px);
+  left: var(--arch-photos-left, 24px);
+  top: var(--arch-photos-top, 640px);
+  margin: 0;
+  padding: 0;
+}
+
+/* Parent annulus clips clouds after their drift/blur, keeping yellow areas clean. */
+body.persona-design :is(#home, .hero-top-extension, #about) .hero-sky-clouds path {
+  animation: hero-cloud-drift 14s linear infinite alternate;
+  animation-delay: -4s;
+  animation-play-state: paused;
+}
+body.persona-design :is(#home, .hero-top-extension, #about) .hero-sky-clouds path:nth-child(even) {
+  animation-delay: -10s;
+  animation-duration: 18s;
+}
+body.persona-design.sky-clouds-running :is(#home, .hero-top-extension, #about) .hero-sky-clouds path {
+  animation-play-state: running;
+}
+@keyframes hero-cloud-drift {
+  from { transform: translate(-70px, 8px); }
+  to { transform: translate(90px, -12px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.persona-design :is(#home, .hero-top-extension, #about) .hero-sky-clouds path { animation: none; }
 }
