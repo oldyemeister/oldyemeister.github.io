@@ -1,3 +1,4 @@
+import { flowerPetals } from './flower.mjs';
 // Small semantic additions for the optional redesign; original pages stay intact.
 export function redesignContent(html) {
   // Reference motifs: flat rings, tapered sparkles, and round-petal flowers.
@@ -19,6 +20,15 @@ export function redesignContent(html) {
     const artwork = shapes.map(([shape, color, position]) => `<svg class="section-motif section-motif--${position}" style="color:var(--${color})" viewBox="0 0 100 100" focusable="false">${motifs[shape]}</svg>`).join('');
     html = html.replace(new RegExp(`(<section[^>]*id="${section}"[^>]*>)`), `$1<div class="section-motifs" aria-hidden="true">${artwork}</div>`);
   }
+  // Continue the actual hero SVG into the area uncovered by the sliding header.
+  const heroArt = html.match(/<svg class="hero-reference-art"[\s\S]*?<\/svg>/)?.[0];
+  if (heroArt) {
+    const headerArt = heroArt.replace('hero-reference-art', 'hero-header-art')
+      .replace(/id="(hero-[^"]+)"/g, 'id="header-$1"')
+      .replace(/url\(#(hero-[^)]+)\)/g, 'url(#header-$1)');
+    html = html.replace('<div class="hero-top-extension" aria-hidden="true" hidden></div>',
+      `<div class="hero-top-extension" aria-hidden="true">${headerArt}</div>`);
+  }
   // Shared settings-reference bands: horizontal in Education, vertical in Contact.
   const settingsBands = [
     ['config-orange', 5], ['config-silver', 6], ['palette-yellow', 4],
@@ -29,9 +39,13 @@ export function redesignContent(html) {
   html = html.replace(/(<section[^>]*id="education"[\s\S]*?)(<\/section>)/,
     `$1<div class="education-horizontal-ribbons" aria-hidden="true">${settingsBands}</div>\n$2`);
   // Six distinct teardrops, shifted inward so their tips overlap into a small center.
-  const petalInset = 18; // SVG units toward the center; increase for more overlap.
-  const petals = [0, 60, 120, 180, 240, 300].map(angle =>
-    `<path transform="rotate(${angle} 160 160) translate(0 ${petalInset})" d="M160 160 C149 123 112 57 122 31 C130 8 163 7 175 26 C192 53 168 123 160 160Z"/>`).join('');
+  const petals = flowerPetals;
+  // The hero and Contact share exactly the same six teardrop petals.
+  html = html.replace(/(<g[^>]* data-contact-petals)>\s*<\/g>/g, (_, opening) => {
+    const outline = (opening.includes('hero-flower-new') || opening.includes('hero-flower-light'))
+      ? `<g class="hero-flower-rainbow-outline">${petals}</g>` : '';
+    return `${opening}><g class="hero-flower-spin">${outline}<g>${petals}</g></g></g>`;
+  });
   html = html.replace('<section class="page-section contact-section" id="contact">',
     `<section class="page-section contact-section" id="contact">
       <div class="contact-edge-ribbons" aria-hidden="true">${settingsBands}</div>

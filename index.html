@@ -3,57 +3,75 @@ layout: default
 page_class: home
 ---
 {% assign site_content = site.data.content %}
-<!-- Continue the hero's existing circles through the space exposed by the sliding header. -->
-<div class="hero-top-extension" aria-hidden="true" hidden>
-  <svg viewBox="0 0 1440 720" focusable="false" aria-hidden="true">
-    <use href="#hero-crescent" />
-    <use href="#hero-ribbon" />
-  </svg>
-</div>
+<!-- Keeps the poster field continuous while the header slides away. -->
+<div class="hero-top-extension" aria-hidden="true" hidden></div>
 <section class="hero-section" id="home">
-  <h1 class="hero-accessible-title">{{ site_content.hero.name }} — {{ site_content.hero.role }}</h1>
   <div class="hero-visual-stage">
-  <svg class="hero-poster-art" viewBox="0 0 1440 720" aria-hidden="true" focusable="false">
-    <defs>
-      <!-- Shared shape definitions keep the text mask and color edges identical. -->
-      <!-- Concentric rings: shared center (950, -180).
-           Inner band: radii 700–840 (140 thick).
-           Yellow gap: 24. Outer band: radii 864–1600 (736 thick). -->
-      <path id="hero-crescent" fill-rule="evenodd" clip-rule="evenodd" d="M 1790 -180 A 840 840 0 1 0 110 -180 A 840 840 0 1 0 1790 -180 Z M 1650 -180 A 700 700 0 1 0 250 -180 A 700 700 0 1 0 1650 -180 Z" />
-      <path id="hero-ribbon" fill-rule="evenodd" clip-rule="evenodd" d="M 2550 -180 A 1600 1600 0 1 0 -650 -180 A 1600 1600 0 1 0 2550 -180 Z M 1814 -180 A 864 864 0 1 0 86 -180 A 864 864 0 1 0 1814 -180 Z" />
-      <clipPath id="hero-gold-mask">
-        <use href="#hero-crescent" />
-        <use href="#hero-ribbon" />
-      </clipPath>
-    </defs>
-    <g class="hero-poster-shapes">
-      <use href="#hero-crescent" />
-      <use href="#hero-ribbon" />
-    </g>
-    <!-- Paint glows after the gold fills but before either lettering layer. -->
-    <foreignObject class="hero-ambient-surface" x="0" y="0" width="1440" height="720" pointer-events="none">
-      <div xmlns="http://www.w3.org/1999/xhtml" class="hero-ambient" aria-hidden="true" inert>
-        <span class="hero-ambient-orb"></span>
-        <span class="hero-ambient-orb"></span>
-        <span class="hero-ambient-orb"></span>
+    <svg class="hero-reference-art" viewBox="0 0 796 448" preserveAspectRatio="xMidYMin meet" aria-hidden="true" focusable="false">
+      <defs>
+        <!-- Local petal coordinates restart the rainbow before each petal rotates. -->
+        <linearGradient id="hero-petal-rainbow" gradientUnits="userSpaceOnUse" x1="122" y1="0" x2="182" y2="0">
+          <stop offset="0" stop-color="var(--flower-red)"/>
+          <stop offset=".32" stop-color="var(--palette-yellow)"/>
+          <stop offset=".55" stop-color="var(--flower-green)"/>
+          <stop offset="1" stop-color="var(--flower-cyan)"/>
+        </linearGradient>
+        <clipPath id="hero-sky-clip"><path d="M-1000 -1000H1800V1800H-1000Z M500 -45a315 315 0 1 0 0 630a315 315 0 1 0 0 -630" clip-rule="evenodd"/></clipPath>
+        <pattern id="hero-sky-lines" width="4" height="3" patternUnits="userSpaceOnUse"><path d="M0 0H4" stroke="var(--palette-white)" stroke-opacity=".13" stroke-width=".6"/></pattern>
+        <pattern id="hero-faint-dots" width="45" height="45" patternUnits="userSpaceOnUse"><circle cx="22.5" cy="22.5" r="21" fill="var(--hero-yellow-light)"/></pattern>
+      </defs>
+      <g clip-path="url(#hero-sky-clip)">
+        <circle class="hero-side-field" cx="500" cy="270" r="445"/>
+        <g class="hero-sky-clouds">
+          <path d="M-40 155 Q0 144 20 151 Q36 129 58 148 Q86 136 107 158 Q141 162 155 175 H-40Z"/>
+          <path d="M25 265 Q45 249 62 256 Q75 236 92 253 Q128 246 155 268Z"/>
+          <path d="M660 16 Q690 0 720 15 Q750 -2 775 18 L815 35 H645Z"/>
+        </g>
+        <circle cx="500" cy="270" r="445" fill="url(#hero-sky-lines)"/>
+        <circle class="hero-side-highlight" cx="500" cy="270" r="395"/>
+      </g>
+      <circle class="hero-ring hero-ring-outer" cx="500" cy="270" r="307"/>
+      <circle class="hero-ring hero-ring-middle" cx="500" cy="270" r="282"/>
+      <circle class="hero-ring hero-ring-inner" cx="500" cy="270" r="251"/>
+      <circle class="hero-dot-field" cx="500" cy="270" r="249" fill="url(#hero-faint-dots)"/>
+      <g class="hero-flower hero-flower-dark" transform="translate(715 22) scale(.20)" data-contact-petals></g>
+      <g class="hero-flower hero-flower-light" transform="translate(756 74) scale(.12)" data-contact-petals></g>
+    </svg>
+    <svg class="hero-left-flower" viewBox="-25 -25 370 370" aria-hidden="true" focusable="false">
+      <g class="hero-flower-new" data-contact-petals></g>
+    </svg>
+    <div class="hero-ambient" aria-hidden="true" inert>
+      <span class="hero-ambient-orb"></span><span class="hero-ambient-orb"></span><span class="hero-ambient-orb"></span>
+    </div>
+    <div class="hero-reference-copy">
+      <svg class="hero-name-flower" viewBox="-25 -25 370 370" aria-hidden="true" focusable="false">
+        <g data-contact-petals></g>
+      </svg>
+      <h1>{{ site_content.hero.name }}</h1>
+      <p>{{ site_content.hero.role }}</p>
+    </div>
+    <figure class="hero-portrait-frame" role="img" aria-label="JY monogram for Jiawei Ye">
+      <span class="hero-portrait-monogram" aria-hidden="true">JY<span class="monogram-dot">.</span></span>
+    </figure>
+    <div class="hero-actions">
+      <div class="hero-links">
+        <a class="text-link text-link-primary" href="{{ site_content.hero.primary_link.url | relative_url }}">{{ site_content.hero.primary_link.label }} <span aria-hidden="true">&rarr;</span></a>
+        <a class="text-link" href="{{ site_content.hero.secondary_link.url | relative_url }}" target="_blank" rel="noopener noreferrer">{{ site_content.hero.secondary_link.label }} <span aria-hidden="true">&nearr;</span></a>
       </div>
-    </foreignObject>
-    <g class="hero-poster-outline">
-      <g transform="rotate(-6 70 360)">
-        <text class="hero-poster-name" x="70" y="360" font-size="84" font-family="Arial Black, Arial, sans-serif" font-weight="900">{{ site_content.hero.name }}</text>
-        <text class="hero-poster-role" x="75" y="420" font-size="34" font-family="Arial Black, Arial, sans-serif" font-weight="900">{{ site_content.hero.role }}</text>
+    </div>
+  </div>
+</section>
+
+<section class="page-section section-muted" id="about">
+  <svg class="about-legacy-art" viewBox="0 0 1440 720" aria-hidden="true" focusable="false">
+    <g class="about-growing-rings">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M1790-180A840 840 0 1 0 110-180 840 840 0 1 0 1790-180ZM1650-180A700 700 0 1 1 250-180 700 700 0 1 1 1650-180Z"/>
+    <circle class="about-outer-ring" cx="950" cy="-180" r="1232" stroke-width="736"/>
       </g>
-    </g>
-    <g class="hero-poster-fill" clip-path="url(#hero-gold-mask)">
-      <g transform="rotate(-6 70 360)">
-        <text class="hero-poster-name" x="70" y="360" font-size="84" font-family="Arial Black, Arial, sans-serif" font-weight="900">{{ site_content.hero.name }}</text>
-        <text class="hero-poster-role" x="75" y="420" font-size="34" font-family="Arial Black, Arial, sans-serif" font-weight="900">{{ site_content.hero.role }}</text>
-      </g>
-    </g>
+    <circle class="about-shockwave" cx="950" cy="-180" r="1800"/>
   </svg>
-  <!-- Decorative corner stripes: palette sampled from the existing ribbon menu. -->
-  <svg class="hero-corner-ribbons" viewBox="0 0 600 480" aria-hidden="true" focusable="false">
-    <g class="hero-corner-ribbon-bands">
+    <svg class="about-corner-ribbons" viewBox="0 0 600 480" aria-hidden="true" focusable="false">
+    <g class="about-corner-ribbon-bands">
       <!-- Paint the steepest, upper stripe last; 8-unit overlaps close fan seams. -->
       <!-- Outer corner extension: height controls thickness; fill controls color. -->
       <rect style="--stripe-index: -6" x="-1200" y="197" width="2400" height="180" fill="#F4D51C" />
@@ -82,27 +100,6 @@ page_class: home
       <rect style="--stripe-index: 19" x="-1200" y="-109.05" width="2400" height="12.48" fill="#827B24" />
     </g>
   </svg>
-  <div class="hero-actions">
-  <div class="content-shell hero-layout">
-    <div class="hero-copy">
-      <div class="hero-links">
-        <a class="text-link text-link-primary" href="{{ site_content.hero.primary_link.url | relative_url }}">
-          {{ site_content.hero.primary_link.label }} <span aria-hidden="true">&rarr;</span>
-        </a>
-        <a class="text-link" href="{{ site_content.hero.secondary_link.url | relative_url }}" target="_blank" rel="noopener noreferrer">
-          {{ site_content.hero.secondary_link.label }} <span aria-hidden="true">&nearr;</span>
-        </a>
-      </div>
-    </div>
-  </div>
-  </div>
-  <figure class="hero-portrait-frame" role="img" aria-label="JY monogram for Jiawei Ye">
-    <span class="hero-portrait-monogram" aria-hidden="true">JY<span class="monogram-dot">.</span></span>
-  </figure>
-  </div>
-</section>
-
-<section class="page-section section-muted" id="about">
   <div class="content-shell two-column-section">
     <div>
       <p class="section-index">01</p>

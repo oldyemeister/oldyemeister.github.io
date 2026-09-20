@@ -23,8 +23,9 @@ body.persona-design :is(#about, #skills, #projects) > .content-shell { position:
   #skills .section-motif--flower, #contact .section-motif--flower { width: 48px; height: 48px; }
 }
 body.persona-design #about {
-  background: var(--palette-gold);
+  background: var(--palette-yellow);
 }
+body.persona-design #about .section-motifs { display: none; }
 body.persona-design #about .prose p {
   color: var(--on-field);
 }

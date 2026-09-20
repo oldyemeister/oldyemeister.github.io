@@ -34,7 +34,7 @@ hero:
     label: "Get in touch"
     url: "#contact"
   secondary_link:
-    label: "View résumé"
+    label: "View resume"
     url: "/assets/documents/resume/Jiawei_Ye_Resume.pdf"
 
 about:
@@ -93,7 +93,7 @@ skills_section:
 
 experience_section:
   heading: "Experience"
-  introduction: "Applied AI systems across media, education, and enterprise workflows."
+  introduction: ""
 
 experience:
   - company: "Neoteai"

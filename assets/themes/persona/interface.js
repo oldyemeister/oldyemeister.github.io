@@ -14,7 +14,7 @@
   const targets = document.querySelectorAll([
     '.site-identity > span:last-child', '.text-link',
     '.project-links a', '.contact-links a', '.case-study-source',
-    'h1', 'h2', '.project-content h3'
+    'h1', 'h2', '.project-content h3', '#home .hero-reference-copy p'
   ].join(','));
   targets.forEach(target => {
     if (target.closest('.hero-title-art')) return;

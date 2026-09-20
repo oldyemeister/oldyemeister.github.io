@@ -1,0 +1,74 @@
+/* About shockwave tuning: swap this token to change the expanding ring color. */
+body.persona-design #about {
+  --about-shockwave-color: var(--palette-olive);
+}
+
+/* Content is fully readable in the viewport's middle; only the edges recede.
+   Individual scale preserves existing hover/reveal transforms and page layout. */
+body.persona-design.page-home [data-scroll-presence] {
+  opacity: var(--scroll-opacity, 1);
+  scale: var(--scroll-scale, 1);
+  transform-origin: center;
+}
+body.persona-design.page-home [data-scroll-presence]:focus-within {
+  opacity: 1;
+  scale: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  body.persona-design.page-home [data-scroll-presence] { opacity: 1; scale: 1; }
+}
+
+/* About has its own scroll timeline; backgrounds meet without a separator. */
+body.persona-design.page-home #home { border-bottom: 0; }
+body.persona-design.page-home :is(#home, #about) { background-color: var(--palette-yellow); }
+body.persona-design.page-home #about[data-about-scroll] > .content-shell {
+  opacity: var(--about-copy-opacity, 1);
+}
+/* Move the complete fan along its diagonal, preserving the connected stripes. */
+body.persona-design.page-home #about[data-about-scroll] > .about-corner-ribbons {
+  opacity: var(--about-ribbon-progress, 1);
+  transform: translate(
+    calc((1 - var(--about-ribbon-progress, 1)) * 75%),
+    calc((1 - var(--about-ribbon-progress, 1)) * 55%)
+  );
+}
+/* Do not multiply About's new reveal by the earlier one-shot item reveal. */
+body.persona-design.page-home #about .reveal-item {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+html.about-scroll-pending body.persona-design #about > :is(.about-legacy-art, .content-shell, .about-corner-ribbons) { opacity: 0; }
+body.persona-design.page-home #about[data-about-scroll] > .content-shell:focus-within { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  body.persona-design.page-home #about > :is(.about-legacy-art, .content-shell, .about-corner-ribbons) { opacity: 1 !important; }
+  body.persona-design.page-home #about .about-growing-rings { transform: none !important; }
+  body.persona-design.page-home #about > .about-corner-ribbons { transform: none !important; }
+}
+
+body.persona-design #about .about-outer-ring { fill: none; stroke: var(--palette-gold); }
+body.persona-design #about .about-shockwave {
+  fill: none;
+  stroke: var(--about-shockwave-color);
+  stroke-width: 38px;
+  opacity: 0;
+  transform-box: view-box;
+  transform-origin: 950px -180px;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  body.persona-design #about .about-shockwave { display: none; }
+}
+
+/* Existing Education layers enter intact, bars first and pills just behind. */
+body.persona-design #education[data-decor-scroll] .education-horizontal-ribbons {
+  transform: translateX(calc((1 - var(--education-bars-progress, 1)) * 100vw));
+}
+body.persona-design #education[data-decor-scroll] .education-pill-field {
+  transform: translateX(calc((1 - var(--education-pills-progress, 1)) * 100vw));
+}
+@media (prefers-reduced-motion: reduce) {
+  body.persona-design #education :is(.education-horizontal-ribbons, .education-pill-field) {
+    transform: none !important;
+  }
+}

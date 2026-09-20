@@ -1,195 +1,293 @@
-/* Home poster: one SVG coordinate system for curved shapes and split-fill type. */
+/* Opening poster: concentric stage, side sky, and one central monogram figure. */
 body.persona-design.page-home #main-content { position: relative; }
+
 body.persona-design .hero-top-extension {
   --hero-header-height: 78px;
   display: block;
   position: absolute;
-  top: calc(-1 * var(--hero-header-height));
-  left: 0;
+  inset: calc(-1 * var(--hero-header-height)) 0 auto;
   width: 100%;
   height: var(--hero-header-height);
-  overflow: hidden;
   z-index: 2;
   background: var(--palette-yellow);
   pointer-events: none;
+  overflow: hidden;
 }
-body.persona-design .hero-top-extension svg {
+body.persona-design .hero-top-extension .hero-header-art {
   position: absolute;
   top: 100%;
   left: 0;
   width: 100%;
   height: auto;
   overflow: visible;
-  fill: var(--palette-gold);
 }
-@media (max-width: 760px) {
-  body.persona-design .hero-top-extension svg { width: 150%; }
-}
+
 body.persona-design #home {
   position: relative;
   isolation: isolate;
-  display: block;
+  min-height: min(760px, calc(100svh - 78px));
   overflow: hidden;
-  height: auto;
-  min-height: 0;
-  max-height: none;
+  padding: 0;
   background: var(--palette-yellow);
   color: var(--palette-olive);
-  padding-bottom: 0;
 }
-body.persona-design #home::before { content: none !important; display: none !important; }
-body.persona-design #home .hero-accessible-title {
+body.persona-design #home::before { content: none !important; }
+body.persona-design #home .hero-visual-stage { position: relative; min-height: inherit; overflow: hidden; z-index: 1; }
+body.persona-design #home .hero-reference-art {
   position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-  border: 0;
-}
-body.persona-design #home .hero-poster-art {
-  display: block;
+  inset: 0;
   width: 100%;
   height: auto;
-  overflow: hidden;
+  overflow: visible; /* Scale circles with width, not the section height. */
   pointer-events: none;
   user-select: none;
 }
-body.persona-design #home .hero-poster-shapes { fill: var(--palette-gold); }
-body.persona-design #home .hero-poster-art text {
-  font-family: 'Persona Slim Local', Arial, sans-serif;
-  font-weight: 400;
-  font-synthesis: none;
-  text-transform: none;
-  letter-spacing: normal;
-  paint-order: stroke fill;
+
+/* Sky is deliberately bluer than the teal used in the original rainbow bands. */
+body.persona-design { --hero-sky: #04C4EB; }
+body.persona-design :is(#home, .hero-top-extension) .hero-side-field { fill: var(--hero-sky); }
+body.persona-design :is(#home, .hero-top-extension) .hero-side-highlight { fill: none; stroke: var(--palette-white); stroke-width: 5px; }
+body.persona-design :is(#home, .hero-top-extension) .hero-sky-clouds { fill: var(--palette-white); opacity: .3; filter: blur(3px); }
+body.persona-design :is(#home, .hero-top-extension) .hero-ring-outer { fill: var(--palette-yellow); stroke: var(--config-orange); stroke-width: 14px; }
+body.persona-design :is(#home, .hero-top-extension) .hero-ring-middle { fill: none; stroke: var(--config-orange); stroke-width: 5px; }
+body.persona-design :is(#home, .hero-top-extension) .hero-ring-inner { fill: var(--palette-yellow); stroke: none; }
+body.persona-design :is(#home, .hero-top-extension) .hero-dot-field { opacity: .1; }
+body.persona-design #home .hero-visual-stage > .hero-ambient { opacity: .2; }
+
+body.persona-design {
+  --flower-red: #FF1600;
+  --flower-green: #2CB900;
+  --flower-cyan: #50F0FA;
 }
-body.persona-design #home .hero-poster-name { font-size: 84px; }
-body.persona-design #home .hero-poster-role { font-size: 34px; }
-body.persona-design #home .hero-poster-outline {
+body.persona-design #home .hero-flower-dark { fill: var(--palette-olive); }
+body.persona-design #home .hero-left-flower {
+  position: absolute;
+  z-index: 2;
+  /* Independent of the circle SVG: move inward with available screen width. */
+  left: calc(clamp(24px, 9vw, 130px) + 50px);
+  top: 74%;
+  transform: translate(-50%, -50%);
+  width: clamp(72px, 7vw, 110px);
+  height: auto;
+  pointer-events: none;
+  fill: var(--palette-white);
+}
+/* Stroke exact petal contours underneath the complete white silhouette.
+   This leaves only the outside half of the stroke visible, with no offset. */
+body.persona-design #home .hero-flower-rainbow-outline {
   fill: none;
-  stroke: var(--palette-olive);
-  stroke-width: 2;
+  stroke: url(#hero-petal-rainbow);
+  stroke-width: 2px; /* White fill covers the inner half, leaving a 1px trace. */
   stroke-linejoin: round;
+  stroke-linecap: round;
 }
-body.persona-design #home .hero-poster-fill {
+body.persona-design #home .hero-flower-rainbow-outline path { vector-effect: non-scaling-stroke; }
+body.persona-design #home .hero-flower-light { fill: var(--palette-white); }
+
+body.persona-design #home .hero-reference-copy {
+  position: absolute;
+  z-index: 3;
+  left: clamp(34px, 6vw, 96px);
+  top: 32%;
+  width: min(44vw, 610px);
+  transform: rotate(-4deg);
+}
+body.persona-design #home .hero-name-flower {
+  position: absolute;
+  bottom: calc(100% + 18px);
+  left: clamp(48px, 5vw, 80px);
+  width: 64px;
+  height: auto;
   fill: var(--palette-olive);
-  stroke: var(--palette-olive);
-  stroke-width: 2;
-  stroke-linejoin: round;
+  pointer-events: none;
 }
-body.persona-design #home .hero-layout {
-  position: relative;
-  display: block;
-  margin-block: 0;
-  padding: 8px clamp(22px, 3.5vw, 44px) 24px;
-  background: transparent;
+body.persona-design #home .hero-reference-copy h1 {
+  margin: 0;
+  color: var(--palette-olive) !important;
+  font: 400 clamp(3.3rem, 6.2vw, 6rem)/.88 'Persona Slim Local', Arial, sans-serif;
+  letter-spacing: -.025em;
+  text-wrap: balance;
+  -webkit-text-fill-color: currentColor;
+  -webkit-text-stroke: 0;
+  text-shadow: 5px 5px 0 var(--palette-white);
+}
+body.persona-design #home .hero-reference-copy p {
+  width: fit-content;
+  max-width: 100%;
+  margin: 22px 0 0 8px;
+  padding: 8px 14px 10px;
+  color: var(--palette-white) !important;
+  background: var(--palette-olive);
+  font: 400 clamp(1.15rem, 2.3vw, 2.1rem)/1 'Persona Slim Local', Arial, sans-serif;
+  -webkit-text-fill-color: currentColor;
+  transform: rotate(2deg);
+}
+
+/* Animated letters remain light against the olive subtitle strip. */
+body.persona-design #home .hero-reference-copy p .kinetic-label,
+body.persona-design #home .hero-reference-copy p .kinetic-word,
+body.persona-design #home .hero-reference-copy p .kinetic-letter {
+  color: var(--palette-white) !important;
+  -webkit-text-fill-color: var(--palette-white);
+}
+
+/* A freestanding monogram takes the place of the reference's character cutout. */
+body.persona-design #home .hero-portrait-frame {
+  position: absolute;
+  z-index: 2;
+  left: 67%;
+  bottom: 7%;
+  width: clamp(360px, 41vw, 620px);
+  height: 67%;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  overflow: visible;
   border: 0;
   border-radius: 0;
+  background: transparent;
+  color: var(--palette-olive);
   box-shadow: none;
+  transform: translateX(-50%) rotate(-3deg);
 }
-body.persona-design #home .hero-copy {
-  width: min(100%, 780px);
-  margin-left: auto;
+body.persona-design #home .hero-portrait-frame::before,
+body.persona-design #home .hero-portrait-frame::after { content: none; }
+body.persona-design #home .hero-portrait-monogram {
+  display: inline-flex;
+  align-items: baseline;
+  gap: .035em;
+  font: 900 clamp(7rem, 16vw, 14rem)/1 'Arial Black', Arial, sans-serif;
+  letter-spacing: -.035em;
+  color: var(--palette-olive);
+  -webkit-text-fill-color: currentColor;
+  -webkit-text-stroke: 6px var(--palette-white);
+  paint-order: stroke fill;
+  text-shadow: 5px 5px 0 var(--palette-black);
+  transform: none;
 }
-body.persona-design #home .hero-introduction {
-  max-width: none;
-  color: var(--palette-olive) !important;
-  -webkit-text-fill-color: var(--palette-olive) !important;
-  text-shadow: none !important;
+body.persona-design #home .hero-portrait-monogram .monogram-dot {
+  font-size: .38em;
+  line-height: 1;
+  color: var(--palette-blue) !important;
+  -webkit-text-fill-color: var(--palette-blue) !important;
+  -webkit-text-stroke: 0;
+  text-shadow: none;
 }
-body.persona-design #home .eyebrow {
-  color: var(--palette-muted) !important;
-  -webkit-text-fill-color: var(--palette-muted) !important;
+
+body.persona-design #home .hero-actions {
+  position: absolute;
+  z-index: 4;
+  left: clamp(34px, 6vw, 96px);
+  bottom: clamp(38px, 7vh, 76px);
 }
-body.persona-design #home .hero-links .text-link-primary { background: var(--palette-olive); }
+body.persona-design #home .hero-links { display: flex; flex-wrap: wrap; gap: 18px; }
 body.persona-design #home .hero-links .text-link {
   font-family: 'Persona Slim Local', Arial, sans-serif;
   font-weight: 400;
   font-synthesis: none;
 }
+body.persona-design #home .hero-links .text-link-primary { background: var(--palette-olive); }
 body.persona-design #home .hero-links .text-link-primary:is(:hover, :focus-visible) { background: var(--palette-muted); }
-@media (max-width: 760px) {
-  /* Keep the entire name visible rather than cropping it like decorative text. */
-  body.persona-design #home .hero-poster-art { margin-top: 36px; }
-  body.persona-design #home .hero-layout { padding: 4px 8px 20px; }
-  body.persona-design #home .hero-copy { width: 100%; }
-}
 
-/* The frame belongs to the composition, not the navigation or other sections. */
-body.persona-design #home .hero-visual-stage { position: relative; }
-body.persona-design #home .hero-portrait-frame {
+/* The previous hero's two sweeping gold circles now frame About. */
+body.persona-design #about {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: clamp(430px, 56vw, 700px);
+  background: var(--palette-yellow);
+}
+body.persona-design #about .about-legacy-art {
   position: absolute;
-  top: 8%;
-  right: 5%;
-  width: 25%;
-  margin: 0;
-  display: grid;
-  place-items: center;
-  aspect-ratio: 1;
-  padding: 0;
-  border: 2px solid var(--border);
-  border-radius: 22px;
-  background: var(--panel);
-  color: var(--on-panel);
-  box-shadow: var(--offset-shadow);
-  transform: none;
+  inset: 0;
+  width: 100%;
+  height: auto;
+  overflow: visible; /* Scale circles with width, not the section height. */
+  fill: var(--palette-gold);
+  pointer-events: none;
 }
-body.persona-design #home .hero-portrait-monogram {
-  font-family: 'Arial Black', Arial, sans-serif;
-  font-size: clamp(6rem, 17vw, 14rem);
-  font-weight: 900;
-  letter-spacing: -.12em;
-  padding-right: .1em;
-}
+body.persona-design #about > .content-shell { position: relative; z-index: 2; }
+
+/* Phone poster: content controls spacing; rings frame the monogram. */
 @media (max-width: 760px) {
-  body.persona-design #home .hero-poster-art { width: 150%; max-width: none; }
-  body.persona-design #home .hero-portrait-frame {
+  body.persona-design #home { min-height: 0; }
+  body.persona-design #home .hero-visual-stage {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    min-height: clamp(560px, calc(100svh - 78px), 680px);
+    padding: 76px 24px 36px;
+    box-sizing: border-box;
+  }
+  body.persona-design #home .hero-reference-art {
+    inset: 140px auto auto -44%;
+    width: 150%;
+    max-width: none;
+    transform: none;
+  }
+  body.persona-design #home .hero-left-flower { left: 74px; top: 64%; width: 44px; }
+  body.persona-design #home .hero-flower-dark { transform: translate(660px, 22px) scale(.20); }
+  body.persona-design #home .hero-reference-copy {
     position: relative;
     top: auto;
-    right: auto;
-    width: min(56%, 260px);
-    margin: -24px auto 36px;
+    left: auto;
+    width: 100%;
+    flex-shrink: 0;
+    transform: rotate(-3deg);
   }
-  body.persona-design #home .hero-portrait-monogram { font-size: clamp(6rem, 34vw, 10rem); }
-}
-body.persona-design #home .hero-poster-outline text {
-  fill: none !important;
-  -webkit-text-fill-color: transparent;
-}
-body.persona-design #home .hero-poster-fill text {
-  fill: var(--palette-olive) !important;
-  -webkit-text-fill-color: var(--palette-olive);
-}
-
-/* CTAs sit on the outer circular band, with no separate rectangular strip. */
-body.persona-design #home .hero-actions {
-  position: absolute;
-  left: 6%;
-  bottom: 7%;
-  z-index: 2;
-  max-width: 88%;
-  background: transparent;
-}
-body.persona-design #home .hero-actions .hero-layout { width: auto; margin: 0; padding: 0; }
-body.persona-design #home .hero-actions .hero-copy { width: auto; margin: 0; }
-@media (max-width: 760px) {
-  body.persona-design #home .hero-visual-stage { background: var(--palette-gold); padding-bottom: 28px; }
-  body.persona-design #home .hero-poster-art { margin-top: 0; background: var(--palette-yellow); }
-  body.persona-design #home .hero-actions {
+  body.persona-design #home .hero-name-flower { width: 42px; bottom: calc(100% + 12px); }
+  body.persona-design #home .hero-reference-copy h1 {
+    max-width: 11ch;
+    font-size: clamp(2.8rem, 13vw, 5rem);
+    line-height: .98;
+    text-shadow: 3px 3px 0 var(--palette-white);
+  }
+  body.persona-design #home .hero-reference-copy p {
+    margin: 16px 0 0;
+    padding: 9px 10px;
+    font-size: clamp(.95rem, 3.8vw, 1.35rem);
+    line-height: 1.2;
+    white-space: normal;
+    text-wrap: balance;
+  }
+  body.persona-design #home .hero-portrait-frame {
     position: relative;
     left: auto;
     bottom: auto;
-    max-width: none;
-    margin: -38px 24px 32px;
+    flex: 1;
+    width: 100%;
+    height: auto;
+    min-height: 180px;
+    transform: none;
   }
-  body.persona-design #home .hero-portrait-frame { margin: 0 auto; }
+  body.persona-design #home .hero-portrait-monogram {
+    font-size: clamp(7rem, 32vw, 12rem);
+    -webkit-text-stroke-width: 4px;
+    text-shadow: 3px 3px 0 var(--palette-black);
+  }
+  body.persona-design #home .hero-actions {
+    position: relative;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    flex-shrink: 0;
+  }
+  body.persona-design #home .hero-links { gap: 12px; }
+  body.persona-design #home .hero-links .text-link {
+    flex: 1 1 130px;
+    justify-content: center;
+    min-height: 48px;
+    padding: 12px 10px;
+    font-size: clamp(.82rem, 3.8vw, 1rem);
+    gap: .5em;
+    white-space: nowrap;
+    box-sizing: border-box;
+  }
+  body.persona-design #about { min-height: 520px; }
 }
 
-/* Intro-only ribbon corner. Change the angle or width here to tune the motif. */
-body.persona-design #home .hero-corner-ribbons {
+/* Original rainbow corner artwork, moved with the previous hero background to About. */
+body.persona-design #about .about-corner-ribbons {
   --hero-corner-angle: 30deg;
   --hero-corner-angle-step: .4deg;
   position: absolute;
@@ -201,14 +299,30 @@ body.persona-design #home .hero-corner-ribbons {
   pointer-events: none;
   user-select: none;
 }
-body.persona-design #home .hero-corner-ribbon-bands {
+body.persona-design #about .about-corner-ribbon-bands {
   transform: translate(440px, 340px);
 }
 @media (max-width: 760px) {
-  body.persona-design #home .hero-corner-ribbons { width: min(32%, 180px); }
+  body.persona-design #about .about-corner-ribbons { width: min(32%, 180px); }
 }
 
-/* Individual angles: 27.6°–37.6° (outer bands extend below the 30° base). The hero clips the extended bands at its edges. */
-body.persona-design #home .hero-corner-ribbon-bands rect {
+/* Individual angles: 27.6°–37.6° (outer bands extend below the 30° base). About clips the extended bands at its edges. */
+body.persona-design #about .about-corner-ribbon-bands rect {
   transform: rotate(calc(-1 * (var(--hero-corner-angle) + var(--stripe-index) * var(--hero-corner-angle-step))));
+}
+
+/* 3 rpm = one revolution every 20 seconds. Position stays on the outer group. */
+body.persona-design #home .hero-flower-spin {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: hero-flower-turn 20s linear infinite;
+  animation-play-state: paused;
+}
+body.persona-design #home.hero-flowers-running .hero-flower-spin { animation-play-state: running; }
+body.persona-design #home :is(.hero-flower-dark, .hero-name-flower) .hero-flower-spin {
+  animation-direction: reverse;
+}
+@keyframes hero-flower-turn { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  body.persona-design #home .hero-flower-spin { animation: none; }
 }
