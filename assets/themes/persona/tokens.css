@@ -1,7 +1,19 @@
-/* Single-version palette, with the requested original TV/HUD exceptions.
+/* Design tokens for the Persona theme (assets/themes/persona/), in three tiers:
+   1. Raw palette colors (below) — the only hex values in this file.
+   2. Game-panel/HUD component tokens (--field, --panel, --border, ...) —
+      consumed almost entirely by redesign.css to style the console-style chrome.
+   3. Page-level tokens (--page, --surface, --text, ...) — named the same as
+      assets/css/site.css's and assets/themes/persona/style.css's own,
+      independent definitions of the same concepts for their own contexts;
+      whichever stylesheet loads last in templates/persona/render.mjs wins the
+      cascade for a given page. Renaming any of these three requires updating
+      all three files in lockstep — see docs/REDESIGN.md.
+
+   Single-version palette, with the requested original TV/HUD exceptions.
    Keep both selectors so saved/system theme preferences cannot change it. */
 :root,
 :root[data-theme] {
+  /* Tier 1 — raw palette colors */
   --palette-yellow: #FFF000;
   --hero-yellow-light: #FCFF89;
   --palette-olive: #4B4A30;
@@ -19,9 +31,8 @@
   --config-taupe: #B99E96;
   --config-violet: #5A25F5;
   --config-lime: #DFFF00;
-  --key-hint-shadow: #858585;
-  --key-hint-fill: #C8C8C2;
 
+  /* Tier 2 — game-panel/HUD component tokens (consumed by redesign.css) */
   --field: var(--palette-yellow);
   --panel: var(--palette-olive);
   --border: var(--palette-gold);
@@ -36,7 +47,7 @@
   --control-shadow: 4px 4px 0 var(--palette-yellow);
   --small-shadow: 2px 2px 0 var(--palette-yellow);
 
-  /* Bridge the preserved base styles to one palette. */
+  /* Tier 3 — page-level tokens, shared in name with site.css/persona/style.css. */
   --page: var(--field);
   --surface: var(--panel);
   --surface-muted: var(--panel);
@@ -47,7 +58,6 @@
   --accent: var(--secondary);
   --accent-strong: var(--on-panel);
   --signal: var(--on-panel);
-  --danger: var(--interactive);
   --focus: var(--interactive);
   --header-bg: var(--panel);
   --shadow: var(--control-shadow);

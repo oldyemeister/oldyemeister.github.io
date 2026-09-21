@@ -1,6 +1,6 @@
 /* Preserve the keyboard HUD; game controls remain part of the new UI. */
 @scope (body.persona-design) to (.persona-hud) {
-/* Reversible visual layer. Remove this and palette.css from render.mjs to roll back.
+/* Reversible visual layer. Remove this and tokens.css from render.mjs to roll back.
    Existing markup, column layouts, content order, game logic and fonts are retained. */
 body.persona-design { background: var(--field); color: var(--on-field); }
 

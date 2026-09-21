@@ -92,6 +92,24 @@ For alternate design previews, see the [design editing guide](docs/DESIGN.md).
 - [Design and font attribution](docs/ATTRIBUTION.md)
 - [GitHub preparation and publishing](docs/PUBLISHING.md)
 
+## Forking this as a template
+
+Nearly all personal content lives in `_data/content.yml`; the layouts,
+includes, build tooling, and CSS/JS architecture underneath are generic. To
+reuse this repo for a different portfolio:
+
+1. Rewrite `_data/content.yml` with your own profile, experience, skills, and project entries.
+2. Set `_config.yml`'s `url:` to your own GitHub Pages (or custom) domain.
+3. Replace `assets/documents/resume/*.pdf` with your own résumé and update `resume.url` in `content.yml` to match its filename.
+4. Replace `assets/images/site/profile-monogram.svg` (or swap `about.image.path` in `content.yml` to point at your own portrait/monogram).
+5. Update this README's own personal links, badges, and `git clone` URL.
+6. If you add or remove project case studies, update the hardcoded page-build list near the top of `tools/preview-build.mjs` to match.
+
+The Persona-themed alternate design (`templates/persona/`, `assets/themes/persona/`)
+is optional decoration layered on top of the same content — see the
+[design editing guide](docs/DESIGN.md) if you want to keep, customize, or
+remove it.
+
 ## Deployment
 
 Pushing to `main` runs `.github/workflows/pages.yml`: engine tests, the Node

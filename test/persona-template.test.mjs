@@ -41,7 +41,7 @@ test('redesign adds a semantic image caption before the project heading', () => 
 
 test('disabling the redesign restores the original presentation without changing routes', () => {
   const result = personaPreview(page, '', false);
-  assert.doesNotMatch(result, /assets\/css\/(palette|redesign)\.css/);
+  assert.doesNotMatch(result, /assets\/themes\/persona\/(tokens|redesign)\.css/);
   assert.doesNotMatch(result, /project-visual|hero-visual-caption/);
   assert.match(result, /assets\/themes\/persona\/style\.css/);
   assert.match(result, /href="\/projects\/laser\/"/);
