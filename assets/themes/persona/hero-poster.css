@@ -55,7 +55,7 @@ body.persona-design :is(#home, .hero-top-extension, #about) .hero-circle-composi
 }
 body.persona-design :is(#home, .hero-top-extension, #about) .hero-side-field { fill: var(--hero-sky); }
 body.persona-design :is(#home, .hero-top-extension, #about) .hero-side-highlight { fill: none; stroke: var(--palette-white); stroke-width: 5px; }
-body.persona-design :is(#home, .hero-top-extension, #about) .hero-sky-clouds { fill: var(--palette-white); opacity: .65; filter: blur(2px); }
+body.persona-design :is(#home, .hero-top-extension, #about) .hero-sky-clouds { opacity: .86; pointer-events: none; }
 body.persona-design :is(#home, .hero-top-extension, #about) .hero-ring-outer { fill: var(--palette-yellow); stroke: var(--config-orange); stroke-width: 14px; }
 body.persona-design :is(#home, .hero-top-extension, #about) .hero-ring-middle { fill: none; stroke: var(--config-orange); stroke-width: 5px; }
 body.persona-design :is(#home, .hero-top-extension, #about) .hero-ring-inner { fill: var(--palette-yellow); stroke: none; }
@@ -412,23 +412,21 @@ body.persona-design #about > .about-picture-placeholders {
   padding: 0;
 }
 
-/* Parent annulus clips clouds after their drift/blur, keeping yellow areas clean. */
-body.persona-design :is(#home, .hero-top-extension, #about) .hero-sky-clouds path {
-  animation: hero-cloud-drift 14s linear infinite alternate;
-  animation-delay: -4s;
+/* Three fixed SVG textures are shared by all cloud instances and continuations.
+   Only translation changes; resets happen entirely outside the blue annulus. */
+body.persona-design :is(#home, .hero-top-extension, #about) .hero-cloud {
+  animation: hero-cloud-drift var(--cloud-duration, 120s) linear infinite;
+  animation-delay: var(--cloud-delay, -40s);
   animation-play-state: paused;
 }
-body.persona-design :is(#home, .hero-top-extension, #about) .hero-sky-clouds path:nth-child(even) {
-  animation-delay: -10s;
-  animation-duration: 18s;
-}
-body.persona-design.sky-clouds-running :is(#home, .hero-top-extension, #about) .hero-sky-clouds path {
+body.persona-design.sky-clouds-running :is(#home, .hero-top-extension, #about) .hero-cloud {
   animation-play-state: running;
 }
 @keyframes hero-cloud-drift {
-  from { transform: translate(-70px, 8px); }
-  to { transform: translate(90px, -12px); }
+  from { transform: translateX(0); }
+  to { transform: translateX(1260px); }
 }
 @media (prefers-reduced-motion: reduce) {
-  body.persona-design :is(#home, .hero-top-extension, #about) .hero-sky-clouds path { animation: none; }
+  /* Freeze the staggered composition, rather than resetting clouds out of view. */
+  body.persona-design.sky-clouds-running :is(#home, .hero-top-extension, #about) .hero-cloud { animation-play-state: paused; }
 }

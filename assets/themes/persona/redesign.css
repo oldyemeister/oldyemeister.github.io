@@ -50,13 +50,39 @@ body.persona-design :is(.case-study-hero-copy, .case-study-layout, .laser-shell)
 }
 body.persona-design .hero-layout { margin-block: 32px; }
 body.persona-design .skip-link { background: var(--interactive); color: var(--on-field); }
-body.persona-design :is(.project-card, .experience-item, .case-study-meta,
+body.persona-design :is(.experience-item, .case-study-meta,
   .project-metrics, .project-metrics > div) {
   background: transparent; border: 0; border-radius: 0;
 }
-body.persona-design .project-card { overflow: visible; }
 body.persona-design .project-card::after { display: none; }
-body.persona-design :is(.project-card, .experience-item):hover { background: transparent; }
+body.persona-design .experience-item:hover { background: transparent; }
+/* Each project card is its own bordered, shadowed tile — a selectable
+   "mission" entry, echoing the numbered save-menu list in Experience.
+   The media keeps its own smaller framed-photo look nested inside, like a
+   layered game-menu panel, rather than being clipped flush to the card. */
+body.persona-design #projects .project-card {
+  background: var(--panel);
+  border: 2px solid var(--border);
+  border-radius: 22px;
+  box-shadow: var(--control-shadow);
+  padding: 16px;
+  gap: 16px;
+}
+body.persona-design #projects .project-file-index {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  margin: 0 0 10px;
+  padding: 3px 11px;
+  border-radius: 999px;
+  background: var(--secondary);
+  color: var(--on-secondary);
+  font: 800 .72rem/1.4 Arial, sans-serif;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  box-shadow: var(--small-shadow);
+}
+body.persona-design #projects .project-file-index span { opacity: .75; }
 body.persona-design .experience-item + .experience-item { border-top: 1px solid var(--border); }
 body.persona-design .project-content { background: transparent; }
 body.persona-design :is(.project-media, .portrait-frame, .case-study-hero-media,
@@ -219,9 +245,9 @@ body.persona-design .project-visual figcaption {
   line-height: 1.5;
 }
 body.persona-design .project-content { padding: 0 0 16px; }
+body.persona-design #projects .project-content { padding: 0; }
 body.persona-design .project-content h3 { margin-bottom: 24px; font-size: clamp(1.6rem, 2.5vw, 2.2rem); }
 body.persona-design .project-grid { gap: 56px 40px; }
-body.persona-design .project-card { border-radius: 22px; }
 /* Content entries share the section panel; only their visuals have a shadow. */
 body.persona-design .experience-item { margin-inline: 0; padding-inline: 0; }
 body.persona-design .case-study-hero {

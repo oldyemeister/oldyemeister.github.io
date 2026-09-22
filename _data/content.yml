@@ -56,6 +56,7 @@ skills_section:
   introduction: "A dual-track background spanning embedded hardware, AI software, and robotics data systems."
   categories:
     - name: "Embedded & Hardware"
+      icon: "hardware"
       skills:
         - "STM32"
         - "Verilog"
@@ -66,6 +67,7 @@ skills_section:
         - "PlatformIO"
         - "RF Circuit Design"
     - name: "AI & Software Engineering"
+      icon: "software"
       skills:
         - "Python"
         - "C/C++"
@@ -75,17 +77,20 @@ skills_section:
         - "Docker"
         - "SQLite"
     - name: "Robotics & Data Systems"
+      icon: "robotics"
       skills:
         - "QA Pipeline Design"
         - "SLAM / VIO"
         - "Dataset Tooling"
 
     - name: "Design & Fabrication"
+      icon: "design"
       skills:
         - "Blender"
         - "Rhino8"
         - "3D Printing"
     - name: "Content & Communication"
+      icon: "content"
       skills:
         - "Technical Scriptwriting"
         - "Video Production (Premiere, After Effects)"
@@ -101,6 +106,7 @@ experience:
     location: "Shanghai, China"
     dates: "Jun 2026 — Present"
     impact: "Embodied AI data pipeline"
+    logo: ""
     highlights:
       - "Built a <strong>Python QA pipeline</strong> for ~62,000 robot episodes; parallelization delivered a <strong>4.5–4.8x speedup</strong> and cut false positives from 90%+ to near zero."
       - "Designed a semantic applicant-review tool with rule-based triage and deterministic <strong>accept, decline, or pending</strong> decisions."
@@ -111,6 +117,7 @@ experience:
     location: "Shanghai, China"
     dates: "Jul — Sep 2025"
     impact: "3,000+ clips/week"
+    logo: ""
     highlights:
       - "Built a <strong>Flask, Dify, and Python</strong> pipeline that categorized <strong>3,000+ provincial-TV clips weekly</strong>."
       - "Built a WeCom news bot and secure translation API with ~<strong>200 ms</strong> average latency and streaming correction."
@@ -120,6 +127,7 @@ experience:
     location: "Shanghai, China"
     dates: "May — Jun 2025"
     impact: "LLM infrastructure"
+    logo: ""
     highlights:
       - "Deployed <strong>Docker</strong> AI infrastructure and custom <strong>MCP servers</strong> for structured-data and API orchestration."
       - "Implemented presentation-summarization and image-generation workflows with DeepSeek and Tongyi APIs."
@@ -129,6 +137,7 @@ experience:
     location: "Shanghai, China"
     dates: "May — Aug 2024"
     impact: "Rehired for 2025"
+    logo: ""
     highlights:
       - "Built kindergarten datasets with Shanghai Education Television using <strong>Selenium</strong> and <strong>PyTorch</strong>."
       - "Deployed Dockerized scrapers for daily WeChat public-account collection."
@@ -138,10 +147,23 @@ experience:
     location: "Shanghai, China"
     dates: "Mar 2022 — Sep 2025"
     impact: "10K+ followers, 1.7M+ views"
+    logo: ""
     highlights:
       - "Grew a Bilibili channel to <strong>10,000+ followers</strong> with Mandarin videos on F1 history and racecar engineering."
       - "Edited in <strong>Adobe Premiere</strong> and designed Photoshop thumbnails; the top video reached <strong>400,000+ views</strong> and the channel 1.7M+."
       - "Turned complex motorsport-engineering research into accessible scripts."
+
+  - company: "Damrey Education"
+    role: "TOEFL Tutor — Internship"
+    location: "Jing'an District, Shanghai, China · On-site"
+    dates: "Jun — Aug 2023 · 3 mos"
+    impact: "116/120 TOEFL · 4 students"
+    logo: ""
+    highlights:
+      - "Provided personalized <strong>1-on-1 TOEFL instruction to four students</strong>, creating tailored study schedules for each student's target score."
+      - "Developed students' test-taking strategies through structured drills and real-time feedback."
+      - "Strengthened communication, mentoring, and curriculum planning skills in an international academic context."
+      - "Selected to tutor TOEFL after achieving <strong>116/120</strong> as a non-native English speaker."
 
 projects_section:
   heading: "Selected projects"
@@ -150,6 +172,7 @@ projects_section:
 projects:
   - title: "Laser Puzzle"
     summary: "An FPGA-based laser reflection puzzle game built for the DE1-SoC, featuring mirror rotation mechanics, timed objectives, and a VGA-rendered playfield."
+    placeholder_index: "01"
     technologies:
       - "C"
       - "Assembly"
@@ -164,6 +187,7 @@ projects:
     live_label: "Solve puzzle"
   - title: "Donkey Kong FPGA Game"
     summary: "A hardware recreation of the classic Donkey Kong game on an FPGA, with full game logic, sprite rendering, and collision detection implemented directly in Verilog. Achieved smooth 60 FPS gameplay on the DE1-SoC through timing analysis and resource optimization."
+    placeholder_index: "02"
     collaborator:
       prefix: "Built with"
       name: "Nolan Young"
@@ -182,6 +206,7 @@ projects:
     featured: false
   - title: "IMU Sandbox"
     summary: "An IMU-controlled STM32 sandbox running up to 3,000 sand particles at approximately 30 FPS, with dual OLEDs, selectable gravity, materials, and environmental effects."
+    placeholder_index: "03"
     collaborator:
       prefix: "Built with"
       name: "Suzen Bao"

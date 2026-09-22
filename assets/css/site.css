@@ -336,6 +336,8 @@ html.theme-transition .theme-switch-thumb {
 .project-media-placeholder span { display: grid; width: 72px; height: 72px; place-items: center; border: 1px solid var(--line-strong); background: var(--surface); color: var(--accent-strong); font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; font-size: 1.25rem; font-weight: 760; }
 .project-media-placeholder small, .project-draft-label { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; font-size: 0.65rem; font-weight: 680; letter-spacing: 0.07em; text-transform: uppercase; }
 .project-content { display: flex; flex-direction: column; padding: 30px; }
+/* Persona-only numbered card label; hidden in the original design by default. */
+.project-file-index { display: none; }
 .project-content > p {
   color: var(--text-muted);
   font-weight: var(--type-project-weight);

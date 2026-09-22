@@ -30,7 +30,8 @@ export function personaPreview(html, prefix = '/persona', redesign = true) {
       <link rel="stylesheet" href="/assets/themes/persona/style.css?v=5">
       ${redesign ? '<link rel="stylesheet" href="/assets/themes/persona/tokens.css">\n      <link rel="stylesheet" href="/assets/themes/persona/redesign.css">' : ''}
       <link rel="stylesheet" href="/assets/themes/persona/key-instructions.css">
-      <link rel="stylesheet" href="/assets/themes/persona/project-tv-effect.css?v=2">
+      <link rel="stylesheet" href="/assets/themes/persona/project-tv-effect.css?v=3">
+      ${home ? '<script src="/assets/js/crt-effect.js" defer></script>' : ''}
       <link rel="stylesheet" href="/assets/themes/persona/skills-section.css?v=3">
       <link rel="stylesheet" href="/assets/themes/persona/hero-poster.css?v=34">
       <link rel="stylesheet" href="/assets/themes/persona/hero-ambient.css?v=5">
@@ -53,8 +54,7 @@ export function personaPreview(html, prefix = '/persona', redesign = true) {
     .replace('</body>', `
       <nav class="persona-hud" aria-label="Keyboard shortcuts">
         ${home ? `
-        <button class="hud-menu-toggle" type="button" data-hud-menu-toggle aria-controls="site-navigation" aria-keyshortcuts="Tab"><kbd>Tab</kbd><span>Menu</span></button>
-        <button class="hud-menu-toggle" type="button" data-hud-menu-toggle aria-controls="site-navigation" aria-keyshortcuts="Escape"><kbd>Esc</kbd><span>Menu</span></button>` : `
+        <button class="hud-menu-toggle" type="button" data-hud-menu-toggle aria-controls="site-navigation" aria-keyshortcuts="Tab Escape"><kbd>Tab</kbd><kbd>Esc</kbd><span>Menu</span></button>` : `
         ${gameKeys}
         <span class="hud-instruction"><kbd>Tab</kbd><span>Navigate</span></span>
         <span class="hud-instruction"><kbd>Enter</kbd><span>Open</span></span>

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="180" viewBox="0 0 320 180">
+  <!-- Static turbulence/displacement, inspired by CSS-Tricks' realistic clouds.
+       Loaded as an image: filters never change while the parent translates. -->
+  <defs>
+    <filter id="edge" x="0" y="0" width="320" height="180" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency=".025" numOctaves="3" seed="17" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="32" xChannelSelector="R" yChannelSelector="G"/>
+      <feGaussianBlur stdDeviation="1.5"/>
+    </filter>
+    <linearGradient id="shade" x2=".15" y2="1">
+      <stop stop-color="#fff"/><stop offset=".48" stop-color="#f8fdff"/><stop offset="1" stop-color="#accbd9" stop-opacity=".75"/>
+    </linearGradient>
+  </defs>
+  <g filter="url(#edge)" fill="url(#shade)">
+    <ellipse cx="163" cy="124" rx="127" ry="28"/>
+    <ellipse cx="87" cy="103" rx="45" ry="35"/>
+    <ellipse cx="212" cy="96" rx="51" ry="43"/>
+    <ellipse cx="147" cy="81" rx="59" ry="53"/>
+    <ellipse cx="112" cy="116" rx="42" ry="22" opacity=".65"/>
+  </g>
+</svg>

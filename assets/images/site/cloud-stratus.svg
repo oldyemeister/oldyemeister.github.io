@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="280" height="120" viewBox="0 0 280 120">
+  <defs>
+    <filter id="edge" x="0" y="0" width="280" height="120" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency=".021 .039" numOctaves="2" seed="29" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="29" xChannelSelector="R" yChannelSelector="G"/>
+      <feGaussianBlur stdDeviation="2.8 2"/>
+    </filter>
+    <linearGradient id="shade" x2=".1" y2="1">
+      <stop stop-color="#f4f8fc" stop-opacity=".9"/><stop offset=".5" stop-color="#d9e5ef" stop-opacity=".8"/><stop offset="1" stop-color="#9db6c9" stop-opacity=".35"/>
+    </linearGradient>
+  </defs>
+  <g filter="url(#edge)" fill="url(#shade)">
+    <ellipse cx="140" cy="78" rx="113" ry="19"/>
+    <ellipse cx="84" cy="64" rx="51" ry="23"/>
+    <ellipse cx="160" cy="58" rx="62" ry="29"/>
+    <ellipse cx="214" cy="70" rx="35" ry="18"/>
+  </g>
+</svg>

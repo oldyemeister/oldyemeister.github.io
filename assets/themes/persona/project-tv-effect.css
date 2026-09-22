@@ -1,116 +1,70 @@
-/* ==========================================================================
-   CRT / analog TV interference overlay
-   Tune these variables — no need to touch anything below.
-   ========================================================================== */
+/* CRT treatment: slow scanline drift, soft phosphor texture, glass falloff.
+   Media stays full color; captions and controls are outside the overlays. */
 :root {
-  --tv-noise-opacity: 0.12;   /* fine scanline texture opacity (0–1) */
-  --tv-noise-line-width: 1px;
-  --tv-noise-line-gap: 3px;
-
-  --tv-band-opacity: 0.08;    /* interference band opacity (0–1) */
-  --tv-band-width: 2px;
-  --tv-band-gap: 20px;
-
-  --tv-burst-duration: 220ms; /* how long a glitch burst lasts */
-  --tv-quiet-min: 2.5s;       /* min gap between bursts */
-  --tv-quiet-max: 6s;         /* max gap between bursts (varies per-instance via nth-child) */
+  --crt-line-width: .5625px;
+  --crt-line-spacing: 3px;
+  --crt-highlight-width: calc(var(--crt-line-width) / 2);
+  --crt-line-end: calc(var(--crt-line-width) + var(--crt-highlight-width));
+  --crt-scan-distance: calc(var(--crt-line-spacing) * 4);
+  --crt-line-opacity: .22;
+  --crt-scan-duration: 55s;
 }
 
-.tv-effect-container {
+#projects .project-media picture {
   position: relative;
-  overflow: hidden;
-}
-
-.tv-effect-container img,
-.tv-effect-container video {
   display: block;
-  width: 100%;
-  position: relative;
-  z-index: 0; /* pin the media's stacking level so overlays can sit above it
-                 regardless of DOM order — fixes the ::before-painted-under-image bug */
+  overflow: hidden;
+  isolation: isolate;
 }
 
-/* Shared overlay base: extend past the container's edges so translation
-   never uncovers a blank strip, and sit above the media via explicit z-index. */
-.tv-effect-container::before,
-.tv-effect-container::after {
+#projects .project-media picture::before,
+#projects .project-media picture::after {
   content: "";
   position: absolute;
-  left: 0;
-  right: 0;
-  top: -50%;
-  bottom: -50%;
   pointer-events: none;
-}
-
-/* Fine scanline texture — mostly still, with occasional tiny irregular jumps
-   rather than a continuous predictable scroll. */
-.tv-effect-container::before {
   z-index: 1;
-  mix-blend-mode: overlay;
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(255, 255, 255, var(--tv-noise-opacity)) 0px,
-    rgba(255, 255, 255, var(--tv-noise-opacity)) var(--tv-noise-line-width),
-    rgba(0, 0, 0, calc(var(--tv-noise-opacity) * 0.6)) var(--tv-noise-line-width),
-    rgba(0, 0, 0, calc(var(--tv-noise-opacity) * 0.6)) calc(var(--tv-noise-line-width) * 2),
-    transparent calc(var(--tv-noise-line-width) * 2),
-    transparent calc(var(--tv-noise-line-width) * 2 + var(--tv-noise-line-gap))
-  );
-  animation: tv-noise-jitter 4.3s steps(1) infinite;
 }
 
-/* Interference band — sits quiet, then fires a short glitch burst and settles
-   again, instead of scrolling continuously in lockstep with itself. */
-.tv-effect-container::after {
-  z-index: 2;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent 0px,
-    transparent var(--tv-band-gap),
-    rgba(255, 255, 255, var(--tv-band-opacity)) var(--tv-band-gap),
-    rgba(255, 255, 255, var(--tv-band-opacity)) calc(var(--tv-band-gap) + var(--tv-band-width)),
-    transparent calc(var(--tv-band-gap) + var(--tv-band-width)),
-    transparent calc(var(--tv-band-gap) * 2)
-  );
-  opacity: 0;
-  animation: tv-band-burst 4.7s steps(1) infinite;
+#projects .project-media picture::before {
+  inset: calc(-1 * var(--crt-scan-distance)) 0;
+  background: repeating-linear-gradient(to bottom,
+    rgb(8 24 32 / var(--crt-line-opacity)) 0 var(--crt-line-width),
+    rgb(255 255 255 / .08) var(--crt-line-width) var(--crt-line-end),
+    transparent var(--crt-line-end) var(--crt-line-spacing));
+  animation: crt-scanlines var(--crt-scan-duration) linear infinite;
+  animation-play-state: paused;
 }
 
-/* Irregular, non-uniform keyframe spacing — deliberately not evenly divided,
-   so the motion doesn't read as a repeating mechanical pattern. */
-@keyframes tv-noise-jitter {
-  0%    { transform: translateY(0); }
-  4%    { transform: translateY(calc(var(--tv-noise-line-gap) * 1)); }
-  4.1%  { transform: translateY(0); }
-  57%   { transform: translateY(calc(var(--tv-noise-line-gap) * -1)); }
-  57.1% { transform: translateY(0); }
-  81%   { transform: translateY(calc(var(--tv-noise-line-gap) * 2)); }
-  81.1% { transform: translateY(0); }
-  100%  { transform: translateY(0); }
+#projects .project-media picture::after {
+  inset: 0;
+  background:
+    radial-gradient(ellipse at center, transparent 45%, rgb(8 18 28 / .19) 100%),
+    repeating-linear-gradient(to right,
+      rgb(255 70 70 / .025) 0 1px,
+      rgb(70 255 110 / .025) 1px 2px,
+      rgb(70 110 255 / .025) 2px 3px);
 }
 
-@keyframes tv-band-burst {
-  0%    { opacity: 0; transform: translateY(0); }
-  38%   { opacity: 0; transform: translateY(0); }
-  39%   { opacity: 1; transform: translateY(calc(var(--tv-band-gap) * 0.6)); }
-  41%   { opacity: 1; transform: translateY(calc(var(--tv-band-gap) * -0.3)); }
-  43%   { opacity: 0; transform: translateY(0); }
-  90%   { opacity: 0; transform: translateY(0); }
-  91%   { opacity: 1; transform: translateY(calc(var(--tv-band-gap) * -0.4)); }
-  93%   { opacity: 0; transform: translateY(0); }
-  100%  { opacity: 0; transform: translateY(0); }
+.hero-crt-scanlines {
+  pointer-events: none;
+  animation: crt-scanlines var(--crt-scan-duration) linear infinite;
+  animation-play-state: paused;
 }
 
-/* Stagger multiple instances of this effect on the page so they don't
-   glitch in sync with each other. */
-.tv-effect-container:nth-of-type(2n)::after { animation-delay: 1.6s; }
-.tv-effect-container:nth-of-type(3n)::before { animation-delay: 0.9s; }
+#projects .project-media picture[data-crt-active="true"]::before,
+[data-crt-active="true"] .hero-crt-scanlines {
+  animation-play-state: running;
+}
+
+/* Four complete pitches keep the loop seam invisible. Overscan prevents gaps. */
+@keyframes crt-scanlines {
+  from { transform: translateY(0); }
+  to { transform: translateY(calc(-1 * var(--crt-scan-distance))); }
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .tv-effect-container::before,
-  .tv-effect-container::after {
+  #projects .project-media picture::before,
+  .hero-crt-scanlines {
     animation: none;
-    opacity: 0;
   }
 }

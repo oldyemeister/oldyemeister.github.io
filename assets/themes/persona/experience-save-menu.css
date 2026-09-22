@@ -1,7 +1,7 @@
 /* Save-menu preview. Pixel samples from reference/album/savemenu.jpg (2560×1440):
    field (40,40) #FFB403; yellow patch (2200,500)-(2300,600) mode #FEDC34;
    lettering patch (710,390)-(1260,480) #AD6900; checker #000000/#1B1B1B;
-   star (208,850) #2E2E2E. Blue and white are the user's explicit overrides. */
+   star (208,850) #2E2E2E. The selected disc uses the hero's blue, never pink. */
 #experience {
   --save-yellow: #FEDC34;
   --save-orange: #FFB403;
@@ -10,13 +10,17 @@
   --save-check: #1B1B1B;
   --save-star: #2E2E2E;
   --save-white: #FFFFFF;
-  --save-blue: #67CEF6;
+  --save-disc: #FFF94B;
+  --save-disc-light: #FFFDB4;
+  --save-disc-shadow: #F3B900;
+  --save-selected-disc: var(--hero-sky, #04C4EB);
+  --save-selected-disc-light: color-mix(in srgb, var(--save-selected-disc) 35%, var(--save-white));
+  --save-selected-disc-shadow: color-mix(in srgb, var(--save-selected-disc) 65%, #003858);
   --save-ink: color-mix(in srgb, var(--save-reference-ink) 75%, var(--save-black));
-  --save-blue-light: color-mix(in srgb, var(--save-blue) 55%, var(--save-white));
-  --save-blue-dark: color-mix(in srgb, var(--save-blue) 35%, var(--palette-blue, #0C75A1));
 }
 body.persona-design #experience {
-  background: linear-gradient(110deg, var(--save-yellow), var(--save-orange));
+  padding-block: clamp(28px, 4vw, 48px) 32px;
+  background: linear-gradient(115deg, var(--save-orange), var(--save-yellow) 65%, var(--save-disc));
   color: var(--save-ink);
 }
 body.persona-design #experience > .content-shell {
@@ -25,6 +29,8 @@ body.persona-design #experience > .content-shell {
   border: 0;
   padding: 0;
 }
+body.persona-design #experience .section-header { display: block; margin-bottom: 16px; }
+body.persona-design #experience .section-header h2 { margin-bottom: 0; }
 body.persona-design #experience .section-header p { color: var(--save-ink); }
 body.persona-design #experience :is(.section-header p, .experience-save-help) {
   font-family: 'Persona Slim Local', Arial, sans-serif;
@@ -44,7 +50,7 @@ body.persona-design #experience :is(.section-header p, .experience-save-help) {
   --sphere-width: var(--sphere-size);
   --sphere-stagger: clamp(12px, calc(var(--sphere-size) * .109), 36px);
   --sphere-offset: 0px;
-  --row-left-padding: max(64px, calc((100vw - 1060px) / 2));
+  --row-left-padding: max(64px, calc((100vw - 1280px) / 2));
   position: relative;
   isolation: isolate;
   display: grid;
@@ -54,10 +60,10 @@ body.persona-design #experience :is(.section-header p, .experience-save-help) {
   min-height: 250px;
   height: var(--experience-row-height, auto);
   scroll-margin-top: 96px;
-  padding: 8px max(24px, calc((100vw - 1180px) / 2)) 8px var(--row-left-padding);
+  padding: 8px clamp(24px, 4vw, 80px) 8px var(--row-left-padding);
   cursor: pointer;
   color: var(--save-ink);
-  background: linear-gradient(110deg, var(--save-yellow), var(--save-orange));
+  background: transparent;
 }
 #experience .experience-save-option[hidden],
 #experience .experience-save-menu:not([data-ready]) .experience-save-option:nth-child(n+4) { display: none; }
@@ -71,7 +77,7 @@ body.persona-design #experience :is(.section-header p, .experience-save-help) {
 }
 #experience .experience-save-option[aria-selected="true"] {
   z-index: 2;
-  color: var(--save-white);
+  color: var(--save-disc);
   background: repeating-conic-gradient(var(--save-black) 0 25%, var(--save-check) 0 50%) 0 0 / 12px 12px;
 }
 #experience .experience-save-list:focus-visible .experience-save-option[aria-selected="true"] h3 {
@@ -88,19 +94,66 @@ body.persona-design #experience .experience-save-copy :is(h3, p, li, strong, spa
   -webkit-text-fill-color: currentColor;
   font-family: 'Persona Slim Local', Arial, sans-serif;
 }
-body.persona-design #experience .experience-save-copy h3 {
+#experience .experience-save-heading-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
   margin: 0 0 8px;
+}
+body.persona-design #experience .experience-save-copy h3 {
+  margin: 0;
   font: 700 var(--content-title-size)/1.3 'Persona Slim Local', Arial, sans-serif;
   text-transform: none;
   letter-spacing: -.015em;
   -webkit-text-stroke: 0;
 }
+/* Only show the reference's small portrait frame when a real logo is supplied. */
+#experience .experience-save-logo-frame { display: none; }
+body.persona-design #experience .experience-save-option[aria-selected="true"] .experience-save-logo-frame {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 64px;
+  height: 40px;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 2px solid var(--save-black);
+  background: var(--save-white);
+  box-shadow: 3px 3px 0 var(--save-black);
+}
+#experience .experience-save-logo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 4px;
+}
+@media (max-width: 600px) {
+  body.persona-design #experience .experience-save-option[aria-selected="true"] .experience-save-logo-frame {
+    width: 52px; height: 32px;
+  }
+}
 #experience .experience-save-meta { margin: 0 0 8px; font-size: .875rem; }
 #experience .experience-save-date { font-style: italic; }
-#experience .experience-save-summary { list-style: none; margin: 0; padding: 0; max-width: 76ch; font-size: .875rem; line-height: 1.35; }
+#experience .experience-save-summary { list-style: none; margin: 0; padding: 0; max-width: none; font-size: .875rem; line-height: 1.35; }
 #experience .experience-save-summary li + li { margin-top: 4px; }
+body.persona-design #experience .experience-save-copy .experience-save-impact {
+  display: table;
+  max-width: 100%;
+  margin: 12px 0 0;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: var(--save-ink);
+  color: var(--save-disc-light) !important;
+  font-size: .85rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+body.persona-design #experience [aria-selected="true"] .experience-save-copy .experience-save-impact {
+  background: var(--save-disc);
+  color: var(--save-black) !important;
+}
 #experience .experience-save-sphere {
-  --sphere-glow: var(--hero-yellow-light, var(--save-yellow));
+  --sphere-glow: var(--save-disc-light);
   position: absolute;
   left: calc(var(--row-left-padding) + var(--sphere-offset));
   top: 50%;
@@ -112,15 +165,16 @@ body.persona-design #experience .experience-save-copy h3 {
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 24%, var(--hero-yellow-light), color-mix(in srgb, var(--hero-yellow-light) 90%, var(--palette-gold)) 80%);
+  background: radial-gradient(circle at 30% 24%, var(--save-disc-light), var(--save-disc) 60%, var(--save-disc-shadow));
   color: var(--save-ink) !important;
-  font: 700 clamp(2.2rem, calc(var(--sphere-size) * .31), 7rem)/1 'Persona Slim Local', Arial, sans-serif;
+  font: italic 700 clamp(2.2rem, calc(var(--sphere-size) * .7), 11rem)/1 'Persona Slim Local', Arial, sans-serif;
 }
 #experience .experience-save-number {
   position: absolute;
-  left: 12%;
+  left: 18%;
+  top: 15%;
   display: block;
-  transform: rotate(20deg);
+  transform: rotate(12deg);
 }
 /* Override the general yellow-background span color on the numeral itself. */
 body.persona-design #experience .experience-save-option[aria-selected="false"] .experience-save-number {
@@ -132,10 +186,10 @@ body.persona-design #experience .experience-save-option[aria-selected="true"] .e
   -webkit-text-fill-color: currentColor;
 }
 #experience [aria-selected="true"] .experience-save-sphere {
-  --sphere-glow: var(--save-blue-light);
+  --sphere-glow: var(--save-selected-disc-light);
   color: var(--save-black) !important;
   transform: translateY(-50%) scale(1.3);
-  background: radial-gradient(circle at 30% 24%, var(--save-blue), var(--save-blue-dark) 80%);
+  background: radial-gradient(circle at 30% 24%, var(--save-selected-disc-light), var(--save-selected-disc) 46%, var(--save-selected-disc-shadow));
 }
 #experience .experience-save-sphere::before,
 #experience .experience-save-sphere::after {
@@ -151,7 +205,11 @@ body.persona-design #experience .experience-save-option[aria-selected="true"] .e
   pointer-events: none;
 }
 #experience .experience-save-sphere::before { top: -5%; left: -5%; }
-#experience .experience-save-sphere::after { bottom: -5%; right: -5%; opacity: .45; }
+#experience .experience-save-sphere::after {
+  top: 18%; left: -38%; width: 100%; height: 110%;
+  background: var(--save-white); opacity: .25; filter: none;
+  transform: rotate(-28deg);
+}
 #experience .experience-save-controls {
   position: absolute;
   /* Keep each 44px arrow fully on the yellow row outside the selection. */
@@ -189,7 +247,7 @@ body.persona-design #experience .experience-save-option[aria-selected="true"] .e
   #experience .experience-save-sphere { font-size: 2.8rem; }
 }
 @media (max-width: 600px) {
-  #experience .experience-save-option { --row-left-padding: 58px; gap: 26px; padding: 20px 16px 20px var(--row-left-padding); }
+  #experience .experience-save-option { --row-left-padding: 40px; gap: 18px; padding: 20px 16px 20px var(--row-left-padding); }
   body.persona-design #experience .experience-save-copy h3 { font-size: 1.05rem; }
   #experience .experience-save-summary { font-size: .825rem; line-height: 1.4; }
   #experience .experience-save-meta { font-size: .8rem; }

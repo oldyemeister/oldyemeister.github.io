@@ -8,12 +8,15 @@ export function redesignContent(html) {
     sparkle: '<path d="M50 2C55 39 61 45 98 50C61 55 55 61 50 98C45 61 39 55 2 50C39 45 45 39 50 2Z"/>',
     ring: '<circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" stroke-width="15"/>',
     rings: '<circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="10"/><circle cx="50" cy="50" r="24" fill="none" stroke="currentColor" stroke-width="8"/>',
-    flower: Array.from({ length: 6 }, (_, i) => `<path transform="rotate(${i * 60} 50 50)" d="M50 50C41 38 33 24 39 15C44 7 56 7 61 15C67 24 59 38 50 50Z"/>`).join('')
+    flower: Array.from({ length: 6 }, (_, i) => `<path transform="rotate(${i * 60} 50 50)" d="M50 50C41 38 33 24 39 15C44 7 56 7 61 15C67 24 59 38 50 50Z"/>`).join(''),
+    // Circuit-board chip, echoing the Skills section's hardware category icon.
+    chip: '<rect x="30" y="30" width="40" height="40" rx="4" fill="none" stroke="currentColor" stroke-width="6"/><path d="M30 30V12M50 30V8M70 30V12M30 70V88M50 70V92M70 70V88M30 40H12M30 60H8M70 40H88M70 60H92" stroke="currentColor" stroke-width="5" fill="none"/>',
+    // D-pad cross, tying the Projects section's decoration to its game-console theme.
+    dpad: '<path d="M38 8H62V36H90V64H62V92H38V64H10V36H38Z" fill="none" stroke="currentColor" stroke-width="7"/>'
   };
   const decorations = {
     about: [['star', 'palette-cyan', 'star'], ['ring', 'config-orange', 'ring']],
-    skills: [['sparkle', 'config-lime', 'sparkle'], ['flower', 'config-violet', 'flower']],
-    projects: [['rings', 'config-violet', 'rings']],
+    skills: [['chip', 'config-lime', 'sparkle']],
     contact: [['flower', 'config-orange', 'flower'], ['sparkle', 'palette-cyan', 'sparkle']]
   };
   for (const [section, shapes] of Object.entries(decorations)) {

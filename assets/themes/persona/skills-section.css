@@ -1,7 +1,52 @@
-/* One existing olive section panel; categories are groups, not separate cards. */
+/* Each category is its own bordered stat-block panel, nested inside the
+   shared olive section panel — same pattern as project-media's framed look. */
 body.persona-design #skills {
   --skill-chip-fill: var(--hero-yellow-light);
   --skill-chip-ink: var(--palette-olive);
+  overflow: hidden;
+}
+/* Blue sky-circle accent, the same motif and color as the hero's. */
+body.persona-design #skills .skills-sky-accent {
+  position: absolute;
+  z-index: 0;
+  top: -15%;
+  right: -8%;
+  width: clamp(140px, 20vw, 260px);
+  height: auto;
+  pointer-events: none;
+}
+body.persona-design #skills .skills-sky-accent-field { fill: var(--hero-sky, #04C4EB); }
+body.persona-design #skills .skills-sky-accent-ring { fill: none; stroke: var(--palette-white); stroke-width: 5px; }
+/* Live equalizer pill field, the same technique as Education's settings screen. */
+body.persona-design #skills .skills-pill-field {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  gap: clamp(3px, .5vw, 7px);
+  padding: 24px;
+  opacity: .35;
+  pointer-events: none;
+}
+body.persona-design #skills .about-pill-column {
+  display: flex;
+  flex: 0 1 28px;
+  min-width: 0;
+  flex-direction: column-reverse;
+  gap: clamp(3px, .5vw, 7px);
+}
+body.persona-design #skills .about-pill {
+  flex: 0 0 clamp(6px, 1.4vw, 16px);
+  border-radius: 999px;
+  background: var(--config-lime);
+}
+body.persona-design #skills .about-pill-column:nth-child(3n+2) .about-pill { background: var(--config-violet); }
+body.persona-design #skills .about-pill-column:nth-child(3n) .about-pill { background: var(--palette-gold); }
+@media (max-width: 760px) {
+  body.persona-design #skills .skills-sky-accent { width: clamp(90px, 26vw, 150px); }
+  body.persona-design #skills .skills-pill-field { display: none; }
 }
 html[data-theme="dark"] body.persona-design #skills {
   --skill-chip-fill: var(--palette-blue);
@@ -14,17 +59,61 @@ body.persona-design #skills .section-header > p {
 body.persona-design #skills .skills-categories {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 36px 48px;
+  gap: 28px 24px;
 }
 body.persona-design #skills .skills-category {
   min-width: 0;
-  padding-top: 20px;
-  border-top: 2px solid var(--palette-gold);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 18px 20px 22px;
+  background: var(--panel);
+  border: 2px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--control-shadow);
+}
+body.persona-design #skills .skills-category-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+body.persona-design #skills .skills-category-icon {
+  display: block;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  background-color: var(--on-panel);
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+}
+body.persona-design #skills [data-skill-icon="hardware"] .skills-category-icon {
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='30' y='30' width='40' height='40' rx='4' fill='none' stroke='black' stroke-width='8'/%3E%3Cpath d='M30 30V12M50 30V8M70 30V12M30 70V88M50 70V92M70 70V88M30 40H12M30 60H8M70 40H88M70 60H92' stroke='black' stroke-width='6' fill='none'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='30' y='30' width='40' height='40' rx='4' fill='none' stroke='black' stroke-width='8'/%3E%3Cpath d='M30 30V12M50 30V8M70 30V12M30 70V88M50 70V92M70 70V88M30 40H12M30 60H8M70 40H88M70 60H92' stroke='black' stroke-width='6' fill='none'/%3E%3C/svg%3E");
+}
+body.persona-design #skills [data-skill-icon="software"] .skills-category-icon {
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M35 25 10 50 35 75M65 25 90 50 65 75' fill='none' stroke='black' stroke-width='9' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M35 25 10 50 35 75M65 25 90 50 65 75' fill='none' stroke='black' stroke-width='9' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+body.persona-design #skills [data-skill-icon="robotics"] .skills-category-icon {
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='58' r='26' fill='none' stroke='black' stroke-width='8'/%3E%3Cline x1='50' y1='32' x2='50' y2='14' stroke='black' stroke-width='8'/%3E%3Ccircle cx='50' cy='10' r='6' fill='black'/%3E%3Ccircle cx='40' cy='58' r='5' fill='black'/%3E%3Ccircle cx='60' cy='58' r='5' fill='black'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='58' r='26' fill='none' stroke='black' stroke-width='8'/%3E%3Cline x1='50' y1='32' x2='50' y2='14' stroke='black' stroke-width='8'/%3E%3Ccircle cx='50' cy='10' r='6' fill='black'/%3E%3Ccircle cx='40' cy='58' r='5' fill='black'/%3E%3Ccircle cx='60' cy='58' r='5' fill='black'/%3E%3C/svg%3E");
+}
+body.persona-design #skills [data-skill-icon="design"] .skills-category-icon {
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 8 90 28V72L50 92 10 72V28Z' fill='none' stroke='black' stroke-width='7' stroke-linejoin='round'/%3E%3Cpath d='M50 8V50L10 28M50 50 90 28M50 50V92' fill='none' stroke='black' stroke-width='6' stroke-linejoin='round'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 8 90 28V72L50 92 10 72V28Z' fill='none' stroke='black' stroke-width='7' stroke-linejoin='round'/%3E%3Cpath d='M50 8V50L10 28M50 50 90 28M50 50V92' fill='none' stroke='black' stroke-width='6' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+body.persona-design #skills [data-skill-icon="content"] .skills-category-icon {
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M12 18H88V68H48L26 88V68H12Z' fill='none' stroke='black' stroke-width='8' stroke-linejoin='round'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M12 18H88V68H48L26 88V68H12Z' fill='none' stroke='black' stroke-width='8' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
 body.persona-design #skills .skills-category h3 {
-  margin: 0 0 16px;
+  margin: 0;
   color: var(--on-panel);
-  font-size: clamp(1.1rem, 2vw, 1.45rem);
+  font-size: clamp(1.05rem, 1.8vw, 1.3rem);
   font-weight: 800;
   line-height: 1.25;
 }
@@ -44,10 +133,11 @@ body.persona-design #skills .skill-chips li {
   background: var(--skill-chip-fill);
   color: var(--skill-chip-ink);
   font: 700 .9rem/1.4 Arial, sans-serif;
+  box-shadow: var(--small-shadow);
   overflow-wrap: anywhere;
 }
 @media (max-width: 760px) {
-  body.persona-design #skills .skills-categories { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  body.persona-design #skills .skills-categories { grid-template-columns: minmax(0, 1fr); gap: 20px; }
 }
 /* Explicitly reuse the panel treatment even where legacy scoped CSS is unsupported. */
 body.persona-design :is(#skills, #education) > .content-shell {

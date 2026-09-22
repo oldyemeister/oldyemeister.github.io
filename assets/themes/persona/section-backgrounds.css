@@ -38,6 +38,32 @@ body.persona-design #contact .contact-intro {
 
 body.persona-design #projects {
   background: var(--palette-gold);
+  overflow: hidden;
+}
+
+/* Same rainbow corner-ribbon technique as About, echoing the CRT/old-TV motif
+   already used on the project media. */
+body.persona-design #projects .project-corner-ribbons {
+  --hero-corner-angle: 30deg;
+  --hero-corner-angle-step: .4deg;
+  position: absolute;
+  z-index: 0;
+  right: 0;
+  bottom: 0;
+  width: min(42%, 640px);
+  height: auto;
+  overflow: visible;
+  pointer-events: none;
+  user-select: none;
+}
+body.persona-design #projects .project-corner-ribbon-bands {
+  transform: translate(440px, 340px);
+}
+body.persona-design #projects .project-corner-ribbon-bands rect {
+  transform: rotate(calc(-1 * (var(--hero-corner-angle) + var(--stripe-index) * var(--hero-corner-angle-step))));
+}
+@media (max-width: 760px) {
+  body.persona-design #projects .project-corner-ribbons { width: min(32%, 180px); }
 }
 
 body.persona-design #contact {

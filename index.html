@@ -17,20 +17,24 @@ page_class: home
           <stop offset="1" stop-color="var(--flower-cyan)"/>
         </linearGradient>
         <clipPath id="hero-sky-clip"><path d="M945 270a445 445 0 1 0 -890 0a445 445 0 1 0 890 0Z M500 -45a315 315 0 1 0 0 630a315 315 0 1 0 0 -630" clip-rule="evenodd"/></clipPath>
-        <pattern id="hero-sky-lines" width="4" height="3" patternUnits="userSpaceOnUse"><path d="M0 0H4" stroke="var(--palette-white)" stroke-opacity=".13" stroke-width=".6"/></pattern>
+        <pattern id="hero-sky-lines" class="hero-crt-pattern" width="4" height="3" patternUnits="userSpaceOnUse"><path d="M0 .5H4" stroke="#081820" stroke-opacity=".22" stroke-width="var(--crt-line-width, .5625px)"/><path d="M0 1.5H4" stroke="#fff" stroke-opacity=".12" stroke-width="var(--crt-highlight-width, .28125px)"/></pattern>
         <pattern id="hero-faint-dots" width="45" height="45" patternUnits="userSpaceOnUse"><circle cx="22.5" cy="22.5" r="21" fill="var(--hero-yellow-light)"/></pattern>
       </defs>
       <g class="hero-circle-composition">
       <g clip-path="url(#hero-sky-clip)">
         <circle class="hero-side-field" cx="500" cy="270" r="445"/>
         <g class="hero-sky-clouds">
-          <path d="M-40 155 Q0 144 20 151 Q36 129 58 148 Q86 136 107 158 Q141 162 155 175 H-40Z"/>
-          <path d="M25 265 Q45 249 62 256 Q75 236 92 253 Q128 246 155 268Z"/>
-          <path d="M660 16 Q690 0 720 15 Q750 -2 775 18 L815 35 H645Z"/>
-          <path d="M265 603 Q287 582 312 592 Q333 565 360 589 Q392 578 425 606 L432 620 H260Z"/>
-          <path d="M735 480 Q759 461 782 475 Q805 445 833 469 Q862 458 893 486 L902 500 H728Z"/>
+          <image class="hero-cloud" href="{{ '/assets/images/site/cloud-cumulus.svg' | relative_url }}" x="-280" y="25" width="230" height="130" style="--cloud-duration: 110s; --cloud-delay: -37s"/>
+          <image class="hero-cloud" href="{{ '/assets/images/site/cloud-bank.svg' | relative_url }}" x="-280" y="-85" width="270" height="113" style="--cloud-duration: 145s; --cloud-delay: -108s"/>
+          <image class="hero-cloud" href="{{ '/assets/images/site/cloud-wisp.svg' | relative_url }}" x="-280" y="205" width="250" height="97" style="--cloud-duration: 125s; --cloud-delay: -33s"/>
+          <image class="hero-cloud" href="{{ '/assets/images/site/cloud-cumulus.svg' | relative_url }}" x="-280" y="285" width="210" height="118" style="--cloud-duration: 118s; --cloud-delay: -96s"/>
+          <image class="hero-cloud" href="{{ '/assets/images/site/cloud-bank.svg' | relative_url }}" x="-280" y="450" width="260" height="108" style="--cloud-duration: 138s; --cloud-delay: -40s"/>
+          <image class="hero-cloud" href="{{ '/assets/images/site/cloud-wisp.svg' | relative_url }}" x="-280" y="490" width="280" height="109" style="--cloud-duration: 105s; --cloud-delay: -83s"/>
+          <image class="hero-cloud" href="{{ '/assets/images/site/cloud-cumulus.svg' | relative_url }}" x="-280" y="600" width="240" height="135" style="--cloud-duration: 130s; --cloud-delay: -68s"/>
+          <image class="hero-cloud" href="{{ '/assets/images/site/cloud-stratus.svg' | relative_url }}" x="-280" y="135" width="160" height="69" style="--cloud-duration: 150s; --cloud-delay: -44s"/>
+          <image class="hero-cloud" href="{{ '/assets/images/site/cloud-scud.svg' | relative_url }}" x="-280" y="405" width="145" height="78" style="--cloud-duration: 112s; --cloud-delay: -91s"/>
         </g>
-        <circle cx="500" cy="270" r="445" fill="url(#hero-sky-lines)"/>
+        <rect class="hero-crt-scanlines" x="50" y="-190" width="900" height="920" fill="url(#hero-sky-lines)"/>
         <circle class="hero-side-highlight" cx="500" cy="270" r="395"/>
       </g>
       <circle class="hero-ring hero-ring-outer" cx="500" cy="270" r="307"/>
@@ -138,6 +142,11 @@ page_class: home
 </section>
 
 <section class="page-section skills-section" id="skills" aria-labelledby="skills-heading">
+  <svg class="skills-sky-accent" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+    <circle class="skills-sky-accent-field" cx="100" cy="100" r="95"/>
+    <circle class="skills-sky-accent-ring" cx="100" cy="100" r="72"/>
+  </svg>
+  <div class="skills-pill-field" aria-hidden="true"></div>
   <div class="content-shell">
     <header class="section-header">
       <div><p class="section-index">03</p><h2 id="skills-heading">{{ site_content.skills_section.heading }}</h2></div>
@@ -145,8 +154,11 @@ page_class: home
     </header>
     <div class="skills-categories">
       {% for category in site_content.skills_section.categories %}
-      <div class="skills-category">
-        <h3>{{ category.name }}</h3>
+      <div class="skills-category" data-skill-icon="{{ category.icon }}">
+        <div class="skills-category-header">
+          <span class="skills-category-icon" aria-hidden="true"></span>
+          <h3>{{ category.name }}</h3>
+        </div>
         <ul class="skill-chips" aria-label="{{ category.name }}">
           {% for skill in category.skills %}<li>{{ skill }}</li>{% endfor %}
         </ul>
@@ -160,7 +172,7 @@ page_class: home
   <div class="content-shell">
     <header class="section-header">
       <div><p class="section-index">04</p><h2>{{ site_content.experience_section.heading }}</h2></div>
-      <p>{{ site_content.experience_section.introduction }}</p>
+      {% if site_content.experience_section.introduction %}<p>{{ site_content.experience_section.introduction }}</p>{% endif %}
     </header>
   </div>
   <div class="experience-save-menu" data-experience-save-menu>
@@ -172,11 +184,15 @@ page_class: home
       {% for item in site_content.experience %}
       <div class="experience-save-option" role="option" aria-selected="false">
         <div class="experience-save-stars" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-              <span class="experience-save-sphere" aria-hidden="true"><span class="experience-save-number"></span></span>
+        <span class="experience-save-sphere" aria-hidden="true"><span class="experience-save-number"></span></span>
         <div class="experience-save-copy">
-          <h3>{{ item.role }} <span>— {{ item.company }}</span></h3>
+          <div class="experience-save-heading-row">
+            <h3>{{ item.role }} <span>— {{ item.company }}</span></h3>
+            {% if item.logo != empty %}<span class="experience-save-logo-frame" aria-hidden="true"><img src="{{ item.logo | relative_url }}" alt="" loading="lazy"></span>{% endif %}
+          </div>
           <p class="experience-save-meta"><span class="experience-save-date">{{ item.dates }}</span> · {{ item.location }}</p>
           <ul class="experience-save-summary">{% for highlight in item.highlights %}<li>{{ highlight }}</li>{% endfor %}</ul>
+          {% if item.impact %}<p class="experience-save-impact">{{ item.impact }}</p>{% endif %}
         </div>
       </div>
       {% endfor %}
@@ -187,6 +203,35 @@ page_class: home
 </section>
 
 <section class="page-section" id="projects">
+  <svg class="project-corner-ribbons" viewBox="0 0 600 480" aria-hidden="true" focusable="false">
+    <g class="project-corner-ribbon-bands">
+      <!-- Same rainbow band data as About's corner art, reused for the old-TV motif. -->
+      <rect style="--stripe-index: -6" x="-1200" y="197" width="2400" height="180" fill="#F4D51C" />
+      <rect style="--stripe-index: -5" x="-1200" y="165" width="2400" height="40" fill="#F6EBA0" />
+      <rect style="--stripe-index: -3" x="-1200" y="125" width="2400" height="48" fill="#FFF52B" />
+      <rect style="--stripe-index: -1" x="-1200" y="93" width="2400" height="40" fill="#FFD229" />
+      <rect style="--stripe-index: 0" x="-1200" y="88.57" width="2400" height="12.48" fill="#FFFFEB" />
+      <rect style="--stripe-index: 1" x="-1200" y="78.11" width="2400" height="16.96" fill="#BEE617" />
+      <rect style="--stripe-index: 2" x="-1200" y="66.53" width="2400" height="18.08" fill="#20C9D3" />
+      <rect style="--stripe-index: 3" x="-1200" y="60.55" width="2400" height="12.48" fill="#FFFCE0" />
+      <rect style="--stripe-index: 4" x="-1200" y="50.09" width="2400" height="16.96" fill="#FFD229" />
+      <rect style="--stripe-index: 5" x="-1200" y="41.87" width="2400" height="14.72" fill="#009B3A" />
+      <rect style="--stripe-index: 6" x="-1200" y="31.41" width="2400" height="16.96" fill="#E1FF00" />
+      <rect style="--stripe-index: 7" x="-1200" y="25.43" width="2400" height="12.48" fill="#FFFAC1" />
+      <rect style="--stripe-index: 8" x="-1200" y="8.25" width="2400" height="23.68" fill="#FF6500" />
+      <rect style="--stripe-index: 9" x="-1200" y="-10.05" width="2400" height="24.80" fill="#FFAD08" />
+      <rect style="--stripe-index: 10" x="-1200" y="-32.83" width="2400" height="29.28" fill="#FFF52B" />
+      <rect style="--stripe-index: 11" x="-1200" y="-43.29" width="2400" height="16.96" fill="#F4D51C" />
+      <rect style="--stripe-index: 12" x="-1200" y="-50.39" width="2400" height="13.60" fill="#FFFFB0" />
+      <rect style="--stripe-index: 13" x="-1200" y="-63.09" width="2400" height="19.20" fill="#C6EE10" />
+      <rect style="--stripe-index: 14" x="-1200" y="-71.31" width="2400" height="14.72" fill="#687D18" />
+      <rect style="--stripe-index: 15" x="-1200" y="-82.89" width="2400" height="18.08" fill="#D5F318" />
+      <rect style="--stripe-index: 16" x="-1200" y="-89.99" width="2400" height="13.60" fill="#FFFDE0" />
+      <rect style="--stripe-index: 17" x="-1200" y="-95.97" width="2400" height="12.48" fill="#A31C08" />
+      <rect style="--stripe-index: 18" x="-1200" y="-103.07" width="2400" height="13.60" fill="#F6EBA0" />
+      <rect style="--stripe-index: 19" x="-1200" y="-109.05" width="2400" height="12.48" fill="#827B24" />
+    </g>
+  </svg>
   <div class="content-shell">
     <header class="section-header">
       <div><p class="section-index">05</p><h2>{{ site_content.projects_section.heading }}</h2></div>
@@ -205,6 +250,7 @@ page_class: home
           {% endif %}
         </div>
         <div class="project-content">
+          <p class="project-file-index" aria-hidden="true"><span>FILE</span> {{ project.placeholder_index }}</p>
           <h3>{{ project.title }}</h3>
           {% if project.collaborator %}
           <p class="collaborator-byline collaborator-byline-card">

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="140" viewBox="0 0 360 140">
+  <defs>
+    <filter id="edge" x="0" y="0" width="360" height="140" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency=".012 .048" numOctaves="2" seed="73" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="43" xChannelSelector="R" yChannelSelector="G"/>
+      <feGaussianBlur stdDeviation="2.5 1.5"/>
+    </filter>
+    <linearGradient id="shade" x2="0" y2="1">
+      <stop stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#e8f6ff" stop-opacity=".25"/>
+    </linearGradient>
+  </defs>
+  <g filter="url(#edge)" fill="url(#shade)">
+    <ellipse cx="176" cy="83" rx="146" ry="16" transform="rotate(-6 176 83)"/>
+    <ellipse cx="151" cy="62" rx="92" ry="20" transform="rotate(-9 151 62)"/>
+    <ellipse cx="242" cy="63" rx="63" ry="13" transform="rotate(-8 242 63)"/>
+  </g>
+</svg>

@@ -12,8 +12,7 @@ test('production Persona uses root routes and leaves shared assets and external 
   assert.match(result, /data-persona-base="\/"/);
   assert.match(result, /href="\/#projects"/);
   assert.match(result, /href="\/projects\/laser\/"/);
-  assert.match(result, /<kbd>Tab<\/kbd><span>Menu<\/span>/);
-  assert.match(result, /<kbd>Esc<\/kbd><span>Menu<\/span>/);
+  assert.match(result, /<kbd>Tab<\/kbd><kbd>Esc<\/kbd><span>Menu<\/span>/);
   assert.doesNotMatch(result, /data-hud-home/);
   assert.match(result, /href="\/assets\/documents\/resume.pdf"/);
   assert.match(result, /href="https:\/\/example.com\/"/);
