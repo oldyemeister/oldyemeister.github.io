@@ -3,6 +3,7 @@ layout: default
 title: Laser Puzzle
 page_class: laser
 laser_game: true
+content_key: laser
 ---
 {% assign site_content = site.data.content %}
 {% assign laser = site_content.laser %}
@@ -37,7 +38,8 @@ laser_game: true
       </div>
     </div>
 
-    <div class="game-status-bar" aria-live="polite">
+    <p class="sr-only" role="status" data-game-announcer></p>
+    <div class="game-status-bar">
       <div><span>{{ laser.status_labels.timer }}</span><strong data-game-timer>2:00</strong></div>
       <div><span>{{ laser.status_labels.lives }}</span><strong data-game-lives>2</strong></div>
       <div><span>{{ laser.status_labels.targets }}</span><strong data-game-targets>0 / 6</strong></div>
@@ -87,6 +89,8 @@ laser_game: true
         "paused": {{ laser.status_labels.paused | jsonify }},
         "won": {{ laser.status_labels.won | jsonify }},
         "lost": {{ laser.status_labels.lost | jsonify }},
+        "livesLabel": {{ laser.status_labels.lives | jsonify }},
+        "targetsLabel": {{ laser.status_labels.targets | jsonify }},
         "background": {{ '/assets/images/projects/laser/laser-background.png' | relative_url | jsonify }},
         "node": {{ '/assets/images/projects/laser/laser-bluenode.png' | relative_url | jsonify }},
         "firewall": {{ '/assets/images/projects/laser/laser-firewall.png' | relative_url | jsonify }},
@@ -99,7 +103,7 @@ laser_game: true
 
 <section class="page-section section-muted laser-notes">
   <div class="content-shell two-column-section">
-    <div><p class="section-index">Project summary</p><h2>{{ laser.notes_heading }}</h2></div>
+    <div><p class="section-index project-summary-eyebrow">Project summary</p><h2>{{ laser.notes_heading }}</h2></div>
     <div class="section-body">
       <p>{{ laser.overview }}</p>
       <p>{{ laser.results }}</p>

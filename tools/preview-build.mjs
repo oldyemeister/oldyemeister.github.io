@@ -1,6 +1,8 @@
 import { execFileSync } from 'node:child_process';
-import { readFile, writeFile, mkdir, cp, rm } from 'node:fs/promises';
-import { resolve, dirname } from 'node:path';
+import { readFile, readdir, writeFile, mkdir, cp, rm } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { resolve, dirname, relative } from 'node:path';
 import { personaPreview } from '../templates/persona/render.mjs';
 
 const root = resolve(import.meta.dirname, '..');
@@ -207,9 +209,95 @@ function render(template, environment) {
   return template.replace(/{{\s*([^}]+)\s*}}/g, (_, expression) => applyFilters(expression, environment));
 }
 
+// --- Asset versioning and CSS bundling -------------------------------------
+// Every JS/CSS URL carries ?v=<hash of the file's final content>, so a deploy
+// never serves a stale file under GitHub Pages' 10-minute cache. JS modules are
+// rewritten first so an importer's hash also changes when a dependency does.
+const hash = (content) => createHash('sha256').update(content).digest('hex').slice(0, 10);
+const finalAssets = new Map(); // site path (/assets/...) -> final content
+
+async function versionModules() {
+  const importPattern = /(\bfrom\s*|\bimport\s*\(\s*)(['"])(\.{1,2}\/[^'"?]+\.m?js)(\?[^'"]*)?\2/g;
+  const sources = new Map();
+  const walk = async (directory) => {
+    for (const entry of await readdir(directory, { withFileTypes: true })) {
+      const path = resolve(directory, entry.name);
+      if (entry.isDirectory()) await walk(path);
+      else if (/\.m?js$/.test(entry.name)) sources.set(`/${relative(destination, path)}`, await readFile(path, 'utf8'));
+    }
+  };
+  await walk(resolve(destination, 'assets'));
+  const visiting = new Set();
+  const finalize = (sitePath) => {
+    if (finalAssets.has(sitePath)) return finalAssets.get(sitePath);
+    if (visiting.has(sitePath)) throw new Error(`Circular module import through ${sitePath}`);
+    visiting.add(sitePath);
+    const content = sources.get(sitePath).replace(importPattern, (match, keyword, quote, specifier) => {
+      const target = new URL(specifier, `https://site${sitePath}`).pathname;
+      if (!sources.has(target)) throw new Error(`${sitePath} imports missing module ${specifier}`);
+      return `${keyword}${quote}${specifier}?v=${hash(finalize(target))}${quote}`;
+    });
+    visiting.delete(sitePath);
+    finalAssets.set(sitePath, content);
+    return content;
+  };
+  for (const sitePath of sources.keys()) {
+    await writeFile(resolve(destination, sitePath.slice(1)), finalize(sitePath));
+  }
+}
+
+async function assetContent(sitePath) {
+  if (!finalAssets.has(sitePath)) finalAssets.set(sitePath, await readFile(resolve(destination, sitePath.slice(1)), 'utf8'));
+  return finalAssets.get(sitePath);
+}
+
+// A page's stylesheets become one file, concatenated in their original cascade
+// order, with relative url()s rewritten so fonts still resolve.
+async function bundleStyles(html) {
+  const head = html.slice(0, html.indexOf('</head>'));
+  const links = [...head.matchAll(/<link rel="stylesheet" href="(\/assets\/[^"?]+\.css)(?:\?[^"]*)?">\s*/g)];
+  if (links.length < 2) return html;
+  const parts = [];
+  for (const [, sitePath] of links) {
+    const css = (await assetContent(sitePath)).replace(/url\((['"]?)(?!data:|#|\/|https?:)([^'")]+)\1\)/g,
+      (_, quote, url) => `url(${quote}${new URL(url, `https://site${sitePath}`).pathname}${quote})`);
+    parts.push(`/* ${sitePath} */\n${css}`);
+  }
+  const bundle = parts.join('\n');
+  const bundlePath = `/assets/bundles/${hash(bundle)}.css`;
+  await mkdir(resolve(destination, 'assets/bundles'), { recursive: true });
+  await writeFile(resolve(destination, bundlePath.slice(1)), bundle);
+  let first = true;
+  return html.replace(/<link rel="stylesheet" href="\/assets\/[^"?]+\.css(?:\?[^"]*)?">\s*/g, (tag, offset) => {
+    if (offset > html.indexOf('</head>')) return tag;
+    if (!first) return '';
+    first = false;
+    return `<link rel="stylesheet" href="${bundlePath}">\n    `;
+  });
+}
+
+async function versionReferences(html) {
+  const references = [...html.matchAll(/\b(src|href|data-module)="(\/assets\/(?!bundles\/)[^"?]+\.(?:m?js|css))(?:\?[^"]*)?"/g)];
+  const versions = new Map();
+  for (const [, , sitePath] of references) versions.set(sitePath, hash(await assetContent(sitePath)));
+  return html.replace(/\b(src|href|data-module)="(\/assets\/(?!bundles\/)[^"?]+\.(?:m?js|css))(?:\?[^"]*)?"/g,
+    (_, attribute, sitePath) => `${attribute}="${sitePath}?v=${versions.get(sitePath)}"`);
+}
+
+const finalizePage = async (html) => versionReferences(await bundleStyles(html));
+
+// The /original/ and /persona/ copies stay reachable but out of search results;
+// each copy's canonical link still points at the root page.
+const noindex = (html) => html.replace('</head>', '  <meta name="robots" content="noindex, follow">\n  </head>');
+
 async function buildPage(sourcePath, outputPath) {
   const source = await readFile(resolve(root, sourcePath), 'utf8');
   const { page, body } = frontMatter(source);
+  page.url = `/${outputPath.replace(/(^|\/)index\.html$/, '$1')}`;
+  page.og_type = page.url === '/' ? 'website' : 'article';
+  page.project = outputPath.startsWith('projects/');
+  // Game pages name their content.yml block; its description feeds the meta tags.
+  if (page.content_key && !page.description) page.description = data[page.content_key]?.description;
   const pageEnvironment = {
     site: { ...config, data: { content: data } }, site_content: data, laser: data.laser,
     game: data.donkey_kong, imu: data.imu_sandbox, page
@@ -229,19 +317,20 @@ async function buildPage(sourcePath, outputPath) {
     .replace('{{ content }}', renderedBody);
   const output = render(assembled, { ...pageEnvironment, content: renderedBody });
   await mkdir(dirname(resolve(destination, outputPath)), { recursive: true });
-  await writeFile(resolve(destination, outputPath), production ? personaPreview(output, '') : output);
+  await writeFile(resolve(destination, outputPath), await finalizePage(production ? personaPreview(output, '', true, data.ui) : output));
   if (production) {
     const originalPath = resolve(destination, 'original', outputPath);
     const original = output.replace(/href="(\/[^"#?]*)([^" ]*)"/g, (match, path, suffix) =>
       path === '/' || path.startsWith('/projects/') || path === '/404.html'
         ? `href="/original${path}${suffix}"` : match);
     await mkdir(dirname(originalPath), { recursive: true });
-    await writeFile(originalPath, original);
+    await writeFile(originalPath, await finalizePage(noindex(original)));
   }
   // Retain /persona/ for preview links and existing bookmarks.
   const alternatePath = resolve(destination, 'persona', outputPath);
   await mkdir(dirname(alternatePath), { recursive: true });
-  await writeFile(alternatePath, personaPreview(output));
+  await writeFile(alternatePath, await finalizePage(noindex(personaPreview(output, '/persona', true, data.ui))));
+  return page;
 }
 
 await rm(destination, { recursive: true, force: true });
@@ -252,11 +341,28 @@ await cp(resolve(root, 'assets'), resolve(destination, 'assets'), {
     (!production || source !== resolve(root, 'assets/images/projects/aps380/APS380_Group8.mp4'))
 });
 if (production) await writeFile(resolve(destination, '.nojekyll'), '');
-await buildPage('index.html', 'index.html');
-await buildPage('projects/laser/index.html', 'projects/laser/index.html');
-await buildPage('projects/donkey-kong/index.html', 'projects/donkey-kong/index.html');
-await buildPage('projects/imu-sandbox/index.html', 'projects/imu-sandbox/index.html');
-await buildPage('projects/rf-receiver/index.md', 'projects/rf-receiver/index.html');
-await buildPage('projects/aps380/index.md', 'projects/aps380/index.html');
-await buildPage('404.html', '404.html');
+await versionModules();
+// Every projects/<name>/index.html or index.md is a page; empty folders are skipped.
+const projectPages = [];
+for (const entry of (await readdir(resolve(root, 'projects'), { withFileTypes: true })).filter(e => e.isDirectory())) {
+  const source = ['index.html', 'index.md'].map(file => `projects/${entry.name}/${file}`)
+    .find(path => existsSync(resolve(root, path)));
+  if (source) projectPages.push({ source, output: `projects/${entry.name}/index.html` });
+}
+const pages = [{ source: 'index.html', output: 'index.html' }, ...projectPages, { source: '404.html', output: '404.html' }];
+const published = [];
+for (const { source, output } of pages) {
+  const page = await buildPage(source, output);
+  if (page.published !== false && output !== '404.html') published.push(page.url);
+}
+
+const siteUrl = `${String(config.url || '').replace(/\/$/, '')}${String(config.baseurl || '').replace(/\/$/, '')}`;
+await writeFile(resolve(destination, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${published.map(url => `  <url><loc>${siteUrl}${url}</loc></url>`).join('\n')}
+</urlset>
+`);
+// The /original/ and /persona/ copies aren't disallowed here: crawlers must be
+// able to fetch them to see their noindex tag.
+await writeFile(resolve(destination, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${siteUrl}/sitemap.xml\n`);
 process.stdout.write(`${destination}\n`);

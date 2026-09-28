@@ -4,16 +4,17 @@
    Existing markup, column layouts, content order, game logic and fonts are retained. */
 body.persona-design { background: var(--field); color: var(--on-field); }
 
-/* Flatten legacy bevels, text strokes and soft shadows. Explicit overrides keep
-   this layer independent of the old stylesheet's high-specificity state rules. */
-body.persona-design *,
-body.persona-design *::before,
-body.persona-design *::after {
-  -webkit-text-stroke: 0 !important;
-  text-shadow: none !important;
-  box-shadow: none !important;
-  border-color: var(--border) !important;
-  outline-color: var(--interactive) !important;
+/* Flatten legacy bevels, text strokes and soft shadows. The `:root` prefix adds
+   one class-level of specificity so this overlay outranks the base stylesheets
+   without !important (verified identical computed styles on every page). */
+:root body.persona-design *,
+:root body.persona-design *::before,
+:root body.persona-design *::after {
+  -webkit-text-stroke: 0;
+  text-shadow: none;
+  box-shadow: none;
+  border-color: var(--border);
+  outline-color: var(--interactive);
 }
 body.persona-design :is(h1, h2, h3) {
   color: var(--on-panel);
@@ -30,7 +31,7 @@ body.persona-design :is(.section-header h2, .two-column-section h2, .contact-lay
   background: var(--interactive); transform: none;
 }
 body.persona-design :is(.laser-intro h1, .case-study-hero h1) {
-  border-bottom: 6px solid var(--interactive) !important;
+  border-bottom: 6px solid var(--interactive);
   padding-bottom: 18px;
 }
 
@@ -90,13 +91,13 @@ body.persona-design :is(.project-media, .portrait-frame, .case-study-hero-media,
   border: 2px solid var(--border);
   border-radius: 22px;
   background: var(--panel);
-  box-shadow: var(--offset-shadow) !important;
+  box-shadow: var(--offset-shadow);
 }
 body.persona-design .project-media { overflow: hidden; }
-body.persona-design .project-media img { border-radius: 20px; }
+body.persona-design .project-media :is(img, video) { border-radius: 20px; }
 body.persona-design .persona-monogram {
   background: var(--panel); color: var(--on-panel);
-  transform: none !important;
+  transform: none;
 }
 body.persona-design figcaption {
   color: var(--on-panel); background: var(--panel);
@@ -111,8 +112,6 @@ body.persona-design :is(.achievement-badge, .collaborator-icon) {
 }
 body.persona-design .achievement-badge::before { background: var(--panel); }
 
-/* A single theme: keep the old switch available for rollback, but out of the UI. */
-body.persona-design .theme-control { display: none !important; }
 body.persona-design :is(.site-header, .site-navigation, .persona-hud, .site-footer) {
   color: var(--on-panel); background: var(--panel); border-color: var(--border);
   backdrop-filter: none;
@@ -125,31 +124,31 @@ body.persona-design .site-navigation a { border-radius: 12px; padding-inline: 14
 body.persona-design :is(.identity-mark, .persona-hud kbd) {
   background: var(--secondary); color: var(--on-secondary);
   border-radius: 8px; transform: none;
-  box-shadow: var(--small-shadow) !important;
+  box-shadow: var(--small-shadow);
 }
-body.persona-design :is(button, .project-demo-link, .hero-links .text-link) {
-  color: var(--on-secondary) !important;
-  background: var(--secondary) !important;
+:root body.persona-design :is(button, .project-demo-link, .hero-links .text-link) {
+  color: var(--on-secondary);
+  background: var(--secondary);
   border: 2px solid var(--border);
   border-radius: 16px;
-  box-shadow: var(--control-shadow) !important;
+  box-shadow: var(--control-shadow);
 }
-body.persona-design :is(button, .project-demo-link, .hero-links .text-link) * {
-  color: inherit !important;
+:root body.persona-design :is(button, .project-demo-link, .hero-links .text-link) * {
+  color: inherit;
 }
 body.persona-design :is(button, .project-demo-link, .hero-links .text-link):hover {
   text-decoration: underline; text-underline-offset: 4px;
 }
 body.persona-design :is(button, .project-demo-link, .hero-links .text-link):active {
-  transform: translate(2px, 2px); box-shadow: var(--small-shadow) !important;
+  transform: translate(2px, 2px); box-shadow: var(--small-shadow);
 }
 body.persona-design :is(button, a, input, canvas):focus-visible {
   outline: 3px solid var(--interactive); outline-offset: 6px;
 }
 body.persona-design :is(button:disabled, [aria-disabled="true"], .source-link-pending, .project-draft-label) {
-  background: var(--inactive) !important; color: var(--on-panel) !important;
-  border-color: var(--inactive) !important; box-shadow: none !important;
-  opacity: 1 !important; cursor: default; text-decoration: none;
+  background: var(--inactive); color: var(--on-panel);
+  border-color: var(--inactive); box-shadow: none;
+  opacity: 1; cursor: default; text-decoration: none;
 }
 body.persona-design button:disabled { transform: none; }
 body.persona-design .project-media-placeholder {
@@ -164,8 +163,8 @@ body.persona-design .imu-toolbar { padding: 12px; }
 body.persona-design .imu-axis-controls { padding-inline: 20px; }
 body.persona-design :is(.imu-mode-control, .imu-planet-control) { gap: 8px; padding: 6px; }
 body.persona-design :is(.imu-mode-control, .imu-planet-control) button:not(.is-active) {
-  background: var(--inactive) !important; color: var(--on-panel) !important;
-  box-shadow: none !important;
+  background: var(--inactive); color: var(--on-panel);
+  box-shadow: none;
 }
 body.persona-design :is(.imu-scene, .imu-scene-status, .imu-world-axes,
   .imu-css-device, .imu-css-screen, .imu-css-screen canvas) {
@@ -173,7 +172,7 @@ body.persona-design :is(.imu-scene, .imu-scene-status, .imu-world-axes,
 }
 body.persona-design .imu-css-stage::before,
 body.persona-design .imu-css-stage::after { background-image: none; }
-body.persona-design .imu-css-device { box-shadow: var(--offset-shadow) !important; border-radius: 20px; }
+body.persona-design .imu-css-device { box-shadow: var(--offset-shadow); border-radius: 20px; }
 body.persona-design .imu-css-screw { background: var(--border); }
 body.persona-design .imu-css-pins {
   background: repeating-linear-gradient(90deg, var(--border) 0 7px, transparent 7px 13px);
@@ -204,14 +203,14 @@ body.persona-design :is(h1, h3, h4) {
 /* Preserve the requested section-heading font, using its installed bold face. */
 body.persona-design h2 { font-weight: 700; line-height: 1.08; }
 body.persona-design :is(h1, h2, h3, h4) .kinetic-letter {
-  animation: none !important;
-  transform: none !important;
-  transition: none !important;
+  animation: none;
+  transform: none;
+  transition: none;
 }
 body.persona-design :is(.hero-copy h1, .project-content h3, .case-study-prose h2, .case-study-prose h3) {
   text-align: left;
   padding-bottom: 18px;
-  border-bottom: 6px solid var(--interactive) !important;
+  border-bottom: 6px solid var(--interactive);
 }
 body.persona-design :is(.section-header h2, .two-column-section h2, .contact-layout h2) {
   width: 100%; text-align: left;
@@ -236,13 +235,6 @@ body.persona-design .hero-visual-caption {
   left: 0; right: 0;
   font: 400 .8rem/1.5 Arial, sans-serif;
   text-align: center;
-}
-body.persona-design .project-visual { margin: 0 0 24px; min-width: 0; }
-body.persona-design .project-visual figcaption {
-  margin-top: 18px;
-  padding: 0 8px;
-  font-size: .78rem;
-  line-height: 1.5;
 }
 body.persona-design .project-content { padding: 0 0 16px; }
 body.persona-design #projects .project-content { padding: 0; }
@@ -269,11 +261,11 @@ body.persona-design .case-study-hero-copy {
 body.persona-design .case-study-hero-media {
   order: 1; width: 100%; margin: 0;
   overflow: visible; border: 0;
-  box-shadow: none !important;
+  box-shadow: none;
 }
 body.persona-design .case-study-hero-media img {
   border-radius: 22px;
-  box-shadow: var(--offset-shadow) !important;
+  box-shadow: var(--offset-shadow);
 }
 body.persona-design .case-study-hero-media figcaption {
   padding: 0 8px; margin-top: 20px; border: 0;
@@ -299,7 +291,7 @@ body.persona-design :is(.arrow-link, .source-link, .case-study-source, .contact-
 }
 body.persona-design .arrow-link {
   background: var(--secondary); color: var(--on-secondary);
-  box-shadow: var(--control-shadow) !important;
+  box-shadow: var(--control-shadow);
 }
 body.persona-design .site-navigation a:is(:hover, :focus-visible),
 body.persona-design .site-navigation a[aria-current] {
@@ -307,17 +299,24 @@ body.persona-design .site-navigation a[aria-current] {
 }
 body.persona-design .site-navigation a::after { border-radius: 12px; }
 body.persona-design button[aria-pressed='true'] {
-  background: var(--secondary) !important;
-  color: var(--on-secondary) !important;
-  box-shadow: var(--control-shadow) !important;
+  background: var(--secondary);
+  color: var(--on-secondary);
+  box-shadow: var(--control-shadow);
 }
 body.persona-design button:disabled,
 body.persona-design button[aria-disabled='true'] {
-  background: var(--inactive) !important;
-  border-color: var(--inactive) !important;
-  box-shadow: none !important;
+  background: var(--inactive);
+  border-color: var(--inactive);
+  box-shadow: none;
 }
 @media (max-width: 600px) {
+  body.persona-design .project-links .source-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding-inline: 4px;
+  }
+
   body.persona-design .case-study-hero-copy { padding: 0; }
   body.persona-design .project-grid { gap: 44px; }
 }
@@ -337,26 +336,24 @@ body.persona-design a:not(.project-demo-link, .hero-links .text-link):is(:hover,
   background-color: var(--secondary);
   text-decoration-color: var(--on-secondary);
 }
-body.persona-design :is(.text-link-primary, .project-demo-link, .game-start-button),
-body.persona-design .theme-switch[aria-checked='true'] {
-  background: var(--palette-yellow) !important;
-  color: var(--on-interactive) !important;
+:root body.persona-design :is(.text-link-primary, .project-demo-link, .game-start-button) {
+  background: var(--palette-yellow);
+  color: var(--on-interactive);
 }
-body.persona-design .theme-switch-thumb { background: var(--on-interactive); }
 body.persona-design :is(.tag-list li, .technology-list li, .case-study-tools li) a { color: inherit; }
 
 /* Hero actions: yellow primary contact CTA and olive résumé action. */
-body.persona-design .hero-links .text-link-primary {
-  background: var(--palette-yellow) !important;
-  color: var(--palette-black) !important;
-  border-color: var(--palette-yellow) !important;
-  box-shadow: var(--control-shadow) !important;
+:root body.persona-design .hero-links .text-link-primary {
+  background: var(--palette-yellow);
+  color: var(--palette-black);
+  border-color: var(--palette-yellow);
+  box-shadow: var(--control-shadow);
 }
 body.persona-design .hero-links .text-link:not(.text-link-primary) {
-  background: var(--palette-olive) !important;
-  color: var(--palette-white) !important;
-  border-color: var(--palette-gold) !important;
-  box-shadow: var(--control-shadow) !important;
+  background: var(--palette-olive);
+  color: var(--palette-white);
+  border-color: var(--palette-gold);
+  box-shadow: var(--control-shadow);
 }
 body.persona-design .hero-links .text-link:hover,
 body.persona-design .hero-links .text-link:focus-visible {
@@ -367,16 +364,16 @@ body.persona-design .hero-links .text-link:focus-visible {
 /* Restore only the black cabinet and bezel, not its buttons or screen UI. */
 body.persona-design .persona-tv {
   background: var(--tv-black);
-  border-color: var(--tv-black) !important;
-  box-shadow: inset 0 3px 0 var(--tv-highlight), inset 0 -6px 0 var(--tv-deep-shadow), 8px 10px 0 var(--tv-shadow) !important;
+  border-color: var(--tv-black);
+  box-shadow: inset 0 3px 0 var(--tv-highlight), inset 0 -6px 0 var(--tv-deep-shadow), 8px 10px 0 var(--tv-shadow);
 }
 body.persona-design .persona-tv > :is(.game-board-wrap, .imu-scene) {
-  border-color: var(--tv-bezel) !important;
-  box-shadow: 0 2px 0 var(--tv-edge) !important;
+  border-color: var(--tv-bezel);
+  box-shadow: 0 2px 0 var(--tv-edge);
 }
 body.persona-design .tv-leg {
-  border-color: var(--tv-black) !important;
-  box-shadow: inset 0 1px 0 var(--tv-highlight), 3px 4px 0 var(--tv-shadow) !important;
+  border-color: var(--tv-black);
+  box-shadow: inset 0 1px 0 var(--tv-highlight), 3px 4px 0 var(--tv-shadow);
 }
 body.persona-design .tv-leg::before { background: var(--tv-black); }
 body.persona-design :is(.game-overlay, .game-pause-overlay, .persona-game-start) {
@@ -384,11 +381,11 @@ body.persona-design :is(.game-overlay, .game-pause-overlay, .persona-game-start)
 }
 body.persona-design .persona-tv .game-action-button,
 body.persona-design .tv-leg .control-group button { border-radius: 50%; }
-body.persona-design .tv-leg button { box-shadow: var(--small-shadow) !important; }
+body.persona-design .tv-leg button { box-shadow: var(--small-shadow); }
 body.persona-design .game-start-button [data-start-label] { color: var(--on-interactive); }
 body.persona-design .game-overlay strong { color: var(--on-panel); }
 @media (max-width: 600px) {
-  body.persona-design .persona-tv { box-shadow: 4px 6px 0 var(--tv-shadow) !important; }
+  body.persona-design .persona-tv { box-shadow: 4px 6px 0 var(--tv-shadow); }
 }
 }
 
@@ -486,32 +483,32 @@ body.persona-design #experience .experience-scroll-arrow {
   padding: 0;
   border: 2px solid var(--border);
   border-radius: 50%;
-  background: color-mix(in srgb, var(--palette-yellow) 85%, transparent) !important;
-  color: var(--on-field) !important;
+  background: color-mix(in srgb, var(--palette-yellow) 85%, transparent);
+  color: var(--on-field);
   font: 700 22px/1 Arial, sans-serif;
   transform: translateY(-50%);
-  box-shadow: none !important;
+  box-shadow: none;
 }
 body.persona-design #experience .experience-scroll-previous { left: -8px; }
 body.persona-design #experience .experience-scroll-next { right: -8px; }
 body.persona-design #experience .experience-scroll-arrow[hidden] { display: none; }
 body.persona-design #experience .experience-scroll-arrow:disabled {
-  background: color-mix(in srgb, var(--inactive) 70%, transparent) !important;
+  background: color-mix(in srgb, var(--inactive) 70%, transparent);
   cursor: default;
 }
 body.persona-design #experience .experience-scroll-arrow:active { transform: translateY(-50%); }
 
 /* Keep the project introduction readable on the yellow field. */
 body.persona-design #projects .section-header > p {
-  color: var(--palette-black) !important;
+  color: var(--palette-black);
 }
 
 /* Footer copy sits on the same olive foundation as the rest of the interface. */
 body.persona-design .site-footer {
-  background: var(--palette-olive) !important;
-  color: var(--palette-white) !important;
+  background: var(--palette-olive);
+  color: var(--palette-white);
 }
-body.persona-design .site-footer p { color: var(--palette-white) !important; }
+body.persona-design .site-footer p { color: var(--palette-white); }
 @media (max-width: 1000px) {
   body.persona-design #experience .experience-card-track { grid-auto-columns: calc((100% - 24px) / 2); }
 }
@@ -526,11 +523,11 @@ body.persona-design .site-footer p { color: var(--palette-white) !important; }
 /* 2. Projects buttons only: the hard shadow contracts into the button. */
 body.persona-design #projects :is(.project-demo-link, button, [role='button']) {
   border-radius: 22px;
-  border-color: var(--palette-black) !important;
-  background: var(--palette-black) !important;
-  color: var(--palette-yellow) !important;
-  box-shadow: 8px 5px 0 0 var(--palette-yellow) !important;
-  transform: none !important;
+  border-color: var(--palette-black);
+  background: var(--palette-black);
+  color: var(--palette-yellow);
+  box-shadow: 8px 5px 0 0 var(--palette-yellow);
+  transform: none;
   transition: background-color 650ms cubic-bezier(.34, 1.56, .64, 1),
     border-color 650ms cubic-bezier(.34, 1.56, .64, 1),
     color 650ms cubic-bezier(.34, 1.56, .64, 1),
@@ -562,24 +559,35 @@ body.persona-design #projects .project-demo-link:is(:hover, :focus-visible)::bef
 /* Project image windows: keep their olive treatment, with a slightly shorter
    yellow drop so it does not peek around the rounded corners. */
 body.persona-design #projects .project-media {
-  box-shadow: 8px 5px 0 var(--palette-yellow) !important;
+  box-shadow: 8px 5px 0 var(--palette-yellow);
 }
-body.persona-design #projects :is(.project-demo-link, button, [role='button']) * { color: inherit !important; }
+body.persona-design #projects :is(.project-demo-link, button, [role='button']) * { color: inherit; }
 body.persona-design #projects :is(.project-demo-link, button, [role='button']):is(:hover, :focus-visible):not(:disabled, [aria-disabled='true']) {
-  background: var(--palette-yellow) !important;
-  border-color: var(--palette-yellow) !important;
-  color: var(--palette-black) !important;
-  box-shadow: 0 0 0 -2em color-mix(in srgb, var(--palette-yellow) 0%, transparent) !important;
+  background: var(--palette-yellow);
+  border-color: var(--palette-yellow);
+  color: var(--palette-black);
+  box-shadow: 0 0 0 -2em color-mix(in srgb, var(--palette-yellow) 0%, transparent);
 }
 body.persona-design #projects :is(button:disabled, [aria-disabled='true']) {
-  background: var(--inactive) !important;
-  border-color: var(--inactive) !important;
-  color: var(--on-panel) !important;
-  box-shadow: none !important;
+  background: var(--inactive);
+  border-color: var(--inactive);
+  color: var(--on-panel);
+  box-shadow: none;
 }
 @media (prefers-reduced-motion: reduce) {
   body.persona-design #projects :is(.project-demo-link, button, [role='button']) { transition: none; }
   body.persona-design #projects .project-demo-link::before { transition: none; }
+}
+
+/* The "playable" sticker over the project window, above the CRT overlay. */
+body.persona-design #projects .project-playable-badge {
+  padding: 6px 12px;
+  border: 2px solid var(--palette-black);
+  border-radius: 999px;
+  background: var(--palette-yellow);
+  color: var(--palette-black);
+  box-shadow: 3px 3px 0 var(--palette-black);
+  font: 800 .72rem/1.2 Arial, sans-serif;
 }
 
 /* Text directly on the electric-yellow field uses the existing black token.
@@ -591,13 +599,15 @@ body.persona-design #projects :is(button:disabled, [aria-disabled='true']) {
   .laser-intro > .content-shell, .case-study-hero, .case-study-layout,
   .laser-shell, .imu-demo-section, .experience-card
 ) {
+  /* Still !important: section stylesheets set these colours with !important. */
   :scope :is(h1, h2, h3, h4, p, li, dt, dd, span, small, strong, em, time, label) {
     color: var(--palette-black) !important;
     -webkit-text-fill-color: currentColor;
   }
 }
 
-/* Yellow controls must also keep nested text black in interactive states. */
+/* Yellow controls must also keep nested text black in interactive states.
+   Still !important: it must beat the rule above in hover/focus states. */
 body.persona-design :is(.skip-link, .text-link-primary, .game-start-button),
 body.persona-design :is(.skip-link, .text-link-primary, .game-start-button) :is(span, strong, small),
 body.persona-design #projects :is(.project-demo-link, button, [role='button']):is(:hover, :focus-visible):not(:disabled, [aria-disabled='true']),
@@ -606,7 +616,8 @@ body.persona-design #projects :is(.project-demo-link, button, [role='button']):i
   -webkit-text-fill-color: currentColor;
 }
 
-/* Requested exception for the hero contact action, including its arrow. */
+/* Requested exception for the hero contact action, including its arrow.
+   Still !important: it must beat the !important black text rule above. */
 body.persona-design .hero-links .text-link-primary,
 body.persona-design .hero-links .text-link-primary * {
   color: var(--palette-yellow) !important;
@@ -616,6 +627,6 @@ body.persona-design .hero-links .text-link-primary * {
 /* Black project copy on the RF/PCB and autonomous car detail pages only. */
 body.persona-design:is(.page-rf-receiver, .page-aps380) .case-study,
 body.persona-design:is(.page-rf-receiver, .page-aps380) .case-study :is(h1, h2, h3, h4, p, a, li, dt, dd, figcaption, span, strong, em, code, th, td) {
-  color: var(--palette-black) !important;
+  color: var(--palette-black);
   -webkit-text-fill-color: var(--palette-black);
 }

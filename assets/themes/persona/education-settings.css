@@ -1,31 +1,41 @@
-/* Education-only settings-screen preview; existing palette and section type. */
+/* P4R settings-screen field, local topic lettering, and sweeping color bands. */
 body.persona-design #education {
+  --education-navy: #1e3765;
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  --education-right-yellow: color-mix(in srgb, var(--hero-yellow-light) 85%, var(--palette-yellow));
-  --pill-gap: clamp(3px, .5vw, 8px);
-  --pill-height: clamp(8px, 2vw, 30px);
-  --education-pill-top: 116px;
-  background: linear-gradient(90deg, var(--palette-gold), var(--education-right-yellow));
-  color: var(--on-field);
+  padding-block: clamp(80px, 8vw, 112px) clamp(56px, 6vw, 88px);
+  background: linear-gradient(110deg, var(--palette-gold), var(--hero-yellow-light));
+  color: var(--palette-black);
   border-bottom: 2px solid var(--palette-amber);
-  padding-top: calc(var(--education-pill-top) + 6 * var(--pill-height) + 5 * var(--pill-gap) + 40px);
-  padding-bottom: 96px;
 }
 body.persona-design #education > .content-shell {
   position: relative;
-  z-index: 1;
+  z-index: 2;
+  display: block;
+  width: min(1180px, calc(100% - 56px));
+  padding: 0;
   background: transparent;
   border: 0;
   border-radius: 0;
-  padding: 0;
-  color: var(--on-field);
-  grid-template-columns: max-content minmax(0, 1fr);
-  gap: clamp(32px, 5vw, 72px);
+  color: inherit;
 }
-body.persona-design #education #education-heading { white-space: nowrap; }
-body.persona-design #education .section-body { color: var(--on-field); }
+body.persona-design #education .education-section-heading { margin-bottom: 36px; }
+body.persona-design #education #education-heading {
+  margin: 0;
+  translate: none;
+  transform: none;
+  white-space: nowrap;
+}
+body.persona-design #education #education-heading::after {
+  content: '';
+  display: block;
+  width: 68px;
+  height: 7px;
+  margin-top: 18px;
+  background: var(--palette-olive);
+  transform: skewX(-16deg);
+}
 body.persona-design #education .education-horizontal-ribbons {
   position: absolute;
   z-index: 1;
@@ -35,40 +45,93 @@ body.persona-design #education .education-horizontal-ribbons {
   pointer-events: none;
 }
 body.persona-design #education .education-horizontal-ribbons > span {
-  flex: 0 0 var(--band-height);
+  height: calc(var(--band-height) * .4);
   background: var(--band-color);
+  transform-origin: right center;
+}
+body.persona-design #education .education-card {
+  display: block;
+  max-width: 100%;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  color: inherit;
+}
+body.persona-design #education .education-heading-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(180px, 24vw, 300px);
+  align-items: center;
+  gap: clamp(24px, 4vw, 64px);
+  margin-bottom: 24px;
+}
+body.persona-design #education .education-logo {
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  transform-origin: center;
+}
+body.persona-design #education .education-logo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(4px 5px 1px var(--palette-yellow));
+}
+body.persona-design #education .education-logo-fallback {
+  color: var(--education-navy);
+  font: 700 1.5rem/1.2 'Persona Slim Local', sans-serif;
+  text-shadow: 3px 4px 1px var(--palette-yellow);
+}
+body.persona-design #education .education-details h3 {
+  margin: 0;
+  color: inherit;
+  font-size: clamp(1.7rem, 3.4vw, 2.75rem);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -.025em;
+  text-transform: none;
+  text-wrap: balance;
+}
+body.persona-design #education .education-program {
+  max-width: 65ch;
+  margin: 0 0 14px;
+  color: inherit;
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  line-height: 1.55;
+}
+body.persona-design #education .education-dates {
+  margin: 0;
+  color: var(--palette-olive);
+  font-size: .94rem;
+  font-weight: 700;
+  line-height: 1.5;
 }
 body.persona-design #education .education-descriptor {
+  max-width: 65ch;
   margin: 24px 0 0;
   padding-top: 18px;
-  border-top: 1px solid var(--palette-amber);
-  color: var(--on-field);
-}
-body.persona-design #education .education-pill-field {
-  position: absolute;
-  left: 0;
-  top: calc(var(--education-pill-top) - 40px);
-  /* Preserve the old 15-column pill width while extending to 22 columns. */
-  width: calc((min(85vw, 1100px) - 14 * var(--pill-gap)) / 15 * 22 + 21 * var(--pill-gap));
-  height: calc(6 * var(--pill-height) + 5 * var(--pill-gap));
-  display: flex;
-  gap: var(--pill-gap);
-  opacity: .65;
-  pointer-events: none;
-  z-index: 0;
-}
-body.persona-design #education .about-pill-column {
-  display: flex;
-  flex: 1 1 0;
-  min-width: 0;
-  flex-direction: column;
-  gap: var(--pill-gap);
-}
-body.persona-design #education .about-pill {
-  flex: 0 0 var(--pill-height);
-  border-radius: calc(var(--pill-height) / 2);
-  background: var(--hero-yellow-light);
+  border-top: 1px solid var(--palette-olive);
+  color: inherit;
+  font-size: 1rem;
+  line-height: 1.6;
 }
 @media (max-width: 760px) {
-  body.persona-design #education > .content-shell { grid-template-columns: 1fr; gap: 24px; }
+  body.persona-design #education { padding-block: 76px 56px; }
+  body.persona-design #education > .content-shell { width: min(100% - 40px, 680px); }
+  body.persona-design #education .education-heading-row {
+    grid-template-columns: minmax(0, 1fr) clamp(100px, 27vw, 180px);
+    gap: 16px;
+  }
+  body.persona-design #education .education-details h3 { font-size: clamp(1.3rem, 4.5vw, 2rem); }
+  body.persona-design #education .education-logo img { filter: drop-shadow(2px 3px 1px var(--palette-yellow)); }
+}
+@media (min-width: 761px) and (max-height: 600px) {
+  body.persona-design #education { padding-block: 72px 48px; }
+  body.persona-design #education .education-section-heading { margin-bottom: 24px; }
 }

@@ -108,11 +108,9 @@
   window.addEventListener('pagehide', reset);
   motion.addEventListener('change', () => { if (motion.matches) reset(); });
 
-  // The fixed HUD documents real browser focus/activation behavior. Arrow
-  // selection is home-only so the project games retain all their arrow keys.
+  // The fixed HUD documents real browser focus/activation behavior. Tab and
+  // the arrow keys stay native; the open menu handles its own arrow keys.
   const hud = document.querySelector('.persona-hud');
-  const homeLink = document.querySelector('[data-hud-home]');
-  const homePage = document.body.classList.contains('page-home');
   const menuTrigger = document.querySelector('[data-menu-toggle]');
   hud.querySelectorAll('[data-hud-menu-toggle]').forEach(button => {
     button.addEventListener('click', () => {
@@ -129,43 +127,16 @@
   else window.addEventListener('resize', sizeHud);
   sizeHud();
 
+  // Esc toggles the navigation menu on every page. It never leaves the page,
+  // so a game in progress isn't lost. The menu itself closes on Esc first.
   window.addEventListener('keydown', event => {
-    if (event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey ||
+    if (event.key !== 'Escape' || event.defaultPrevented || event.isComposing ||
+        event.altKey || event.ctrlKey || event.metaKey || document.fullscreenElement ||
         event.target.closest('input, textarea, select, [contenteditable]:not([contenteditable="false"]), [role="dialog"], dialog')) return;
-    if (event.key === 'Escape') {
-      if (document.fullscreenElement) return;
-      event.preventDefault();
-      if (event.repeat || busy) return;
-      if (document.body.classList.contains('navigation-open')) {
-        menuTrigger?.click();
-        menuTrigger?.focus();
-        return;
-      }
-      if (homePage) {
-        menuTrigger?.focus({ preventScroll: true });
-        menuTrigger?.click();
-        return;
-      }
-      // Use the link's existing click path, including reduced-motion handling,
-      // the outgoing wipe and the destination page's arrival wipe.
-      homeLink.click();
-    } else if (homePage && event.key === 'Tab' && !event.shiftKey &&
-        !document.body.classList.contains('navigation-open') &&
-        (document.activeElement === document.body || document.activeElement === document.documentElement)) {
-      event.preventDefault();
-      menuTrigger?.focus({ preventScroll: true });
-      menuTrigger?.click();
-    } else if (homePage && !event.shiftKey && (event.key === 'ArrowDown' || event.key === 'ArrowUp')) {
-      const links = [...document.querySelectorAll('.site-navigation a, main a[href], .persona-hud a')]
-        .filter(link => link.getClientRects().length && getComputedStyle(link).visibility !== 'hidden');
-      if (!links.length) return;
-      event.preventDefault();
-      if (busy) return;
-      const current = links.indexOf(document.activeElement);
-      const next = current < 0 ? (event.key === 'ArrowDown' ? 0 : links.length - 1)
-        : (current + (event.key === 'ArrowDown' ? 1 : -1) + links.length) % links.length;
-      links[next].focus();
-    }
+    event.preventDefault();
+    if (event.repeat || busy) return;
+    menuTrigger?.focus({ preventScroll: true });
+    menuTrigger?.click();
   });
 
   document.addEventListener('click', async event => {

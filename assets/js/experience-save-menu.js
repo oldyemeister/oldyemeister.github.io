@@ -3,6 +3,11 @@
   if (!menu) return;
   const list = menu.querySelector('[role="listbox"]');
   const options = [...list.querySelectorAll('[role="option"]')];
+  // Decorative "to be continued" rows pad both ends, so the selected role can
+  // always sit in the middle of the three visible rows.
+  const fillers = [...list.querySelectorAll('[data-experience-filler]')];
+  const padded = fillers.length === 2;
+  const rows = padded ? [fillers[0], ...options, fillers[1]] : options;
   const up = menu.querySelector('[data-experience-up]');
   const down = menu.querySelector('[data-experience-down]');
   if (!options.length) return;
@@ -18,7 +23,8 @@
     shifts = [];
   }
   motion.addEventListener('change', () => { if (motion.matches) cancelShifts(); });
-  let selected = Math.min(1, options.length - 1);
+  // Lead with the current role, centred under the top filler row.
+  let selected = 0;
   let first = 0;
   options.forEach((option, index) => {
     option.id = `experience-option-${index + 1}`;
@@ -27,6 +33,10 @@
     option.querySelector('.experience-save-number').textContent = String(index + 1);
     option.addEventListener('click', () => select(index, true));
   });
+  if (padded) {
+    fillers[0].querySelector('.experience-save-number').textContent = '0';
+    fillers[1].querySelector('.experience-save-number').textContent = String(options.length + 1);
+  }
   function positionControls() {
     const row = options[selected];
     menu.style.setProperty('--selected-row-top', `${row.offsetTop}px`);
@@ -51,16 +61,17 @@
     const previousSelection = selected;
     const animate = menu.dataset.ready === 'true' && !motion.matches;
     const listTop = animate ? list.getBoundingClientRect().top : 0;
-    const previousCopies = new Map(animate ? options.filter(row => !row.hidden).map(row =>
+    const previousCopies = new Map(animate ? rows.filter(row => !row.hidden).map(row =>
       [row, row.querySelector('.experience-save-copy').getBoundingClientRect().top - listTop]) : []);
     cancelShifts();
     selected = next;
-    first = selected - 1;
-    options.forEach((option, i) => {
-      option.hidden = i < first || i >= first + 3;
-      option.setAttribute('aria-selected', String(i === selected));
-      option.dataset.position = i < selected ? 'above' : i > selected ? 'below' : 'selected';
+    // `first` indexes rows; with fillers the selection is always the middle row.
+    first = padded ? selected : Math.max(0, Math.min(Math.max(0, options.length - 3), selected - 1));
+    rows.forEach((row, i) => {
+      row.hidden = i < first || i >= first + 3;
+      row.dataset.position = ['first', 'middle', 'last'][i - first] || 'last';
     });
+    options.forEach((option, i) => option.setAttribute('aria-selected', String(i === selected)));
     list.setAttribute('aria-activedescendant', options[selected].id);
     up.disabled = selected === 0;
     down.disabled = selected === options.length - 1;
@@ -75,7 +86,7 @@
       const direction = Math.sign(selected - previousSelection);
       const rowHeight = options[selected].offsetHeight;
       const newListTop = list.getBoundingClientRect().top;
-      shifts.push(...options.filter(row => !row.hidden).map(row => {
+      shifts.push(...rows.filter(row => !row.hidden).map(row => {
         const copy = row.querySelector('.experience-save-copy');
         const oldTop = previousCopies.get(row);
         const distance = oldTop === undefined
@@ -88,7 +99,7 @@
         ], { duration: SLIDE_DURATION, easing: SLIDE_EASING });
       }));
       // Squash and stretch around fixed centers, preserving the selected size.
-      shifts.push(...options.filter(row => !row.hidden).flatMap(row => {
+      shifts.push(...rows.filter(row => !row.hidden).flatMap(row => {
         const scale = row === options[selected] ? 1.3 : 1;
         const shape = (x, y) => `translateY(-50%) scale(${scale * x}, ${scale * y})`;
         const number = row.querySelector('.experience-save-number').animate([

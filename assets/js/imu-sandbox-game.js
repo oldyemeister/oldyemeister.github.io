@@ -2,7 +2,7 @@ import * as THREE from '../vendor/three.module.min.js';
 import {
   OLED_WIDTH, OLED_HEIGHT, createSandbox, particlePixelX, particlePixelY,
   setPoseValue, resetPose, setMode, cycleMode, setPlanet, updateSandbox
-} from './imu-sandbox-engine.js?v=17';
+} from './imu-sandbox-engine.js';
 import { createViewportLoop } from './viewport-loop.js';
 
 const host = document.querySelector('[data-imu-scene]');

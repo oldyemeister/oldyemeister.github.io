@@ -22,7 +22,11 @@ body.persona-design.page-home [data-scroll-presence]:focus-within {
 body.persona-design.page-home #home { border-bottom: 0; }
 body.persona-design.page-home :is(#home, #about) { background-color: var(--palette-yellow); }
 body.persona-design.page-home #about[data-about-scroll] > .content-shell > .section-body {
-  opacity: var(--about-copy-opacity, 1);
+  transform: translateX(calc((1 - var(--about-copy-progress, 1)) * 18px));
+}
+body.persona-design.page-home #about[data-about-scroll] h2::after {
+  transform-origin: left center;
+  transform: skewX(-16deg) scaleX(calc(.5 + var(--about-copy-progress, 1) * .5));
 }
 /* Move the complete fan along its diagonal, preserving the connected stripes. */
 body.persona-design.page-home #about[data-about-scroll] > .about-corner-ribbons {
@@ -38,12 +42,14 @@ body.persona-design.page-home #about .reveal-item {
   transform: none;
   transition: none;
 }
-html.about-scroll-pending body.persona-design #about > :is(.about-legacy-art, .content-shell, .about-corner-ribbons) { opacity: 0; }
+html.about-scroll-pending body.persona-design #about > :is(.about-legacy-art, .about-corner-ribbons) { opacity: 0; }
 body.persona-design.page-home #about[data-about-scroll] > .content-shell > :focus-within { opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
   body.persona-design.page-home #about > :is(.about-legacy-art, .content-shell, .about-corner-ribbons) { opacity: 1 !important; }
   body.persona-design.page-home #about .about-growing-rings { transform: none !important; }
   body.persona-design.page-home #about > .about-corner-ribbons { transform: none !important; }
+  body.persona-design.page-home #about[data-about-scroll] > .content-shell > .section-body { transform: none; }
+  body.persona-design.page-home #about[data-about-scroll] h2::after { transform: skewX(-16deg); }
 }
 
 body.persona-design #about .about-outer-ring { fill: none; stroke: var(--palette-gold); }
@@ -60,17 +66,28 @@ body.persona-design #about .about-shockwave {
   body.persona-design #about .about-shockwave { display: none; }
 }
 
-/* Existing Education layers enter intact, bars first and pills just behind. */
+/* Education retains its ribbon entrance; pills now belong to Contact. */
 body.persona-design #education[data-decor-scroll] .education-horizontal-ribbons {
   transform: translateX(calc((1 - var(--education-bars-progress, 1)) * 100vw));
 }
-body.persona-design #education[data-decor-scroll] .education-pill-field {
-  transform: translateX(calc((1 - var(--education-pills-progress, 1)) * 100vw));
+/* A settings-screen sweep: bands arrive first; the transparent crest settles
+   into place as the school record enters. Content is readable at every point. */
+body.persona-design #education[data-decor-scroll] .education-horizontal-ribbons > span:nth-child(even) {
+  transform: translateX(calc((1 - var(--education-bars-progress, 1)) * 12vw));
+}
+body.persona-design #education[data-decor-scroll] .education-logo {
+  transform: translateX(calc((1 - var(--education-entry-progress, 1)) * 24px))
+    rotate(calc((1 - var(--education-entry-progress, 1)) * -6deg));
+}
+body.persona-design #education[data-decor-scroll] #education-heading::after {
+  transform-origin: left center;
+  transform: skewX(-16deg) scaleX(calc(.5 + var(--education-entry-progress, 1) * .5));
 }
 @media (prefers-reduced-motion: reduce) {
-  body.persona-design #education :is(.education-horizontal-ribbons, .education-pill-field) {
+  body.persona-design #education :is(.education-horizontal-ribbons, .education-horizontal-ribbons > span, .education-logo) {
     transform: none !important;
   }
+  body.persona-design #education #education-heading::after { transform: skewX(-16deg); }
 }
 
 /* Portrait frames turn in from opposite sides, tied to the About scroll reveal. */

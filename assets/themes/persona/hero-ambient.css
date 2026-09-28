@@ -30,7 +30,10 @@ body.persona-design #home .hero-ambient-orb {
   opacity: .20;
   pointer-events: none;
   animation: hero-ambient-drift 26s ease-in-out infinite;
+  /* Large blurred layers are costly; drift only while the hero is on screen. */
+  animation-play-state: paused;
 }
+body.persona-design #home.hero-flowers-running .hero-ambient-orb { animation-play-state: running; }
 body.persona-design #home .hero-ambient-orb:nth-child(1) { top: -8%; left: 26%; }
 body.persona-design #home .hero-ambient-orb:nth-child(2) {
   top: 28%; right: -4%;

@@ -67,8 +67,23 @@ function render() {
   if (game.status === 'won') context.drawImage(assets.win, 202, 18);
 }
 
+// Screen readers hear only restarts and the win, not the live counters.
+const announcer = document.querySelector('[data-game-announcer]');
+let announced;
+function announce() {
+  const state = { collisions: game.collisions, status: game.status };
+  if (announcer && announced) {
+    const parts = [];
+    if (state.collisions > announced.collisions) parts.push(`${labels.collisionsLabel}: ${state.collisions}`);
+    if (state.status === 'won' && announced.status !== 'won') parts.push(labels.wonMessage);
+    if (parts.length) announcer.textContent = parts.join('. ');
+  }
+  announced = state;
+}
+
 function updateInterface() {
   if (!game) return;
+  announce();
   const status = game.status === 'won' ? labels.won : game.paused ? labels.paused : labels.running;
   elements.status.textContent = status;
   elements.collisions.textContent = String(game.collisions);
@@ -119,20 +134,26 @@ function directionForKey(key) {
   return null;
 }
 
-window.addEventListener('keydown', (event) => {
-  if (event.defaultPrevented || document.body.classList.contains('navigation-open') ||
-      event.target.matches('input, textarea, select')) return;
-  if (!game) return;
+// Keys drive the game only while its canvas has focus, so Space and the arrows
+// keep their normal meaning on buttons and the rest of the page.
+canvas.addEventListener('keydown', (event) => {
+  if (event.defaultPrevented || !game) return;
   const direction = directionForKey(event.key);
   if (direction) { event.preventDefault(); setControl(game, direction, true); }
   if ((event.key === 'w' || event.key === 'ArrowUp') && !event.repeat) { event.preventDefault(); jump(game); }
   if (event.key === ' ' && !event.repeat && game.status === 'running') { event.preventDefault(); pause(!game.paused); }
   if (event.key.toLowerCase() === 'r') reset();
 });
+// Releases are global: a key let go after focus moves away must still stop Mario.
 window.addEventListener('keyup', (event) => {
   if (!game) return;
   const direction = directionForKey(event.key);
   if (direction) setControl(game, direction, false);
+});
+canvas.addEventListener('blur', () => {
+  if (!game) return;
+  setControl(game, 'left', false);
+  setControl(game, 'right', false);
 });
 
 document.querySelectorAll('[data-dk-direction]').forEach((button) => {

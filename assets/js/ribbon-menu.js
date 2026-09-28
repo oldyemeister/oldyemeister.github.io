@@ -3,6 +3,8 @@
   const nav = document.querySelector('[data-navigation]');
   if (!trigger || !nav) return;
   const hudTriggers = [...document.querySelectorAll('[data-hud-menu-toggle]')];
+  // Labels come from content.yml (ui.menu) via data attributes on the nav.
+  const labels = nav.dataset;
   // Animation speed: 1.25 is 25% faster. Durations below are milliseconds.
   const MENU_SPEED = 1.0;
   // Entry curvature and temporary space between neighboring bands.
@@ -77,7 +79,7 @@
   closeButton.className = 'ribbon-menu-close';
   closeButton.type = 'button';
   closeButton.textContent = '×';
-  closeButton.setAttribute('aria-label', 'Close navigation');
+  closeButton.setAttribute('aria-label', labels.closeLabel);
   nav.append(closeButton);
   links.forEach(link => {
     const word = document.createElement('span');
@@ -88,15 +90,19 @@
   const hints = document.createElement('div');
   hints.className = 'menu-input-hints';
   hints.setAttribute('role', 'group');
-  hints.setAttribute('aria-label', 'Menu keyboard instructions');
-  for (const [keys, action] of [[['↑', '↓'], 'Navigate'], [['Enter'], 'Open'], [['Esc'], 'Close']]) {
+  hints.setAttribute('aria-label', labels.hintsLabel);
+  for (const [keys, action, spoken, arrows] of [
+    [['↑', '↓'], labels.hintNavigate, labels.hintNavigateKeys, true],
+    [['Enter'], labels.hintOpen, 'Enter', false],
+    [['Esc'], labels.hintClose, 'Esc', false]
+  ]) {
     const group = document.createElement('span');
     group.className = 'menu-input-hint';
     group.setAttribute('role', 'group');
-    group.setAttribute('aria-label', `${action}: ${action === 'Navigate' ? 'Up or Down arrow' : keys[0]}`);
+    group.setAttribute('aria-label', `${action}: ${spoken}`);
     for (const key of keys) {
       const symbol = document.createElement('kbd');
-      symbol.className = action === 'Navigate' ? 'menu-hint-arrow' : 'menu-hint-key';
+      symbol.className = arrows ? 'menu-hint-arrow' : 'menu-hint-key';
       symbol.textContent = key;
       symbol.setAttribute('aria-hidden', 'true');
       group.append(symbol);
@@ -232,7 +238,7 @@
     open = value;
     trigger.setAttribute('aria-expanded', String(open));
     hudTriggers.forEach(button => button.setAttribute('aria-expanded', String(open)));
-    trigger.title = open ? 'Close navigation' : 'Open navigation';
+    trigger.title = open ? labels.closeLabel : labels.openLabel;
     trigger.querySelector('.sr-only').textContent = trigger.title;
     document.body.classList.toggle('navigation-open', open);
     nav.inert = !open;
@@ -285,7 +291,23 @@
   document.addEventListener('focusin', event => {
     if (open && !nav.contains(event.target) && !trigger.contains(event.target)) setOpen(false);
   });
-  links.forEach(link => link.addEventListener('click', () => setOpen(false, true)));
+  // An in-page link moves focus to its section, so the next Tab continues from
+  // there instead of from the menu button at the top of the page.
+  function samePageTarget(link) {
+    if (!link.hash || link.pathname !== location.pathname) return null;
+    try { return document.getElementById(decodeURIComponent(link.hash.slice(1))); }
+    catch { return null; }
+  }
+  links.forEach(link => link.addEventListener('click', () => {
+    const target = samePageTarget(link);
+    setOpen(false, !target);
+    if (!target) return;
+    if (!target.hasAttribute('tabindex')) {
+      target.setAttribute('tabindex', '-1');
+      target.addEventListener('blur', () => target.removeAttribute('tabindex'), { once: true });
+    }
+    target.focus({ preventScroll: true });
+  }));
   motion.addEventListener('change', () => setOpen(open));
   window.addEventListener('resize', () => { if (!nav.hidden) { measure(); draw(); } });
   window.addEventListener('pagehide', () => setOpen(false));

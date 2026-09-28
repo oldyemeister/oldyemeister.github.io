@@ -103,7 +103,12 @@ reuse this repo for a different portfolio:
 3. Replace `assets/documents/resume/*.pdf` with your own résumé and update `resume.url` in `content.yml` to match its filename.
 4. Replace `assets/images/site/profile-monogram.svg` (or swap `about.image.path` in `content.yml` to point at your own portrait/monogram).
 5. Update this README's own personal links, badges, and `git clone` URL.
-6. If you add or remove project case studies, update the hardcoded page-build list near the top of `tools/preview-build.mjs` to match.
+6. Add or remove case studies by adding or removing `projects/<name>/index.html` or `index.md`; the build finds them automatically and lists them in `sitemap.xml`.
+7. Interface wording (menu, keyboard hints, "Start game", card labels, section numbers) lives in the `ui:` block of `content.yml`.
+8. Regenerate the link-preview card and favicons with `npm run assets:brand`, and the playable-project preview videos with `npm run assets:previews` (both need Chrome; the previews also need ffmpeg).
+
+The build versions every CSS/JS URL with a content hash and bundles each page's
+stylesheets, so never add `?v=` query strings by hand.
 
 The Persona-themed alternate design (`templates/persona/`, `assets/themes/persona/`)
 is optional decoration layered on top of the same content — see the

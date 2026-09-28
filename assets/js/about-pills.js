@@ -40,5 +40,5 @@
   window.addEventListener('pageshow', sync);
   sync();
   }
-  document.querySelectorAll('#education .education-pill-field, #skills .skills-pill-field').forEach(initializePills);
+  document.querySelectorAll('#contact .contact-pill-field, #skills .skills-pill-field').forEach(initializePills);
 })();

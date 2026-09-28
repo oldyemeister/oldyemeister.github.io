@@ -1,14 +1,23 @@
+// Records each playable project's canvas in real time and encodes the homepage
+// preview as a looping H.264 MP4 with a matching PNG poster. (VP9 WebM came
+// out larger than H.264 for all three games, so only MP4 is produced.)
+//
+// Needs Chrome with remote debugging and a server for the built site, e.g.:
+//   "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new \
+//     --remote-debugging-port=9234 --enable-unsafe-swiftshader about:blank
+//   python3 -m http.server 8766 --directory _site
+//   node tools/capture-game-previews.mjs [laser|donkey-kong|imu-sandbox ...]
 import { execFileSync } from 'node:child_process';
-import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
 const DEBUG_URL = process.env.GAME_PREVIEW_DEBUG_URL || 'http://127.0.0.1:9234';
-const SITE_URL = process.env.GAME_PREVIEW_SITE_URL || 'http://127.0.0.1:8766';
+// The original design loads each game as soon as its canvas is visible,
+// without the Persona "Start" gate.
+const SITE_URL = process.env.GAME_PREVIEW_SITE_URL || 'http://127.0.0.1:8766/original';
 const OUTPUT_DIRECTORY = resolve('assets/images/projects');
-const FRAME_WIDTH = 480;
-const FRAME_HEIGHT = 320;
-const FRAME_DELAY = 20;
+const CAPTURE_FPS = 30;
 
 const sleep = (milliseconds) => new Promise((resolveSleep) => setTimeout(resolveSleep, milliseconds));
 
@@ -44,197 +53,139 @@ class CdpSession {
 
   async evaluate(expression, awaitPromise = false) {
     const result = await this.send('Runtime.evaluate', { expression, awaitPromise, returnByValue: true });
-    if (result.exceptionDetails) throw new Error(result.exceptionDetails.text || 'Browser evaluation failed.');
+    if (result.exceptionDetails) {
+      throw new Error(result.exceptionDetails.exception?.description || result.exceptionDetails.text);
+    }
     return result.result.value;
   }
 
   close() { this.socket.close(); }
 }
 
-function fixedPalette() {
-  const bytes = [];
-  for (let index = 0; index < 256; index += 1) {
-    bytes.push(
-      Math.round(((index >> 5) & 7) * 255 / 7),
-      Math.round(((index >> 2) & 7) * 255 / 7),
-      Math.round((index & 3) * 255 / 3)
-    );
-  }
-  return Buffer.from(bytes);
-}
-
-function word(value) { return Buffer.from([value & 255, value >> 8 & 255]); }
-
-function lzw(indices) {
-  const clearCode = 256;
-  const endCode = 257;
-  let dictionary = new Map();
-  let nextCode = 258;
-  let codeSize = 9;
-  let bitBuffer = 0;
-  let bitCount = 0;
-  const output = [];
-
-  const emit = (code) => {
-    bitBuffer |= code << bitCount;
-    bitCount += codeSize;
-    while (bitCount >= 8) {
-      output.push(bitBuffer & 255);
-      bitBuffer >>>= 8;
-      bitCount -= 8;
-    }
-  };
-  const reset = () => {
-    dictionary = new Map();
-    nextCode = 258;
-    codeSize = 9;
-  };
-
-  emit(clearCode);
-  let prefix = indices[0];
-  for (let index = 1; index < indices.length; index += 1) {
-    const value = indices[index];
-    const key = prefix * 256 + value;
-    const existing = dictionary.get(key);
-    if (existing !== undefined) {
-      prefix = existing;
-      continue;
-    }
-    emit(prefix);
-    if (nextCode < 4096) {
-      dictionary.set(key, nextCode++);
-      // The decoder adds a dictionary entry one emitted code behind the encoder.
-      if (nextCode > 1 << codeSize && codeSize < 12) codeSize += 1;
-    } else {
-      emit(clearCode);
-      reset();
-    }
-    prefix = value;
-  }
-  emit(prefix);
-  emit(endCode);
-  if (bitCount) output.push(bitBuffer & 255);
-
-  const blocks = [];
-  for (let offset = 0; offset < output.length; offset += 255) {
-    const block = Buffer.from(output.slice(offset, offset + 255));
-    blocks.push(Buffer.from([block.length]), block);
-  }
-  blocks.push(Buffer.from([0]));
-  return Buffer.concat(blocks);
-}
-
-function encodeGif(frames, frameDelay = FRAME_DELAY) {
-  const parts = [
-    Buffer.from('GIF89a'), word(FRAME_WIDTH), word(FRAME_HEIGHT),
-    Buffer.from([0xf7, 0, 0]), fixedPalette(),
-    Buffer.from([0x21, 0xff, 0x0b]), Buffer.from('NETSCAPE2.0'),
-    Buffer.from([0x03, 0x01, 0x00, 0x00, 0x00])
-  ];
-  for (const frame of frames) {
-    parts.push(
-      Buffer.from([0x21, 0xf9, 0x04, 0x04]), word(frameDelay), Buffer.from([0, 0]),
-      Buffer.from([0x2c]), word(0), word(0), word(FRAME_WIDTH), word(FRAME_HEIGHT), Buffer.from([0]),
-      Buffer.from([8]), lzw(frame)
-    );
-  }
-  parts.push(Buffer.from([0x3b]));
-  return Buffer.concat(parts);
-}
-
-async function screenshotToIndices(session, selector, directory, frameNumber) {
-  const bounds = await session.evaluate(`(() => {
-    const bounds = document.querySelector(${JSON.stringify(selector)}).getBoundingClientRect();
-    const cropHeight = Math.min(bounds.height, bounds.width * 2 / 3);
-    return { x: bounds.x, y: bounds.y + (bounds.height - cropHeight) / 2, width: bounds.width, height: cropHeight };
-  })()`);
-  const screenshot = await session.send('Page.captureScreenshot', {
-    format: 'png',
-    captureBeyondViewport: true,
-    clip: { ...bounds, scale: FRAME_WIDTH / bounds.width }
-  });
-  const pngPath = join(directory, `frame-${frameNumber}.png`);
-  const gifPath = join(directory, `frame-${frameNumber}.gif`);
-  const rgbPath = join(directory, `frame-${frameNumber}.rgb`);
-  await writeFile(pngPath, Buffer.from(screenshot.data, 'base64'));
-  execFileSync('sips', ['-s', 'format', 'gif', pngPath, '--out', gifPath], { stdio: 'ignore' });
-  execFileSync('gif2rgb', ['-1', '-o', rgbPath, gifPath], { stdio: 'ignore' });
-  const rgb = await readFile(rgbPath);
-  if (rgb.length !== FRAME_WIDTH * FRAME_HEIGHT * 3) {
-    throw new Error(`Unexpected frame size: ${rgb.length} bytes.`);
-  }
-  const indices = Buffer.alloc(FRAME_WIDTH * FRAME_HEIGHT);
-  for (let pixel = 0, offset = 0; pixel < indices.length; pixel += 1, offset += 3) {
-    indices[pixel] = (rgb[offset] >> 5) << 5 | (rgb[offset + 1] >> 5) << 2 | rgb[offset + 2] >> 6;
-  }
-  return indices;
-}
-
-async function navigate(session, path, readyExpression) {
+async function navigate(session, path, selector, ready) {
   await session.send('Page.navigate', { url: `${SITE_URL}${path}` });
-  for (let attempt = 0; attempt < 80; attempt += 1) {
+  for (let attempt = 0; attempt < 150; attempt += 1) {
     await sleep(100);
-    if (await session.evaluate(`Boolean(${readyExpression})`).catch(() => false)) return;
+    // Game loops only run while their canvas is on screen.
+    const loaded = await session.evaluate(`(() => {
+      const canvas = document.querySelector(${JSON.stringify(selector)});
+      if (!canvas) return false;
+      canvas.scrollIntoView({ block: 'center' });
+      return Boolean(${ready});
+    })()`).catch(() => false);
+    if (loaded) return;
   }
   throw new Error(`Timed out loading ${path}`);
 }
 
-async function capture(session, definition, rootDirectory) {
-  const directory = join(rootDirectory, definition.name);
-  await import('node:fs/promises').then(({ mkdir }) => mkdir(directory));
-  await navigate(session, definition.path, definition.ready);
-  await sleep(500);
-  const frames = [];
-  for (let frame = 0; frame < definition.frameCount; frame += 1) {
-    await definition.action(session, frame);
-    await sleep(definition.captureDelay ?? 180);
-    frames.push(await screenshotToIndices(session, definition.selector, directory, frame));
-  }
-  const outputDirectory = join(OUTPUT_DIRECTORY, definition.name);
-  await mkdir(outputDirectory, { recursive: true });
-  const outputPath = join(outputDirectory, `${definition.name}-preview.gif`);
-  await writeFile(outputPath, encodeGif(frames, definition.frameDelay));
-  process.stdout.write(`${outputPath}: ${frames.length} frames\n`);
+// Runs `drive` in the page while MediaRecorder captures the canvas stream.
+async function recordCanvas(session, selector, seconds, drive) {
+  const base64 = await session.evaluate(`(async () => {
+    const canvas = document.querySelector(${JSON.stringify(selector)});
+    const recorder = new MediaRecorder(canvas.captureStream(${CAPTURE_FPS}), {
+      mimeType: 'video/webm;codecs=vp9', videoBitsPerSecond: 12_000_000
+    });
+    const chunks = [];
+    recorder.ondataavailable = (event) => chunks.push(event.data);
+    const stopped = new Promise((resolveStop) => { recorder.onstop = resolveStop; });
+    recorder.start();
+    const wait = (milliseconds) => new Promise((resolveWait) => setTimeout(resolveWait, milliseconds));
+    await Promise.all([(${drive})(canvas, wait), wait(${seconds * 1000})]);
+    recorder.stop();
+    await stopped;
+    const bytes = new Uint8Array(await new Blob(chunks).arrayBuffer());
+    let binary = '';
+    for (let offset = 0; offset < bytes.length; offset += 0x8000) {
+      binary += String.fromCharCode(...bytes.subarray(offset, offset + 0x8000));
+    }
+    return btoa(binary);
+  })()`, true);
+  return Buffer.from(base64, 'base64');
 }
 
+function encode(rawPath, definition) {
+  const directory = join(OUTPUT_DIRECTORY, definition.name);
+  const output = join(directory, `${definition.name}-preview`);
+  const trim = ['-ss', String(definition.leadIn), '-t', String(definition.duration)];
+  const filter = `fps=${definition.fps ?? CAPTURE_FPS},${definition.frame}`;
+  execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', rawPath, ...trim, '-vf', filter, '-an',
+    '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', String(definition.crf ?? 23), '-preset', 'slow',
+    '-movflags', '+faststart', `${output}.mp4`]);
+  execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-ss', String(definition.leadIn + definition.posterAt),
+    '-i', rawPath, '-frames:v', '1', '-vf', definition.frame, `${output}.png`]);
+  return output;
+}
+
+async function capture(session, definition, temporaryDirectory) {
+  await navigate(session, definition.path, definition.selector, definition.ready);
+  await sleep(600);
+  const seconds = definition.leadIn + definition.duration + 0.5;
+  const raw = await recordCanvas(session, definition.selector, seconds, definition.drive);
+  const rawPath = join(temporaryDirectory, `${definition.name}.webm`);
+  await writeFile(rawPath, raw);
+  await mkdir(join(OUTPUT_DIRECTORY, definition.name), { recursive: true });
+  const output = encode(rawPath, definition);
+  process.stdout.write(`${output}.{mp4,png}\n`);
+}
+
+// Each `drive` is page-side source: an async function of (canvas, wait).
 const targets = [
   {
-    name: 'laser', path: '/projects/laser/', selector: '[data-laser-canvas]', frameCount: 25,
-    ready: "document.querySelector('[data-laser-canvas]')?.width === 320",
-    action: (session, frame) => session.evaluate(`(() => {
-      const canvas = document.querySelector('[data-laser-canvas]');
-      ${frame === 0 ? "canvas.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }));" : ''}
-      ${frame > 0 && frame % 3 === 0 ? "canvas.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));" : ''}
-    })()`)
+    name: 'laser', path: '/projects/laser/', selector: '[data-laser-canvas]',
+    ready: "canvas.width === 320",
+    leadIn: 0.3, duration: 6, posterAt: 2.5,
+    frame: 'scale=640:480:flags=neighbor',
+    drive: `async (canvas, wait) => {
+      const press = (key) => canvas.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true }));
+      for (const key of ['ArrowLeft', 'ArrowDown', 'ArrowLeft', 'ArrowLeft', 'ArrowDown', 'ArrowRight',
+        'ArrowDown', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'ArrowRight', 'ArrowUp']) {
+        press(key);
+        await wait(500);
+      }
+    }`
   },
   {
-    name: 'donkey-kong', path: '/projects/donkey-kong/', selector: '[data-donkey-kong-canvas]', frameCount: 25,
-    ready: "document.querySelector('[data-donkey-kong-canvas]') && document.querySelector('[data-dk-status]')?.textContent !== ''",
-    action: (session, frame) => session.evaluate(`(() => {
-      if (${frame} === 0) window.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
-      if (${frame} === 24) window.dispatchEvent(new KeyboardEvent('keyup', { key: 'ArrowRight', bubbles: true }));
-    })()`)
+    name: 'donkey-kong', path: '/projects/donkey-kong/', selector: '[data-donkey-kong-canvas]',
+    ready: "document.querySelector('[data-dk-status]')?.textContent !== ''",
+    leadIn: 0.3, duration: 6, posterAt: 2.5,
+    frame: 'scale=640:480:flags=neighbor',
+    drive: `async (canvas, wait) => {
+      // The game listens for keydown on its canvas; keyup bubbles to window.
+      const key = (type, name) => canvas.dispatchEvent(new KeyboardEvent(type, { key: name, bubbles: true }));
+      key('keydown', 'ArrowRight');
+      for (let jump = 0; jump < 5; jump += 1) {
+        await wait(1100);
+        key('keydown', 'ArrowUp');
+        key('keyup', 'ArrowUp');
+      }
+      await wait(900);
+      key('keyup', 'ArrowRight');
+    }`
   },
   {
-    name: 'imu-sandbox', path: '/projects/imu-sandbox/', selector: '[data-imu-scene]', frameCount: 30,
-    frameDelay: 20,
-    captureDelay: 80,
+    name: 'imu-sandbox', path: '/projects/imu-sandbox/', selector: '.imu-webgl-canvas',
     ready: "document.querySelector('[data-imu-scene]')?.classList.contains('is-ready')",
-    action: (session, frame) => {
-      const easeInOutCubic = (progress) => progress < 0.5
-        ? 4 * progress ** 3
-        : 1 - (-2 * progress + 2) ** 3 / 2;
-      const roll = frame <= 9
-        ? 180 * easeInOutCubic(frame / 9)
-        : 180 - 360 * easeInOutCubic((frame - 9) / 20);
-      return session.evaluate(`(() => {
-        for (const [axis, value] of [['pitch', 0], ['yaw', 0], ['roll', ${roll}]]) {
-          const input = document.querySelector('[data-imu-axis="' + axis + '"]');
-          input.value = value;
-          input.dispatchEvent(new Event('input', { bubbles: true }));
-        }
-      })()`);
-    }
+    leadIn: 0.3, duration: 6, posterAt: 1.8,
+    // Sand noise barely compresses: crop to the card's 16:10 frame, 24 fps.
+    fps: 24, crf: 32,
+    frame: 'crop=iw:iw*10/16,scale=560:350:flags=lanczos',
+    // Roll 0° → 180°, then sweep to −180°, easing like the original preview.
+    drive: `async (canvas, wait) => {
+      const ease = (t) => t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2;
+      const set = (axis, value) => {
+        const input = document.querySelector('[data-imu-axis="' + axis + '"]');
+        input.value = value;
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+      };
+      set('pitch', 0); set('yaw', 0);
+      const start = performance.now();
+      const total = 6300;
+      while (performance.now() - start < total) {
+        const t = (performance.now() - start) / total;
+        set('roll', t <= 0.3 ? 180 * ease(t / 0.3) : 180 - 360 * ease((t - 0.3) / 0.7));
+        await new Promise(requestAnimationFrame);
+      }
+    }`
   }
 ];
 

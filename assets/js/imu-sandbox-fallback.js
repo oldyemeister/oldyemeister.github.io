@@ -8,7 +8,7 @@
 
     try {
       const [engine, { createViewportLoop }] = await Promise.all([
-        import('./imu-sandbox-engine.js?v=17'),
+        import('./imu-sandbox-engine.js'),
         import('./viewport-loop.js')
       ]);
       host.querySelector('.imu-webgl-canvas')?.remove();

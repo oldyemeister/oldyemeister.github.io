@@ -11,13 +11,14 @@ export const SCROLL_ANIMATION = {
     continueIntoAbout: true, // EXPERIMENT: false restores the original straight clipping edge.
   },
   about: {
-    minHeightPx: 1100, // Minimum section height, including on phones.
-    minHeightVh: 135, // Also allow at least 135% of the browser height.
+    minHeightPx: 560, // Desktop floor; compact and phone layouts use smaller floors.
+    minHeightVh: 68, // Leave room for the ring without a full viewport of empty space.
+    goldArtworkScale: .54, // Decorative arch, scaled independently from the copy.
     minimumRingGapPx: 48, // Keep this much vertical space between blue and full-size gold rings.
-    circleCenterXPercent: 65, // 0 = left edge, 50 = middle, 100 = right edge of About.
+    circleCenterXPercent: 82, // Keep the arch on the open side of the copy.
     circleCenterYPercent: 100, // 0 = top, 100 = bottom; >100 puts the center below About.
-    circleCenterOffsetXPx: -200, // Optional fine adjustment: positive moves right.
-    circleCenterOffsetYPx: -80, // Optional fine adjustment: positive moves down.
+    circleCenterOffsetXPx: 0, // Optional fine adjustment: positive moves right.
+    circleCenterOffsetYPx: 130, // Crop the lower arc at the Education seam.
     circlesStartFraction: 0.65, // Fraction of About visible before growth starts (capped at one viewport); smaller = earlier.
     circlesTravelVh: 40,
     textCompleteAt: .3, // Fraction of circle growth when text is fully visible.

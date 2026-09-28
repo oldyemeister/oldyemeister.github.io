@@ -32,11 +32,13 @@ Set the topic heading rule to `font-weight: 700` to select that bold face,
 or `400` for the lighter strokes. The white outline thickness
 is controlled independently by `-webkit-text-stroke`.
 
-The new theme includes a fixed keyboard instruction bar. On the homepage,
-Up/Down or Tab selects links and Enter activates them. On project pages, arrow
-keys retain their game behavior; Tab selects controls. Esc returns home using
-the page wipe, or closes an open navigation menu first. The HUD's Home
-link also works with pointer and touch input.
+The new theme includes a fixed keyboard instruction bar. Tab and the arrow keys
+keep their normal browser behavior everywhere (the first Tab reaches the skip
+link). Esc opens the navigation menu on every page and closes it again; it never
+leaves a page, so a game in progress isn't lost. Inside the open menu, Up/Down
+move between links and Enter opens one. On game pages the keys only drive a
+game while its canvas has focus. The HUD's Esc/Menu button also works with
+pointer and touch input.
 The top navigation stays collapsed behind its menu button at every viewport
 width. Opening it reveals a dropdown; selecting a link or pressing Esc closes it.
 

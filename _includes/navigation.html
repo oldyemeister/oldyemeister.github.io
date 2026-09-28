@@ -5,11 +5,12 @@
       <span class="identity-mark" aria-hidden="true">{{ site_content.site.initials }}</span>
       <span>{{ site_content.site.name }}</span>
     </a>
-    <button class="nav-menu-button icon-button" type="button" aria-expanded="false" aria-controls="site-navigation" data-menu-toggle data-ribbon-trigger title="Open navigation">
+    {% if page.project %}<a class="nav-back-link" href="{{ '/#projects' | relative_url }}"><span aria-hidden="true">&larr;</span> <span>{{ site_content.ui.menu.back_to_projects }}</span></a>{% endif %}
+    <button class="nav-menu-button icon-button" type="button" aria-expanded="false" aria-controls="site-navigation" data-menu-toggle data-ribbon-trigger title="{{ site_content.ui.menu.open }}">
       <span class="menu-icon" aria-hidden="true"></span>
-      <span class="sr-only">Open navigation</span>
+      <span class="sr-only">{{ site_content.ui.menu.open }}</span>
     </button>
-    <nav class="site-navigation" id="site-navigation" aria-label="Primary" data-navigation hidden inert aria-hidden="true">
+    <nav class="site-navigation" id="site-navigation" aria-label="Primary" data-navigation hidden inert aria-hidden="true" data-open-label="{{ site_content.ui.menu.open }}" data-close-label="{{ site_content.ui.menu.close }}" data-hints-label="{{ site_content.ui.menu.hints_label }}" data-hint-navigate="{{ site_content.ui.menu.hint_navigate }}" data-hint-navigate-keys="{{ site_content.ui.menu.hint_navigate_keys }}" data-hint-open="{{ site_content.ui.menu.hint_open }}" data-hint-close="{{ site_content.ui.menu.hint_close }}">
       <a href="{{ '/#home' | relative_url }}" data-menu-description="{{ site_content.navigation_descriptions.home }}">{{ site_content.navigation.home }}</a>
       <a href="{{ '/#about' | relative_url }}" data-menu-description="{{ site_content.navigation_descriptions.about }}">{{ site_content.navigation.about }}</a>
       <a href="{{ '/#education' | relative_url }}" data-menu-description="{{ site_content.navigation_descriptions.education }}">{{ site_content.navigation.education }}</a>

@@ -67,6 +67,7 @@ page_class: home
       <div class="hero-links">
         <a class="text-link text-link-primary" href="{{ site_content.hero.primary_link.url | relative_url }}">{{ site_content.hero.primary_link.label }} <span aria-hidden="true">&rarr;</span></a>
         <a class="text-link" href="{{ site_content.hero.secondary_link.url | relative_url }}" target="_blank" rel="noopener noreferrer">{{ site_content.hero.secondary_link.label }} <span aria-hidden="true">&nearr;</span></a>
+        <a class="text-link text-link-projects" href="{{ site_content.hero.projects_link.url | relative_url }}">{{ site_content.hero.projects_link.label }} <span aria-hidden="true">&darr;</span></a>
       </div>
     </div>
   </div>
@@ -111,30 +112,32 @@ page_class: home
     </g>
   </svg>
   <div class="content-shell two-column-section">
-    <div>
-      <p class="section-index">01</p>
+    <header class="about-heading">
+      <p class="section-index">{{ site_content.ui.section_index.about }}</p>
       <h2>{{ site_content.about.heading }}</h2>
-    </div>
+    </header>
     <div class="section-body">
       <div class="prose">{{ site_content.about.biography | markdownify }}</div>
     </div>
 
   </div>
-    <div class="about-picture-placeholders" aria-label="Future About photos">
-      <!-- Replace each span with an img using a real src and descriptive alt text. -->
-      <div class="about-picture-frame"><span>Photo 01</span></div>
-      <div class="about-picture-frame"><span>Photo 02</span></div>
-    </div>
 </section>
 
 <section class="page-section education-section" id="education" aria-labelledby="education-heading">
-  <div class="education-pill-field" aria-hidden="true"></div>
-  <div class="content-shell two-column-section">
-    <div><p class="section-index">02</p><h2 id="education-heading">{{ site_content.education_section.heading }}</h2></div>
-    <div class="section-body">
-      <h3>{{ site_content.education_section.institution }}</h3>
-      <p>{{ site_content.education_section.program }}</p>
-      <p>{{ site_content.education_section.start_year }} — {{ site_content.education_section.graduation }}</p>
+  <div class="content-shell education-layout">
+    <header class="education-section-heading"><p class="section-index">{{ site_content.ui.section_index.education }}</p><h2 id="education-heading">{{ site_content.education_section.heading }}</h2></header>
+    <div class="section-body education-card">
+      <div class="education-details">
+        <div class="education-heading-row">
+          <h3>{{ site_content.education_section.institution }}</h3>
+          <div class="education-logo">
+            {% if site_content.education_section.logo != empty %}<img src="{{ site_content.education_section.logo | relative_url }}" alt="{{ site_content.education_section.logo_alt }}" width="1152" height="473" decoding="async">{% endif %}
+            {% if site_content.education_section.logo == empty %}<span class="education-logo-fallback" aria-hidden="true">{{ site_content.education_section.short_name }}</span>{% endif %}
+          </div>
+        </div>
+        <p class="education-program">{{ site_content.education_section.program }}</p>
+        <p class="education-dates">{{ site_content.education_section.start_year }} — {{ site_content.education_section.graduation }}</p>
+      </div>
       <p class="education-descriptor">{{ site_content.education_section.description }}</p>
       <!-- Optional GPA/honors line: intentionally omitted until supplied and approved. -->
     </div>
@@ -142,14 +145,9 @@ page_class: home
 </section>
 
 <section class="page-section skills-section" id="skills" aria-labelledby="skills-heading">
-  <svg class="skills-sky-accent" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
-    <circle class="skills-sky-accent-field" cx="100" cy="100" r="95"/>
-    <circle class="skills-sky-accent-ring" cx="100" cy="100" r="72"/>
-  </svg>
-  <div class="skills-pill-field" aria-hidden="true"></div>
   <div class="content-shell">
     <header class="section-header">
-      <div><p class="section-index">03</p><h2 id="skills-heading">{{ site_content.skills_section.heading }}</h2></div>
+      <div><p class="section-index">{{ site_content.ui.section_index.skills }}</p><h2 id="skills-heading">{{ site_content.skills_section.heading }}</h2></div>
       <p>{{ site_content.skills_section.introduction }}</p>
     </header>
     <div class="skills-categories">
@@ -171,7 +169,7 @@ page_class: home
 <section class="page-section experience-section" id="experience">
   <div class="content-shell">
     <header class="section-header">
-      <div><p class="section-index">04</p><h2>{{ site_content.experience_section.heading }}</h2></div>
+      <div><p class="section-index">{{ site_content.ui.section_index.experience }}</p><h2>{{ site_content.experience_section.heading }}</h2></div>
       {% if site_content.experience_section.introduction %}<p>{{ site_content.experience_section.introduction }}</p>{% endif %}
     </header>
   </div>
@@ -180,7 +178,11 @@ page_class: home
       <button type="button" data-experience-up aria-label="Previous experience" aria-controls="experience-options"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5 22 20H2Z"/></svg></button>
       <button type="button" data-experience-down aria-label="Next experience" aria-controls="experience-options"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 19 10-15H2Z"/></svg></button>
     </div>
-    <div class="experience-save-list" id="experience-options" role="listbox" aria-label="Experience" aria-orientation="vertical" tabindex="0" aria-describedby="experience-save-help">
+    <div class="experience-save-list" id="experience-options" role="listbox" aria-label="Experience" aria-orientation="vertical" tabindex="0">
+      <div class="experience-save-option experience-save-filler" data-experience-filler aria-hidden="true">
+        <span class="experience-save-sphere"><span class="experience-save-number"></span></span>
+        <div class="experience-save-copy"><p class="experience-save-continued">{{ site_content.experience_section.continued_label }}</p></div>
+      </div>
       {% for item in site_content.experience %}
       <div class="experience-save-option" role="option" aria-selected="false">
         <div class="experience-save-stars" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
@@ -196,45 +198,19 @@ page_class: home
         </div>
       </div>
       {% endfor %}
+      <div class="experience-save-option experience-save-filler" data-experience-filler aria-hidden="true">
+        <span class="experience-save-sphere"><span class="experience-save-number"></span></span>
+        <div class="experience-save-copy"><p class="experience-save-continued">{{ site_content.experience_section.continued_label }}</p></div>
+      </div>
     </div>
-    <p class="experience-save-help" id="experience-save-help">Select a role, or use the arrow buttons to browse.</p>
   </div>
   <script src="{{ '/assets/js/experience-save-menu.js' | relative_url }}" defer></script>
 </section>
 
 <section class="page-section" id="projects">
-  <svg class="project-corner-ribbons" viewBox="0 0 600 480" aria-hidden="true" focusable="false">
-    <g class="project-corner-ribbon-bands">
-      <!-- Same rainbow band data as About's corner art, reused for the old-TV motif. -->
-      <rect style="--stripe-index: -6" x="-1200" y="197" width="2400" height="180" fill="#F4D51C" />
-      <rect style="--stripe-index: -5" x="-1200" y="165" width="2400" height="40" fill="#F6EBA0" />
-      <rect style="--stripe-index: -3" x="-1200" y="125" width="2400" height="48" fill="#FFF52B" />
-      <rect style="--stripe-index: -1" x="-1200" y="93" width="2400" height="40" fill="#FFD229" />
-      <rect style="--stripe-index: 0" x="-1200" y="88.57" width="2400" height="12.48" fill="#FFFFEB" />
-      <rect style="--stripe-index: 1" x="-1200" y="78.11" width="2400" height="16.96" fill="#BEE617" />
-      <rect style="--stripe-index: 2" x="-1200" y="66.53" width="2400" height="18.08" fill="#20C9D3" />
-      <rect style="--stripe-index: 3" x="-1200" y="60.55" width="2400" height="12.48" fill="#FFFCE0" />
-      <rect style="--stripe-index: 4" x="-1200" y="50.09" width="2400" height="16.96" fill="#FFD229" />
-      <rect style="--stripe-index: 5" x="-1200" y="41.87" width="2400" height="14.72" fill="#009B3A" />
-      <rect style="--stripe-index: 6" x="-1200" y="31.41" width="2400" height="16.96" fill="#E1FF00" />
-      <rect style="--stripe-index: 7" x="-1200" y="25.43" width="2400" height="12.48" fill="#FFFAC1" />
-      <rect style="--stripe-index: 8" x="-1200" y="8.25" width="2400" height="23.68" fill="#FF6500" />
-      <rect style="--stripe-index: 9" x="-1200" y="-10.05" width="2400" height="24.80" fill="#FFAD08" />
-      <rect style="--stripe-index: 10" x="-1200" y="-32.83" width="2400" height="29.28" fill="#FFF52B" />
-      <rect style="--stripe-index: 11" x="-1200" y="-43.29" width="2400" height="16.96" fill="#F4D51C" />
-      <rect style="--stripe-index: 12" x="-1200" y="-50.39" width="2400" height="13.60" fill="#FFFFB0" />
-      <rect style="--stripe-index: 13" x="-1200" y="-63.09" width="2400" height="19.20" fill="#C6EE10" />
-      <rect style="--stripe-index: 14" x="-1200" y="-71.31" width="2400" height="14.72" fill="#687D18" />
-      <rect style="--stripe-index: 15" x="-1200" y="-82.89" width="2400" height="18.08" fill="#D5F318" />
-      <rect style="--stripe-index: 16" x="-1200" y="-89.99" width="2400" height="13.60" fill="#FFFDE0" />
-      <rect style="--stripe-index: 17" x="-1200" y="-95.97" width="2400" height="12.48" fill="#A31C08" />
-      <rect style="--stripe-index: 18" x="-1200" y="-103.07" width="2400" height="13.60" fill="#F6EBA0" />
-      <rect style="--stripe-index: 19" x="-1200" y="-109.05" width="2400" height="12.48" fill="#827B24" />
-    </g>
-  </svg>
   <div class="content-shell">
     <header class="section-header">
-      <div><p class="section-index">05</p><h2>{{ site_content.projects_section.heading }}</h2></div>
+      <div><p class="section-index">{{ site_content.ui.section_index.projects }}</p><h2>{{ site_content.projects_section.heading }}</h2></div>
       <p>{{ site_content.projects_section.introduction }}</p>
     </header>
     <div class="project-grid">
@@ -242,15 +218,21 @@ page_class: home
       <article class="project-card{% if project.featured %} project-card-featured{% endif %}">
         <div class="project-media">
           {% if project.placeholder %}<div class="project-media-placeholder" aria-hidden="true"><span>{{ project.placeholder_index }}</span><small>Project slot</small></div>{% endif %}
-          {% if project.image.path %}
+          {% if project.image.video %}
+          <span class="project-screen{% if project.image.crt_effect %} tv-effect-container{% endif %}">
+            <video data-project-preview src="{{ project.image.video | relative_url }}" muted loop playsinline preload="none" poster="{{ project.image.poster | relative_url }}" aria-label="{{ project.image.alt }}"></video>
+          </span>
+          {% endif %}
+          {% if project.image.video == empty %}{% if project.image.path %}
           <picture{% if project.image.crt_effect %} class="tv-effect-container"{% endif %}>
             {% if project.image.poster %}<source media="(prefers-reduced-motion: reduce)" srcset="{{ project.image.poster | relative_url }}">{% endif %}
             <img src="{{ project.image.path | relative_url }}" alt="{{ project.image.alt }}" loading="lazy" decoding="async">
           </picture>
-          {% endif %}
+          {% endif %}{% endif %}
+          {% if project.playable %}<span class="project-playable-badge">{{ site_content.ui.projects.playable }}</span>{% endif %}
         </div>
         <div class="project-content">
-          <p class="project-file-index" aria-hidden="true"><span>FILE</span> {{ project.placeholder_index }}</p>
+          <p class="project-file-index" aria-hidden="true"><span>{{ site_content.ui.projects.file }}</span> {{ project.placeholder_index }}</p>
           <h3>{{ project.title }}</h3>
           {% if project.collaborator %}
           <p class="collaborator-byline collaborator-byline-card">
@@ -261,7 +243,7 @@ page_class: home
           {% if project.collaborators %}
           <p class="collaborator-byline collaborator-byline-card collaborator-byline-multiple">
             <span class="collaborator-icon" aria-hidden="true">+</span>
-            <span>Built with</span>
+            <span>{{ site_content.ui.projects.built_with }}</span>
             {% for collaborator in project.collaborators %}
               {% if collaborator.url != empty %}<a href="{{ collaborator.url }}" target="_blank" rel="noopener noreferrer">{{ collaborator.name }}</a>{% endif %}
               {% if collaborator.url == empty %}<span>{{ collaborator.name }}</span>{% endif %}
@@ -274,8 +256,8 @@ page_class: home
           </ul>
           <div class="project-links">
             {% if project.live_url %}<a class="project-demo-link" href="{{ project.live_url | relative_url }}"{% if project.external %} target="_blank" rel="noopener noreferrer"{% endif %}>{{ project.live_label }} <span aria-hidden="true">&rarr;</span></a>{% endif %}
-            {% if project.repository_url %}<a class="source-link" href="{{ project.repository_url }}" target="_blank" rel="noopener noreferrer">Source <span aria-hidden="true">&nearr;</span></a>{% endif %}
-            {% if project.repository_pending %}<span class="source-link source-link-pending" aria-label="Source repository link pending">Source <small>URL pending</small></span>{% endif %}
+            {% if project.repository_url %}<a class="source-link" href="{{ project.repository_url }}" target="_blank" rel="noopener noreferrer">{{ site_content.ui.projects.view_source }} <span aria-hidden="true">&nearr;</span></a>{% endif %}
+            {% if project.repository_pending %}<span class="source-link source-link-pending" aria-label="{{ site_content.ui.projects.source_pending_label }}">{{ site_content.ui.projects.source }} <small>{{ site_content.ui.projects.source_pending }}</small></span>{% endif %}
             {% if project.draft_label %}<span class="project-draft-label">{{ project.draft_label }}</span>{% endif %}
           </div>
         </div>
@@ -283,17 +265,27 @@ page_class: home
       {% endfor %}
     </div>
   </div>
+  <script src="{{ '/assets/js/project-previews.js' | relative_url }}" defer></script>
 </section>
 
 <section class="page-section contact-section" id="contact">
+  <div class="contact-pill-field" aria-hidden="true"></div>
   <div class="content-shell contact-layout">
-    <div><p class="section-index">06</p><h2>{{ site_content.contact.heading }}</h2></div>
+    <div><p class="section-index">{{ site_content.ui.section_index.contact }}</p><h2>{{ site_content.contact.heading }}</h2></div>
     <div>
       <div class="contact-links">
         <div class="contact-intro">{{ site_content.contact.message }}</div>
         <nav class="contact-secondary-links" aria-label="Contact links">
-        <a href="mailto:{{ site_content.contact.email.address }}">{{ site_content.contact.email.label }}</a>
-        {% for social in site_content.contact.social_links %}<a href="{{ social.url }}" target="_blank" rel="noopener noreferrer">{{ social.label }}</a>{% endfor %}
+          <a class="contact-link-row" href="mailto:{{ site_content.contact.email.address }}">
+            <span class="contact-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M3 4h18a2 2 0 0 1 2 2v1l-11 7L1 7V6a2 2 0 0 1 2-2Zm-2 5.4 10.46 6.66a1 1 0 0 0 1.08 0L23 9.4V18a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2Z"/></svg></span>
+            <span class="contact-link-address">{{ site_content.contact.email.address }}</span>
+          </a>
+          {% for social in site_content.contact.social_links %}
+          <a class="contact-link-row" href="{{ social.url }}" target="_blank" rel="noopener noreferrer">
+            <span class="contact-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="{{ social.icon_path }}"/></svg></span>
+            <span class="contact-link-address">{{ social.display_url | default: social.label }}</span>
+          </a>
+          {% endfor %}
         </nav>
       </div>
     </div>

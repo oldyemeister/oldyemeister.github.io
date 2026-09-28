@@ -16,7 +16,8 @@
   --save-selected-disc: var(--hero-sky, #04C4EB);
   --save-selected-disc-light: color-mix(in srgb, var(--save-selected-disc) 35%, var(--save-white));
   --save-selected-disc-shadow: color-mix(in srgb, var(--save-selected-disc) 65%, #003858);
-  --save-ink: color-mix(in srgb, var(--save-reference-ink) 75%, var(--save-black));
+  /* 64% keeps small text at ≥4.5:1 even on the orange end of the row gradient. */
+  --save-ink: color-mix(in srgb, var(--save-reference-ink) 64%, var(--save-black));
 }
 body.persona-design #experience {
   padding-block: clamp(28px, 4vw, 48px) 32px;
@@ -32,7 +33,7 @@ body.persona-design #experience > .content-shell {
 body.persona-design #experience .section-header { display: block; margin-bottom: 16px; }
 body.persona-design #experience .section-header h2 { margin-bottom: 0; }
 body.persona-design #experience .section-header p { color: var(--save-ink); }
-body.persona-design #experience :is(.section-header p, .experience-save-help) {
+body.persona-design #experience .section-header p {
   font-family: 'Persona Slim Local', Arial, sans-serif;
 }
 #experience .experience-save-menu { position: relative; }
@@ -41,7 +42,7 @@ body.persona-design #experience :is(.section-header p, .experience-save-help) {
   display: grid;
   grid-template-rows: repeat(3, var(--experience-row-height));
   /* Paged-out rows use display:none; let enlarged end circles overhang. */
-  outline: none; overflow: visible; overflow-anchor: none;
+  overflow: visible; overflow-anchor: none;
   height: calc(var(--experience-row-height) * var(--experience-visible-count, 3));
 }
 #experience .experience-save-option {
@@ -80,14 +81,40 @@ body.persona-design #experience :is(.section-header p, .experience-save-help) {
   color: var(--save-disc);
   background: repeating-conic-gradient(var(--save-black) 0 25%, var(--save-check) 0 50%) 0 0 / 12px 12px;
 }
+/* Keyboard focus is shown by underlining the selected title, not an outline box. */
+#experience .experience-save-list:focus { outline: none; }
+/* "To be continued" rows pad both ends so the selection stays in the middle. */
+#experience .experience-save-filler { cursor: default; }
+/* Deep-gold lettering stays legible across the orange-to-yellow field; the
+   bright yellow underline keeps the requested two-color Persona treatment. */
+body.persona-design #experience .experience-save-filler .experience-save-continued {
+  --continued-gold: color-mix(in srgb, var(--palette-gold) 38%, var(--save-black));
+  width: fit-content;
+  margin: 0;
+  color: var(--continued-gold) !important;
+  -webkit-text-fill-color: currentColor;
+  text-decoration-line: underline;
+  text-decoration-color: var(--palette-yellow);
+  text-decoration-thickness: .12em;
+  text-underline-offset: .16em;
+  text-shadow: 2px 2px 0 color-mix(in srgb, var(--palette-yellow) 82%, var(--palette-white));
+  /* Same face as the Education "University of Toronto" heading, in italic. */
+  font: italic 800 clamp(2.4rem, 5vw, 4.2rem)/1.1 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: -.025em;
+  text-transform: uppercase;
+}
+body.persona-design #experience .experience-save-filler .experience-save-number {
+  color: var(--save-ink) !important;
+  -webkit-text-fill-color: currentColor;
+}
 #experience .experience-save-list:focus-visible .experience-save-option[aria-selected="true"] h3 {
   text-decoration: underline;
   text-underline-offset: 5px;
 }
-#experience .experience-save-option[data-position="above"] { grid-row: 1; --sphere-offset: calc(-1 * var(--sphere-stagger)); }
-#experience .experience-save-option[data-position="selected"] { grid-row: 2; }
-#experience .experience-save-option[data-position="below"] { grid-row: 3; --sphere-offset: var(--sphere-stagger); }
-#experience .experience-save-option:hover:not([aria-selected="true"]) { box-shadow: inset 4px 0 var(--save-ink); }
+#experience .experience-save-option[data-position="first"] { grid-row: 1; --sphere-offset: calc(-1 * var(--sphere-stagger)); }
+#experience .experience-save-option[data-position="middle"] { grid-row: 2; }
+#experience .experience-save-option[data-position="last"] { grid-row: 3; --sphere-offset: var(--sphere-stagger); }
+#experience .experience-save-option:hover:not([aria-selected="true"], .experience-save-filler) { box-shadow: inset 4px 0 var(--save-ink); }
 #experience .experience-save-copy { position: relative; grid-column: 2; }
 body.persona-design #experience .experience-save-copy :is(h3, p, li, strong, span) {
   color: inherit !important;
@@ -171,7 +198,7 @@ body.persona-design #experience [aria-selected="true"] .experience-save-copy .ex
 }
 #experience .experience-save-number {
   position: absolute;
-  left: 18%;
+  left: 10%;
   top: 15%;
   display: block;
   transform: rotate(12deg);
@@ -230,7 +257,6 @@ body.persona-design #experience .experience-save-option[aria-selected="true"] .e
 #experience .experience-save-controls svg { width: 24px; height: 24px; fill: currentColor; stroke: var(--save-yellow); stroke-width: 2px; paint-order: stroke fill; }
 #experience .experience-save-controls button:disabled { opacity: .4; cursor: default; }
 #experience .experience-save-controls button:focus-visible { outline: 3px solid var(--save-black); outline-offset: 2px; }
-#experience .experience-save-help { margin: 18px 24px 0; text-align: center; color: var(--save-ink); font-size: .875rem; }
 #experience .experience-save-stars { display: none; position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
 #experience [aria-selected="true"] .experience-save-stars { display: block; }
 #experience .experience-save-stars i {
@@ -247,10 +273,78 @@ body.persona-design #experience .experience-save-option[aria-selected="true"] .e
   #experience .experience-save-sphere { font-size: 2.8rem; }
 }
 @media (max-width: 600px) {
-  #experience .experience-save-option { --row-left-padding: 40px; gap: 18px; padding: 20px 16px 20px var(--row-left-padding); }
-  body.persona-design #experience .experience-save-copy h3 { font-size: 1.05rem; }
-  #experience .experience-save-summary { font-size: .825rem; line-height: 1.4; }
-  #experience .experience-save-meta { font-size: .8rem; }
-  #experience .experience-save-controls { margin-left: 4px; }
+  body.persona-design #experience .experience-save-filler .experience-save-continued {
+    max-width: 100%;
+    font-size: clamp(1.4rem, 6vw, 2.1rem);
+  }
+  body.persona-design #experience { padding-bottom: max(28px, env(safe-area-inset-bottom)); }
+  body.persona-design #experience .section-header { margin-bottom: 8px; }
+  #experience .experience-save-menu { padding-top: 60px; }
+  #experience .experience-save-list {
+    display: flex;
+    flex-direction: column;
+    height: auto !important;
+  }
+  #experience .experience-save-option {
+    --row-left-padding: 18px;
+    --sphere-size: 56px;
+    --sphere-width: 56px;
+    --sphere-stagger: 0px;
+    grid-template-columns: 56px minmax(0, 1fr);
+    gap: 16px;
+    min-height: 92px;
+    height: auto !important;
+    padding: 14px 16px 14px var(--row-left-padding);
+  }
+  #experience .experience-save-option[aria-selected="true"] {
+    min-height: 0;
+    padding-block: 22px;
+  }
+  #experience .experience-save-copy { grid-column: 2; }
+  body.persona-design #experience .experience-save-copy h3 {
+    font-size: 1.08rem;
+    line-height: 1.22;
+  }
+  #experience .experience-save-heading-row { margin-bottom: 5px; }
+  #experience .experience-save-meta {
+    margin-bottom: 0;
+    font-size: .875rem;
+    line-height: 1.35;
+  }
+  #experience .experience-save-summary,
+  body.persona-design #experience .experience-save-copy .experience-save-impact {
+    display: none;
+  }
+  #experience .experience-save-option[aria-selected="true"] .experience-save-summary {
+    display: block;
+    margin-top: 12px;
+    font-size: .975rem;
+    line-height: 1.5;
+  }
+  #experience .experience-save-option[aria-selected="true"] .experience-save-summary li:nth-child(n+2) {
+    display: none;
+  }
+  body.persona-design #experience .experience-save-option[aria-selected="true"] .experience-save-impact {
+    display: table;
+    margin-top: 14px;
+    padding: 5px 12px;
+    font-size: .875rem;
+  }
+  #experience .experience-save-sphere {
+    left: var(--row-left-padding);
+    font-size: 2.35rem;
+  }
+  #experience [aria-selected="true"] .experience-save-sphere {
+    transform: translateY(-50%) scale(1.12);
+  }
+  #experience .experience-save-controls {
+    top: 0;
+    right: 14px;
+    width: 100px;
+    height: 44px;
+    margin: 0;
+    flex-direction: row;
+    justify-content: space-between;
+  }
 }
 /* Circle squash/stretch and numeral bounce respect reduced motion in the controller. */

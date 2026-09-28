@@ -4,8 +4,11 @@ site:
   title: "Jiawei (Jacky) Ye | Computer Engineering Student & Hardware Engineer"
   description: "Computer Engineering student at the University of Toronto building embedded systems, FPGA games, and AI-powered tools."
   language: "en"
-  favicon: "/assets/images/projects/laser/laser-bluenode.png"
-  share_image: "/assets/images/projects/laser/laser-preview.png"
+  # Brand images are generated from this file by `npm run assets:brand`.
+  favicon: "/assets/images/site/favicon.svg"
+  favicon_png: "/assets/images/site/favicon-32.png"
+  apple_touch_icon: "/assets/images/site/apple-touch-icon.png"
+  share_image: "/assets/images/site/share-card.png"
 
 navigation:
   home: "Home"
@@ -25,6 +28,46 @@ navigation_descriptions:
   projects: "Games, circuits & robotics"
   contact: "Get in touch"
 
+# Interface labels used by templates and scripts, kept here so they can be
+# edited (or translated) without touching code.
+ui:
+  section_index:
+    about: "01"
+    education: "02"
+    skills: "03"
+    experience: "04"
+    projects: "05"
+    contact: "06"
+  hud:
+    label: "Keyboard shortcuts"
+    menu: "Menu"
+    navigate: "Navigate"
+    open: "Open"
+  menu:
+    open: "Open navigation"
+    close: "Close navigation"
+    hints_label: "Menu keyboard instructions"
+    hint_navigate: "Navigate"
+    hint_navigate_keys: "Up or Down arrow"
+    hint_open: "Open"
+    hint_close: "Close"
+    back_to_projects: "Back to projects"
+  game_start:
+    start_game: "Start game"
+    start_sandbox: "Start sandbox"
+    loading: "Loading…"
+    loading_status: "Getting the game ready…"
+    retry: "Reload to retry"
+    load_error: "The game could not load. Reload the page to try again."
+  projects:
+    file: "FILE"
+    built_with: "Built with"
+    view_source: "View source"
+    source: "Source"
+    source_pending: "URL pending"
+    source_pending_label: "Source repository link pending"
+    playable: "Playable in browser"
+
 hero:
   name: "Jiawei (Jacky) Ye"
   role: "Hardware & Software Engineer"
@@ -36,6 +79,9 @@ hero:
   secondary_link:
     label: "View resume"
     url: "/assets/documents/resume/Jiawei_Ye_Resume.pdf"
+  projects_link:
+    label: "Explore projects"
+    url: "#projects"
 
 about:
   heading: "About"
@@ -45,6 +91,9 @@ about:
 education_section:
   heading: "Education"
   institution: "University of Toronto"
+  logo: "/assets/images/site/uoft-logo.png"
+  logo_alt: "University of Toronto logo"
+  short_name: "U of T"
   program: "Electrical & Computer Engineering — BASc, PEY Co-op program"
   start_year: "2023"
   graduation: "April 2028 (expected graduation)"
@@ -66,12 +115,15 @@ skills_section:
         - "Quartus Prime"
         - "PlatformIO"
         - "RF Circuit Design"
-    - name: "AI & Software Engineering"
+    - name: "Programming Languages"
       icon: "software"
       skills:
         - "Python"
         - "C/C++"
         - "C#"
+    - name: "Backend & Tooling"
+      icon: "backend"
+      skills:
         - "Flask"
         - "FastAPI"
         - "Docker"
@@ -98,6 +150,7 @@ skills_section:
 
 experience_section:
   heading: "Experience"
+  continued_label: "TO BE CONTINUED..."
   introduction: ""
 
 experience:
@@ -167,11 +220,12 @@ experience:
 
 projects_section:
   heading: "Selected projects"
-  introduction: "A mix of hardware, software, and engineering storytelling — from FPGA games to embedded sensor sandboxes and motorsport explainers."
+  introduction: "Three of these run right here in your browser: faithful recreations of projects originally built for an FPGA board and an STM32 microcontroller. The rest are written case studies and videos."
 
 projects:
   - title: "Laser Puzzle"
-    summary: "An FPGA-based laser reflection puzzle game built for the DE1-SoC, featuring mirror rotation mechanics, timed objectives, and a VGA-rendered playfield."
+    summary: "A laser-reflection puzzle written in C and RISC-V assembly for the DE1-SoC's RV32 processor, drawing to a 320 × 240 VGA framebuffer — 13 rotatable mirrors, six targets, four hazards, and a two-minute timer."
+    playable: true
     placeholder_index: "01"
     technologies:
       - "C"
@@ -179,14 +233,16 @@ projects:
       - "RV32"
       - "Computer Architecture"
     image:
-      path: "/assets/images/projects/laser/laser-preview.gif"
+      video: "/assets/images/projects/laser/laser-preview.mp4"
       crt_effect: true
       poster: "/assets/images/projects/laser/laser-preview.png"
+      alt: "Laser Puzzle gameplay: a laser beam reflecting off mirrors toward targets on a dark grid."
     repository_url: "https://github.com/oldyemeister/RISC-V_lasergame"
     live_url: "/projects/laser/"
-    live_label: "Solve puzzle"
+    live_label: "Play Laser Puzzle"
   - title: "Donkey Kong FPGA Game"
     summary: "A hardware recreation of the classic Donkey Kong game on an FPGA, with full game logic, sprite rendering, and collision detection implemented directly in Verilog. Achieved smooth 60 FPS gameplay on the DE1-SoC through timing analysis and resource optimization."
+    playable: true
     placeholder_index: "02"
     collaborator:
       prefix: "Built with"
@@ -198,14 +254,16 @@ projects:
       - "ModelSim"
       - "DE1-SoC FPGA"
     image:
-      path: "/assets/images/projects/donkey-kong/donkey-kong-preview.gif"
+      video: "/assets/images/projects/donkey-kong/donkey-kong-preview.mp4"
       crt_effect: true
       poster: "/assets/images/projects/donkey-kong/donkey-kong-preview.png"
+      alt: "Donkey Kong FPGA gameplay with platforms, ladders, barrels, and the player character."
     live_url: "/projects/donkey-kong/"
-    live_label: "Play game"
+    live_label: "Play Donkey Kong"
     featured: false
   - title: "IMU Sandbox"
     summary: "An IMU-controlled STM32 sandbox running up to 3,000 sand particles at approximately 30 FPS, with dual OLEDs, selectable gravity, materials, and environmental effects."
+    playable: true
     placeholder_index: "03"
     collaborator:
       prefix: "Built with"
@@ -216,12 +274,13 @@ projects:
       - "STM32"
       - "BNO055"
     image:
-      path: "/assets/images/projects/imu-sandbox/imu-sandbox-preview.gif"
+      video: "/assets/images/projects/imu-sandbox/imu-sandbox-preview.mp4"
       crt_effect: true
       poster: "/assets/images/projects/imu-sandbox/imu-sandbox-preview.png"
+      alt: "A tilted virtual OLED display simulating sand particles responding to gravity."
     repository_url: "https://github.com/oldyemeister/imu_sandbox_stm32"
     live_url: "/projects/imu-sandbox/"
-    live_label: "Alter gravity"
+    live_label: "Try IMU Sandbox"
     featured: false
 
   # EDITABLE PROJECT CARD 4
@@ -240,12 +299,13 @@ projects:
     placeholder: false
     placeholder_index: "04"
     image:
-      path: "/assets/images/projects/rf-receiver/pcb_manufacturing.jpg"
+      path: "/assets/images/projects/rf-receiver/pcb_manufacturing-1200.webp"
       crt_effect: true
       poster: ""
+      alt: "Manufactured green RF receiver circuit board populated with filters, inductors, and integrated circuits."
     repository_url: ""
     live_url: "/projects/rf-receiver/"
-    live_label: "Read project"
+    live_label: "View RF case study"
     draft_label: ""
     featured: false
 
@@ -269,9 +329,10 @@ projects:
       path: "/assets/images/projects/aps380/hero.jpg"
       crt_effect: true
       poster: ""
+      alt: "Vision-assisted autonomous model car with a front camera, ultrasonic sensor, and yellow wheels."
     repository_url: ""
     live_url: "/projects/aps380/"
-    live_label: "Read project"
+    live_label: "View ACC case study"
     draft_label: ""
     featured: false
 
@@ -288,9 +349,10 @@ projects:
       path: "/assets/images/projects/bilibili/bilibili-preview.svg"
       crt_effect: true
       poster: ""
+      alt: "Preview artwork for Jacky's Formula 1 engineering videos on Bilibili."
     repository_url: ""
     live_url: "https://space.bilibili.com/302146460"
-    live_label: "Watch on Bilibili"
+    live_label: "Watch F1 videos"
     external: true
     draft_label: ""
     featured: false
@@ -304,8 +366,12 @@ contact:
   social_links:
     - label: "GitHub"
       url: "https://github.com/oldyemeister"
+      display_url: "github.com/oldyemeister"
+      icon_path: "M12 .75a11.25 11.25 0 0 0-3.56 21.92c.56.1.77-.24.77-.54v-2.1c-3.13.68-3.79-1.33-3.79-1.33-.51-1.3-1.25-1.65-1.25-1.65-1.02-.7.08-.68.08-.68 1.13.08 1.72 1.16 1.72 1.16 1 1.72 2.63 1.22 3.27.93.1-.72.4-1.22.71-1.5-2.5-.28-5.13-1.25-5.13-5.56 0-1.23.44-2.23 1.16-3.02-.12-.28-.5-1.43.11-2.98 0 0 .95-.3 3.1 1.16A10.8 10.8 0 0 1 12 6.18c.96 0 1.92.13 2.82.38 2.15-1.46 3.1-1.16 3.1-1.16.62 1.55.23 2.7.12 2.98.72.79 1.15 1.79 1.15 3.02 0 4.32-2.63 5.27-5.14 5.55.4.35.76 1.03.76 2.08v3.1c0 .3.2.65.78.54A11.25 11.25 0 0 0 12 .75Z"
     - label: "LinkedIn"
       url: "https://www.linkedin.com/in/jiawei-ye-a706b6287/"
+      display_url: "LinkedIn profile"
+      icon_path: "M5.37 24H.4V7.98h4.97V24ZM2.88 5.8A2.9 2.9 0 1 1 2.88 0a2.9 2.9 0 0 1 0 5.8ZM24 24h-4.97v-7.8c0-1.86-.04-4.26-2.6-4.26-2.6 0-3 2.03-3 4.12V24H8.46V7.98h4.77v2.18h.07c.66-1.25 2.29-2.57 4.7-2.57 5.02 0 5.95 3.3 5.95 7.61L24 24Z"
 
 laser:
   page_title: "Laser Puzzle"
@@ -348,6 +414,7 @@ donkey_kong:
   eyebrow: "Hardware-implemented classic game"
   description: "A full hardware recreation of Donkey Kong, built entirely in Verilog on a DE1-SoC FPGA — game logic, sprite rendering, and collision detection all run in custom digital circuits."
   objective: "Reach the goal at the top of the level while avoiding barrels."
+  source_note: "The source code isn't public: parts of it build on code provided by U of T professors and TAs, which course policy doesn't allow to be shared publicly."
   overview: "This project is a hardware recreation of Donkey Kong developed with Nolan Young for the DE1-SoC. Instead of running a software game loop, the player movement, jumping, barrel behavior, collision detection, sprite selection, and win logic are expressed as clocked Verilog logic. The level and sprites are stored in FPGA memory, while the VGA pipeline continuously combines those assets with the live positions of Mario and the barrels."
   results: "The finished design delivers smooth 60 FPS VGA gameplay with responsive controls, moving hazards, collision-based respawning, and a complete path to the goal. The project strengthened my understanding of synchronous design, clock-rate division, memory-backed graphics, and timing analysis. It also showed me how edge cases that are trivial in software—platform boundaries, simultaneous movement, and collision timing—must be made explicit and deterministic in hardware."
   instructions: "Move and jump to climb the platforms, dodging barrels along the way."

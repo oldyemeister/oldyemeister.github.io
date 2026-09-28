@@ -17,7 +17,7 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, educationDeco
   syncFlowers();
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const targets = [...document.querySelectorAll([
-    '.page-section:not(#projects):not(#about) > .content-shell',
+    '.page-section:not(#projects):not(#about):not(#education) > .content-shell',
     '#projects .section-header', '#projects .project-card'
   ].join(','))];
   const about = document.querySelector('#about');
@@ -113,18 +113,26 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, educationDeco
   const outerRing = about?.querySelector('.about-outer-ring');
   const shockwave = about?.querySelector('.about-shockwave');
   const education = document.querySelector('#education');
+  const aboutHeightFloor = () => window.innerWidth <= 760
+    ? { px: 520, vh: 0 }
+    : window.innerHeight <= 600 ? { px: 440, vh: 0 }
+    : { px: settings.about.minHeightPx, vh: settings.about.minHeightVh };
   const alignGoldCircles = () => {
     if (!about) return;
     const box = about.getBoundingClientRect();
     const goldArt = about.querySelector('.about-legacy-art');
-    const scale = Math.max(box.width / 1440, .45);
+    const scale = Math.max(.45, Math.min(box.width / 1440, 1.1)) * settings.about.goldArtworkScale;
     const x = box.width * settings.about.circleCenterXPercent / 100 + settings.about.circleCenterOffsetXPx;
     const blueBottom = Number(about.style.getPropertyValue('--hero-blue-bottom')) || 0;
     const fraction = settings.about.circleCenterYPercent / 100;
-    // Reserve space at the base center; manual offsets then move the artwork
-    // without being canceled by an equal increase in section height.
-    const clearHeight = fraction > 0 ? Math.max(0, (blueBottom + 1032 * scale + settings.about.minimumRingGapPx) / fraction) : 0;
-    about.style.setProperty('--about-section-min-height', `max(${settings.about.minHeightPx}px, ${settings.about.minHeightVh}svh, ${clearHeight}px)`);
+    // The actual outer radius includes the stroke. Account for the cropped
+    // center offset so the two rings stay separate without excessive height.
+    const clearHeight = fraction > 0 ? Math.max(0,
+      (blueBottom + 1032 * scale + settings.about.minimumRingGapPx - settings.about.circleCenterOffsetYPx) / fraction) : 0;
+    about.style.setProperty('--about-content-top', `${Math.max(48, blueBottom + 24)}px`);
+    const floor = aboutHeightFloor();
+    const heightRule = `max(${floor.px}px, ${floor.vh}svh, ${clearHeight}px)`;
+    about.style.setProperty('--about-section-min-height', heightRule);
     const y = box.height * fraction + settings.about.circleCenterOffsetYPx;
     goldArt.style.width = `${1440 * scale}px`;
     goldArt.style.left = `${x - 950 * scale}px`;
@@ -141,10 +149,38 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, educationDeco
     about.style.setProperty('--arch-photos-left', `${left}px`);
     about.style.setProperty('--arch-photos-top', `${Math.min(top, box.height - height - 32)}px`);
   };
-  about?.style.setProperty('--about-section-min-height', `max(${settings.about.minHeightPx}px, ${settings.about.minHeightVh}svh)`);
+  const initialAboutFloor = aboutHeightFloor();
+  about?.style.setProperty('--about-section-min-height', `max(${initialAboutFloor.px}px, ${initialAboutFloor.vh}svh)`);
   alignGoldCircles();
   window.addEventListener('resize', alignGoldCircles, { passive: true });
+  document.fonts?.ready.then(alignGoldCircles);
   if (about && 'ResizeObserver' in window) new ResizeObserver(alignGoldCircles).observe(about);
+
+  // Most frames change nothing; skip identical writes, since each one
+  // invalidates style for its element.
+  const written = new WeakMap();
+  const write = (element, name, value) => {
+    let cache = written.get(element);
+    if (!cache) written.set(element, cache = new Map());
+    if (cache.get(name) === value) return;
+    cache.set(name, value);
+    if (name.startsWith('--')) element.style.setProperty(name, value);
+    else element.setAttribute(name, value);
+  };
+  // Only cards near the viewport can change. A card leaving that band gets one
+  // last update, which lands on its resting off-screen value.
+  const near = new Set(targets);
+  const leaving = new Set();
+  if ('IntersectionObserver' in window) {
+    const nearObserver = new IntersectionObserver(entries => {
+      entries.forEach(({ target, isIntersecting }) => {
+        if (isIntersecting) near.add(target);
+        else if (near.delete(target)) leaving.add(target);
+      });
+      schedule();
+    }, { rootMargin: '25% 0px' });
+    targets.forEach(element => nearObserver.observe(element));
+  }
 
   let shockAnimation;
   let shockArmed = false;
@@ -155,11 +191,15 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, educationDeco
     const viewport = window.innerHeight;
     const aboutBox = about?.getBoundingClientRect();
     const educationBox = education?.getBoundingClientRect();
+    const educationProgress = educationBox ? Math.max(0, Math.min(1,
+      (viewport * .9 - educationBox.top) / Math.max(1, viewport * .45))) : 1;
     const pictureTop = pictureRow?.getBoundingClientRect().top;
     const decor = aboutBox && educationBox ? educationDecorProgress(educationBox.top, aboutBox.bottom, aboutBox.height, viewport) : null;
     const reveal = aboutBox ? aboutScrollProgress(aboutBox.top, aboutBox.height, viewport) : null;
     // Read first, then write, so cards don't trigger repeated layout work.
-    const values = targets.map(element => {
+    const active = [...new Set([...near, ...leaving])];
+    leaving.clear();
+    const values = active.map(element => {
       const box = element.getBoundingClientRect();
       // Compensate for our center-origin scale; keep progress independent of it.
       const height = element.offsetHeight;
@@ -172,8 +212,10 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, educationDeco
     });
     if (reveal && rings) {
       const outer = aboutOuterRing(reveal.progress);
-      outerRing?.setAttribute('r', outer.radius);
-      outerRing?.setAttribute('stroke-width', outer.width);
+      if (outerRing) {
+        write(outerRing, 'r', String(outer.radius));
+        write(outerRing, 'stroke-width', String(outer.width));
+      }
       if (reveal.progress < Math.max(0, settings.shockwave.triggerAt - settings.shockwave.rearmGap)) shockArmed = true;
       if (shockArmed && reveal.progress >= settings.shockwave.triggerAt) {
         shockArmed = false;
@@ -191,24 +233,24 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, educationDeco
       pictureFrames.forEach((picture, index) => {
         const distance = viewport * (settings.pictures.enterAtVh - settings.pictures.delayVh - index * settings.pictures.staggerVh) / 100 - pictureTop;
         const p = Math.max(0, Math.min(1, distance / Math.max(1, viewport * settings.pictures.travelVh / 100)));
-        picture.style.setProperty('--picture-progress', (1 - (1 - p) ** 3).toFixed(4));
+        write(picture, '--picture-progress', (1 - (1 - p) ** 3).toFixed(4));
       });
-      about.dataset.aboutScroll = '';
-      about.style.setProperty('--about-copy-opacity', reveal.text.toFixed(4));
-      about.style.setProperty('--about-ribbon-progress', aboutRibbonProgress(aboutBox.bottom, viewport, aboutBox.height).toFixed(4));
-      rings.setAttribute('transform', `translate(950 -180) scale(${reveal.progress}) translate(-950 180)`);
+      write(about, 'data-about-scroll', '');
+      write(about, '--about-copy-progress', reveal.text.toFixed(4));
+      write(about, '--about-ribbon-progress', aboutRibbonProgress(aboutBox.bottom, viewport, aboutBox.height).toFixed(4));
+      write(rings, 'transform', `translate(950 -180) scale(${reveal.progress}) translate(-950 180)`);
     }
     if (decor) {
-      education.dataset.decorScroll = '';
-      education.style.setProperty('--education-bars-progress', decor.bars.toFixed(4));
-      education.style.setProperty('--education-pills-progress', decor.pills.toFixed(4));
+      write(education, 'data-decor-scroll', '');
+      write(education, '--education-bars-progress', decor.bars.toFixed(4));
+      write(education, '--education-entry-progress', (1 - (1 - educationProgress) ** 3).toFixed(4));
     }
     document.documentElement.classList.remove('about-scroll-pending');
     clearTimeout(window.aboutScrollFallback);
     values.forEach(({ element, opacity, scale }) => {
-      element.dataset.scrollPresence = '';
-      element.style.setProperty('--scroll-opacity', opacity.toFixed(3));
-      element.style.setProperty('--scroll-scale', scale.toFixed(4));
+      write(element, 'data-scroll-presence', '');
+      write(element, '--scroll-opacity', opacity.toFixed(3));
+      write(element, '--scroll-scale', scale.toFixed(4));
     });
   }
   function schedule() {
@@ -217,6 +259,9 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, educationDeco
   function preferenceChanged() {
     cancelAnimationFrame(frame);
     frame = 0;
+    // Direct removals below bypass write(), so forget what was written.
+    [outerRing, rings, about, education, ...pictureFrames, ...targets].forEach(element => element && written.delete(element));
+    targets.forEach(element => leaving.add(element));
     if (reducedMotion.matches) {
       shockAnimation?.cancel();
       shockArmed = false;
@@ -226,11 +271,11 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, educationDeco
       if (education) {
         delete education.dataset.decorScroll;
         education.style.removeProperty('--education-bars-progress');
-        education.style.removeProperty('--education-pills-progress');
+        education.style.removeProperty('--education-entry-progress');
       }
       if (about) {
         delete about.dataset.aboutScroll;
-        about.style.removeProperty('--about-copy-opacity');
+        about.style.removeProperty('--about-copy-progress');
         about.style.removeProperty('--about-ribbon-progress');
         rings?.removeAttribute('transform');
       }

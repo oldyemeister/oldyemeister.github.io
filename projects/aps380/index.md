@@ -8,7 +8,7 @@ summary: "A four-person APS380 project integrating distance sensing, lane tracki
 hero_image: "/assets/images/projects/aps380/hero.jpg"
 hero_alt: "Completed APS380 autonomous vehicle with its custom silver body"
 hero_caption: "Completed autonomous vehicle with its custom body installed."
-role: "Team member"
+role: "Raspberry Pi software"
 team_size: "4 students"
 timeline: "One academic term"
 collaborators:
@@ -90,6 +90,10 @@ Direct sunlight initially confused the IR array during outdoor testing. Threshol
 
 *Figure 7. Front-mounted Pi camera, HC-SR04 ultrasonic sensor, and four-channel IR line sensor on the vehicle platform.*
 {: .image-caption}
+
+## My contribution
+
+I was responsible for the code running on the Raspberry Pi. My focus was the sensor-driven control: reading the four-channel infrared line sensor to steer the car along the lane, and using the ultrasonic sensor to detect the vehicle or obstacle ahead.
 
 ## Validation and results
 

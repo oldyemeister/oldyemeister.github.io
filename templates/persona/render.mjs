@@ -1,65 +1,74 @@
 // Decorate the already-rendered pages so both designs share content and assets.
-// Used by the local preview and production static builds.
+// Used by the local preview and production static builds. `ui` is the ui: block
+// from _data/content.yml, which supplies every label this file inserts.
 import { redesignContent } from './redesign.mjs';
+import { replaceRequired } from './anchors.mjs';
 
-export function personaPreview(html, prefix = '/persona', redesign = true) {
+export function personaPreview(html, prefix = '/persona', redesign = true, ui) {
   if (redesign) html = redesignContent(html);
   const home = /<body class="page-home">/.test(html);
   const guide = html.match(/<aside class="keyboard-guide[^"]*"[^>]*>[\s\S]*?<\/aside>/);
   const gameKeys = guide ? [...guide[0].matchAll(/<li>([\s\S]*?)<\/li>/g)]
     .map(([, instruction]) => `<span class="hud-instruction hud-game-key">${instruction.replace(/<kbd>([^<]+)<\/kbd>/g, (_, keys) => keys.trim().split(/\s+/).map(key => `<kbd${/[↑↓←→]/.test(key) ? ' class="hud-arrow"' : ''}>${key}</kbd>`).join(''))}</span>`).join('') : '';
   if (guide) {
-    html = html
-      .replace(/<p class="section-index">Project summary<\/p>\s*<h2>[^<]*<\/h2>/, '<h2>Summary</h2>')
-      .replace('<h1>', '<h1 id="game-page-title">')
-      .replace(/aria-labelledby="(?:game-heading|dk-game-heading|imu-demo-heading)"/g, 'aria-labelledby="game-page-title"')
-      .replace(/<div>\s*<p class="section-index">[^<]*<\/p>\s*<h2 id="(?:game-heading|dk-game-heading|imu-demo-heading)">[^<]*<\/h2>\s*<\/div>/g, '');
+    html = replaceRequired(html, '<h1>', '<h1 id="game-page-title">', 'the game page <h1>');
+    html = replaceRequired(html, /aria-labelledby="(?:game-heading|dk-game-heading|imu-demo-heading)"/g,
+      'aria-labelledby="game-page-title"', 'the game section aria-labelledby');
+    html = replaceRequired(html,
+      /<div>\s*<p class="section-index">[^<]*<\/p>\s*<h2 id="(?:game-heading|dk-game-heading|imu-demo-heading)">[^<]*<\/h2>\s*<\/div>/g,
+      '', 'the game heading block');
+    html = replaceRequired(html, /src="\/assets\/js\/(?:project-bootstrap|imu-sandbox-bootstrap)\.js[^"]*"/g,
+      'src="/assets/themes/persona/game-start.js"', 'the game bootstrap script');
   }
-  return html
+  html = html
     .replace(/<aside class="keyboard-guide[^"]*"[^>]*>[\s\S]*?<\/aside>/g, '')
     .replace(/<p class="section-index">\s*\d+\s*<\/p>/g, '')
-    .replace(/src="\/assets\/js\/(?:project-bootstrap|imu-sandbox-bootstrap)\.js[^"]*"/g,
-      'src="/assets/themes/persona/game-start.js"')
-    .replace(/href="(\/[^"#?]*)([^" ]*)"/g, (match, path, suffix) => {
-      if (path === '/' || path.startsWith('/projects/') || path === '/404.html') {
-        return `href="${prefix}${path}${suffix}"`;
-      }
-      return match;
-    })
-    .replace('</head>', `
-      <link rel="stylesheet" href="/assets/themes/persona/style.css?v=5">
+    .replace(/href="(\/[^"#?]*)([^" ]*)"/g, (match, path, suffix) =>
+      path === '/' || path.startsWith('/projects/') || path === '/404.html'
+        ? `href="${prefix}${path}${suffix}"` : match);
+  html = replaceRequired(html, '</head>', () => `${headAssets(home, redesign)}\n    </head>`, '</head>');
+  html = replaceRequired(html, /<body class="([^"]*)">/, (_, classes) => `<body class="${classes} persona-design" data-persona-base="${prefix}/">
+      <div class="page-wipe" aria-hidden="true"><i></i><i></i><i></i></div>`, 'the <body> tag');
+  return replaceRequired(html, '</body>', () => `${hud(home, gameKeys, ui.hud)}\n    </body>`, '</body>');
+}
+
+// Stylesheets and scripts for the Persona layer, in cascade order. Sheets that
+// only style homepage sections load on the homepage only.
+function headAssets(home, redesign) {
+  const homeSheet = (name, when = true) => home && when ? `<link rel="stylesheet" href="/assets/themes/persona/${name}.css">` : '';
+  return `
+      <link rel="stylesheet" href="/assets/themes/persona/style.css">
       ${redesign ? '<link rel="stylesheet" href="/assets/themes/persona/tokens.css">\n      <link rel="stylesheet" href="/assets/themes/persona/redesign.css">' : ''}
       <link rel="stylesheet" href="/assets/themes/persona/key-instructions.css">
-      <link rel="stylesheet" href="/assets/themes/persona/project-tv-effect.css?v=3">
+      ${homeSheet('project-tv-effect')}
       ${home ? '<script src="/assets/js/crt-effect.js" defer></script>' : ''}
-      <link rel="stylesheet" href="/assets/themes/persona/skills-section.css?v=3">
-      <link rel="stylesheet" href="/assets/themes/persona/hero-poster.css?v=34">
-      <link rel="stylesheet" href="/assets/themes/persona/hero-ambient.css?v=5">
+      ${home ? '<link rel="stylesheet" href="/assets/themes/persona/skills-section.css?v=5">' : ''}
+      ${homeSheet('hero-poster')}
+      ${homeSheet('hero-ambient')}
       <link rel="stylesheet" href="/assets/themes/persona/content-typography.css">
-      ${redesign ? '<link rel="stylesheet" href="/assets/themes/persona/section-backgrounds.css">' : ''}
-      ${redesign ? '<link rel="stylesheet" href="/assets/themes/persona/education-settings.css">' : ''}
-      <link rel="stylesheet" href="/assets/themes/persona/experience-save-menu.css">
+      ${homeSheet('section-backgrounds', redesign)}
+      ${home && redesign ? '<link rel="stylesheet" href="/assets/themes/persona/education-settings.css?v=2">' : ''}
+      ${homeSheet('experience-save-menu')}
       ${redesign ? '<script src="/assets/js/about-pills.js" defer></script>' : ''}
-      ${home ? '<link rel="stylesheet" href="/assets/themes/persona/scroll-presence.css?v=6">\n      <script type="module" src="/assets/js/scroll-presence.js?v=6"></script>' : ''}
+      ${home ? '<link rel="stylesheet" href="/assets/themes/persona/scroll-presence.css">\n      <script type="module" src="/assets/js/scroll-presence.js"></script>' : ''}
       ${home ? `<script>
         if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
           document.documentElement.classList.add('about-scroll-pending');
           window.aboutScrollFallback = setTimeout(() => document.documentElement.classList.remove('about-scroll-pending'), 2000);
         }
       </script>` : ''}
-      <script src="/assets/themes/persona/arrival.js"></script>
-    </head>`)
-    .replace(/<body class="([^"]*)">/, `<body class="$1 persona-design" data-persona-base="${prefix}/">
-      <div class="page-wipe" aria-hidden="true"><i></i><i></i><i></i></div>`)
-    .replace('</body>', `
-      <nav class="persona-hud" aria-label="Keyboard shortcuts">
-        ${home ? `
-        <button class="hud-menu-toggle" type="button" data-hud-menu-toggle aria-controls="site-navigation" aria-keyshortcuts="Tab Escape"><kbd>Tab</kbd><kbd>Esc</kbd><span>Menu</span></button>` : `
+      <script src="/assets/themes/persona/arrival.js"></script>`;
+}
+
+// The fixed keyboard-hint bar. Game pages also list their own keys.
+function hud(home, gameKeys, labels) {
+  return `
+      <nav class="persona-hud" aria-label="${labels.label}">
+        ${home ? '' : `
         ${gameKeys}
-        <span class="hud-instruction"><kbd>Tab</kbd><span>Navigate</span></span>
-        <span class="hud-instruction"><kbd>Enter</kbd><span>Open</span></span>
-        <a class="hud-home" href="${prefix}/" data-hud-home aria-keyshortcuts="Escape"><kbd>Esc</kbd><span>Home</span><span aria-hidden="true">↗</span></a>`}
+        <span class="hud-instruction"><kbd>Tab</kbd><span>${labels.navigate}</span></span>
+        <span class="hud-instruction"><kbd>Enter</kbd><span>${labels.open}</span></span>`}
+        <button class="hud-menu-toggle" type="button" data-hud-menu-toggle aria-controls="site-navigation" aria-keyshortcuts="Escape"><kbd>Esc</kbd><span>${labels.menu}</span></button>
       </nav>
-      <script src="/assets/themes/persona/interface.js?v=5" defer></script>
-    </body>`);
+      <script src="/assets/themes/persona/interface.js" defer></script>`;
 }

@@ -160,7 +160,24 @@ function formatTime(seconds) {
   return `${Math.floor(rounded / 60)}:${String(rounded % 60).padStart(2, '0')}`;
 }
 
+// Screen readers hear only meaningful changes — a lost life, a destroyed
+// target, winning or losing — never the ticking timer.
+const announcer = document.querySelector('[data-game-announcer]');
+let announced;
+function announce() {
+  const state = { lives: game.lives, targets: game.targetsDestroyed, status: game.status };
+  if (announcer && announced) {
+    const parts = [];
+    if (state.lives < announced.lives) parts.push(`${labels.livesLabel}: ${state.lives}`);
+    if (state.targets > announced.targets) parts.push(`${labels.targetsLabel}: ${state.targets} / ${game.nodes.length}`);
+    if (state.status !== announced.status && state.status !== 'running') parts.push(state.status === 'won' ? labels.won : labels.lost);
+    if (parts.length) announcer.textContent = parts.join('. ');
+  }
+  announced = state;
+}
+
 function updateInterface() {
+  announce();
   elements.timer.textContent = formatTime(game.secondsLeft);
   elements.lives.textContent = game.lives;
   elements.targets.textContent = `${game.targetsDestroyed} / ${game.nodes.length}`;

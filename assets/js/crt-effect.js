@@ -9,7 +9,7 @@
     });
   }
   const screens = [...document.querySelectorAll(
-    '#projects .project-media picture, .hero-reference-art, .hero-header-art'
+    '#projects .project-media :is(picture, .project-screen), .hero-reference-art, .hero-header-art'
   )];
   const visible = new Set();
   const motion = matchMedia('(prefers-reduced-motion: reduce)');

@@ -10,22 +10,22 @@
   --crt-scan-duration: 55s;
 }
 
-#projects .project-media picture {
+#projects .project-media :is(picture, .project-screen) {
   position: relative;
   display: block;
   overflow: hidden;
   isolation: isolate;
 }
 
-#projects .project-media picture::before,
-#projects .project-media picture::after {
+#projects .project-media :is(picture, .project-screen)::before,
+#projects .project-media :is(picture, .project-screen)::after {
   content: "";
   position: absolute;
   pointer-events: none;
   z-index: 1;
 }
 
-#projects .project-media picture::before {
+#projects .project-media :is(picture, .project-screen)::before {
   inset: calc(-1 * var(--crt-scan-distance)) 0;
   background: repeating-linear-gradient(to bottom,
     rgb(8 24 32 / var(--crt-line-opacity)) 0 var(--crt-line-width),
@@ -35,7 +35,7 @@
   animation-play-state: paused;
 }
 
-#projects .project-media picture::after {
+#projects .project-media :is(picture, .project-screen)::after {
   inset: 0;
   background:
     radial-gradient(ellipse at center, transparent 45%, rgb(8 18 28 / .19) 100%),
@@ -51,7 +51,7 @@
   animation-play-state: paused;
 }
 
-#projects .project-media picture[data-crt-active="true"]::before,
+#projects .project-media :is(picture, .project-screen)[data-crt-active="true"]::before,
 [data-crt-active="true"] .hero-crt-scanlines {
   animation-play-state: running;
 }
@@ -63,7 +63,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #projects .project-media picture::before,
+  #projects .project-media :is(picture, .project-screen)::before,
   .hero-crt-scanlines {
     animation: none;
   }

@@ -6,6 +6,8 @@
   const imu = target.matches('[data-imu-scene]');
   const donkey = target.matches('[data-donkey-kong-canvas]');
   const kind = imu ? 'imu-sandbox' : donkey ? 'donkey-kong' : 'laser';
+  // Labels come from content.yml (ui.game_start), rendered by the layout.
+  const labels = JSON.parse(document.getElementById('game-start-labels').textContent);
   const stage = imu ? target : target.closest('[data-game-wrap]');
   const section = stage.closest('section');
   const television = document.createElement('div');
@@ -52,12 +54,13 @@
   overlay.innerHTML = `
     <img class="game-start-poster" src="/assets/images/projects/${kind}/${kind}-preview.png" alt="">
     <div class="game-start-prompt">
-      <button class="game-start-button" type="button"><span aria-hidden="true">▶</span><span data-start-label>Start ${imu ? 'sandbox' : 'game'}</span></button>
+      <button class="game-start-button" type="button"><span aria-hidden="true">▶</span><span data-start-label></span></button>
       <p class="sr-only" role="status"></p>
     </div>`;
   stage.append(overlay);
   const button = overlay.querySelector('button');
   const label = overlay.querySelector('[data-start-label]');
+  label.textContent = imu ? labels.start_sandbox : labels.start_game;
   const status = overlay.querySelector('[role="status"]');
 
   // Preserve the slider feedback normally installed by the IMU bootstrap.
@@ -94,8 +97,8 @@
     if (target.dataset.moduleState !== 'idle') return;
     target.dataset.moduleState = 'loading';
     button.disabled = true;
-    label.textContent = 'Loading…';
-    status.textContent = 'Getting the game ready…';
+    label.textContent = labels.loading;
+    status.textContent = labels.loading_status;
     try {
       // DK initializes asynchronously; warm its required images before importing.
       if (donkey) {
@@ -126,9 +129,9 @@
       console.error('Game failed to start.', error);
       target.dataset.moduleState = 'error';
       button.disabled = false;
-      label.textContent = 'Reload to retry';
+      label.textContent = labels.retry;
       status.classList.remove('sr-only');
-      status.textContent = 'The game could not load. Reload the page to try again.';
+      status.textContent = labels.load_error;
     }
   });
 }());

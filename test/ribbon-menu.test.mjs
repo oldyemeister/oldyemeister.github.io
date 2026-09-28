@@ -24,6 +24,11 @@ function setup(reduced = false, viewport = 1440, labels = ['About', 'Experience'
   const links = labels.map(element);
   links.forEach(link => { link.dataset = { menuDescription: `${link.textContent} details` }; });
   const nav = element(); nav.children = [...links]; nav.querySelectorAll = () => links;
+  // Mirrors the ui.menu labels rendered onto #site-navigation.
+  nav.dataset = {
+    openLabel: 'Open navigation', closeLabel: 'Close navigation', hintsLabel: 'Menu keyboard instructions',
+    hintNavigate: 'Navigate', hintNavigateKeys: 'Up or Down arrow', hintOpen: 'Open', hintClose: 'Close'
+  };
   document = element(); document.body = element();
   document.querySelector = s => s === '[data-ribbon-trigger]' ? trigger : nav;
   document.querySelectorAll = () => [];

@@ -112,6 +112,7 @@
 
 .site-navigation a,
 .site-identity,
+.nav-back-link,
 .hero-links .text-link,
 .project-links a,
 .contact-links a,
@@ -135,12 +136,6 @@
   grid-column: 3;
   grid-row: 1;
   justify-self: end;
-}
-
-.theme-control {
-  position: static;
-  grid-column: 2;
-  grid-row: 1;
 }
 
 .site-navigation {
@@ -224,17 +219,52 @@
   box-shadow: 3px 3px 0 var(--persona-sky);
 }
 
-.theme-switch {
-  border: 2px solid var(--persona-ink);
-  background: var(--persona-sky);
+.site-identity,
+.nav-menu-button {
+  min-width: 44px;
+  min-height: 44px;
 }
 
-.theme-switch[aria-checked="true"] {
-  background: var(--persona-yellow);
+.nav-menu-button {
+  width: 44px;
+  height: 44px;
 }
 
-.theme-switch-thumb {
-  background: var(--persona-ink);
+@media (max-height: 700px) {
+  .site-header {
+    min-height: 56px;
+    transform: translateY(0);
+    transition: transform 240ms cubic-bezier(.16, 1, .3, 1);
+  }
+
+  .nav-shell {
+    min-height: 56px;
+  }
+
+  .site-identity > span:last-child {
+    display: none;
+  }
+
+  .site-navigation {
+    max-height: calc(100svh - 58px - var(--hud-height));
+  }
+
+  body.short-header-hidden:not(.navigation-open) .site-header {
+    transform: translateY(calc(-100% - 2px));
+    pointer-events: none;
+  }
+
+  body.navigation-open .site-header,
+  .site-header:focus-within {
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+}
+
+@media (max-height: 700px) and (prefers-reduced-motion: reduce) {
+  .site-header {
+    transition: none;
+  }
 }
 
 .hero-section {
@@ -342,6 +372,9 @@ html.reveal-enabled .persona-monogram.is-revealed {
   color: var(--text);
   letter-spacing: .12em;
 }
+
+/* Persona shows only the content-driven heading on game summary blocks. */
+.project-summary-eyebrow { display: none; }
 
 .section-header h2,
 .two-column-section h2,
@@ -655,10 +688,6 @@ html {
     flex-wrap: wrap;
     gap: 8px 16px;
   }
-}
-
-html.theme-transition .kinetic-letter {
-  transition: none;
 }
 
 @media (max-width:1080px) {

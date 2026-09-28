@@ -3,6 +3,7 @@ layout: default
 title: IMU Sandbox OLED Explorer
 page_class: imu-sandbox
 imu_sandbox_game: true
+content_key: imu_sandbox
 ---
 {% assign site_content = site.data.content %}
 {% assign imu = site_content.imu_sandbox %}
@@ -32,7 +33,7 @@ imu_sandbox_game: true
       <p class="section-index">{{ imu.interactive_label }}</p>
       <h2 id="imu-demo-heading">{{ imu.page_title }}</h2>
     </div>
-    <div class="imu-live-readouts" aria-live="polite">
+    <div class="imu-live-readouts">
       <div class="imu-mode-readout"><span>{{ imu.current_mode_label }}</span><strong data-imu-mode-value>{{ imu.modes.normal }}</strong></div>
       <div class="imu-gravity-readout">
         <span>{{ imu.gravity_heading }}</span>
@@ -125,7 +126,7 @@ imu_sandbox_game: true
 
 <section class="page-section section-muted laser-notes">
   <div class="content-shell two-column-section">
-    <div><p class="section-index">Project summary</p><h2>{{ imu.notes_heading }}</h2></div>
+    <div><p class="section-index project-summary-eyebrow">Project summary</p><h2>{{ imu.notes_heading }}</h2></div>
     <div class="section-body">
       <dl class="project-metrics" aria-label="IMU Sandbox performance metrics">
         {% for metric in imu.metrics %}

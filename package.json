@@ -9,6 +9,8 @@
     "assets:laser": "node tools/convert-laser-assets.mjs",
     "assets:donkey-kong": "node tools/convert-donkey-kong-assets.mjs",
     "assets": "npm run assets:laser && npm run assets:donkey-kong",
+    "assets:previews": "node tools/capture-game-previews.mjs",
+    "assets:brand": "node tools/render-brand-assets.mjs",
     "preview:build": "node tools/preview-build.mjs"
   }
 }

@@ -1,10 +1,7 @@
 (function () {
   const root = document.documentElement;
-  const themeToggle = document.querySelector('[data-theme-toggle]');
   const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const themeDuration = 420;
-  let transitionTimer;
 
   // Decorative stripes: 25% thinner, with a minimum of two rendered pixels.
   const heroStripes = document.querySelector('#home .hero-corner-ribbons');
@@ -52,43 +49,67 @@
     }
   }
 
-  function setTheme(theme, persist, animated = false) {
-    root.dataset.theme = theme;
-    if (themeToggle) {
-      const dark = theme === 'dark';
-      themeToggle.setAttribute('aria-checked', String(dark));
-      themeToggle.setAttribute('aria-label', dark ? 'Use light theme' : 'Use dark theme');
-    }
-    if (persist) {
-      try { localStorage.setItem('theme', theme); } catch (error) {}
-    }
-    window.dispatchEvent(new CustomEvent('site-theme-change', {
-      detail: { theme, animated, duration: animated ? themeDuration : 0 }
-    }));
-  }
-
-  function toggleTheme(theme) {
-    if (reducedMotion.matches) {
-      setTheme(theme, true, false);
-      return;
-    }
-    window.clearTimeout(transitionTimer);
-    root.classList.add('theme-transition');
-    themeToggle?.classList.add('is-changing');
-    window.requestAnimationFrame(() => setTheme(theme, true, true));
-    transitionTimer = window.setTimeout(() => {
-      root.classList.remove('theme-transition');
-      themeToggle?.classList.remove('is-changing');
-    }, themeDuration + 60);
-  }
-
-  setTheme(root.dataset.theme || (systemTheme.matches ? 'dark' : 'light'), false);
-  themeToggle?.addEventListener('click', () => {
-    toggleTheme(root.dataset.theme === 'dark' ? 'light' : 'dark');
-  });
+  // The head script picks the initial theme; follow later OS changes unless a
+  // theme was saved.
   systemTheme.addEventListener?.('change', (event) => {
-    if (!storedTheme()) setTheme(event.matches ? 'dark' : 'light', false);
+    if (!storedTheme()) root.dataset.theme = event.matches ? 'dark' : 'light';
   });
+
+  // Short windows need the content more than persistent chrome. Keep the
+  // header available at the top and on upward scroll, but let it retreat on
+  // downward scroll. One passive listener and one animation-frame write keep
+  // this from adding work to the scroll path.
+  const siteHeader = document.querySelector('[data-site-header]');
+  const shortViewport = window.matchMedia('(max-height: 700px)');
+  if (siteHeader) {
+    let previousScrollY = window.scrollY;
+    let headerFrame = 0;
+    let headerInteractionStarted = false;
+    const showHeader = () => document.body.classList.remove('short-header-hidden');
+    const startHeaderInteraction = () => {
+      headerInteractionStarted = true;
+      previousScrollY = window.scrollY;
+    };
+    const updateShortHeader = () => {
+      headerFrame = 0;
+      const currentScrollY = window.scrollY;
+      if (!headerInteractionStarted) {
+        previousScrollY = currentScrollY;
+        showHeader();
+        return;
+      }
+      const menuOpen = document.body.classList.contains('navigation-open');
+      const headerFocused = siteHeader.contains(document.activeElement);
+      if (!shortViewport.matches || currentScrollY < 80 || menuOpen || headerFocused) {
+        showHeader();
+      } else if (currentScrollY > previousScrollY + 1) {
+        document.body.classList.add('short-header-hidden');
+      } else if (currentScrollY < previousScrollY - 1) {
+        showHeader();
+      }
+      previousScrollY = currentScrollY;
+    };
+    const queueShortHeaderUpdate = () => {
+      if (!headerFrame) headerFrame = window.requestAnimationFrame(updateShortHeader);
+    };
+    window.addEventListener('scroll', queueShortHeaderUpdate, { passive: true });
+    window.addEventListener('wheel', startHeaderInteraction, { passive: true });
+    window.addEventListener('touchstart', startHeaderInteraction, { passive: true });
+    window.addEventListener('pointerdown', startHeaderInteraction, { passive: true });
+    window.addEventListener('keydown', event => {
+      if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(event.key)) {
+        startHeaderInteraction();
+      }
+    });
+    shortViewport.addEventListener?.('change', () => {
+      previousScrollY = window.scrollY;
+      showHeader();
+    });
+    siteHeader.addEventListener('focusin', showHeader);
+    window.addEventListener('pagehide', () => {
+      if (headerFrame) window.cancelAnimationFrame(headerFrame);
+    });
+  }
 
   const revealTargets = [...document.querySelectorAll([
     '.hero-copy', '.portrait-frame', '.section-header > *',
