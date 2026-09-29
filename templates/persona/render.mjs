@@ -41,12 +41,14 @@ function headAssets(home, redesign) {
       ${redesign ? '<link rel="stylesheet" href="/assets/themes/persona/tokens.css">\n      <link rel="stylesheet" href="/assets/themes/persona/redesign.css">' : ''}
       <link rel="stylesheet" href="/assets/themes/persona/key-instructions.css">
       ${homeSheet('project-tv-effect')}
-      ${home ? '<script src="/assets/js/crt-effect.js" defer></script>' : ''}
+      ${home ? '<script type="module" src="/assets/js/crt-effect.js"></script>' : ''}
       ${home ? '<link rel="stylesheet" href="/assets/themes/persona/skills-section.css?v=5">' : ''}
       ${homeSheet('hero-poster')}
       ${homeSheet('hero-ambient')}
       <link rel="stylesheet" href="/assets/themes/persona/content-typography.css">
+      ${!home && redesign ? '<link rel="stylesheet" href="/assets/themes/persona/project-pages.css">' : ''}
       ${homeSheet('section-backgrounds', redesign)}
+      ${homeSheet('project-cards', redesign)}
       ${home && redesign ? '<link rel="stylesheet" href="/assets/themes/persona/education-settings.css?v=2">' : ''}
       ${homeSheet('experience-save-menu')}
       ${redesign ? '<script src="/assets/js/about-pills.js" defer></script>' : ''}

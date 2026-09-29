@@ -13,9 +13,9 @@ export const SCROLL_ANIMATION = {
   about: {
     minHeightPx: 560, // Desktop floor; compact and phone layouts use smaller floors.
     minHeightVh: 68, // Leave room for the ring without a full viewport of empty space.
-    goldArtworkScale: .54, // Decorative arch, scaled independently from the copy.
+    goldArtworkScale: .65, // Slightly enlarged corner arch, independent of the copy.
     minimumRingGapPx: 48, // Keep this much vertical space between blue and full-size gold rings.
-    circleCenterXPercent: 82, // Keep the arch on the open side of the copy.
+    circleCenterXPercent: 0, // Anchor the cropped arch to About's lower-left corner.
     circleCenterYPercent: 100, // 0 = top, 100 = bottom; >100 puts the center below About.
     circleCenterOffsetXPx: 0, // Optional fine adjustment: positive moves right.
     circleCenterOffsetYPx: 130, // Crop the lower arc at the Education seam.

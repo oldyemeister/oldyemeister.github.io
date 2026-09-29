@@ -1,15 +1,6 @@
-/* CRT treatment: slow scanline drift, soft phosphor texture, glass falloff.
-   Media stays full color; captions and controls are outside the overlays. */
-:root {
-  --crt-line-width: .5625px;
-  --crt-line-spacing: 3px;
-  --crt-highlight-width: calc(var(--crt-line-width) / 2);
-  --crt-line-end: calc(var(--crt-line-width) + var(--crt-highlight-width));
-  --crt-scan-distance: calc(var(--crt-line-spacing) * 4);
-  --crt-line-opacity: .22;
-  --crt-scan-duration: 55s;
-}
-
+/* Vault66-inspired CRT layers; adjustable values live in assets/js/crt-settings.js.
+   Adapted from vault66-crt-effect, Copyright (c) 2025 Maksym Dombrov (MIT).
+   License: /assets/licenses/vault66-crt-effect.txt. No external runtime required. */
 #projects .project-media :is(picture, .project-screen) {
   position: relative;
   display: block;
@@ -17,54 +8,127 @@
   isolation: isolate;
 }
 
-#projects .project-media :is(picture, .project-screen)::before,
-#projects .project-media :is(picture, .project-screen)::after {
+/* The same HTML layers sit inside the SVG's existing sky-ring clip.
+   Text, flowers, gold rings and the monogram remain outside the filter. */
+.hero-crt-window {
+  pointer-events: none;
+  overflow: hidden;
+  /* Blend the flattened HTML texture with the real SVG sky, not just its
+     sibling overlays. This adds shimmer without a dark gray film. */
+  mix-blend-mode: screen;
+}
+.hero-crt-screen { position: relative; width: 100%; height: 100%; overflow: hidden; }
+.crt-surface[data-crt-glow="true"] {
+  filter: drop-shadow(0 0 6px var(--crt-glow-color)) drop-shadow(0 0 12px var(--crt-glow-color));
+}
+.crt-layer { position: absolute; inset: 0; pointer-events: none; }
+
+/* Desaturate only the decorative layers, never the original image/video.
+   Keep their brightness/opacity unchanged so the sweep does not turn white. */
+.crt-scanlines, .crt-edge-glow, .crt-noise {
+  filter: saturate(var(--crt-tint-saturation, 1));
+}
+/* Neutral speckles; the sky-colored scanlines/sweep keep their blue hue. */
+.hero-crt-screen > .crt-noise { filter: grayscale(1); }
+
+.crt-scanlines {
+  z-index: 6;
+  background: repeating-linear-gradient(var(--crt-line-direction),
+    var(--crt-line-color) 0 var(--crt-line-width),
+    transparent var(--crt-line-width) calc(var(--crt-line-width) + var(--crt-line-gap)));
+  opacity: var(--crt-line-opacity);
+  mix-blend-mode: screen;
+}
+.crt-curvature {
+  z-index: 1;
+  background:
+    radial-gradient(ellipse 75% 75% at 30% 25%, rgb(255 255 255 / .05), transparent 55%),
+    radial-gradient(ellipse 100% 100% at center, transparent 42%,
+      rgb(0 0 0 / calc(var(--crt-curvature-intensity) * .35)) 72%,
+      rgb(0 0 0 / calc(var(--crt-curvature-intensity) * .9)) 100%);
+}
+.crt-vignette {
+  z-index: 5;
+  background: radial-gradient(ellipse at center, transparent 60%, rgb(0 0 0 / var(--crt-vignette-intensity)));
+  mix-blend-mode: multiply;
+}
+.crt-edge-glow {
+  z-index: 4;
+  box-shadow: inset 0 0 var(--crt-edge-glow-size) var(--crt-edge-glow-color);
+}
+.crt-glare {
+  z-index: 3;
+  background: linear-gradient(115deg, transparent,
+    rgb(255 255 255 / calc(var(--crt-glare-intensity) * .15)) 22%,
+    rgb(255 255 255 / calc(var(--crt-glare-intensity) * .55)) 50%, transparent);
+}
+.crt-noise {
+  z-index: 2;
+  inset: -4px;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  opacity: var(--crt-noise-opacity);
+  mix-blend-mode: screen;
+  animation: crt-noise .5s steps(4) infinite paused;
+}
+.crt-sweep {
+  z-index: 7;
+  opacity: 0;
+  animation: crt-sweep var(--crt-sweep-duration) linear infinite paused;
+  animation-delay: calc(-1 * var(--crt-sweep-duration) * var(--crt-sweep-phase));
+}
+.crt-sweep::before {
   content: "";
   position: absolute;
-  pointer-events: none;
-  z-index: 1;
+  inset: 0 0 auto;
+  height: var(--crt-sweep-thickness);
+  background: linear-gradient(to bottom, transparent, rgb(0 0 0 / .4) 40%, rgb(0 0 0 / .6) 50%, transparent);
+  filter: blur(1.5px);
 }
-
-#projects .project-media :is(picture, .project-screen)::before {
-  inset: calc(-1 * var(--crt-scan-distance)) 0;
-  background: repeating-linear-gradient(to bottom,
-    rgb(8 24 32 / var(--crt-line-opacity)) 0 var(--crt-line-width),
-    rgb(255 255 255 / .08) var(--crt-line-width) var(--crt-line-end),
-    transparent var(--crt-line-end) var(--crt-line-spacing));
-  animation: crt-scanlines var(--crt-scan-duration) linear infinite;
-  animation-play-state: paused;
+[data-crt-sweep-style="soft"] > .crt-sweep::before {
+  background: linear-gradient(to bottom, transparent, rgb(0 0 0 / .15) 40%, rgb(0 0 0 / .1) 50%, transparent);
+  filter: blur(5px);
 }
-
-#projects .project-media :is(picture, .project-screen)::after {
-  inset: 0;
-  background:
-    radial-gradient(ellipse at center, transparent 45%, rgb(8 18 28 / .19) 100%),
-    repeating-linear-gradient(to right,
-      rgb(255 70 70 / .025) 0 1px,
-      rgb(70 255 110 / .025) 1px 2px,
-      rgb(70 110 255 / .025) 2px 3px);
+[data-crt-sweep-style="colored"] > .crt-sweep { mix-blend-mode: screen; }
+[data-crt-sweep-style="colored"] > .crt-sweep::before {
+  background: linear-gradient(to bottom, transparent, var(--crt-sweep-color) 50%, transparent);
+  filter: saturate(var(--crt-tint-saturation, 1)) blur(8px);
 }
-
-.hero-crt-scanlines {
-  pointer-events: none;
-  animation: crt-scanlines var(--crt-scan-duration) linear infinite;
-  animation-play-state: paused;
+/* Dimming overlay avoids changing media/frame opacity or the SVG's geometry. */
+.crt-flicker {
+  z-index: 8;
+  background: #000;
+  opacity: 0;
+  animation: crt-flicker var(--crt-flicker-speed) infinite paused;
+  animation-delay: calc(-1 * var(--crt-flicker-speed) * var(--crt-sweep-phase));
 }
+.crt-surface[data-crt-active="true"] > :is(.crt-sweep, .crt-noise, .crt-flicker) { animation-play-state: running; }
+.crt-surface[data-crt-active="true"] > .crt-sweep { opacity: 1; }
+.crt-surface[data-crt-active="false"] > .crt-flicker { visibility: hidden; }
+.crt-surface[data-crt-active="true"] > :is(.crt-sweep, .crt-noise) { will-change: transform; }
 
-#projects .project-media :is(picture, .project-screen)[data-crt-active="true"]::before,
-[data-crt-active="true"] .hero-crt-scanlines {
-  animation-play-state: running;
+/* Move a full-height carrier, not top/height, to avoid per-frame layout work. */
+@keyframes crt-sweep {
+  from { transform: translateY(-30%); }
+  to { transform: translateY(130%); }
 }
-
-/* Four complete pitches keep the loop seam invisible. Overscan prevents gaps. */
-@keyframes crt-scanlines {
-  from { transform: translateY(0); }
-  to { transform: translateY(calc(-1 * var(--crt-scan-distance))); }
+@keyframes crt-noise {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-3px, 2px); }
+  50% { transform: translate(2px, -3px); }
+  75% { transform: translate(-2px, -2px); }
 }
-
+@keyframes crt-flicker {
+  0%, 60%, 90%, 100% { opacity: 0; }
+  10% { opacity: calc(var(--crt-flicker-intensity) * .53); }
+  20% { opacity: calc(var(--crt-flicker-intensity) * .13); }
+  30% { opacity: calc(var(--crt-flicker-intensity) * .8); }
+  40% { opacity: calc(var(--crt-flicker-intensity) * .33); }
+  50% { opacity: calc(var(--crt-flicker-intensity) * .67); }
+  70% { opacity: var(--crt-flicker-intensity); }
+  80% { opacity: calc(var(--crt-flicker-intensity) * .27); }
+}
 @media (prefers-reduced-motion: reduce) {
-  #projects .project-media :is(picture, .project-screen)::before,
-  .hero-crt-scanlines {
-    animation: none;
-  }
+  .crt-sweep, .crt-flicker { display: none; animation: none; }
+  .crt-noise { animation: none; }
 }

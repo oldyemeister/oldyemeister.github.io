@@ -5,7 +5,7 @@ body.persona-design #education {
   isolation: isolate;
   overflow: hidden;
   padding-block: clamp(80px, 8vw, 112px) clamp(56px, 6vw, 88px);
-  background: linear-gradient(110deg, var(--palette-gold), var(--hero-yellow-light));
+  background: var(--palette-gold);
   color: var(--palette-black);
   border-bottom: 2px solid var(--palette-amber);
 }
@@ -26,15 +26,6 @@ body.persona-design #education #education-heading {
   translate: none;
   transform: none;
   white-space: nowrap;
-}
-body.persona-design #education #education-heading::after {
-  content: '';
-  display: block;
-  width: 68px;
-  height: 7px;
-  margin-top: 18px;
-  background: var(--palette-olive);
-  transform: skewX(-16deg);
 }
 body.persona-design #education .education-horizontal-ribbons {
   position: absolute;

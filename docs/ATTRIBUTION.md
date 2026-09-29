@@ -1,5 +1,21 @@
 # Appendix: design and font references
 
+## CRT screen treatment
+
+The homepage's initial CSS/SVG screen filter was independently implemented after reviewing
+[Alec Lownes's CSS CRT breakdown](https://aleclownes.com/2017/02/01/crt-display.html)
+and [Mobius's Old TV and VCR demo](https://codepen.io/Mobius1/pen/ZNgwbr).
+These informed the dark scanline, RGB phosphor-mask, and vignette layering.
+The current treatment adapts the Fallout preset and scanline, sweep, flicker,
+noise and glass-shading formulas from
+[vault66-crt-effect](https://github.com/mdombrov-33/vault66-crt-effect),
+Copyright (c) 2025 Maksym Dombrov, under the MIT license. The license is shipped
+in `assets/licenses/vault66-crt-effect.txt`. No external runtime dependency is added.
+The user's complete playground URL and editable settings are in
+`assets/js/crt-settings.js`. See [CRT controls](CRT-CONTROLS.md).
+Animation stops offscreen and honors reduced-motion preferences; gameplay,
+frames, captions and controls are outside the effects.
+
 ## Interaction design reference
 
 - **Project:** Persona-Style Portfolio — EnvHaru / Angga Indrawan

@@ -4,7 +4,7 @@ page_class: aps380
 title: "Vision-Assisted Adaptive Cruise Control"
 description: "Design and validation of a Raspberry Pi autonomous vehicle with adaptive cruise control, lane keeping, emergency braking, and vision-based stop-sign detection."
 eyebrow: "Autonomous vehicle · Controls and perception"
-summary: "A four-person APS380 project integrating distance sensing, lane tracking, motor control, and computer vision into a compact autonomous vehicle that met or exceeded every planned validation target."
+summary: "A Raspberry Pi vehicle that follows a lead car, stays in its lane, brakes for obstacles, and recognizes stop signs."
 hero_image: "/assets/images/projects/aps380/hero.jpg"
 hero_alt: "Completed APS380 autonomous vehicle with its custom silver body"
 hero_caption: "Completed autonomous vehicle with its custom body installed."
@@ -28,11 +28,9 @@ permalink: /projects/aps380/
 published: true
 ---
 
-## Project overview
+## The result
 
-Our four-person team built a small autonomous vehicle that combines **adaptive cruise control**, **lane keeping**, **emergency braking**, and **vision-based stop-sign detection**. A Raspberry Pi 5 coordinates an ultrasonic distance sensor, a four-channel infrared line sensor, a Pi camera, four DC motors, and two motor drivers in a single integrated control system.
-
-The vehicle maintains a steady cruise speed on a marked track, adjusts its speed to follow a lead vehicle at a safe distance, stops immediately for close obstacles, and performs a controlled three-second stop when its camera recognizes a stop sign.
+Our four-person team built a Raspberry Pi vehicle combining **adaptive cruise control, lane keeping, emergency braking, and stop-sign detection**. It passed all six planned validation categories.
 
 | Performance metric | Result |
 | --- | ---: |
@@ -44,79 +42,58 @@ The vehicle maintains a steady cruise speed on a marked track, adjusts its speed
 | Stop-sign detection range | 30–60 cm |
 | Vision-processing latency | ≈150–200 ms/frame |
 
-![Completed APS380 autonomous vehicle](/assets/images/projects/aps380/hero.jpg)
-
-*Figure 1. Completed autonomous vehicle with its custom body installed.*
-{: .image-caption}
-
 ![APS380 vehicle electronics and sensor platform](/assets/images/projects/aps380/figure-2.png)
 
-*Figure 2. Exposed vehicle platform showing the Raspberry Pi, camera, ultrasonic sensor, control electronics, battery, and drivetrain.*
+*Raspberry Pi, sensors, power electronics, and drivetrain.*
 {: .image-caption}
 
-## System architecture
+## How it works
 
-A 12 V lithium-ion battery powers the four DC motors through two motor-driver boards. A 5 V regulator supplies the Raspberry Pi 5, which reads every sensor and issues motor commands. The implementation uses a single-threaded Python loop running at 10 Hz, prioritizing rapid integration and predictable state transitions over strict real-time guarantees.
+A Raspberry Pi 5 reads an ultrasonic sensor, four-channel IR line sensor, and Pi camera, then commands four DC motors through two drivers. A 12 V battery powers the motors; a 5 V regulator supplies the Pi. The single-threaded Python control loop runs at 10 Hz.
 
 ![Hardware architecture diagram](/assets/images/projects/aps380/figure-3.png)
 
-*Figure 3. Hardware connections between the Raspberry Pi, camera, ultrasonic and IR sensors, motor drivers, battery, and four-wheel drivetrain.*
+*Power, sensing, and motor connections.*
 {: .image-caption}
+
+Emergency braking overrides all commands when an obstacle enters the **10 cm safety zone**. Stop-sign handling takes priority next, followed by normal lane keeping and cruise control.
 
 ![Control and signal-flow diagram](/assets/images/projects/aps380/figure-4.png)
 
-*Figure 4. Signal flow for lane keeping, adaptive cruise control, stop-sign handling, and motor actuation.*
+*Control priorities and signal flow.*
 {: .image-caption}
 
-### Control priorities
+## Tuning on the track
 
-The software coordinates several behaviors operating at different rates. Emergency braking has the highest priority and overrides every other command when the ultrasonic sensor reports an obstacle within 10 cm. Stop-sign handling then manages the required stationary period, while lane keeping and adaptive cruise control provide the normal steering and speed commands.
+The ultrasonic PID controller maintains a **30 cm following gap**. Reducing proportional gain and adding a small integral term brought steady-state error within 5 cm, versus the original ±10 cm requirement.
 
-This finite-state approach was selected instead of a continuous model-predictive controller because the vehicle's operating scenarios were discrete and the project emphasized robust subsystem integration.
-
-## Adaptive cruise control
-
-The adaptive cruise controller uses ultrasonic distance measurements and a PID controller to maintain a 30 cm gap behind a lead vehicle. When no valid target is detected, the vehicle continues at a reduced cruise speed. If the gap changes, the controller adjusts the motor command to restore the setpoint.
-
-Early tuning produced oscillation and visible overshoot. The team applied step changes in desired spacing, reduced the proportional gain, and introduced a small integral term. The revised controller maintained the target distance within approximately 5 cm—twice as precise as the original ±10 cm requirement.
-
-## Lane keeping and emergency braking
-
-Four infrared sensors detect reflective tape at the lane boundaries. The sensor pattern maps to steering behavior: the outer sensors command aggressive correction, the inner sensors make smaller adjustments, and the centered pattern drives straight.
-
-Direct sunlight initially confused the IR array during outdoor testing. Threshold tuning and small physical shrouds around the sensors improved reliability under mixed lighting. The emergency-braking path was tested independently and consistently stopped the vehicle before collision when an obstacle entered the 10 cm safety zone.
+IR sensor patterns set steering corrections. Sunlight initially confused the array; threshold tuning and physical shrouds improved outdoor reliability.
 
 ![Front-mounted camera, ultrasonic sensor, and line sensor](/assets/images/projects/aps380/figure-7.jpg)
 
-*Figure 7. Front-mounted Pi camera, HC-SR04 ultrasonic sensor, and four-channel IR line sensor on the vehicle platform.*
+*Front-mounted camera, ultrasonic sensor, and IR array.*
 {: .image-caption}
 
 ## My contribution
 
-I was responsible for the code running on the Raspberry Pi. My focus was the sensor-driven control: reading the four-channel infrared line sensor to steer the car along the lane, and using the ultrasonic sensor to detect the vehicle or obstacle ahead.
+I wrote the Raspberry Pi software, focusing on IR-based lane steering and ultrasonic detection of vehicles and obstacles ahead.
 
-## Validation and results
+## Validation
 
-The completed platform passed all six planned validation categories. It remained within its lane for runs longer than 30 seconds, followed lead vehicles moving from 0.1 to 0.5 m/s, reacted to speed changes in approximately 100 ms against a 500 ms requirement, and operated in both indoor and outdoor test conditions.
+The vehicle stayed in its lane for **30+ seconds**, followed lead vehicles at **0.1–0.5 m/s**, and reacted in **approximately 100 ms** against a 500 ms requirement. Tests covered indoor and outdoor conditions and independent emergency-braking checks.
 
 ![Vehicle completing the taped-track validation course](/assets/images/projects/aps380/figure-5.png)
 
-*Figure 5. Track testing used reflective tape for lane boundaries and a lead vehicle to exercise following-distance control.*
+*Track tests for lane keeping and following distance.*
 {: .image-caption}
 
-## Vision-based stop-sign detection
-
-Computer vision expanded the project beyond its original cruise-control scope. A pre-trained convolutional neural network processes Pi camera frames and identifies stop signs between approximately 30 and 60 cm away. A confident detection transitions the vehicle into a stopped state for three seconds before normal cruise operation resumes.
-
-The vision pipeline takes approximately 150–200 ms per frame, while distance sensing and motor control run at 10 Hz. Coordinating these different timescales required explicit state management so slower perception updates did not interfere with the safety-critical control loop.
+A pre-trained convolutional neural network detects stop signs at **30–60 cm**, triggering a three-second stop. Vision takes 150–200 ms per frame, requiring explicit state management alongside the faster motor-control updates.
 
 ![Stop sign identified by the vehicle vision system](/assets/images/projects/aps380/figure-6.png)
 
-*Figure 6. Stop-sign detection result from the Raspberry Pi camera and convolutional neural network.*
+*Stop-sign detection from the Pi camera.*
 {: .image-caption}
 
 ## Next iteration
 
-A future revision could add wheel encoders for closed-loop speed measurement, use camera-based lane detection on more complex roads, and evaluate model-predictive control for smoother acceleration. Additional perception models could extend the system to pedestrians and traffic lights, while separating the vision and motor loops would improve timing isolation.
-
-The project demonstrated how sensing, perception, control, power electronics, and mechanical design must work together in an autonomous electric-vehicle system. Its strongest result was not any single subsystem, but the successful integration of all four behaviors into one repeatable platform.
+Separate the vision and motor loops for better timing isolation. Wheel encoders could close the speed-control loop, while camera-based lane detection and model-predictive control could support more complex routes and smoother acceleration.

@@ -10,7 +10,6 @@ content_key: donkey_kong
 <section class="laser-intro dk-intro">
   <div class="content-shell laser-intro-layout">
     <div>
-      <p class="eyebrow">{{ game.eyebrow }}</p>
       <h1>{{ game.page_title }}</h1>
       {% if game.collaborator %}
       <p class="collaborator-byline">
@@ -22,8 +21,6 @@ content_key: donkey_kong
     <div>
       <p class="laser-description">{{ game.description }}</p>
       <p class="laser-objective">{{ game.objective }}</p>
-      {% if game.source_note %}<p class="project-source-note">{{ game.source_note }}</p>{% endif %}
-      <a class="text-link" href="{{ '/#projects' | relative_url }}"><span aria-hidden="true">&larr;</span> {{ game.back_label }}</a>
     </div>
   </div>
 </section>
@@ -100,12 +97,13 @@ content_key: donkey_kong
 
 <section class="page-section section-muted laser-notes">
   <div class="content-shell two-column-section">
-    <div><p class="section-index project-summary-eyebrow">Project summary</p><h2>{{ game.notes_heading }}</h2></div>
+    <div><h2>{{ game.notes_heading }}</h2></div>
     <div class="section-body">
       <p>{{ game.overview }}</p>
       <p>{{ game.results }}</p>
       <h3>How to play</h3>
       <p>{{ game.instructions }}</p>
+      {% if game.source_note %}<p class="project-source-note">{{ game.source_note }}</p>{% endif %}
     </div>
   </div>
 </section>

@@ -17,7 +17,6 @@ page_class: home
           <stop offset="1" stop-color="var(--flower-cyan)"/>
         </linearGradient>
         <clipPath id="hero-sky-clip"><path d="M945 270a445 445 0 1 0 -890 0a445 445 0 1 0 890 0Z M500 -45a315 315 0 1 0 0 630a315 315 0 1 0 0 -630" clip-rule="evenodd"/></clipPath>
-        <pattern id="hero-sky-lines" class="hero-crt-pattern" width="4" height="3" patternUnits="userSpaceOnUse"><path d="M0 .5H4" stroke="#081820" stroke-opacity=".22" stroke-width="var(--crt-line-width, .5625px)"/><path d="M0 1.5H4" stroke="#fff" stroke-opacity=".12" stroke-width="var(--crt-highlight-width, .28125px)"/></pattern>
         <pattern id="hero-faint-dots" width="45" height="45" patternUnits="userSpaceOnUse"><circle cx="22.5" cy="22.5" r="21" fill="var(--hero-yellow-light)"/></pattern>
       </defs>
       <g class="hero-circle-composition">
@@ -34,7 +33,9 @@ page_class: home
           <image class="hero-cloud" href="{{ '/assets/images/site/cloud-stratus.svg' | relative_url }}" x="-280" y="135" width="160" height="69" style="--cloud-duration: 150s; --cloud-delay: -44s"/>
           <image class="hero-cloud" href="{{ '/assets/images/site/cloud-scud.svg' | relative_url }}" x="-280" y="405" width="145" height="78" style="--cloud-duration: 112s; --cloud-delay: -91s"/>
         </g>
-        <rect class="hero-crt-scanlines" x="50" y="-190" width="900" height="920" fill="url(#hero-sky-lines)"/>
+        <foreignObject class="hero-crt-window" x="50" y="-190" width="900" height="920">
+          <div xmlns="http://www.w3.org/1999/xhtml" class="hero-crt-screen" aria-hidden="true"></div>
+        </foreignObject>
         <circle class="hero-side-highlight" cx="500" cy="270" r="395"/>
       </g>
       <circle class="hero-ring hero-ring-outer" cx="500" cy="270" r="307"/>

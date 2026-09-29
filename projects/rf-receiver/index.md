@@ -4,7 +4,7 @@ page_class: rf-receiver
 title: "RF Frequency Downconversion System"
 description: "Design and validation of an analog receiver chain with an RF limiter, 8–16 MHz bandpass filter, Gilbert-cell mixer, and low-pass filter."
 eyebrow: "Analog hardware · RF and PCB design"
-summary: "A three-person receiver project that filters and protects an incoming RF signal, downconverts it through a Gilbert-cell-style mixer, and isolates an approximately 100 kHz output for downstream processing."
+summary: "An analog RF receiver built from simulation to PCB: filtering, voltage protection, and downconversion to a 100 kHz output."
 hero_image: "/assets/images/projects/rf-receiver/pcb_manufacturing.jpg"
 hero_alt: "PCB during manufacturing and assembly"
 hero_caption: "PCB with all surface mount components."
@@ -25,9 +25,9 @@ permalink: /projects/rf-receiver/
 published: true
 ---
 
-## Project overview
+## The result
 
-We designed and assembled an analog receiver chain for a software-defined-radio front end. The completed signal path combines an **8–16 MHz bandpass filter**, a **±0.7 V limiter**, a Gilbert-cell-style frequency mixer, and a low-pass filter. During bench testing, a 10 MHz RF input mixed with a 9.9 MHz local oscillator produced an approximately **100 kHz** output with **18 dB measured chain gain**.
+A working RF receiver front end with **18 dB measured chain gain**. Mixing a 10 MHz input with a 9.9 MHz local oscillator produced an output near **100 kHz**.
 
 | Parameter | Design or measured value |
 | --- | ---: |
@@ -37,77 +37,54 @@ We designed and assembled an analog receiver chain for a software-defined-radio 
 | Measured chain gain | 18 dB |
 | I/Q phase target | 90° ±12.5° |
 
-## Receiver architecture
+## Circuit design
 
-The bandpass stage rejects signals outside the required shortwave range before the limiter clamps excessive positive and negative peaks. The protected RF signal then enters the Gilbert-cell mixer, where multiplication with the local oscillator generates sum- and difference-frequency components. A low-pass stage rejects the high-frequency products and retains the output near 100 kHz for the next receiver subsystem.
+The signal passes through an LC bandpass filter, opposing 1N4148 limiter diodes, a Gilbert-cell mixer, and a low-pass filter. A center-tapped transformer supplies balanced local-oscillator signals for the I/Q paths.
 
-The complete design also generated in-phase and quadrature paths. A center-tapped RF transformer provided two balanced local-oscillator signals, allowing the two mixer paths to preserve the required phase relationship.
-
-## Design decisions
-
-### Passive bandpass filter
-
-We selected a passive LC bandpass network because it required fewer components and less board area than an active alternative. LTspice frequency sweeps and breadboard measurements were used to tune the 8 MHz and 16 MHz cutoff regions. The main trade-off was loss from practical inductor quality factor, which could be recovered by a later gain stage.
-
-### Limiter
-
-Opposing 1N4148 diodes clamp both polarities of the incoming signal near ±0.7 V. This protects the mixer and downstream analog circuitry from high-amplitude inputs while adding little complexity to the RF path.
-
-### Gilbert-cell mixer
-
-Our first discrete mixer prototype produced approximately 33.75 dB of conversion loss, so the team redesigned the stage around a Gilbert-cell topology. We modelled the differential transistor network in LTspice, verified it on a breadboard, and implemented the final version with an HFA3101 transistor array. Compared with the initial design, the Gilbert cell produced a cleaner, more measurable downconverted output and was easier to isolate during debugging.
+Our initial discrete mixer had **33.75 dB conversion loss**. We redesigned it around an HFA3101 transistor array, then verified the circuit in LTspice and on a breadboard. The passive LC filter saved board area, at the cost of inductor loss.
 
 ![LTspice schematic of the Gilbert-cell mixer and low-pass filter](/assets/images/projects/rf-receiver/LTspice_Schematic_Mixer.png)
 
-*LTspice model used to evaluate the Gilbert-cell mixer, differential output, low-pass filter, and output stage.*
+*LTspice model of the revised mixer and output filter.*
 {: .image-caption}
 
 ![Breadboard prototype of the receiver mixer](/assets/images/projects/rf-receiver/mixer_prototype.png)
 
-*Breadboard prototype used to test the mixer before committing the complete signal path to PCB.*
+*Breadboard validation before PCB layout.*
 {: .image-caption}
 
 ![Oscilloscope output from the receiver-chain test](/assets/images/projects/rf-receiver/mixer_prototype_output.png)
 
-*Output near 100 kHz during prototype validation.*
+*Prototype output near 100 kHz.*
 {: .image-caption}
 
-## PCB implementation
+## From schematic to PCB
 
-The Altium design contained more than 100 components across matched I and Q paths. The layout used compact surface-mount components, accessible through-hole test points, thicker RF-carrying traces, and a via fence around the local-oscillator region to reduce coupling. The board was assembled through a combination of reflow and through-hole soldering.
+The Altium board contains **100+ components** across matched I/Q paths, with surface-mount parts, accessible test points, thicker RF traces, and a via fence around the local oscillator. We assembled it using reflow and through-hole soldering.
 
 ![PCB design](/assets/images/projects/rf-receiver/pcb_footprint.png)
 
-*PCB footprint in Altium Designer.*
+*PCB layout in Altium Designer.*
 {: .image-caption}
 
-![PCB during manufacturing and assembly](/assets/images/projects/rf-receiver/pcb_manufacturing.jpg)
-
-*PCB with all surface mount components.*
-{: .image-caption}
+Bring-up revealed an incorrect trace and reversed op-amp terminals. We isolated the stage, cut the trace, and added a jumper before resuming tests.
 
 ![Completed receiver subsystem during final integration](/assets/images/projects/rf-receiver/final_integration.png)
 
-*Receiver subsystems with other subsystems for final test.*
+*Receiver integrated with the adjacent subsystems.*
 {: .image-caption}
 
 ![Received target signal of final device](/assets/images/projects/rf-receiver/final_test.png)
 
-*Received signal as shown by peak in this image.*
+*Target signal received by the integrated system.*
 {: .image-caption}
-
-Board bring-up exposed an incorrect copper connection and reversed operational-amplifier terminals. We isolated the affected stage, cut the incorrect trace, added a jumper connection, and resumed subsystem testing. This reinforced the importance of pin-level schematic review and staged validation before full-chain measurements.
 
 ## My contribution
 
-I contributed to the receiver requirements, bandpass-filter and limiter design, circuit simulation, and prototype testing. I was directly involved in limiter and mixer verification, component selection, PCB assembly, debugging, and the iterative redesign from the underperforming mixer to the Gilbert-cell implementation. I also helped define the test procedures used to evaluate cutoff frequency, voltage limiting, downconversion, gain, and I/Q phase behavior.
+I worked on requirements, bandpass-filter and limiter design, simulation, component selection, and prototype testing. I also helped verify and redesign the mixer, assemble and debug the PCB, and define tests for cutoff frequency, limiting, gain, downconversion, and I/Q phase.
 
-## Hardware validation
+## Validation & next steps
 
-For the in-phase path, we applied a **10 MHz, 200 mV peak-to-peak RF signal** and a **9.9 MHz, 3.3 V peak-to-peak local oscillator** with a 1.65 V offset. The measured output was approximately 100 kHz, confirming frequency downconversion through the complete chain. Separate I/Q measurements were used to check the required 90° ±12.5° phase relationship.
+Bench inputs were **10 MHz at 200 mVpp** and a **9.9 MHz, 3.3 Vpp local oscillator** with a 1.65 V offset. The output confirmed downconversion near 100 kHz; separate measurements checked the I/Q phase target.
 
-## Results and next revision
-
-The project produced a functional receiver chain and was successfully integrated with the adjacent receiver subsystems. The prototype demonstrated RF selection, voltage protection, frequency downconversion, and low-pass filtering on physical hardware rather than simulation alone.
-
-The next revision would replace the passive low-pass stage with an active filter for a more accurate passband and additional gain. Independent resistance adjustment on the I and Q output stages would also reduce the measured amplitude imbalance toward the required 1 dB limit. At the PCB level, a formal connection and footprint checklist would help prevent the trace and pin-orientation errors found during first-board bring-up.
+Next: an active low-pass filter for better passband control and gain, independent I/Q adjustments toward the 1 dB imbalance limit, and a pin-and-footprint checklist to prevent bring-up errors.

@@ -10,7 +10,6 @@ content_key: imu_sandbox
 <section class="laser-intro imu-intro">
   <div class="content-shell laser-intro-layout">
     <div>
-      <p class="eyebrow">{{ imu.eyebrow }}</p>
       <h1>{{ imu.page_title }}</h1>
       {% if imu.collaborator %}
       <p class="collaborator-byline">
@@ -22,7 +21,6 @@ content_key: imu_sandbox
     <div>
       <p class="laser-description">{{ imu.description }}</p>
       <p class="laser-objective">{{ imu.objective }}</p>
-      <a class="text-link" href="{{ '/#projects' | relative_url }}"><span aria-hidden="true">&larr;</span> {{ imu.back_label }}</a>
     </div>
   </div>
 </section>
@@ -126,7 +124,7 @@ content_key: imu_sandbox
 
 <section class="page-section section-muted laser-notes">
   <div class="content-shell two-column-section">
-    <div><p class="section-index project-summary-eyebrow">Project summary</p><h2>{{ imu.notes_heading }}</h2></div>
+    <div><h2>{{ imu.notes_heading }}</h2></div>
     <div class="section-body">
       <dl class="project-metrics" aria-label="IMU Sandbox performance metrics">
         {% for metric in imu.metrics %}

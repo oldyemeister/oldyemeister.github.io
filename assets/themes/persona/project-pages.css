@@ -1,0 +1,287 @@
+/* Project reading surfaces only. The TV, game controls and demo scene keep
+   their existing styles; no page-level tokens or gameplay selectors change. */
+body.persona-design :is(.laser-intro, .laser-notes, .case-study-hero, .case-study-layout) {
+  background: var(--palette-yellow);
+  color: var(--palette-black);
+  border: 0;
+  border-radius: 0;
+}
+/* Long-form case studies use the quieter gold field; playable project pages
+   keep their brighter yellow stage around the televisions and controls. */
+body.persona-design :is(.case-study, .case-study-hero, .case-study-layout) {
+  background: var(--palette-gold);
+}
+body.persona-design :is(.laser-intro, .laser-notes) > .content-shell {
+  background: transparent;
+  color: var(--palette-black);
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+}
+body.persona-design :is(.laser-intro, .laser-notes, .case-study) :is(p, li, dt, dd, a, figcaption, strong, em, th, td) {
+  color: var(--palette-olive);
+  -webkit-text-fill-color: currentColor;
+  -webkit-text-stroke: 0;
+  text-shadow: none;
+}
+body.persona-design :is(.laser-intro, .laser-notes, .case-study) :is(h1, h2) {
+  color: var(--palette-black);
+  -webkit-text-fill-color: currentColor;
+  font-family: 'Persona Slim Wide', 'Persona Slim Local', sans-serif;
+  font-weight: 300;
+  letter-spacing: -.02em;
+  line-height: 1.12;
+  text-wrap: balance;
+  border: 0;
+  padding: 0;
+}
+/* Let animated letters inherit the title ink instead of the legacy panel ink. */
+:root body.persona-design :is(.laser-intro, .laser-notes, .case-study) :is(h1, h2) span {
+  color: inherit;
+  -webkit-text-fill-color: currentColor;
+}
+:root body.persona-design :is(.laser-intro, .laser-notes, .case-study) :is(h1, h2, h1 .kinetic-letter, h2 .kinetic-letter) {
+  -webkit-text-stroke: 1.5px var(--palette-white);
+  paint-order: stroke fill;
+}
+body.persona-design :is(.laser-intro, .case-study-hero) h1 {
+  max-width: 22ch;
+  margin: 0;
+  font-size: clamp(2.25rem, 4.5vw, 4.25rem);
+  overflow-wrap: anywhere;
+}
+body.persona-design .case-study-hero h1 .kinetic-word {
+  max-width: 100%;
+  white-space: normal;
+}
+body.persona-design :is(.laser-notes, .case-study-prose) h2 {
+  font-size: clamp(1.8rem, 2.6vw, 2.7rem);
+}
+body.persona-design .laser-notes h2::after { display: none; }
+body.persona-design :is(.laser-intro, .laser-notes, .case-study) a {
+  text-decoration: underline;
+  text-underline-offset: .22em;
+  text-decoration-thickness: 1px;
+}
+body.persona-design :is(.laser-intro, .laser-notes, .case-study) a:hover {
+  color: var(--palette-black);
+  text-decoration-thickness: 2px;
+}
+body.persona-design :is(.laser-intro, .laser-notes, .case-study) a:focus-visible {
+  outline: 2px solid var(--palette-black);
+  outline-offset: 5px;
+}
+body.persona-design .laser-intro {
+  padding-block: clamp(32px, 5vw, 64px) 20px;
+}
+body.persona-design .laser-intro-layout {
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(24px, 5vw, 72px);
+}
+body.persona-design .laser-description {
+  margin: 0 0 12px;
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+body.persona-design .laser-objective {
+  margin: 0 0 18px;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+body.persona-design .laser-intro .collaborator-byline {
+  margin: 16px 0 0;
+  font-size: .875rem;
+}
+body.persona-design .laser-notes {
+  padding-block: clamp(40px, 6vw, 80px);
+}
+body.persona-design .laser-notes .two-column-section {
+  grid-template-columns: minmax(0, .65fr) minmax(0, 1.35fr);
+  gap: clamp(24px, 5vw, 72px);
+  align-items: start;
+  border-top: 2px solid var(--palette-olive);
+  padding-top: 32px;
+}
+body.persona-design .laser-notes .section-body {
+  max-width: 70ch;
+  min-width: 0;
+}
+body.persona-design .laser-notes .section-body > p {
+  color: var(--palette-olive);
+  margin: 0 0 18px;
+  font-size: 1rem;
+  line-height: 1.7;
+  letter-spacing: normal;
+}
+body.persona-design .laser-notes .section-body > h3 {
+  color: var(--palette-black);
+  margin: 28px 0 8px;
+  font: 750 1rem/1.4 var(--content-font);
+  letter-spacing: normal;
+  text-transform: none;
+}
+body.persona-design .laser-notes .project-source-note {
+  border-top: 1px solid var(--palette-gold);
+  padding-top: 16px;
+  font-size: .875rem;
+}
+body.persona-design .laser-notes .project-metrics > div {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--palette-gold);
+}
+body.persona-design .laser-notes .project-metrics dt { color: var(--palette-black); }
+/* These notes sit below the television, not in its screen or control panel. */
+body.persona-design .laser-shell > :is(.game-message, .game-implementation-note),
+body.persona-design .imu-axis-controls > .imu-implementation-note {
+  color: var(--palette-olive);
+  -webkit-text-fill-color: currentColor;
+}
+body.persona-design .case-study-hero {
+  display: flex;
+  flex-direction: column;
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: clamp(32px, 5vw, 64px) 0 0;
+  gap: 32px;
+}
+body.persona-design .case-study-hero-copy {
+  order: 0;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+}
+body.persona-design .case-study-summary {
+  max-width: 65ch;
+  margin-top: 20px;
+  font-size: 1.125rem;
+  line-height: 1.65;
+}
+body.persona-design .case-study-hero-media {
+  order: 1;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+body.persona-design .case-study-hero-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 7;
+  object-fit: cover;
+  max-height: 480px;
+  border-radius: 12px;
+  box-shadow: none;
+}
+body.persona-design .case-study-hero-media figcaption {
+  background: transparent;
+  margin-top: 12px;
+  padding: 0;
+  text-align: left;
+  font-size: .875rem;
+}
+body.persona-design .case-study-layout {
+  grid-template-columns: minmax(180px, 240px) minmax(0, 70ch);
+  gap: clamp(32px, 5vw, 80px);
+  padding: clamp(40px, 6vw, 80px) 0;
+  margin-bottom: 0;
+}
+body.persona-design .case-study-meta {
+  position: static;
+  border-top: 2px solid var(--palette-olive);
+  padding-top: 20px;
+}
+body.persona-design .case-study-meta div {
+  grid-template-columns: 1fr;
+  gap: 4px;
+}
+body.persona-design .case-study-meta dt {
+  font-size: .75rem;
+  letter-spacing: .04em;
+}
+body.persona-design .case-study-meta dd { font-size: .9375rem; }
+body.persona-design .case-study-tools { display: grid; gap: 4px; }
+body.persona-design .case-study-tools li {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+}
+body.persona-design .case-study-prose {
+  max-width: 70ch;
+  font-size: 1rem;
+  line-height: 1.75;
+  letter-spacing: normal;
+}
+body.persona-design .case-study-prose h2 {
+  margin: 48px 0 16px;
+  padding-top: 24px;
+  border-top: 1px solid var(--palette-gold);
+}
+body.persona-design .case-study-prose > h2:first-child { margin-top: 0; padding-top: 0; border: 0; }
+body.persona-design .case-study-prose p { margin: 0 0 20px; }
+body.persona-design .case-study-prose strong { color: var(--palette-black); }
+body.persona-design .case-study-prose img {
+  margin: 16px 0 0;
+  border: 1px solid var(--palette-olive);
+  border-radius: 12px;
+  box-shadow: none;
+}
+body.persona-design .case-study-prose .image-caption {
+  margin: -8px 0 28px;
+  text-align: left;
+  font-size: .875rem;
+  font-style: normal;
+}
+body.persona-design .case-study-prose table { font-variant-numeric: tabular-nums; }
+body.persona-design .case-study-prose :is(th, td) {
+  border-color: var(--palette-gold);
+  padding: 10px 8px;
+  overflow-wrap: anywhere;
+}
+body.persona-design .case-study-prose th { color: var(--palette-black); background: var(--palette-gold); }
+/* IMU settings live on the yellow page, outside the untouched black TV. */
+body.persona-design .imu-demo-section > :is(.imu-toolbar, .imu-axis-controls) {
+  color: var(--palette-olive);
+  border-color: var(--palette-gold);
+}
+body.persona-design .imu-demo-section > :is(.imu-toolbar, .imu-axis-controls) :is(span, small, legend, output, button) {
+  color: var(--palette-olive);
+  -webkit-text-fill-color: currentColor;
+}
+body.persona-design .imu-toolbar :is(.imu-mode-control, .imu-planet-control) button:is(.is-active, :hover) {
+  background: var(--palette-gold);
+  color: var(--palette-black);
+}
+body.persona-design .imu-toolbar button.is-active::after { background: var(--palette-black); }
+body.persona-design .imu-toolbar button:focus-visible,
+body.persona-design .imu-axis-control input:focus-visible {
+  outline: 2px solid var(--palette-black);
+  outline-offset: 3px;
+}
+body.persona-design .imu-axis-control input { accent-color: var(--palette-olive); }
+@media (max-width: 760px) {
+  body.persona-design :is(.laser-intro-layout, .laser-notes .two-column-section, .case-study-layout) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+  body.persona-design .laser-intro h1 { max-width: 24ch; }
+  body.persona-design .case-study-meta dl { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  body.persona-design .case-study-hero h1 {
+    font-family: 'Persona Slim Local', sans-serif;
+    font-size: clamp(1.75rem, 7vw, 3rem);
+  }
+  body.persona-design .case-study-hero-media img { aspect-ratio: 4 / 3; }
+  body.persona-design .imu-toolbar { align-items: start; }
+  body.persona-design .imu-toolbar-groups { display: grid; gap: 8px; overflow: visible; }
+  body.persona-design .imu-toolbar-group { width: auto; min-width: 0; }
+  body.persona-design :is(.imu-mode-control, .imu-planet-control) { flex-wrap: wrap; overflow: visible; gap: 4px; }
+  body.persona-design :is(.imu-mode-control, .imu-planet-control) button { min-width: 0; min-height: 44px; }
+}
+@media (max-width: 380px) {
+  body.persona-design .case-study-meta dl { grid-template-columns: minmax(0, 1fr); }
+}
