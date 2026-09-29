@@ -363,6 +363,8 @@ contact:
   email:
     label: "Email"
     address: "jiawei.ye@mail.utoronto.ca"
+  discord:
+    username: "jacky_ye"
   social_links:
     - label: "GitHub"
       url: "https://github.com/oldyemeister"

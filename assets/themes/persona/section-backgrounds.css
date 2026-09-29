@@ -50,8 +50,9 @@ body.persona-design #contact .contact-link-row:focus-visible {
 body.persona-design #contact .contact-link-row:is(:hover, :focus-visible) .contact-link-icon {
   background: var(--palette-black, #111);
 }
-body.persona-design #contact .contact-link-row:is(:hover, :focus-visible) .contact-link-address {
-  text-decoration-thickness: 2px;
+body.persona-design #contact .contact-link-address {
+  /* Animated inline-block letters leave inherited underlines on spaces only. */
+  text-decoration: none;
 }
 
 body.persona-design #projects {
@@ -91,6 +92,13 @@ body.persona-design #contact {
   --contact-flower-size: clamp(150px, 14vw, 210px);
   --contact-flower-scale: 1.2;
   --contact-flower-period: 30s; /* Two counterclockwise revolutions per minute. */
+  /* A spacious closing panel, with a natural height if more links are added. */
+  --contact-min-height: clamp(680px, 85svh, 880px);
+  --contact-space-y: clamp(112px, 14svh, 176px);
+  min-height: var(--contact-min-height);
+  padding-block: var(--contact-space-y);
+  display: grid;
+  align-content: center;
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -100,6 +108,26 @@ body.persona-design #contact {
 body.persona-design #contact > .content-shell {
   position: relative;
   z-index: 1;
+}
+@media (max-width: 680px) {
+  body.persona-design #contact {
+    --contact-min-height: clamp(600px, 78svh, 720px);
+    --contact-space-y: 96px;
+    --contact-ribbon-inset: 0px;
+  }
+  body.persona-design #contact > .content-shell { padding-inline-end: 24px; }
+  /* Keep the full ribbon palette, without running bands underneath the links. */
+  body.persona-design #contact .contact-edge-ribbons {
+    transform: scaleX(.3);
+    transform-origin: right center;
+  }
+}
+/* Short desktop/landscape windows should not gain a screenful of empty space. */
+@media (max-height: 600px) {
+  body.persona-design #contact {
+    --contact-min-height: 480px;
+    --contact-space-y: 80px;
+  }
 }
 /* Top-edge decoration behind the content, ribbons, flower, and other motifs. */
 body.persona-design #contact .contact-pill-field {
@@ -131,7 +159,7 @@ body.persona-design #contact .about-pill {
 /* Education's band pattern turned clockwise: top band becomes rightmost. */
 body.persona-design #contact .contact-edge-ribbons {
   position: absolute;
-  inset: 0 20px 0 auto;
+  inset: 0 var(--contact-ribbon-inset, 20px) 0 auto;
   display: flex;
   flex-direction: row-reverse;
   z-index: 0;

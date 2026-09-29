@@ -436,6 +436,13 @@ html.reveal-enabled .reveal-item.is-revealed {
 .contact-link-address { min-width: 0; overflow-wrap: anywhere; font-size: clamp(1rem, 1.6vw, 1.3rem); line-height: 1.4; text-decoration: underline; text-underline-offset: .2em; text-decoration-thickness: 1px; }
 .contact-secondary-links a { color: var(--accent-strong); font-weight: 700; text-decoration-thickness: 1px; transition: color var(--motion-fast) ease, text-underline-offset var(--motion-fast) ease; }
 .contact-email-link:hover, .contact-secondary-links a:hover { color: var(--text); text-underline-offset: 7px; }
+.contact-copy-content { min-width: 0; }
+.contact-copy-heading { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
+.contact-discord .contact-link-address { font-weight: 700; text-decoration: none; user-select: text; }
+.contact-copy-button { min-width: 44px; min-height: 44px; padding: 0 8px; border: 0; border-radius: 0; background: transparent; color: inherit; font: inherit; font-size: .82rem; font-weight: 700; text-decoration: underline; text-underline-offset: .2em; cursor: pointer; }
+.contact-copy-button:hover { text-decoration-thickness: 2px; }
+.contact-copy-button:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+.contact-copy-button:disabled { cursor: wait; }
 .site-footer { padding-block: 30px; background: var(--text); color: var(--page); }
 .footer-inner { display: flex; justify-content: space-between; gap: 24px; }
 .footer-inner p { margin: 0; font-size: 0.82rem; }

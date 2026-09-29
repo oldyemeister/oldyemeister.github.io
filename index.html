@@ -287,8 +287,21 @@ page_class: home
             <span class="contact-link-address">{{ social.display_url | default: social.label }}</span>
           </a>
           {% endfor %}
+          {% if site_content.contact.discord.username %}
+          <div class="contact-link-row contact-discord">
+            <span class="contact-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M20.32 4.37a19.8 19.8 0 0 0-4.89-1.52c-.21.38-.45.89-.62 1.3a18.4 18.4 0 0 0-5.42 0c-.17-.41-.42-.92-.63-1.3a19.7 19.7 0 0 0-4.89 1.53C.77 8.97-.07 13.45.35 17.88a19.9 19.9 0 0 0 6 3.03c.48-.65.91-1.35 1.27-2.08-.7-.26-1.38-.59-2.02-.97l.5-.39a14.2 14.2 0 0 0 11.8 0l.5.39c-.64.38-1.32.71-2.02.97.36.73.79 1.43 1.27 2.08a19.8 19.8 0 0 0 6-3.03c.5-5.13-.85-9.57-3.33-13.51ZM8.02 15.15c-1.18 0-2.15-1.09-2.15-2.42s.95-2.42 2.15-2.42c1.21 0 2.18 1.1 2.16 2.42 0 1.33-.95 2.42-2.16 2.42Zm7.96 0c-1.18 0-2.15-1.09-2.15-2.42s.95-2.42 2.15-2.42c1.21 0 2.18 1.1 2.16 2.42 0 1.33-.95 2.42-2.16 2.42Z"/></svg></span>
+            <div class="contact-copy-content">
+              <div class="contact-copy-heading">
+                <span class="contact-link-address">{{ site_content.contact.discord.username }}</span>
+                <button class="contact-copy-button" type="button" data-copy-contact="{{ site_content.contact.discord.username }}" aria-label="Copy Discord username {{ site_content.contact.discord.username }}" hidden>Copy</button>
+              </div>
+              <span class="sr-only" role="status" aria-live="polite" aria-atomic="true">Discord username</span>
+            </div>
+          </div>
+          {% endif %}
         </nav>
       </div>
     </div>
   </div>
 </section>
+<script src="{{ '/assets/js/contact-copy.js' | relative_url }}" defer></script>
