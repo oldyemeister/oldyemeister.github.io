@@ -28,12 +28,29 @@ export function configureScreen(screen, settings) {
   set('glare-intensity', clamp(settings.glareIntensity, 0, 1));
 }
 
+export function appendCrtLayers(document, screen, settings, animated = true) {
+  const layers = [
+    ['curvature', settings.enableCurvature], ['noise', settings.enableNoise],
+    ['glare', settings.enableGlare], ['edge-glow', settings.enableEdgeGlow],
+    ['vignette', settings.enableVignette], ['scanlines', settings.enableScanlines],
+    ['sweep', settings.enableSweep && animated], ['flicker', settings.enableFlicker && animated],
+  ];
+  layers.forEach(([name, enabled]) => {
+    if (!enabled) return;
+    const layer = document.createElement('span');
+    layer.className = `crt-layer crt-${name}`;
+    layer.setAttribute('aria-hidden', 'true');
+    screen.append(layer);
+  });
+}
+
 export function initCrt(document, window, settings = CRT_SETTINGS) {
   if (!settings.enabled) return;
   const projects = [...document.querySelectorAll('#projects .project-media :is(picture, .project-screen)')];
   const heroes = [...document.querySelectorAll('.hero-crt-screen')];
   const previews = projects.filter(screen => screen.querySelector('[data-project-preview]'));
   const screens = [...projects, ...heroes];
+  if (!screens.length) return;
   screens.forEach(screen => {
     const previewIndex = previews.indexOf(screen);
     const isHero = heroes.includes(screen);
@@ -42,19 +59,7 @@ export function initCrt(document, window, settings = CRT_SETTINGS) {
     const animated = isHero || previewIndex !== -1;
     const phase = isHero ? 0.18 : settings.staggerPreviews && previewIndex !== -1 ? previewIndex / previews.length : 0;
     screen.style.setProperty('--crt-sweep-phase', String(phase));
-    const layers = [
-      ['curvature', screenSettings.enableCurvature], ['noise', screenSettings.enableNoise],
-      ['glare', screenSettings.enableGlare], ['edge-glow', screenSettings.enableEdgeGlow],
-      ['vignette', screenSettings.enableVignette], ['scanlines', screenSettings.enableScanlines],
-      ['sweep', screenSettings.enableSweep && animated], ['flicker', screenSettings.enableFlicker && animated],
-    ];
-    layers.forEach(([name, enabled]) => {
-      if (!enabled) return;
-      const layer = document.createElement('span');
-      layer.className = `crt-layer crt-${name}`;
-      layer.setAttribute('aria-hidden', 'true');
-      screen.append(layer);
-    });
+    appendCrtLayers(document, screen, screenSettings, animated);
   });
 
   const visible = new Set();

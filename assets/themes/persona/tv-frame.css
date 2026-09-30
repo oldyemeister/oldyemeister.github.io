@@ -1,0 +1,228 @@
+/* Shared approved P4 TV frame for the three Persona game pages. */
+body.persona-tv-screen .persona-tv {
+  --tv-ink: #080808;
+  --tv-paper: #fffdf3;
+  --tv-feet-height: clamp(46px, 8vw, 72px);
+  --tv-knob-offset: clamp(6px, .8vw, 10px);
+  width: min(100%, 820px);
+  margin: clamp(104px, 23vw, 240px) auto calc(var(--tv-feet-height) + 80px);
+  padding: 0;
+  border: 0;
+  border-radius: 4% 5% 4% 4% / 5% 5% 5% 5%;
+  background: var(--tv-ink);
+  color: var(--tv-ink);
+  box-shadow: none;
+  container: television / inline-size;
+}
+
+body.persona-tv-screen .tv-antennas {
+  top: auto;
+  bottom: calc(100% - 6px);
+  left: 17%;
+  width: 66%;
+  height: auto;
+  transform: none;
+  color: var(--tv-ink);
+}
+
+.tv-frame-cabinet {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(48px, 16%);
+  align-items: center;
+  gap: 3%;
+  padding: 5% 3.5% 1.5% 4%;
+}
+
+body.persona-tv-screen .tv-frame-cabinet > :is(.game-board-wrap, .imu-scene) {
+  min-width: 0;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  margin: 0;
+  border: 0;
+  border-radius: 4% / 5%;
+  overflow: hidden;
+  box-shadow: none;
+}
+
+.tv-frame-hardware { position: relative; aspect-ratio: 130 / 440; color: var(--tv-paper); }
+.tv-frame-hardware svg { display: block; width: 100%; height: auto; pointer-events: none; }
+
+body.persona-tv-screen .persona-tv-panel {
+  padding: 8px 4% 14px;
+  gap: 0;
+}
+body.persona-tv-screen .persona-tv-panel > :is(.tv-speaker, .tv-power, .tv-knob) { display: none; }
+body.persona-tv-screen .persona-tv .game-status-bar { flex: 1; min-width: 0; margin: 0; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+body.persona-tv-screen .persona-tv .game-status-bar > div { padding: 0 4px; align-items: center; gap: 4px; }
+body.persona-tv-screen .persona-tv .game-status-bar :is(span, strong) {
+  font-family: 'Persona Slim Local', Arial, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  color: var(--tv-paper);
+  -webkit-text-stroke: 0;
+  line-height: 1.1;
+}
+body.persona-tv-screen .persona-tv .game-status-bar span { font-size: 12px; text-transform: uppercase; }
+body.persona-tv-screen .persona-tv .game-status-bar strong { font-size: 17px; font-variant-numeric: tabular-nums; }
+
+body.persona-tv-screen .persona-tv .game-actions { position: absolute; inset: 0; display: block; margin: 0; }
+body.persona-tv-screen .persona-tv .game-action-button {
+  position: absolute;
+  left: 50%;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 3px solid var(--tv-paper);
+  border-radius: 50%;
+  background: var(--tv-ink);
+  color: var(--tv-paper);
+  box-shadow: none;
+  transform: translateX(-50%);
+}
+.tv-secondary-controls {
+  position: absolute;
+  top: calc(55% - 22px + var(--tv-knob-offset));
+  left: 50%;
+  display: flex;
+  gap: 8px;
+  transform: translateX(-50%);
+}
+body.persona-tv-screen .persona-tv .tv-secondary-controls .game-action-button {
+  position: relative;
+  left: auto;
+  flex: 0 0 44px;
+  transform: none;
+}
+body.persona-tv-screen .persona-tv .tv-secondary-controls .game-action-button:active:enabled { transform: scale(.96); }
+/* White knob faces with a black concentric ring, like the supplied TV. */
+body.persona-tv-screen .persona-tv .tv-secondary-controls .game-action-button::before,
+body.persona-tv-screen .tv-leg button::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  background: var(--tv-paper);
+  pointer-events: none;
+}
+body.persona-tv-screen .persona-tv .pause-symbol { position: relative; z-index: 1; color: var(--tv-ink); }
+.crt-knob-label { position: relative; z-index: 1; color: var(--tv-ink); font: 700 10px/1 Arial, sans-serif; letter-spacing: -.04em; }
+.crt-knob-indicator { position: absolute; z-index: 1; bottom: 8px; left: calc(50% - 3px); width: 6px; height: 3px; border: 1px solid var(--tv-ink); border-radius: 2px; }
+.tv-crt-control[aria-pressed="true"] .crt-knob-indicator { background: var(--tv-ink); }
+.tv-crt-control[aria-pressed="false"] .crt-knob-label { text-decoration: line-through; text-decoration-thickness: 1px; }
+body.persona-tv-screen .persona-tv .game-action-button:focus-visible { outline: 3px solid #fff000; outline-offset: 3px; }
+
+/* Decoration only: never intercept game input or apply a filter to the canvas.
+   Keep the existing Start / Pause / game-result interfaces above the texture. */
+.game-crt-overlay { position: absolute; inset: 0; z-index: 4; overflow: hidden; border-radius: inherit; pointer-events: none; isolation: isolate; }
+.game-crt-overlay[hidden] { display: none; }
+body.persona-tv-screen .game-overlay { z-index: 10; }
+body.persona-tv-screen .persona-tv .tv-reset-control {
+  bottom: calc(2% - var(--tv-knob-offset) - 8px);
+  width: 100%;
+  min-width: 44px;
+  height: auto;
+  aspect-ratio: 1;
+  border: 0;
+  background: transparent;
+}
+body.persona-tv-screen .persona-tv .reset-symbol { position: absolute; width: 26%; inset: 37%; color: var(--tv-ink); }
+body.persona-tv-screen .persona-tv .game-action-button:hover:enabled { color: var(--tv-paper); border-color: var(--tv-paper); background: var(--tv-ink); }
+body.persona-tv-screen .persona-tv .tv-reset-control:hover:enabled { background: transparent; }
+body.persona-tv-screen .persona-tv .game-action-button:active:enabled { transform: translateX(-50%) scale(.96); box-shadow: none; }
+
+/* Preserve the real controls; the silhouette feet are decoration, not buttons. */
+body.persona-tv-screen .persona-tv .tv-leg-controls {
+  position: absolute;
+  top: calc(100% + var(--tv-feet-height) + 12px);
+  left: 6%;
+  right: 6%;
+  width: auto;
+  margin: 0;
+  padding: 0;
+}
+body.persona-tv-screen .tv-leg { width: auto; height: auto; padding: 0; border: 0; background: none; box-shadow: none; }
+body.persona-tv-screen .tv-leg::before { display: none; }
+body.persona-tv-screen .tv-leg .control-group { grid-template-columns: repeat(2, 44px); gap: 10px; }
+body.persona-tv-screen .tv-leg button { position: relative; width: 44px; min-width: 44px; height: 44px; border: 3px solid var(--tv-paper); background: var(--tv-ink); color: var(--tv-ink); box-shadow: none; }
+body.persona-tv-screen .tv-leg button svg { position: relative; z-index: 1; width: 20px; height: 20px; }
+body.persona-tv-screen .tv-leg button:hover:enabled { color: var(--tv-ink); border-color: var(--tv-paper); background: var(--tv-ink); }
+body.persona-tv-screen .tv-leg button:focus-visible { outline: 3px solid var(--tv-ink); outline-offset: 3px; }
+body.persona-tv-screen .persona-tv .game-action-button:disabled,
+body.persona-tv-screen .tv-leg button:disabled { opacity: 1; cursor: not-allowed; }
+
+body.persona-tv-screen .persona-tv .game-start-prompt { padding: 12px; }
+:root body.persona-tv-screen .persona-tv .game-start-button {
+  min-height: 44px;
+  gap: 10px;
+  padding: 10px 16px;
+  border: 2px solid var(--tv-ink);
+  border-radius: 4px;
+  background: var(--tv-paper);
+  box-shadow: none;
+  font-size: 20px;
+  line-height: 1.1;
+  transform: none;
+}
+body.persona-tv-screen .persona-tv .game-start-button [data-start-label] {
+  font-family: 'Persona Slim Local', Arial, sans-serif;
+  font-size: inherit;
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: .02em;
+  -webkit-text-stroke: 0;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+:root body.persona-tv-screen .persona-tv .game-start-button:hover:enabled { background: #fff000; }
+:root body.persona-tv-screen .persona-tv .game-start-button:active:enabled { transform: scale(.98); }
+
+.tv-frame-feet {
+  position: absolute;
+  top: calc(100% - 2px);
+  inset-inline: 0;
+  height: var(--tv-feet-height);
+  pointer-events: none;
+}
+.tv-frame-feet svg { display: block; width: 100%; height: 100%; }
+
+/* Each game keeps its own counters and input model. */
+body.persona-tv-screen .persona-tv .dk-status-bar { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+body.persona-tv-screen .tv-leg .dk-jump-button { width: 78px; border-radius: 22px; font: 400 14px/1 'Persona Slim Local', Arial, sans-serif; }
+body.persona-tv-screen .tv-leg .dk-jump-button::before { border-radius: inherit; }
+body.persona-tv-screen .tv-leg .dk-jump-button span { position: relative; z-index: 1; color: var(--tv-ink); }
+body.persona-tv-screen .persona-tv-sandbox { margin-bottom: calc(var(--tv-feet-height) + 28px); }
+body.persona-tv-screen .tv-frame-cabinet > .imu-scene { height: auto; min-height: 260px; }
+body.persona-tv-screen .persona-tv .imu-live-readouts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; margin: 0; gap: 12px; text-align: center; }
+body.persona-tv-screen .persona-tv .imu-live-readouts > div { min-width: 0; align-items: center; white-space: normal; }
+body.persona-tv-screen .persona-tv .imu-live-readouts :is(span, strong, small, b) { color: var(--tv-paper); font: 400 14px/1.3 'Persona Slim Local', Arial, sans-serif; }
+body.persona-tv-screen .persona-tv .imu-live-readouts > div > span { font-size: 12px; text-transform: uppercase; }
+body.persona-tv-screen .persona-tv .imu-mode-readout strong { min-width: 0; text-align: center; }
+body.persona-tv-screen .persona-tv .imu-gravity-readout strong { flex-wrap: wrap; justify-content: center; gap: 2px 6px; }
+body.persona-tv-screen .persona-tv .imu-gravity-readout small { flex-basis: 100%; font-size: 12px; }
+
+/* Keep the narrow rail and full-width game screen. Stack the two small knobs
+   only when the cabinet cannot fit two accessible 44px targets side by side. */
+@container television (max-width: 650px) {
+  .tv-frame-hardware { height: 210px; aspect-ratio: auto; }
+  .tv-frame-hardware .tv-frame-grille { height: 54px; }
+  .tv-secondary-controls { top: 62px; flex-direction: column; gap: 6px; }
+  body.persona-tv-screen .persona-tv .tv-reset-control { bottom: 0; width: 44px; }
+  body.persona-tv-screen .persona-tv-sandbox .tv-secondary-controls { top: 96px; }
+}
+
+@media (max-width: 600px) {
+  /* Give the actual 320×240 game as much phone width as the reference allows. */
+  body.persona-tv-screen .laser-play-section .laser-shell { width: calc(100% - 24px); padding: 16px 8px; }
+  body.persona-tv-screen .imu-demo-section { width: calc(100% - 24px); margin-inline: auto; padding-inline: 8px; }
+  body.persona-tv-screen .persona-tv { margin-top: 102px; }
+  .tv-frame-cabinet { grid-template-columns: minmax(0, 1fr) minmax(44px, 14%); gap: 3%; padding: 5% 3% 2% 3%; }
+  body.persona-tv-screen .persona-tv-panel { padding: 7px 3% 12px; }
+  body.persona-tv-screen .persona-tv .game-status-bar span { font-size: 11px; }
+  body.persona-tv-screen .persona-tv .game-status-bar strong { font-size: 15px; }
+  :root body.persona-tv-screen .persona-tv .game-start-button { font-size: 18px; padding: 8px 10px; gap: 8px; }
+}
+
+@media (max-width: 360px) {
+  body.persona-tv-screen .persona-tv-sandbox .game-start-prompt { padding: 8px; }
+  :root body.persona-tv-screen .persona-tv-sandbox .game-start-button { font-size: 16px; padding-inline: 8px; gap: 6px; }
+}

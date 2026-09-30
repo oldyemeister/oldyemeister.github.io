@@ -3,6 +3,9 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, educationDeco
 // Scroll-linked presence: reversible, with no timers or hidden-content gate.
 (() => {
   if (!document.body.matches('.persona-design.page-home')) return;
+  // Prevent elastic upward scrolling from exposing the decorative header
+  // extension above the first visible frame. Normal page scrolling is unchanged.
+  document.documentElement.classList.add('home-overscroll-contained');
   const hero = document.querySelector('#home');
   document.body.style.setProperty('--hero-circle-scale', settings.heroBackdrop.scale);
   let heroVisible = true;

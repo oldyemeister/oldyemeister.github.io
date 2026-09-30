@@ -47,6 +47,39 @@ The three interactive demos use `assets/themes/persona/game-start.js` to wait
 for the Start button before loading the shared game modules and focusing their
 keyboard controls. Numeric section labels are removed by the Persona renderer.
 
+### Shared game television
+
+The approved P4-style cabinet lives in `assets/themes/persona/tv-frame.css` and
+`tv-frame.js`. The Persona renderer loads it only on the three playable pages,
+after their existing bootstrap; original-design pages and case studies are unaffected.
+The flat black cabinet, hollow antennas, white grille, concentric knob faces,
+gear-shaped Reset dial and splayed feet are SVG/CSS, based on the supplied reference.
+White controls carry black symbols and stay white while natively disabled before Start.
+
+The frame moves the original screen and buttons without cloning them or changing
+game logic. Laser Puzzle and Donkey Kong remain 320×240 at 4:3; the IMU viewport
+has a 260px minimum height for its interactive device. Compact readouts use the
+existing Persona Slim Local face. Lower controls retain 44px targets. The IMU's
+Reset moves to the dial; mode, gravity and axis controls remain outside the TV.
+Its small knob controls CRT, not Pause (the sandbox has no pause action).
+
+`--tv-knob-offset` moves the small knobs and Reset slightly down the right rail.
+Pause and CRT sit beside each other; below a 650px cabinet width they stack with
+44px targets so the canvas retains its width. Reset remains the bottom gear dial.
+`assets/js/game-crt.js` adds an optional pointer-transparent screen overlay using
+the shared CRT layers. The white CRT toggle stays available before Start, exposes
+`aria-pressed`, and starts off. Edit `CRT_SETTINGS.game` in `assets/js/crt-settings.js`
+for game-only overrides or to change the default. Off removes all CRT decoration;
+reduced motion, offscreen screens and hidden tabs stop its animated layers.
+Game state and controls are independent of the filter.
+
+All Persona pages reserve the fixed keyboard-hint clearance inside the olive
+footer, never as yellow body padding below it. The shared measured HUD height
+keeps the final content reachable, including when touch layouts hide the hints.
+
+`node tools/tv-demo-build.mjs` restores the optional `/tv-demo/` alias after a
+production build, using the same shared frame rather than a separate design copy.
+
 The menu font controls are `--menu-font`, `--menu-font-size`, and
 `--menu-outline` in the theme stylesheet.
 
@@ -57,6 +90,21 @@ Open `/persona/` for Persona and `/` for the original.
 See [attribution](ATTRIBUTION.md) for design and font sources.
 
 ## Adjusting transitions locally
+
+### Rainbow cursor afterimages
+
+Every Persona page loads `assets/js/cursor-trail.js` and `cursor-trail.css`.
+The effect is currently disabled: set `CURSOR_TRAIL.enabled` to `true` and rebuild
+to restore it. While disabled, no listeners, visual elements or animation loop are created.
+Seven outlined arrow echoes follow recent mouse positions, red through violet,
+24ms apart, fading out within 240ms of stopping. The native cursor is untouched.
+Edit `CURSOR_TRAIL` for colors, spacing and persistence. Only seven small SVGs are
+created, on first mouse movement; the animation loop stops when idle. The overlay
+is pointer-transparent and absent for touch/coarse pointers and reduced motion.
+Leaving the page, scrolling, typing, pointer lock and tab hiding clear the trail.
+No game logic, click targets, cursor affordances or text selection are changed.
+
+### Page transitions
 
 Run `npm run watch` in a second terminal while your `_site/` server is running.
 It rebuilds after source changes; wait for “Rebuilt”, then refresh the browser.

@@ -27,6 +27,41 @@ test('production Persona uses root routes and leaves shared assets and external 
   assert.match(result, /href="\/assets\/documents\/resume.pdf"/);
   assert.match(result, /href="https:\/\/example.com\/"/);
   assert.doesNotMatch(result, /href="\/persona\//);
+  assert.doesNotMatch(result, /tv-frame\.(?:css|js)|persona-tv-screen/);
+  assert.doesNotMatch(result, /game-crt\.js/);
+  assert.match(result, /assets\/js\/cursor-trail.js/);
+  assert.match(result, /assets\/themes\/persona\/cursor-trail.css/);
+});
+
+for (const [pageClass, heading, bootstrap] of [
+  ['laser', 'game-heading', 'project-bootstrap'],
+  ['donkey-kong', 'dk-game-heading', 'project-bootstrap'],
+  ['imu-sandbox', 'imu-demo-heading', 'imu-sandbox-bootstrap']
+]) {
+  test(`${pageClass} loads the shared TV after its unchanged game bootstrap`, () => {
+    const fixture = `<html><head></head><body class="page-${pageClass}">
+      <h1>Game</h1><section aria-labelledby="${heading}">
+      <div><p class="section-index">Game</p><h2 id="${heading}">Game</h2></div>
+      <aside class="keyboard-guide"><li><kbd>R</kbd>Reset</li></aside></section>
+      <script src="/assets/js/${bootstrap}.js" data-module="/assets/js/game.js" defer></script>
+      </body></html>`;
+    const result = personaPreview(fixture, '', false, ui);
+    assert.match(result, /persona-design persona-tv-screen/);
+    assert.match(result, /href="\/assets\/themes\/persona\/tv-frame.css"/);
+    assert.match(result, /href="\/assets\/themes\/persona\/project-tv-effect.css"/);
+    assert.match(result, /type="module" src="\/assets\/js\/game-crt.js"/);
+    assert.equal((result.match(/src="\/assets\/themes\/persona\/tv-frame.js"/g) || []).length, 1);
+    assert(result.indexOf('src="/assets/themes/persona/game-start.js"') < result.indexOf('src="/assets/themes/persona/tv-frame.js"'));
+    assert.match(result, /data-module="\/assets\/js\/game.js"/);
+    assert.match(result, /assets\/js\/cursor-trail.js/);
+  });
+}
+
+test('article pages do not load game CRT assets', () => {
+  const article = '<html><head></head><body class="page-case-study"><article>Case study</article></body></html>';
+  const result = personaPreview(article, '', false, ui);
+  assert.doesNotMatch(result, /game-crt|project-tv-effect|tv-frame/);
+  assert.match(result, /assets\/js\/cursor-trail.js/);
 });
 
 test('comparison preview retains its Persona route prefix', () => {

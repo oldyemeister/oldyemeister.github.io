@@ -1,6 +1,6 @@
 /* CRT CONTROLS — edit this file, run `npm run build`, then refresh localhost.
  * Or leave `npm run watch` running and refresh after it reports “Rebuilt”.
- * Shared by the hero sky artwork and Selected projects; never the actual games.
+ * Shared by the hero, Selected projects, and optional in-game CRT controls.
  * Names match Vault66. The Fallout preset is expanded below so no values are hidden.
  * Thickness/gap/size = px; duration/speed = seconds; opacity/intensity = 0–1.
  * Hero dimensions scale with its SVG artwork. Video dimensions are CSS pixels.
@@ -50,6 +50,13 @@ export const CRT_SETTINGS = {
 
   // Portfolio-specific: keep each looping preview at a different sweep phase.
   staggerPreviews: true,
+
+  // GAME TVs — the white CRT knob toggles this presentation-only overlay.
+  // Start with the clean screen; set defaultEnabled to true to start with CRT.
+  // Other parameters inherit the shared values above; add overrides here.
+  game: {
+    defaultEnabled: false,
+  },
 
   // HERO ONLY — the blue sky is artwork, not a dark glass TV screen.
   // Everything omitted here (grain, flicker, sweep timing) inherits the values above.

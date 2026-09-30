@@ -102,7 +102,9 @@
 .persona-design h2 .kinetic-word,
 .persona-design .laser-intro h1 .kinetic-word {
   max-width: 100%;
-  white-space: normal;
+  /* Letters are separate inline elements for hover motion. Keep each word
+     intact so a heading can wrap only at real spaces, never mid-word. */
+  white-space: nowrap;
 }
 
 .persona-design h2 .sr-only,
@@ -593,13 +595,13 @@ html.reveal-enabled .persona-monogram.is-revealed {
 }
 
 .persona-design {
-  padding-bottom: var(--hud-height);
+  padding-bottom: 0;
 }
 
-/* On the homepage, reserve the fixed HUD's space inside the olive footer so
-   the document cannot end on an exposed strip of the yellow body field. */
-.persona-design.page-home {
-  padding-bottom: 0;
+/* Reserve fixed hints inside the footer on every page, not as yellow body
+   padding below it. The measured HUD height already includes the safe area. */
+.persona-design .site-footer {
+  padding-bottom: calc(30px + var(--hud-height));
 }
 
 .persona-design.page-home .site-footer {

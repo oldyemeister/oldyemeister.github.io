@@ -26,27 +26,30 @@ export function personaPreview(html, prefix = '/persona', redesign = true, ui) {
     .replace(/href="(\/[^"#?]*)([^" ]*)"/g, (match, path, suffix) =>
       path === '/' || path.startsWith('/projects/') || path === '/404.html'
         ? `href="${prefix}${path}${suffix}"` : match);
-  html = replaceRequired(html, '</head>', () => `${headAssets(home, redesign)}\n    </head>`, '</head>');
-  html = replaceRequired(html, /<body class="([^"]*)">/, (_, classes) => `<body class="${classes} persona-design" data-persona-base="${prefix}/">
+  html = replaceRequired(html, '</head>', () => `${headAssets(home, redesign, Boolean(guide))}\n    </head>`, '</head>');
+  html = replaceRequired(html, /<body class="([^"]*)">/, (_, classes) => `<body class="${classes} persona-design${guide ? ' persona-tv-screen' : ''}" data-persona-base="${prefix}/">
       <div class="page-wipe" aria-hidden="true"><i></i><i></i><i></i></div>`, 'the <body> tag');
-  return replaceRequired(html, '</body>', () => `${hud(home, gameKeys, ui.hud)}\n    </body>`, '</body>');
+  return replaceRequired(html, '</body>', () => `${guide ? '<script src="/assets/themes/persona/tv-frame.js" defer></script><script type="module" src="/assets/js/game-crt.js"></script>' : ''}${hud(home, gameKeys, ui.hud)}\n    </body>`, '</body>');
 }
 
 // Stylesheets and scripts for the Persona layer, in cascade order. Sheets that
 // only style homepage sections load on the homepage only.
-function headAssets(home, redesign) {
+function headAssets(home, redesign, game) {
   const homeSheet = (name, when = true) => home && when ? `<link rel="stylesheet" href="/assets/themes/persona/${name}.css">` : '';
   return `
       <link rel="stylesheet" href="/assets/themes/persona/style.css">
       ${redesign ? '<link rel="stylesheet" href="/assets/themes/persona/tokens.css">\n      <link rel="stylesheet" href="/assets/themes/persona/redesign.css">' : ''}
       <link rel="stylesheet" href="/assets/themes/persona/key-instructions.css">
-      ${homeSheet('project-tv-effect')}
+      <link rel="stylesheet" href="/assets/themes/persona/cursor-trail.css">
+      <script type="module" src="/assets/js/cursor-trail.js"></script>
+      ${home || game ? '<link rel="stylesheet" href="/assets/themes/persona/project-tv-effect.css">' : ''}
       ${home ? '<script type="module" src="/assets/js/crt-effect.js"></script>' : ''}
       ${home ? '<link rel="stylesheet" href="/assets/themes/persona/skills-section.css?v=5">' : ''}
       ${homeSheet('hero-poster')}
       ${homeSheet('hero-ambient')}
       <link rel="stylesheet" href="/assets/themes/persona/content-typography.css">
       ${!home && redesign ? '<link rel="stylesheet" href="/assets/themes/persona/project-pages.css">' : ''}
+      ${game ? '<link rel="stylesheet" href="/assets/themes/persona/tv-frame.css">' : ''}
       ${homeSheet('section-backgrounds', redesign)}
       ${homeSheet('project-cards', redesign)}
       ${home && redesign ? '<link rel="stylesheet" href="/assets/themes/persona/education-settings.css?v=2">' : ''}
