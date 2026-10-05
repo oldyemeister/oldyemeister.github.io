@@ -1,0 +1,179 @@
+/* Header chrome without a bar. The header keeps its place and behaviour but
+   is transparent; the name and back link float on black pills, and the
+   top-right corner holds a P4-style calendar: concentric yellow, orange,
+   white, red and yellow rings around a brightened disc, the date bar and time
+   of day on their left, and a sun/moon badge on the rings. The menu button
+   sits inside the bright disc. header-calendar.js builds the calendar. */
+body.persona-design .site-header {
+  border-bottom: 0;
+  background: transparent;
+  /* The transparent strip must not block clicks on the page beneath it. */
+  pointer-events: none;
+}
+body.persona-design .site-header :is(a, button, #site-navigation) {
+  pointer-events: auto;
+}
+body.persona-design .nav-shell {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+}
+body.persona-design :is(.site-identity, .nav-back-link) {
+  padding: 5px 16px 5px 5px;
+  border-radius: 999px;
+  background: var(--palette-black);
+  color: var(--palette-white);
+  box-shadow: 3px 3px 0 var(--palette-yellow);
+}
+body.persona-design .nav-back-link { padding-left: 16px; }
+
+/* Menu button: a black disc inside the calendar's bright interior. */
+body.persona-design .site-header .nav-menu-button {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 3;
+  border-radius: 50%;
+  background: var(--palette-black);
+  color: var(--palette-yellow);
+  box-shadow: 0 0 0 2px var(--palette-yellow);
+}
+body.persona-design .site-header .nav-menu-button:focus-visible {
+  outline: 3px solid var(--palette-black);
+  outline-offset: 4px;
+}
+/* The menu's close button takes the menu button's exact place and look, so
+   the same corner control opens and closes the menu. */
+body.persona-design #site-navigation.ribbon-navigation .ribbon-menu-close {
+  top: 14px;
+  right: 14px;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: var(--palette-black) !important; /* ribbon-menu.css uses !important. */
+  color: var(--palette-yellow) !important;
+  box-shadow: 0 0 0 2px var(--palette-yellow) !important;
+}
+
+body.persona-design .header-calendar {
+  --ring-size: 280px;
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  width: 560px;
+  height: 176px;
+  /* The rings extend past the corner; clip them so the page never scrolls sideways. */
+  overflow: hidden;
+  pointer-events: none;
+  transform-origin: top right;
+  transition: opacity 240ms ease;
+}
+/* Rings: radius 140px, centred 10px in from the right edge and 30px below
+   the top, so their left side and lower-left arc show. The band is 38.4px
+   (27.4% of the radius): from the outside in, a thick yellow, then thinner
+   orange, white, red and yellow, then the bright disc. The bar, time and
+   badge offsets below assume this centre and size. */
+body.persona-design .header-calendar-ring {
+  position: absolute;
+  top: calc(-0.5 * var(--ring-size) + 30px);
+  right: calc(-0.5 * var(--ring-size) + 10px);
+  width: var(--ring-size);
+  height: var(--ring-size);
+  border-radius: 50%;
+  background: radial-gradient(circle closest-side,
+    color-mix(in srgb, var(--palette-white) 22%, transparent) 0 72.57%,
+    var(--palette-yellow) 72.57% 76.86%,
+    var(--palette-play-red) 76.86% 81.14%,
+    var(--palette-white) 81.14% 84.57%,
+    var(--palette-amber) 84.57% 88.86%,
+    var(--palette-yellow) 88.86% 100%);
+  -webkit-backdrop-filter: brightness(1.35) saturate(1.05);
+  backdrop-filter: brightness(1.35) saturate(1.05);
+}
+/* Date bar along the top: drawn over the rings, its right end reaches into
+   the bright disc. */
+body.persona-design .header-calendar-bar {
+  position: absolute;
+  top: 12px;
+  right: 95px;
+  z-index: 1;
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 5px 40px 4px 20px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--palette-black) 88%, transparent);
+  line-height: 1;
+}
+body.persona-design .header-calendar-date {
+  color: var(--palette-white);
+  font: 600 26px/1 'Persona Slim Wide', 'Persona Slim Local', Arial, sans-serif;
+  letter-spacing: .12em;
+}
+body.persona-design .header-calendar-day {
+  font: 400 17px/1 'Persona Slim Local', Arial, sans-serif;
+  letter-spacing: .04em;
+}
+body.persona-design .header-calendar-weekday { color: var(--palette-white); }
+body.persona-design .header-calendar-saturday { color: var(--palette-calendar-blue); }
+body.persona-design .header-calendar-sunday { color: var(--palette-calendar-pink); }
+/* Time of day under the bar, overlapping the rings' outer edge a little. */
+body.persona-design .header-calendar-time {
+  position: absolute;
+  top: 52px;
+  right: 130px;
+  z-index: 2;
+  color: var(--palette-white);
+  /* A clean bold sans like the reference: the traced Persona Hints face has
+     lumpy lowercase "e" and "g" at this size. */
+  font: 700 25px/1.1 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  letter-spacing: -.01em;
+  -webkit-text-stroke: 6px var(--palette-black);
+  paint-order: stroke fill;
+}
+/* Badge centred on the band, lower-left of the rings (about 125 degrees). */
+body.persona-design .header-calendar-badge {
+  position: absolute;
+  top: 102px;
+  right: 52px;
+  z-index: 2;
+  width: 54px;
+  height: 54px;
+}
+body.persona-design .header-calendar-rim,
+body.persona-design .header-calendar-glyph {
+  fill: var(--palette-yellow);
+}
+body.persona-design .header-calendar-glyph {
+  stroke: var(--palette-yellow);
+  stroke-width: 1.2;
+  stroke-linejoin: round;
+}
+body.persona-design .header-calendar-field {
+  fill: var(--palette-black);
+}
+
+/* Opening the menu slides the header up by 110% of its own 78px height
+   (ribbon-menu.css). The calendar is taller, so it adds its own distance on
+   the same timeline and leaves the screen completely. */
+body.persona-design .site-header .header-calendar {
+  translate: 0 calc(-110px * var(--menu-chrome-progress, 0));
+}
+
+/* Short windows: the header retreats on downward scroll; so does the corner. */
+body.short-header-hidden:not(.navigation-open) .header-calendar { opacity: 0; }
+
+@media (max-width: 600px) {
+  body.persona-design .header-calendar { transform: scale(.55); }
+  body.persona-design .site-header .nav-menu-button,
+  body.persona-design #site-navigation.ribbon-navigation .ribbon-menu-close { top: 10px; right: 10px; }
+  /* Phones: the back link needs the room; the rings and badge stay. */
+  body.persona-design .site-header:has(.nav-back-link) :is(.header-calendar-bar, .header-calendar-time) {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.persona-design .header-calendar { transition: none; }
+}

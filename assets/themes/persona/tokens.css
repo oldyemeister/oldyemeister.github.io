@@ -19,8 +19,12 @@
   --palette-olive: #4B4A30;
   --palette-gold: #DDB800;
   --palette-amber: #F4A006;
+  --palette-play-red: #E5222B; /* Vivid red speech-bubble sticker. */
   --palette-muted: #62614C;
   --palette-black: #080808;
+  --palette-ink-panel: #1B1A12; /* Raised panels on the black Skills field. */
+  --palette-calendar-pink: #F6A49A; /* Sunday on the header calendar bar. */
+  --palette-calendar-blue: #A9CBF2; /* Saturday on the header calendar bar. */
   --palette-white: #FFFDF3;
   --palette-blue: #0C75A1;
   --palette-cyan: #20C9D3; /* Shared with the hero's cyan color bar. */

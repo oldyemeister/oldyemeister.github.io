@@ -55,8 +55,10 @@ body.persona-design #contact .contact-link-address {
   text-decoration: none;
 }
 
+/* Bright yellow case-file field with faint diagonal hazard stripes. */
 body.persona-design #projects {
-  background: var(--palette-gold);
+  background: var(--palette-yellow) repeating-linear-gradient(-45deg,
+    transparent 0 26px, color-mix(in srgb, var(--palette-black) 5%, transparent) 26px 52px);
   overflow: hidden;
 }
 

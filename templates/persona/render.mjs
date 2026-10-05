@@ -11,6 +11,18 @@ export function personaPreview(html, prefix = '/persona', redesign = true, ui) {
   const gameKeys = guide ? [...guide[0].matchAll(/<li>([\s\S]*?)<\/li>/g)]
     .map(([, instruction]) => `<span class="hud-instruction hud-game-key">${instruction.replace(/<kbd>([^<]+)<\/kbd>/g, (_, keys) => keys.trim().split(/\s+/).map(key => `<kbd${/[↑↓←→]/.test(key) ? ' class="hud-arrow"' : ''}>${key}</kbd>`).join(''))}</span>`).join('') : '';
   if (guide) {
+    html = html.replace(guide[0], `<details class="game-keyboard-help" data-game-controls-help open>
+      <summary><kbd aria-hidden="true">?</kbd><span>${ui.hud.controls || 'Controls'}</span></summary>
+      <div class="game-keyboard-hints">${gameKeys}</div>
+    </details>`);
+    // Keep the intro and live game adjacent in DOM order; only their wide-screen
+    // presentation becomes two columns. The reading section stays full width.
+    if (html.includes('class="laser-intro')) {
+      html = replaceRequired(html,
+        /(<section class="laser-intro[^\"]*">[\s\S]*?<\/section>)\s*(<section class="(?:laser-play-section[^\"]*|imu-demo-section)"[\s\S]*?<\/section>)/,
+        (_, intro, game) => `<div class="game-entry">${intro}\n${game}</div>`,
+        'the game intro and playable section');
+    }
     html = replaceRequired(html, '<h1>', '<h1 id="game-page-title">', 'the game page <h1>');
     html = replaceRequired(html, /aria-labelledby="(?:game-heading|dk-game-heading|imu-demo-heading)"/g,
       'aria-labelledby="game-page-title"', 'the game section aria-labelledby');
@@ -29,7 +41,7 @@ export function personaPreview(html, prefix = '/persona', redesign = true, ui) {
   html = replaceRequired(html, '</head>', () => `${headAssets(home, redesign, Boolean(guide))}\n    </head>`, '</head>');
   html = replaceRequired(html, /<body class="([^"]*)">/, (_, classes) => `<body class="${classes} persona-design${guide ? ' persona-tv-screen' : ''}" data-persona-base="${prefix}/">
       <div class="page-wipe" aria-hidden="true"><i></i><i></i><i></i></div>`, 'the <body> tag');
-  return replaceRequired(html, '</body>', () => `${guide ? '<script src="/assets/themes/persona/tv-frame.js" defer></script><script type="module" src="/assets/js/game-crt.js"></script>' : ''}${hud(home, gameKeys, ui.hud)}\n    </body>`, '</body>');
+  return replaceRequired(html, '</body>', () => `${guide ? '<script src="/assets/themes/persona/tv-frame.js" defer></script><script type="module" src="/assets/js/game-controls-help.js"></script><script type="module" src="/assets/js/game-crt.js"></script>' : ''}${hud(home, gameKeys, ui.hud)}\n    </body>`, '</body>');
 }
 
 // Stylesheets and scripts for the Persona layer, in cascade order. Sheets that
@@ -40,6 +52,9 @@ function headAssets(home, redesign, game) {
       <link rel="stylesheet" href="/assets/themes/persona/style.css">
       ${redesign ? '<link rel="stylesheet" href="/assets/themes/persona/tokens.css">\n      <link rel="stylesheet" href="/assets/themes/persona/redesign.css">' : ''}
       <link rel="stylesheet" href="/assets/themes/persona/key-instructions.css">
+      <link rel="stylesheet" href="/assets/themes/persona/header-calendar.css">
+      <script src="/assets/themes/persona/header-calendar.js" defer></script>
+      ${home ? '' : '<script src="/assets/themes/persona/project-exit.js" defer></script>'}
       <link rel="stylesheet" href="/assets/themes/persona/cursor-trail.css">
       <script type="module" src="/assets/js/cursor-trail.js"></script>
       ${home || game ? '<link rel="stylesheet" href="/assets/themes/persona/project-tv-effect.css">' : ''}
@@ -65,12 +80,11 @@ function headAssets(home, redesign, game) {
       <script src="/assets/themes/persona/arrival.js"></script>`;
 }
 
-// The fixed keyboard-hint bar. Game pages also list their own keys.
+// Game instructions are docked in the page, not in this fixed navigation hint.
 function hud(home, gameKeys, labels) {
   return `
       <nav class="persona-hud" aria-label="${labels.label}">
-        ${home ? '' : `
-        ${gameKeys}
+        ${home || gameKeys ? '' : `
         <span class="hud-instruction"><kbd>Tab</kbd><span>${labels.navigate}</span></span>
         <span class="hud-instruction"><kbd>Enter</kbd><span>${labels.open}</span></span>`}
         <button class="hud-menu-toggle" type="button" data-hud-menu-toggle aria-controls="site-navigation" aria-keyshortcuts="Escape"><kbd>Esc</kbd><span>${labels.menu}</span></button>

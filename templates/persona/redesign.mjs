@@ -1,17 +1,21 @@
 import { flowerPetals } from './flower.mjs';
+import { playBadge } from './play-badge.mjs';
 import { replaceRequired } from './anchors.mjs';
 // Small semantic additions for the optional redesign; original pages stay intact.
 export function redesignContent(html) {
   // Section art only exists on the homepage.
   if (!/<body class="page-home">/.test(html)) return html;
-  // Reference motifs: flat rings, tapered sparkles, and round-petal flowers.
+  // Replace only playable markers; case studies and the original design stay intact.
+  html = html.replace(/<span class="project-playable-badge" data-play-url="([^"]+)" data-play-label="([^"]+)">[^<]*<\/span>/g,
+    (_, url, label) => playBadge(url, label));
+  // Reference motifs: flat rings, tapered sparkles, and water-drop flowers.
   // Deliberately scattered, stable positions keep decoration away from content.
   const motifs = {
     star: '<path d="M50 3 60 34 94 22 72 49 96 69 63 67 55 98 42 69 9 82 29 54 4 34 38 36Z"/>',
     sparkle: '<path d="M50 2C55 39 61 45 98 50C61 55 55 61 50 98C45 61 39 55 2 50C39 45 45 39 50 2Z"/>',
     ring: '<circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" stroke-width="15"/>',
     rings: '<circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="10"/><circle cx="50" cy="50" r="24" fill="none" stroke="currentColor" stroke-width="8"/>',
-    flower: Array.from({ length: 6 }, (_, i) => `<path transform="rotate(${i * 60} 50 50)" d="M50 50C41 38 33 24 39 15C44 7 56 7 61 15C67 24 59 38 50 50Z"/>`).join(''),
+    flower: `<g transform="translate(50 50) scale(.32) translate(-160 -160)">${flowerPetals}</g>`,
     // Circuit-board chip, echoing the Skills section's hardware category icon.
     chip: '<rect x="30" y="30" width="40" height="40" rx="4" fill="none" stroke="currentColor" stroke-width="6"/><path d="M30 30V12M50 30V8M70 30V12M30 70V88M50 70V92M70 70V88M30 40H12M30 60H8M70 40H88M70 60H92" stroke="currentColor" stroke-width="5" fill="none"/>',
     // D-pad cross, tying the Projects section's decoration to its game-console theme.
@@ -52,7 +56,7 @@ export function redesignContent(html) {
   html = replaceRequired(html, /(<section[^>]*id="education"[\s\S]*?)(<\/section>)/,
     (_, section, closing) => `${section}<div class="education-horizontal-ribbons" aria-hidden="true">${settingsBands}</div>\n${closing}`,
     'the #education section');
-  // Six distinct teardrops, shifted inward so their tips overlap into a small center.
+    // Six water drops with flat inward heads aligned at one shared center.
   const petals = flowerPetals;
   // The hero and Contact share exactly the same six teardrop petals.
   html = replaceRequired(html, /(<g[^>]* data-contact-petals)>\s*<\/g>/g, (_, opening) => {

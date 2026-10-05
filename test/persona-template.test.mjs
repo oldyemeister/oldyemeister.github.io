@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { personaPreview } from '../templates/persona/render.mjs';
+import { flowerPetals } from '../templates/persona/flower.mjs';
 
 // A minimal homepage carrying every anchor the Persona decorators require.
 const page = `<!doctype html><html><head></head><body class="page-home">
@@ -54,8 +55,28 @@ for (const [pageClass, heading, bootstrap] of [
     assert(result.indexOf('src="/assets/themes/persona/game-start.js"') < result.indexOf('src="/assets/themes/persona/tv-frame.js"'));
     assert.match(result, /data-module="\/assets\/js\/game.js"/);
     assert.match(result, /assets\/js\/cursor-trail.js/);
+    assert.match(result, /assets\/js\/game-controls-help.js/);
+    assert.match(result, /<details class="game-keyboard-help" data-game-controls-help open>/);
+    const fixedHud = result.match(/<nav class="persona-hud"[\s\S]*?<\/nav>/)[0];
+    assert.doesNotMatch(fixedHud, /hud-game-key|<kbd>Tab<\/kbd>|<kbd>Enter<\/kbd>/);
   });
 }
+
+test('game entry pairs the existing intro and game without moving the reading section inside', () => {
+  const fixture = `<html><head></head><body class="page-laser">
+    <section class="laser-intro"><h1>Laser</h1><p>Original description</p></section>
+    <section class="laser-play-section" aria-labelledby="game-heading">
+      <div><p class="section-index">Game</p><h2 id="game-heading">Laser</h2></div>
+      <aside class="keyboard-guide"><ul><li><kbd>← →</kbd><span>Rotate</span></li></ul></aside>
+      <canvas data-laser-canvas></canvas></section>
+    <section class="page-section laser-notes">Original notes</section>
+    <script src="/assets/js/project-bootstrap.js" defer></script></body></html>`;
+  const result = personaPreview(fixture, '', true, ui);
+  assert.match(result, /<div class="game-entry"><section class="laser-intro">/);
+  assert.match(result, /<canvas data-laser-canvas><\/canvas><\/section><\/div>\s*<section class="page-section laser-notes">Original notes/);
+  assert.match(result, /Original description/);
+  assert.match(result, /class="hud-arrow">←<\/kbd><kbd class="hud-arrow">→<\/kbd><span>Rotate/);
+});
 
 test('article pages do not load game CRT assets', () => {
   const article = '<html><head></head><body class="page-case-study"><article>Case study</article></body></html>';
@@ -72,6 +93,37 @@ test('comparison preview retains its Persona route prefix', () => {
   assert.match(result, /data-hud-menu-toggle aria-controls="site-navigation"/);
 });
 
+test('all flower variants reuse the six-petal reference silhouette', () => {
+  assert.equal((flowerPetals.match(/<path /g) || []).length, 6);
+  assert.deepEqual([...flowerPetals.matchAll(/rotate\((\d+) 160 160\)/g)].map(match => Number(match[1])), [0, 60, 120, 180, 240, 300]);
+  const result = personaPreview(page, '', true, ui);
+  assert.ok(result.includes(`<g transform="translate(50 50) scale(.32) translate(-160 -160)">${flowerPetals}</g>`));
+  assert.ok(result.includes(`<g class="contact-flower-face contact-flower-spin">${flowerPetals}</g>`));
+  assert.ok(result.includes(`<g class="hero-flower-spin"><g>${flowerPetals}</g></g>`));
+});
+
+test('flower drops have flat inward heads centered on their shared rotation point', () => {
+  assert.equal((flowerPetals.match(/translate\(160 160\) scale\(\.8 1\.08\) translate\(-160 -160\)/g) || []).length, 6);
+  const paths = [...flowerPetals.matchAll(/d="([^"]+)"/g)].map(match => match[1]);
+  assert.equal(new Set(paths).size, 1);
+  for (const path of paths) {
+    // The cap midpoint is (160, 160), exactly the pivot of every rotated drop.
+    const cap = path.match(/^M([\d.]+) 160 H([\d.]+) /);
+    assert.ok(cap);
+    assert.equal((Number(cap[1]) + Number(cap[2])) / 2, 160);
+    assert.ok(Math.abs(Number(cap[2]) - Number(cap[1]) - 6 * 1.2) < .001,
+      'the flat inner head is exactly 20% wider');
+    assert.match(path, /156\.4 160Z$/);
+    assert.doesNotMatch(path, /Q/); // No rounded, overshooting inner tip.
+    const outerArc = path.match(/A([\d.]+) ([\d.]+) 0 1 0 /);
+    assert.ok(outerArc, 'a broad outer arc forms the rounded bulb');
+    assert.ok(Math.abs(Number(outerArc[1]) - 38 * 1.2) < .001,
+      'the outer circle radius is 20% larger');
+    assert.ok(Math.abs(Number(outerArc[1]) * .8 - Number(outerArc[2]) * 1.08) < .001,
+      'the outer bulb stays circular after the thinner/longer petal scaling');
+  }
+});
+
 test('redesign keeps project descriptions accessible without adding visible image captions', () => {
   const project = page.replace('</body>', `<article class="project-card">
     <div class="project-media"><picture><img src="/demo.png" alt="FPGA gameplay preview"></picture></div>
@@ -80,6 +132,26 @@ test('redesign keeps project descriptions accessible without adding visible imag
   const result = personaPreview(project, '', true, ui);
   assert.match(result, /alt="FPGA gameplay preview"/);
   assert.doesNotMatch(result, /<figcaption>FPGA gameplay preview<\/figcaption>/);
+});
+
+test('playable markers become accessible Play stickers with unchanged game destinations', () => {
+  const routes = ['laser', 'donkey-kong', 'imu-sandbox'];
+  const badges = routes.map(route => `<span class="project-playable-badge" data-play-url="/projects/${route}/" data-play-label="Play ${route}">Playable in browser</span>`).join('');
+  const fixture = page.replace('</body>', `${badges}</body>`);
+  const result = personaPreview(fixture, '', true, ui);
+  assert.equal((result.match(/class="project-play-sticker"/g) || []).length, 3);
+  assert.doesNotMatch(result, /Playable in browser/);
+  for (const route of routes) {
+    assert.ok(result.includes(`<a class="project-playable-badge" href="/projects/${route}/" aria-label="Play ${route}">`));
+  }
+  assert.match(result, /viewBox="0 0 150 120" aria-hidden="true" focusable="false"/);
+  assert.equal((result.match(/rotate\(12 75 60\) translate\(0 8\)/g) || []).length, 3,
+    'all three stickers share the original lettering proportions');
+  const comparison = personaPreview(fixture, '/persona', true, ui);
+  assert.match(comparison, /class="project-playable-badge" href="\/persona\/projects\/laser\/"/);
+  const original = personaPreview(fixture, '', false, ui);
+  assert.match(original, /Playable in browser/);
+  assert.doesNotMatch(original, /project-play-sticker/);
 });
 
 test('disabling the redesign restores the original presentation without changing routes', () => {

@@ -37,10 +37,10 @@
   if (imu) {
     actions = document.createElement('div');
     actions.className = 'game-actions';
-    actions.append(section.querySelector('[data-imu-reset]'));
+    actions.append(section.querySelector('[data-imu-pause]'), section.querySelector('[data-imu-reset]'));
   }
   hardware.append(actions);
-  const pause = actions.querySelector('[data-game-pause], [data-dk-pause]');
+  const pause = actions.querySelector('[data-game-pause], [data-dk-pause], [data-imu-pause]');
   pause?.classList.add('tv-pause-control');
   const secondary = document.createElement('div');
   secondary.className = 'tv-secondary-controls';
@@ -72,4 +72,17 @@
   feet.setAttribute('aria-hidden', 'true');
   feet.innerHTML = '<svg viewBox="0 0 1000 115" preserveAspectRatio="none" focusable="false"><path fill="currentColor" d="M155 0h110L178 105q-7 12-32 8L130 111q-10-2-7-15ZM735 0h110l32 96q3 13-7 15l-16 2q-25 4-32-8Z"/></svg>';
   television.append(feet);
+
+  // Group the existing sandbox inputs beside the TV on desktop, below it on
+  // narrow screens. Move the original nodes, preserving their listeners.
+  const help = section.querySelector('[data-game-controls-help]');
+  if (imu) {
+    section.closest('.game-entry')?.classList.add('game-entry-imu');
+    const settings = document.createElement('div');
+    settings.className = 'imu-control-panel';
+    television.after(settings);
+    settings.append(section.querySelector('.imu-toolbar'), section.querySelector('.imu-axis-controls'));
+    // Keep help last so disclosure never moves an input during a click.
+    if (help) settings.append(help);
+  } else if (help) television.after(help);
 }());

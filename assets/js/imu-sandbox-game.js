@@ -4,6 +4,7 @@ import {
   setPoseValue, resetPose, setMode, cycleMode, setPlanet, updateSandbox
 } from './imu-sandbox-engine.js';
 import { createViewportLoop } from './viewport-loop.js';
+import { initImuPause } from './imu-pause.js';
 
 const host = document.querySelector('[data-imu-scene]');
 if (!host) throw new Error('IMU Sandbox scene is missing.');
@@ -251,7 +252,8 @@ syncPose();
 syncMode();
 syncGravity();
 resize();
-createViewportLoop(host, animate, (time) => {
+const loop = createViewportLoop(host, animate, (time) => {
   previousTime = time;
   physicsAccumulator = 0;
 });
+initImuPause(host, loop);

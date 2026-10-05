@@ -7,9 +7,10 @@
     const labels = content ? JSON.parse(content.textContent) : {};
 
     try {
-      const [engine, { createViewportLoop }] = await Promise.all([
+      const [engine, { createViewportLoop }, { initImuPause }] = await Promise.all([
         import('./imu-sandbox-engine.js'),
-        import('./viewport-loop.js')
+        import('./viewport-loop.js'),
+        import('./imu-pause.js')
       ]);
       host.querySelector('.imu-webgl-canvas')?.remove();
       const stage = document.createElement('div');
@@ -158,10 +159,11 @@
       draw();
       document.querySelector('[data-imu-status]').hidden = true;
       host.classList.add('is-ready', 'is-fallback');
-      createViewportLoop(host, animate, (time) => {
+      const loop = createViewportLoop(host, animate, (time) => {
         previous = time;
         accumulator = 0;
       });
+      initImuPause(host, loop);
     } catch (error) {
       console.error('IMU Sandbox compatibility renderer failed.', error);
       const status = document.querySelector('[data-imu-status]');

@@ -498,14 +498,6 @@ html.reveal-enabled .persona-monogram.is-revealed {
   background: var(--surface-muted);
 }
 
-.laser-intro h1,
-.case-study-hero h1 {
-  text-decoration: underline;
-  text-decoration-color: var(--persona-yellow);
-  text-decoration-thickness: 8px;
-  text-underline-offset: 12px;
-}
-
 /* Character motion is opt-in for headings and links; game controls stay intact. */
 .kinetic-label {
   display: inline;
@@ -587,6 +579,22 @@ html.reveal-enabled .persona-monogram.is-revealed {
 
 .persona-arriving .page-wipe i {
   transform: translateX(0) skewX(-12deg);
+}
+
+/* Leaving a project page: the screen switches off like a CRT. The beam is
+   animated by project-exit.js; this layer only exists during that exit. */
+.page-switch-off {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.page-switch-off i {
+  position: absolute;
+  inset: 0;
+  background: var(--palette-white, #FFFDF3);
+  box-shadow: 0 0 60px var(--palette-white, #FFFDF3);
 }
 
 /* A fixed instruction strip; measured padding keeps the last content reachable. */

@@ -579,17 +579,6 @@ body.persona-design #projects :is(button:disabled, [aria-disabled='true']) {
   body.persona-design #projects .project-demo-link::before { transition: none; }
 }
 
-/* The "playable" sticker over the project window, above the CRT overlay. */
-body.persona-design #projects .project-playable-badge {
-  padding: 6px 12px;
-  border: 2px solid var(--palette-black);
-  border-radius: 999px;
-  background: var(--palette-yellow);
-  color: var(--palette-black);
-  box-shadow: 3px 3px 0 var(--palette-black);
-  font: 800 .72rem/1.2 Arial, sans-serif;
-}
-
 /* Text directly on the electric-yellow field uses the existing black token.
    Stop at panels and overlays, which supply their own surface/text pairing. */
 @scope (body.persona-design) to (

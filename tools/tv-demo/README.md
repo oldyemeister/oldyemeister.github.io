@@ -26,6 +26,6 @@ IMU Sandbox retains its existing Reset, mode, gravity and axis controls; its sma
 white knob controls CRT because the original sandbox has no pause action.
 
 The optional CRT screen texture uses `assets/js/game-crt.js` and the shared
-`CRT_SETTINGS` from `assets/js/crt-settings.js`. It starts off, works before or
+`CRT_SETTINGS` from `assets/js/crt-settings.js`. It starts on, works before or
 after Start, and never alters gameplay. Pause and CRT are adjacent on wide TVs
 and stack on narrow TVs, preserving both 44px targets and the screen width.

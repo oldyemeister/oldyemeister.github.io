@@ -207,7 +207,6 @@ body.persona-tv-screen .persona-tv .imu-gravity-readout small { flex-basis: 100%
   .tv-frame-hardware .tv-frame-grille { height: 54px; }
   .tv-secondary-controls { top: 62px; flex-direction: column; gap: 6px; }
   body.persona-tv-screen .persona-tv .tv-reset-control { bottom: 0; width: 44px; }
-  body.persona-tv-screen .persona-tv-sandbox .tv-secondary-controls { top: 96px; }
 }
 
 @media (max-width: 600px) {
@@ -225,4 +224,150 @@ body.persona-tv-screen .persona-tv .imu-gravity-readout small { flex-basis: 100%
 @media (max-width: 360px) {
   body.persona-tv-screen .persona-tv-sandbox .game-start-prompt { padding: 8px; }
   :root body.persona-tv-screen .persona-tv-sandbox .game-start-button { font-size: 16px; padding-inline: 8px; gap: 6px; }
+}
+
+/* Give the game the first viewport. The title remains first in reading order;
+   below desktop widths it stacks naturally, without clipping any copy. */
+body.persona-tv-screen .game-entry .laser-intro { padding-block: 24px 8px; }
+body.persona-tv-screen .game-entry .laser-play-section { padding-block: 8px 24px; }
+body.persona-tv-screen .game-entry .laser-shell { display: flow-root; }
+body.persona-tv-screen .game-entry .persona-tv {
+  --tv-antenna-height: clamp(80px, 18vw, 160px);
+  margin-top: calc(var(--tv-antenna-height) + 8px);
+}
+body.persona-tv-screen .game-entry .tv-antennas { height: var(--tv-antenna-height); }
+body.persona-tv-screen .game-entry .imu-demo-section {
+  display: flow-root;
+  width: calc(100% - 40px);
+  margin-inline: auto;
+  margin-block: 0 24px;
+  padding: 0 8px;
+  overflow: visible;
+}
+body.persona-tv-screen .game-entry .imu-toolbar { margin-block: 16px; }
+body.persona-tv-screen .game-entry .imu-toolbar-groups { flex-wrap: wrap; gap: 12px 24px; }
+
+@media (min-width: 1000px) {
+  body.persona-tv-screen .game-entry {
+    --tv-stage-width: max(360px, min(820px, calc(108svh - 280px)));
+    display: grid;
+    grid-template-columns: minmax(260px, .7fr) minmax(0, 1.6fr);
+    align-items: start;
+    gap: clamp(24px, 3vw, 48px);
+    /* Same measure as .content-shell, so the notes below share this left edge. */
+    width: min(1180px, calc(100% - 56px));
+    margin-inline: auto;
+    padding-top: 24px;
+  }
+  body.persona-tv-screen .game-entry > * { min-width: 0; }
+  body.persona-tv-screen .game-entry .laser-intro { padding: clamp(64px, 12svh, 120px) 0 0; }
+  body.persona-tv-screen .game-entry .laser-intro-layout {
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+  body.persona-tv-screen .game-entry .laser-intro h1 {
+    font-size: clamp(2rem, 3vw, 3.25rem);
+    max-width: 100%;
+  }
+  body.persona-tv-screen .game-entry :is(.laser-play-section, .laser-shell, .imu-demo-section) {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+  body.persona-tv-screen .game-entry .persona-tv {
+    --tv-antenna-height: clamp(60px, 11svh, 104px);
+    --tv-feet-height: clamp(40px, 6svh, 56px);
+    width: min(100%, var(--tv-stage-width));
+    margin-top: calc(var(--tv-antenna-height) + 8px);
+  }
+  body.persona-tv-screen .game-entry .tv-antennas {
+    height: var(--tv-antenna-height);
+  }
+  body.persona-tv-screen .game-entry :is(.imu-toolbar, .imu-axis-controls) {
+    width: min(100%, var(--tv-stage-width));
+  }
+  body.persona-tv-screen .game-entry :is(.imu-mode-control, .imu-planet-control) {
+    flex-wrap: wrap;
+    overflow: visible;
+  }
+  body.persona-tv-screen .game-entry .imu-toolbar button { min-height: 44px; }
+}
+
+/* The sandbox's screen and settings are one workspace, not a vertical queue.
+   Keep the short introduction above both; phone order is TV, then settings. */
+body.persona-tv-screen .imu-control-panel {
+  min-width: 0;
+  padding: 20px;
+  background: var(--palette-olive);
+  color: var(--palette-white);
+}
+body.persona-tv-screen .game-entry .imu-control-panel :is(.imu-toolbar, .imu-axis-controls) {
+  width: 100%;
+  margin: 0;
+  padding: 16px 0;
+}
+body.persona-tv-screen .imu-control-panel .imu-toolbar-groups {
+  display: grid;
+  width: 100%;
+  gap: 16px;
+  overflow: visible;
+}
+body.persona-tv-screen .imu-control-panel .imu-toolbar-group { width: 100%; }
+body.persona-tv-screen .imu-control-panel :is(.imu-mode-control, .imu-planet-control) {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  overflow: visible;
+}
+body.persona-tv-screen .imu-control-panel .imu-planet-control { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+body.persona-tv-screen .imu-control-panel :is(.imu-mode-control, .imu-planet-control) button {
+  min-width: 0;
+  min-height: 44px;
+  padding-inline: 8px;
+}
+body.persona-tv-screen .imu-control-panel .imu-axis-control { min-height: 44px; }
+body.persona-tv-screen .imu-control-panel .imu-axis-control input { min-height: 32px; }
+body.persona-tv-screen .imu-control-panel .game-keyboard-help {
+  margin-top: 16px;
+  color: var(--palette-white);
+}
+body.persona-tv-screen .imu-control-panel .game-implementation-note { color: var(--palette-white); }
+body.persona-tv-screen .imu-control-panel :is(.imu-toolbar-group > span, .imu-axis-controls legend) {
+  color: var(--palette-yellow);
+}
+
+@media (min-width: 1000px) {
+  body.persona-tv-screen .game-entry.game-entry-imu {
+    --tv-stage-width: max(400px, min(760px, calc(100svh - 260px)));
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  body.persona-tv-screen .game-entry-imu .laser-intro { padding: 0; }
+  body.persona-tv-screen .game-entry-imu .laser-intro-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    align-items: start;
+    gap: 32px;
+  }
+  body.persona-tv-screen .game-entry-imu .laser-description { margin-top: 0; }
+  body.persona-tv-screen .game-entry-imu .imu-demo-section {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(320px, 1fr);
+    align-items: start;
+    gap: 32px;
+  }
+  body.persona-tv-screen .game-entry-imu .imu-control-panel {
+    margin-top: calc(clamp(48px, 8svh, 72px) + 8px);
+  }
+  body.persona-tv-screen .game-entry-imu .persona-tv {
+    --tv-antenna-height: clamp(48px, 8svh, 72px);
+  }
+}
+
+@media (min-width: 1200px) {
+  body.persona-tv-screen .imu-control-panel .imu-mode-control {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }

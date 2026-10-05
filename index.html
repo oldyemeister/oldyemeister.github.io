@@ -10,7 +10,7 @@ page_class: home
     <svg class="hero-reference-art" viewBox="0 0 796 448" preserveAspectRatio="xMidYMin meet" aria-hidden="true" focusable="false">
       <defs>
         <!-- Local petal coordinates restart the rainbow before each petal rotates. -->
-        <linearGradient id="hero-petal-rainbow" gradientUnits="userSpaceOnUse" x1="122" y1="0" x2="182" y2="0">
+        <linearGradient id="hero-petal-rainbow" gradientUnits="userSpaceOnUse" x1="114.4" y1="0" x2="205.6" y2="0">
           <stop offset="0" stop-color="var(--flower-red)"/>
           <stop offset=".32" stop-color="var(--palette-yellow)"/>
           <stop offset=".55" stop-color="var(--flower-green)"/>
@@ -139,7 +139,7 @@ page_class: home
         <p class="education-program">{{ site_content.education_section.program }}</p>
         <p class="education-dates">{{ site_content.education_section.start_year }} — {{ site_content.education_section.graduation }}</p>
       </div>
-      <p class="education-descriptor">{{ site_content.education_section.description }}</p>
+      {% if site_content.education_section.description != empty %}<p class="education-descriptor">{{ site_content.education_section.description }}</p>{% endif %}
       <!-- Optional GPA/honors line: intentionally omitted until supplied and approved. -->
     </div>
   </div>
@@ -229,7 +229,7 @@ page_class: home
             <img{% if project.image.logo %} class="project-image-logo"{% endif %} src="{{ project.image.path | relative_url }}" alt="{{ project.image.alt }}" loading="lazy" decoding="async">
           </picture>
           {% endif %}{% endif %}
-          {% if project.playable %}<span class="project-playable-badge">{{ site_content.ui.projects.playable }}</span>{% endif %}
+          {% if project.playable %}<span class="project-playable-badge" data-play-url="{{ project.live_url | relative_url }}" data-play-label="Play {{ project.title | escape }}">{{ site_content.ui.projects.playable }}</span>{% endif %}
         </div>
         <div class="project-content">
           <p class="project-file-index" aria-hidden="true"><span>{{ site_content.ui.projects.file }}</span> {{ project.placeholder_index }}</p>

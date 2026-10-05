@@ -1,0 +1,129 @@
+/* Persona upgrade study from the design review. Local preview only.
+   Every visual change is gated on html.p4-demo, so the toggle shows the
+   shipped design underneath. Elements added by upgrades.js stay hidden
+   while the study is off. */
+:root {
+  --p4-black: #080808;
+  --p4-yellow: #FFF000;
+  --p4-white: #FFFDF3;
+  --p4-gold: #DDB800;
+  --p4-wide: 'Persona Slim Wide', 'Persona Slim Local', Arial, sans-serif;
+}
+.p4-calendar { display: none; }
+
+/* Study toggle */
+.p4-demo-toggle {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 300;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 2px solid var(--p4-yellow);
+  background: var(--p4-black);
+  color: var(--p4-yellow);
+  font: 600 14px/1 var(--p4-wide);
+  letter-spacing: .04em;
+  transform: skew(-10deg);
+  box-shadow: 4px 4px 0 var(--p4-yellow);
+  cursor: pointer;
+}
+html:not(.p4-demo) .p4-demo-toggle { background: var(--p4-white); color: var(--p4-black); border-color: var(--p4-black); box-shadow: 4px 4px 0 var(--p4-black); }
+.p4-demo-toggle:focus-visible { outline: 3px solid var(--p4-black); outline-offset: 4px; }
+
+/* 1. Calendar and time-of-day panel in the header */
+html.p4-demo .p4-calendar {
+  display: flex;
+  /* The header is a grid; share the wide identity column, right-aligned. */
+  grid-row: 1;
+  grid-column: 1;
+  justify-self: end;
+  align-items: center;
+  gap: 8px;
+  margin: 0 18px 0 auto;
+  color: var(--p4-white);
+  font-family: var(--p4-wide);
+  transform: skew(-10deg);
+}
+html.p4-demo .p4-calendar-date { font-size: 30px; line-height: 1; color: var(--p4-yellow); text-shadow: 3px 3px 0 var(--p4-black); }
+html.p4-demo .p4-calendar-day { padding: 3px 8px; background: var(--p4-yellow); color: var(--p4-black); font-size: 14px; }
+html.p4-demo .p4-calendar-icon { width: 26px; height: 26px; color: var(--p4-yellow); }
+html.p4-demo .p4-calendar-time { padding: 3px 8px; background: var(--p4-black); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+html.p4-demo .nav-shell > .site-identity { grid-row: 1; grid-column: 1; justify-self: start; }
+@media (max-width: 600px) {
+  html.p4-demo :is(.p4-calendar-time, .p4-calendar-icon) { display: none; }
+  /* Phones: the back link needs the room. */
+  html.p4-demo .nav-shell:has(.nav-back-link) .p4-calendar { display: none; }
+  /* Compact "P4" chip; the full label stays as the accessible name. */
+  .p4-demo-toggle { width: 44px; height: 44px; padding: 0; font-size: 0; }
+  .p4-demo-toggle::before { content: 'P4'; font-size: 14px; }
+}
+
+/* 2. Skills: black field, category panels with a yellow edge and hard shadow */
+html.p4-demo body.persona-design #skills { background: var(--p4-black); }
+/* The shipped black title would vanish on black; flip it to yellow. */
+html.p4-demo body.persona-design #skills h2 {
+  color: var(--p4-yellow);
+  text-shadow: 3px 4px 1px var(--p4-gold);
+}
+html.p4-demo body.persona-design #skills .skills-categories { gap: 20px; border: 0; }
+html.p4-demo body.persona-design #skills .skills-category {
+  border: 0;
+  border-left: 6px solid var(--p4-yellow);
+  background: #1b1a12;
+  box-shadow: 6px 6px 0 var(--p4-gold);
+}
+
+/* 3. Projects as case files: striped yellow field, black panels, hard
+   shadows, the hidden "FILE 0X" label revived, a featured lead card */
+html.p4-demo body.persona-design #projects {
+  background: var(--p4-yellow) repeating-linear-gradient(-45deg, transparent 0 26px, rgb(8 8 8 / .05) 26px 52px);
+}
+html.p4-demo body.persona-design #projects .project-content {
+  background: var(--p4-black);
+  box-shadow: 8px 8px 0 var(--p4-white), 8px 8px 0 3px var(--p4-black);
+}
+html.p4-demo body.persona-design #projects .project-card:is(:hover, :focus-within) .project-content {
+  transform: translate(-4px, -4px);
+  box-shadow: 12px 12px 0 var(--p4-white), 12px 12px 0 3px var(--p4-black);
+}
+html.p4-demo body.persona-design #projects .project-file-index {
+  display: inline-block;
+  position: absolute;
+  top: -18px;
+  left: 20px;
+  margin: 0;
+  padding: 3px 12px;
+  background: var(--p4-yellow);
+  color: var(--p4-black);
+  font: 600 14px/1.3 var(--p4-wide);
+  letter-spacing: .06em;
+  transform: skew(-12deg);
+  box-shadow: 3px 3px 0 var(--p4-black);
+}
+html.p4-demo body.persona-design #projects .project-file-index span { opacity: 1; }
+html.p4-demo body.persona-design #projects .project-play-sticker {
+  filter: drop-shadow(3px 4px 0 var(--p4-black));
+}
+@media (min-width: 1000px) {
+  html.p4-demo body.persona-design #projects .project-card:first-child {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    align-items: stretch;
+    gap: 28px;
+  }
+}
+
+/* 4. Leaving a page: the screen switches off like a CRT */
+.p4-transition { position: fixed; inset: 0; z-index: 1000; pointer-events: none; }
+.p4-transition i {
+  position: absolute;
+  inset: 0;
+  background: var(--p4-white);
+  box-shadow: 0 0 60px var(--p4-white);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.p4-demo body.persona-design #projects .project-card:is(:hover, :focus-within) .project-content { transform: none; }
+}

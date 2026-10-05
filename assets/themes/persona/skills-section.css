@@ -1,9 +1,8 @@
-/* Skills is one continuous field rather than a dashboard of nested cards.
-   Gold rules preserve all six groups while connecting them to the site's
-   strong bands, menus, and editorial grids. */
+/* Skills is a black status field: each of the six groups is a raised panel
+   with a yellow edge and a hard gold shadow, like a layered game-menu window. */
 body.persona-design #skills {
   overflow: hidden;
-  background: var(--palette-olive);
+  background: var(--palette-black);
   color: var(--palette-white);
   border-bottom: 3px solid var(--palette-black);
 }
@@ -27,20 +26,26 @@ body.persona-design #skills .section-header > p {
   max-width: 42ch;
 }
 
+/* The shared black topic would vanish on the black field; this outranks the
+   shared rule in content-typography.css, which loads later. */
+body.persona-design #skills .section-header h2 {
+  color: var(--palette-yellow);
+  text-shadow: 3px 4px 1px var(--palette-gold);
+}
+
 body.persona-design #skills .skills-categories {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
   margin-top: clamp(38px, 6vw, 70px);
-  border-top: 3px solid var(--palette-gold);
-  border-left: 3px solid var(--palette-gold);
 }
 
 body.persona-design #skills .skills-category {
   min-width: 0;
   padding: clamp(24px, 3vw, 40px);
-  background: transparent;
-  border-right: 3px solid var(--palette-gold);
-  border-bottom: 3px solid var(--palette-gold);
+  background: var(--palette-ink-panel);
+  border-left: 6px solid var(--palette-yellow);
+  box-shadow: 6px 6px 0 var(--palette-gold);
 }
 
 body.persona-design #skills .skills-category-header {

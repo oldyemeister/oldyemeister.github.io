@@ -144,3 +144,66 @@ body.persona-design .persona-hud {
     display: flex;
   }
 }
+
+/* Game help belongs to the document flow: it must never cover the TV controls
+   or reading copy. Native details works with touch, keyboard and without JS. */
+body.persona-tv-screen .game-keyboard-help {
+  width: min(100%, var(--tv-stage-width, 820px));
+  margin: 0 auto 18px;
+  color: var(--palette-olive);
+  font: 600 .875rem/1.5 var(--content-font, sans-serif);
+}
+body.persona-tv-screen .game-keyboard-help summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  min-height: 44px;
+  padding: 4px 10px;
+  cursor: pointer;
+  list-style: none;
+}
+body.persona-tv-screen .game-keyboard-help summary::-webkit-details-marker { display: none; }
+body.persona-tv-screen .game-keyboard-help summary::after {
+  content: '';
+  width: 7px;
+  height: 7px;
+  margin-left: 5px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg) translateY(-2px);
+}
+body.persona-tv-screen .game-keyboard-help[open] summary::after { transform: rotate(225deg); }
+body.persona-tv-screen .game-keyboard-help summary:focus-visible {
+  outline: 2px solid var(--palette-black);
+  outline-offset: 2px;
+}
+body.persona-tv-screen .game-keyboard-help kbd {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  min-width: 28px;
+  height: 28px;
+  padding-inline: 6px;
+  border-radius: 50%;
+  border: 2px solid var(--palette-white);
+  background: var(--palette-black);
+  color: var(--palette-white);
+  font: 700 11px/1 Arial, sans-serif;
+}
+body.persona-tv-screen .game-keyboard-hints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  padding: 12px 10px 16px;
+}
+body.persona-tv-screen .game-keyboard-hints .hud-instruction {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+/* The fixed game HUD now holds Esc/Menu only, and its transparent area cannot
+   eat clicks on the page. Full game instructions never enter this layer. */
+body.persona-tv-screen .persona-hud { pointer-events: none; }
+body.persona-tv-screen .persona-hud .hud-menu-toggle { pointer-events: auto; }

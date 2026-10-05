@@ -16,7 +16,7 @@ export const CRT_SETTINGS = {
   // Your scanlines: 2px green lines with a 2px clear gap.
   theme: 'green', // 'green', 'amber', 'blue', or 'custom'.
   enableScanlines: true,
-  scanlineOpacity: 0.19,
+  scanlineOpacity: 0.30, // Stronger shared texture; sweep/glow brightness is unchanged.
   scanlineThickness: 2,
   scanlineGap: 2,
   scanlineColor: '#5bb387', // Used only with theme: 'custom'; opacity is separate.
@@ -52,16 +52,19 @@ export const CRT_SETTINGS = {
   staggerPreviews: true,
 
   // GAME TVs — the white CRT knob toggles this presentation-only overlay.
-  // Start with the clean screen; set defaultEnabled to true to start with CRT.
+  // Start with CRT enabled; the white knob can still switch it off.
   // Other parameters inherit the shared values above; add overrides here.
   game: {
-    defaultEnabled: false,
+    defaultEnabled: true,
   },
 
   // HERO ONLY — the blue sky is artwork, not a dark glass TV screen.
   // Everything omitted here (grain, flicker, sweep timing) inherits the values above.
   // Uses the actual sky color from hero-poster.css instead of painting gray over it.
   hero: {
+    // Half-width lines and gaps: twice as many bars, same brightness and color.
+    scanlineThickness: 1,
+    scanlineGap: 1,
     theme: 'custom',
     scanlineColor: 'var(--hero-sky)',
     tintSaturation: 1,

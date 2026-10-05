@@ -45,7 +45,7 @@ content_key: imu_sandbox
       <div class="imu-toolbar-group">
         <span>{{ imu.mode_heading }}</span>
         <div class="imu-mode-control" role="group" aria-label="{{ imu.mode_heading }}">
-          <button type="button" data-imu-mode="normal" aria-pressed="false">{{ imu.modes.normal }}</button>
+          <button type="button" class="is-active" data-imu-mode="normal" aria-pressed="true">{{ imu.modes.normal }}</button>
           <button type="button" data-imu-mode="wind" aria-pressed="false">{{ imu.modes.wind }}</button>
           <button type="button" data-imu-mode="shake" aria-pressed="false">{{ imu.modes.shake }}</button>
           <button type="button" data-imu-mode="explosion" aria-pressed="false">{{ imu.modes.explosion }}</button>
@@ -55,7 +55,7 @@ content_key: imu_sandbox
         <span>{{ imu.gravity_magnitude_heading }}</span>
         <div class="imu-planet-control" role="group" aria-label="{{ imu.gravity_magnitude_heading }}">
           <button type="button" data-imu-planet="moon" aria-pressed="false">{{ imu.planets.moon.label }} <small>{{ imu.planets.moon.gravity }}</small></button>
-          <button type="button" data-imu-planet="earth" aria-pressed="false">{{ imu.planets.earth.label }} <small>{{ imu.planets.earth.gravity }}</small></button>
+          <button type="button" class="is-active" data-imu-planet="earth" aria-pressed="true">{{ imu.planets.earth.label }} <small>{{ imu.planets.earth.gravity }}</small></button>
           <button type="button" data-imu-planet="jupiter" aria-pressed="false">{{ imu.planets.jupiter.label }} <small>{{ imu.planets.jupiter.gravity }}</small></button>
         </div>
       </div>

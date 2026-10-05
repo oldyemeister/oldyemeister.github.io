@@ -197,6 +197,8 @@ test('hero filters stay inside the sky clip; runtime is homepage-only', () => {
 test('hero preserves its original sky color and shimmer without changing project treatment', () => {
   const { projects, heroes } = setup();
   for (const hero of heroes) {
+    assert.equal(hero.properties['--crt-line-width'], '1px');
+    assert.equal(hero.properties['--crt-line-gap'], '1px');
     assert.equal(hero.properties['--crt-line-color'], 'var(--hero-sky)');
     assert.equal(hero.properties['--crt-tint-saturation'], '1');
     assert.equal(hero.properties['--crt-sweep-color'], CRT_SETTINGS.hero.sweepColor);
@@ -206,6 +208,8 @@ test('hero preserves its original sky color and shimmer without changing project
     assert.equal(hero.properties['--crt-flicker-intensity'], String(CRT_SETTINGS.flickerIntensity));
   }
   assert.equal(projects[0].properties['--crt-tint-saturation'], String(CRT_SETTINGS.tintSaturation));
+  assert.equal(projects[0].properties['--crt-line-width'], '2px');
+  assert.equal(projects[0].properties['--crt-line-gap'], '2px');
   assert.equal(hasLayer(projects[0], 'curvature'), CRT_SETTINGS.enableCurvature);
   assert.equal(projects[0].properties['--crt-sweep-color'], CRT_SETTINGS.sweepColor);
   assert.match(stylesheet, /\.hero-crt-window\s*\{[^}]*mix-blend-mode: screen;/);

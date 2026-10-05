@@ -17,7 +17,7 @@ function element() {
   item.style = { setProperty: (name, value) => { item.properties[name] = value; } };
   return item;
 }
-function setup({ settings = CRT_SETTINGS, reduced = false, observe = true } = {}) {
+function setup({ settings = { ...CRT_SETTINGS, game: { ...CRT_SETTINGS.game, defaultEnabled: false } }, reduced = false, observe = true } = {}) {
   const stage = element();
   const canvas = element();
   stage.append(canvas);
@@ -43,7 +43,17 @@ function setup({ settings = CRT_SETTINGS, reduced = false, observe = true } = {}
     show: visible => notify([{ isIntersecting: visible }]) };
 }
 
-test('CRT starts off, toggles both ways, and never replaces or modifies gameplay', () => {
+test('production CRT starts enabled with stronger scanlines and can still be switched off', () => {
+  const { button, overlay } = setup({ settings: CRT_SETTINGS });
+  assert.equal(button['aria-pressed'], 'true');
+  assert.equal(overlay.hidden, false);
+  assert.equal(overlay.properties['--crt-line-opacity'], '0.3');
+  button.events.click();
+  assert.equal(button['aria-pressed'], 'false');
+  assert.equal(overlay.hidden, true);
+});
+
+test('clean-screen override toggles both ways and never replaces or modifies gameplay', () => {
   const { button, overlay, stage, canvas, show } = setup();
   assert.equal(button.type, 'button');
   assert.equal(button['aria-label'], 'CRT effect');

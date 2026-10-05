@@ -1,10 +1,13 @@
-/* Homepage project previews: the image and the information panel are siblings,
+/* Homepage project previews as case files: black information panels with hard
+   offset shadows under each preview. The image and the panel are siblings,
    not nested elevations. Never apply these rules to the playable TV screens. */
 body.persona-design #projects {
-  --project-panel: var(--palette-olive);
+  --project-panel: var(--palette-black);
   --project-panel-ink: var(--palette-white);
   --project-panel-accent: var(--palette-yellow);
-  --project-panel-shadow: 6px 10px 16px -6px color-mix(in srgb, var(--palette-black) 48%, transparent);
+  /* A white offset block with a black outline, raised further on hover. */
+  --project-panel-shadow: 8px 8px 0 var(--palette-white), 8px 8px 0 3px var(--palette-black);
+  --project-panel-shadow-raised: 12px 12px 0 var(--palette-white), 12px 12px 0 3px var(--palette-black);
 }
 body.persona-design #projects .project-card {
   background: transparent;
@@ -24,10 +27,71 @@ body.persona-design #projects .project-card:hover { transform: none; }
 body.persona-design #projects .project-media {
   box-shadow: none;
 }
+/* Only the sticker escapes the preview; the screen still clips its CRT layers. */
+body.persona-design #projects .project-media:has(.project-playable-badge) {
+  overflow: visible;
+}
 body.persona-design #projects .project-card:hover .project-media :is(img, video) {
   transform: none;
 }
-body.persona-design #projects .project-playable-badge { box-shadow: none; }
+/* Red speech bubble and tilted outlined lettering from the supplied badge.
+   The whole sticker is a link; it stays above, and outside, the CRT layers. */
+body.persona-design #projects .project-playable-badge {
+  top: 0;
+  left: auto;
+  right: 0;
+  translate: 36% -25%;
+  display: block;
+  width: clamp(105.6px, 9.6vw, 129.6px); /* 20% above the original sticker size. */
+  aspect-ratio: 5 / 4;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+body.persona-design #projects .project-play-sticker {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(3px 4px 0 var(--palette-black));
+  transition: transform 180ms ease-out;
+}
+body.persona-design #projects .project-play-bubble {
+  fill: var(--palette-play-red);
+  stroke: var(--palette-white);
+  stroke-width: 3.5px;
+  stroke-linejoin: round;
+}
+body.persona-design #projects .project-play-letter-outline {
+  fill: var(--palette-white);
+  stroke: var(--palette-white);
+  stroke-width: 9px;
+}
+body.persona-design #projects .project-play-lettering {
+  fill: var(--palette-white);
+  stroke: var(--palette-play-red);
+  stroke-width: 4px;
+  paint-order: stroke fill;
+}
+body.persona-design #projects .project-playable-badge:is(:hover, :focus-visible) .project-play-sticker {
+  transform: rotate(-4deg) scale(1.04);
+}
+body.persona-design #projects .project-playable-badge:focus-visible {
+  outline: 3px solid var(--palette-yellow);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+body.persona-design #projects .project-playable-badge:active .project-play-sticker {
+  transform: scale(.96);
+}
+@media (max-width: 600px) {
+  /* Keep the tail on the preview without pushing the sticker off the phone. */
+  body.persona-design #projects .project-playable-badge { translate: 22% -25%; }
+}
 
 body.persona-design #projects .project-content {
   position: relative;
@@ -35,9 +99,38 @@ body.persona-design #projects .project-content {
   color: var(--project-panel-ink);
   border: 0;
   padding: clamp(20px, 2.2vw, 28px);
-  box-shadow: none;
+  box-shadow: var(--project-panel-shadow);
   transition: transform 240ms cubic-bezier(.16, 1, .3, 1),
     box-shadow 240ms cubic-bezier(.16, 1, .3, 1);
+}
+/* The "FILE 0X" tag on the panel's top edge. Styled in full here: the
+   redesign.css rule sits inside its @scope and never matches. The child
+   selector outranks the panel's white `.project-content > p` text. */
+body.persona-design #projects .project-content > .project-file-index {
+  display: inline-block;
+  position: absolute;
+  top: -18px;
+  left: 20px;
+  margin: 0;
+  padding: 3px 12px;
+  background: var(--palette-yellow);
+  color: var(--palette-black);
+  -webkit-text-fill-color: currentColor;
+  font: 600 14px/1.3 'Persona Slim Wide', 'Persona Slim Local', Arial, sans-serif;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  transform: skew(-12deg);
+  box-shadow: 3px 3px 0 var(--palette-black);
+}
+/* The first project leads, full width with its preview beside the panel. */
+@media (min-width: 1000px) {
+  body.persona-design #projects .project-card:first-child {
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    grid-template-rows: none;
+    align-items: stretch;
+    gap: 28px;
+  }
 }
 body.persona-design #projects .project-content h3,
 body.persona-design #projects .project-content h3 span {
@@ -72,18 +165,22 @@ body.persona-design #projects .project-content a:focus-visible {
   outline: 2px solid var(--project-panel-accent);
   outline-offset: 5px;
 }
-/* The gap stays open as only the olive panel lifts; the media casts no shadow. */
+/* Only the panel jumps toward its shadow; the media stays put. */
 @media (hover: hover) and (pointer: fine) {
   body.persona-design #projects .project-card:hover .project-content {
-    transform: translateY(-3px);
-    box-shadow: var(--project-panel-shadow);
+    transform: translate(-4px, -4px);
+    box-shadow: var(--project-panel-shadow-raised);
   }
 }
 body.persona-design #projects .project-card:focus-within .project-content {
-  transform: translateY(-3px);
-  box-shadow: var(--project-panel-shadow);
+  transform: translate(-4px, -4px);
+  box-shadow: var(--project-panel-shadow-raised);
 }
 @media (prefers-reduced-motion: reduce) {
+  body.persona-design #projects .project-play-sticker { transition: none; }
+  body.persona-design #projects .project-playable-badge:is(:hover, :focus-visible, :active) .project-play-sticker {
+    transform: none;
+  }
   body.persona-design #projects .project-content,
   body.persona-design #projects .project-content .project-demo-link { transition: none; }
   body.persona-design #projects .project-card:is(:hover, :focus-within) .project-content {

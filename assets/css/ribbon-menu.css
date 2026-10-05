@@ -98,6 +98,21 @@ body #site-navigation.ribbon-navigation .menu-ribbons {
   pointer-events: none;
 }
 
+/* The core bands' half-sine lobes drift slowly upward. One lobe length per
+   loop; ribbon-menu.js draws an extra lobe beyond the screen, so it repeats
+   seamlessly. Transforms on SVG content use viewBox units. */
+body #site-navigation.ribbon-navigation .menu-wave-drift {
+  animation: menu-wave-drift 40s linear infinite;
+}
+
+@keyframes menu-wave-drift {
+  to { transform: translateY(calc(-1px * var(--wave-length))); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body #site-navigation.ribbon-navigation .menu-wave-drift { animation: none; }
+}
+
 /* Match the section-topic font face and spacing, retaining the menu outline. */
 body #site-navigation.ribbon-navigation a {
   position: relative;

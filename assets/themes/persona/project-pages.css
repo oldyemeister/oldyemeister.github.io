@@ -67,6 +67,16 @@ body.persona-design :is(.laser-intro, .laser-notes, .case-study) a:hover {
   color: var(--palette-black);
   text-decoration-thickness: 2px;
 }
+/* Letter-animated links split words into inline-blocks, which a text underline
+   skips (it would only draw under the spaces). Rule the whole link instead. */
+body.persona-design :is(.laser-intro, .laser-notes, .case-study) a.kinetic-text {
+  text-decoration: none;
+  padding-bottom: .12em;
+  border-bottom: 1px solid currentColor;
+}
+body.persona-design :is(.laser-intro, .laser-notes, .case-study) a.kinetic-text:hover {
+  box-shadow: 0 1px 0 currentColor;
+}
 body.persona-design :is(.laser-intro, .laser-notes, .case-study) a:focus-visible {
   outline: 2px solid var(--palette-black);
   outline-offset: 5px;

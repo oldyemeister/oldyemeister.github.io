@@ -12,4 +12,10 @@
     root.classList.add('persona-arriving');
     window.personaArrivalTimeout = setTimeout(() => root.classList.remove('persona-arriving'), 2000);
   }
+  // Land on a #section instantly: smooth scrolling would otherwise show the
+  // top of the page first, then scroll down to the section.
+  if (location.hash) {
+    root.style.scrollBehavior = 'auto';
+    addEventListener('load', () => setTimeout(() => root.style.removeProperty('scroll-behavior'), 0), { once: true });
+  }
 })();

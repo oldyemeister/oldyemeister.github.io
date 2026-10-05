@@ -1,6 +1,6 @@
 import { execFileSync } from 'node:child_process';
 import { readFile, readdir, writeFile, mkdir, cp, rm } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { resolve, dirname, relative } from 'node:path';
 import { personaPreview } from '../templates/persona/render.mjs';
@@ -41,10 +41,43 @@ function valueOf(expression, environment) {
   return path.split('.').reduce((value, key) => value?.[key], environment);
 }
 
+// Intrinsic size of a local WebP, PNG or JPEG, so lazy images reserve their space.
+function imageSize(src) {
+  const path = resolve(root, src.replace(/^\//, ''));
+  if (!src.startsWith('/') || !existsSync(path)) return null;
+  const bytes = readFileSync(path);
+  if (bytes.toString('ascii', 0, 4) === 'RIFF' && bytes.toString('ascii', 8, 12) === 'WEBP') {
+    const chunk = bytes.toString('ascii', 12, 16);
+    if (chunk === 'VP8X') return { width: 1 + bytes.readUIntLE(24, 3), height: 1 + bytes.readUIntLE(27, 3) };
+    if (chunk === 'VP8L') {
+      const bits = bytes.readUInt32LE(21);
+      return { width: (bits & 0x3fff) + 1, height: ((bits >> 14) & 0x3fff) + 1 };
+    }
+    if (chunk === 'VP8 ') return { width: bytes.readUInt16LE(26) & 0x3fff, height: bytes.readUInt16LE(28) & 0x3fff };
+  }
+  if (bytes.readUInt32BE(0) === 0x89504e47) return { width: bytes.readUInt32BE(16), height: bytes.readUInt32BE(20) };
+  if (bytes[0] === 0xff && bytes[1] === 0xd8) {
+    for (let offset = 2; offset < bytes.length;) {
+      const marker = bytes[offset + 1];
+      if (marker >= 0xc0 && marker <= 0xcf && ![0xc4, 0xc8, 0xcc].includes(marker)) {
+        return { width: bytes.readUInt16BE(offset + 7), height: bytes.readUInt16BE(offset + 5) };
+      }
+      offset += 2 + bytes.readUInt16BE(offset + 2);
+    }
+  }
+  return null;
+}
+
+function markdownImage(alt, src) {
+  const size = imageSize(src);
+  const dimensions = size ? ` width="${size.width}" height="${size.height}"` : '';
+  return `<img src="${src}" alt="${alt}"${dimensions} loading="lazy" decoding="async">`;
+}
+
 function inlineMarkdown(text) {
   return text
     .replace(/`([^`]+)`/g, '<code>$1</code>')
-    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1">')
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (match, alt, src) => markdownImage(alt, src))
     .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
     .replace(/\*([^*]+)\*/g, '<em>$1</em>');

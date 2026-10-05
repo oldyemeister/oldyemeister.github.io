@@ -42,6 +42,17 @@
     television.append(gameControls);
   }
   section.querySelector('.game-heading-row, .imu-demo-heading')?.remove();
+  // Create before collecting controls so Pause shares the normal Start gate.
+  if (imu) {
+    const pause = document.createElement('button');
+    pause.type = 'button';
+    pause.className = 'game-action-button';
+    pause.dataset.imuPause = '';
+    pause.setAttribute('aria-label', labels.pause_sandbox);
+    pause.title = labels.pause_sandbox;
+    pause.innerHTML = '<span class="pause-symbol" aria-hidden="true"></span>';
+    section.querySelector('[data-imu-reset]').before(pause);
+  }
   const controls = [...section.querySelectorAll('button, input')];
   const disabled = controls.map(control => control.disabled);
   controls.forEach(control => { control.disabled = true; });

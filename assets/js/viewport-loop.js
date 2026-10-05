@@ -2,6 +2,7 @@ export function createViewportLoop(element, onFrame, onResume = () => {}) {
   let frameId = 0;
   let inViewport = false;
   let running = false;
+  let manuallyPaused = false;
   element.dataset.rendering = 'paused';
 
   function frame(time) {
@@ -11,7 +12,7 @@ export function createViewportLoop(element, onFrame, onResume = () => {}) {
   }
 
   function sync() {
-    const shouldRun = inViewport && !document.hidden;
+    const shouldRun = inViewport && !document.hidden && !manuallyPaused;
     if (shouldRun === running) return;
     running = shouldRun;
     element.dataset.rendering = running ? 'active' : 'paused';
@@ -31,4 +32,10 @@ export function createViewportLoop(element, onFrame, onResume = () => {}) {
 
   document.addEventListener('visibilitychange', sync);
   sync();
+  return {
+    setPaused(paused) {
+      manuallyPaused = Boolean(paused);
+      sync();
+    }
+  };
 }

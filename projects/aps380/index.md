@@ -42,7 +42,7 @@ Our four-person team built a Raspberry Pi vehicle combining **adaptive cruise co
 | Stop-sign detection range | 30–60 cm |
 | Vision-processing latency | ≈150–200 ms/frame |
 
-![APS380 vehicle electronics and sensor platform](/assets/images/projects/aps380/figure-2.png)
+![APS380 vehicle electronics and sensor platform](/assets/images/projects/aps380/figure-2.webp)
 
 *Raspberry Pi, sensors, power electronics, and drivetrain.*
 {: .image-caption}
@@ -51,14 +51,14 @@ Our four-person team built a Raspberry Pi vehicle combining **adaptive cruise co
 
 A Raspberry Pi 5 reads an ultrasonic sensor, four-channel IR line sensor, and Pi camera, then commands four DC motors through two drivers. A 12 V battery powers the motors; a 5 V regulator supplies the Pi. The single-threaded Python control loop runs at 10 Hz.
 
-![Hardware architecture diagram](/assets/images/projects/aps380/figure-3.png)
+![Hardware architecture diagram](/assets/images/projects/aps380/figure-3.webp)
 
 *Power, sensing, and motor connections.*
 {: .image-caption}
 
 Emergency braking overrides all commands when an obstacle enters the **10 cm safety zone**. Stop-sign handling takes priority next, followed by normal lane keeping and cruise control.
 
-![Control and signal-flow diagram](/assets/images/projects/aps380/figure-4.png)
+![Control and signal-flow diagram](/assets/images/projects/aps380/figure-4.webp)
 
 *Control priorities and signal flow.*
 {: .image-caption}
@@ -69,7 +69,7 @@ The ultrasonic PID controller maintains a **30 cm following gap**. Reducing prop
 
 IR sensor patterns set steering corrections. Sunlight initially confused the array; threshold tuning and physical shrouds improved outdoor reliability.
 
-![Front-mounted camera, ultrasonic sensor, and line sensor](/assets/images/projects/aps380/figure-7.jpg)
+![Front-mounted camera, ultrasonic sensor, and line sensor](/assets/images/projects/aps380/figure-7.webp)
 
 *Front-mounted camera, ultrasonic sensor, and IR array.*
 {: .image-caption}
@@ -82,14 +82,14 @@ I wrote the Raspberry Pi software, focusing on IR-based lane steering and ultras
 
 The vehicle stayed in its lane for **30+ seconds**, followed lead vehicles at **0.1–0.5 m/s**, and reacted in **approximately 100 ms** against a 500 ms requirement. Tests covered indoor and outdoor conditions and independent emergency-braking checks.
 
-![Vehicle completing the taped-track validation course](/assets/images/projects/aps380/figure-5.png)
+![Vehicle completing the taped-track validation course](/assets/images/projects/aps380/figure-5.webp)
 
 *Track tests for lane keeping and following distance.*
 {: .image-caption}
 
 A pre-trained convolutional neural network detects stop signs at **30–60 cm**, triggering a three-second stop. Vision takes 150–200 ms per frame, requiring explicit state management alongside the faster motor-control updates.
 
-![Stop sign identified by the vehicle vision system](/assets/images/projects/aps380/figure-6.png)
+![Stop sign identified by the vehicle vision system](/assets/images/projects/aps380/figure-6.webp)
 
 *Stop-sign detection from the Pi camera.*
 {: .image-caption}

@@ -9,4 +9,7 @@ tools/.reference/
 reference/
 assets/images/projects/aps380/APS380_Group8.mp4
 .impeccable/
+.claude/
 UofT_Logo.svg_-e1418677958967.png
+# Local font-mod reference; do not publish the archive or game-font assets.
+/references/fonts/p4_revival_font1_0_0/

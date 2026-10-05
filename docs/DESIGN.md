@@ -47,6 +47,32 @@ The three interactive demos use `assets/themes/persona/game-start.js` to wait
 for the Start button before loading the shared game modules and focusing their
 keyboard controls. Numeric section labels are removed by the Persona renderer.
 
+### Flowers and hero CRT
+
+Flower artwork uses six water drops with short, flat inward heads aligned at
+one shared center in `templates/persona/flower.mjs`, including the small Contact motif.
+Petals taper to that center without extending past it into a rounded rosette.
+Each drop is scaled around its inward head to be 20% thinner and 8% longer radially.
+The outer end uses a scale-compensated circular arc for the reference's rounded bulb.
+The bulb radius and flat inner-head width are both enlarged by 20% from that baseline.
+Existing fills, rainbow outlines, shadows, placements, sizes and rotation styles are preserved.
+The hero CRT uses 1px scanlines with 1px gaps (twice the line density); project
+media and gameplay retain 2px lines and 2px gaps.
+
+### Project Play stickers
+
+The three playable previews use a vivid-red speech-bubble sticker based on the
+supplied “New” reference, with white outlines and tilted vector “Play” lettering.
+`templates/persona/play-badge.mjs` supplies the shared artwork; `project-cards.css`
+sets its responsive size and focus/hover states. Each sticker links to its game,
+has a project-specific accessible name, and sits above the CRT filter. Article
+previews and the original-design badges are unchanged. Stickers sit in the
+top-right edge, overlapping the preview without clipping its CRT layers. They
+are 20% larger than the initial size (105.6–129.6px), with the original bold
+vector lettering restored. A 36% rightward offset keeps the tail over the
+preview, reduced to 22% on phones to avoid overflow, with a small black shadow below.
+Their color is `--palette-play-red` in `tokens.css`.
+
 ### Shared game television
 
 The approved P4-style cabinet lives in `assets/themes/persona/tv-frame.css` and
@@ -61,14 +87,36 @@ game logic. Laser Puzzle and Donkey Kong remain 320×240 at 4:3; the IMU viewpor
 has a 260px minimum height for its interactive device. Compact readouts use the
 existing Persona Slim Local face. Lower controls retain 44px targets. The IMU's
 Reset moves to the dial; mode, gravity and axis controls remain outside the TV.
-Its small knob controls CRT, not Pause (the sandbox has no pause action).
+Its small white knobs control Pause and CRT, matching Donkey Kong. The sandbox
+Pause freezes the viewport loop, disables pose/mode/gravity inputs, and shows
+an on-screen Resume button. Resuming resets the frame clock, so there is no
+catch-up simulation. Reset also resumes. `imu-pause.js` is shared by the WebGL
+and compatibility renderers; the particle engine and existing shortcuts are unchanged.
+
+At widths of 1000px and above, `.game-entry` places the unchanged intro beside
+the TV. `--tv-stage-width` uses the small viewport height to keep the cabinet,
+shortened antennas, feet and accessible controls within the initial desktop view.
+Narrower layouts keep the intro first and stack naturally without clipping copy.
+For IMU, a compact intro sits above a two-column workspace: TV on the left,
+mode/gravity/rotation panel on the right. Below 1000px, the settings follow the
+TV. The panel keeps an olive background and readable white/yellow text.
+
+Game keyboard hints live in a native `? Controls` disclosure after the TV and
+its inputs (after the IMU settings), not in the fixed HUD. This keeps live
+controls stationary during focus changes. Hints are open by default on all
+three games, wrap without rotation, and never overlay other content.
+`game-controls-help.js` opens them while the game surface has focus and closes
+automatic help when focus leaves; an explicit manual disclosure remains open.
+Both WebGL and fallback IMU surfaces are supported. The fixed game HUD retains
+only Esc/Menu; browser Tab/Enter behavior and all game input handlers are unchanged.
 
 `--tv-knob-offset` moves the small knobs and Reset slightly down the right rail.
 Pause and CRT sit beside each other; below a 650px cabinet width they stack with
 44px targets so the canvas retains its width. Reset remains the bottom gear dial.
 `assets/js/game-crt.js` adds an optional pointer-transparent screen overlay using
 the shared CRT layers. The white CRT toggle stays available before Start, exposes
-`aria-pressed`, and starts off. Edit `CRT_SETTINGS.game` in `assets/js/crt-settings.js`
+`aria-pressed`, and starts on. Shared scanline opacity is 0.30 across hero artwork,
+project media and gameplay; sweep/glow brightness is unchanged. Edit `CRT_SETTINGS.game` in `assets/js/crt-settings.js`
 for game-only overrides or to change the default. Off removes all CRT decoration;
 reduced motion, offscreen screens and hidden tabs stop its animated layers.
 Game state and controls are independent of the filter.

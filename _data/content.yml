@@ -43,6 +43,7 @@ ui:
     menu: "Menu"
     navigate: "Navigate"
     open: "Open"
+    controls: "Controls"
   menu:
     open: "Open navigation"
     close: "Close navigation"
@@ -55,6 +56,9 @@ ui:
   game_start:
     start_game: "Start game"
     start_sandbox: "Start sandbox"
+    pause_sandbox: "Pause sandbox"
+    resume_sandbox: "Resume sandbox"
+    resume: "Resume"
     loading: "Loading…"
     loading_status: "Getting the game ready…"
     retry: "Reload to retry"
@@ -100,7 +104,8 @@ education_section:
   program: "Electrical & Computer Engineering — BASc, PEY Co-op program"
   start_year: "2023"
   graduation: "April 2028 (expected graduation)"
-  description: "Includes PEY and co-op work experience."
+  # Optional line under the dates; leave empty rather than repeat the program.
+  description: ""
   # Optional GPA/honors line: add only if Jacky provides and approves it.
 
 skills_section:
@@ -451,6 +456,7 @@ donkey_kong:
     status: "State"
     barrels: "Barrels"
     collisions: "Restarts"
+    standby: "Ready"
     running: "Running"
     paused: "Paused"
     won: "You Win!!!"

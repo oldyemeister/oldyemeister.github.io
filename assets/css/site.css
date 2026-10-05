@@ -411,7 +411,7 @@ html.reveal-enabled .reveal-item.is-revealed {
 .case-study-prose li::marker { color: var(--accent); font-weight: 760; }
 .case-study-prose blockquote { margin: 40px 0; border-left: 3px solid var(--accent); padding: 4px 0 4px 24px; color: var(--text); font-size: clamp(1.12rem, 2vw, 1.32rem); font-weight: 560; line-height: 1.55; }
 .case-study-prose blockquote p:last-child { margin-bottom: 0; }
-.case-study-prose img { width: 100%; margin: 38px 0 12px; border: 1px solid var(--line-strong); background: var(--surface-muted); }
+.case-study-prose img { width: 100%; height: auto; margin: 38px 0 12px; border: 1px solid var(--line-strong); background: var(--surface-muted); }
 .case-study-prose .case-study-wide-image { position: relative; left: 50%; width: min(1040px, calc(100vw - 56px)); max-width: none; transform: translateX(-50%); }
 .case-study-prose .case-study-wide-image img { margin: 0; }
 .case-study-prose em.image-caption { display: block; margin: -2px 0 36px; color: var(--text-muted); font-size: 0.76rem; font-style: normal; }
