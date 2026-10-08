@@ -133,14 +133,14 @@ body.persona-design .header-calendar-time {
   -webkit-text-stroke: 6px var(--palette-black);
   paint-order: stroke fill;
 }
-/* Badge centred on the band, lower-left of the rings (about 125 degrees). */
+/* Badge on the band, lower-left of the rings (about 120 degrees). */
 body.persona-design .header-calendar-badge {
   position: absolute;
-  top: 102px;
-  right: 52px;
+  top: 97px;
+  right: 37px;
   z-index: 2;
-  width: 54px;
-  height: 54px;
+  width: 64px;
+  height: 64px;
 }
 body.persona-design .header-calendar-rim,
 body.persona-design .header-calendar-glyph {

@@ -597,6 +597,21 @@ html.reveal-enabled .persona-monogram.is-revealed {
   box-shadow: 0 0 60px var(--palette-white, #FFFDF3);
 }
 
+/* The next page then fades in from that black (arrival.js toggles these). */
+html.persona-screen-return body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 1001;
+  background: var(--palette-black, #080808);
+  pointer-events: none;
+  transition: opacity 700ms cubic-bezier(.33, 0, .2, 1);
+}
+
+html.persona-screen-return.persona-screen-fading body::after {
+  opacity: 0;
+}
+
 /* A fixed instruction strip; measured padding keeps the last content reachable. */
 :root {
   --hud-height: 68px;

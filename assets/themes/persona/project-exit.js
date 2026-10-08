@@ -53,7 +53,15 @@
     event.preventDefault();
     event.stopImmediatePropagation();
     (motion.matches ? Promise.resolve() : switchOff())
-      .then(() => { if (back) history.back(); else location.assign(url.href); });
+      .then(() => {
+        // The screen is now black; the next page fades in from black too
+        // (arrival.js) instead of appearing at once.
+        if (!motion.matches) {
+          try { sessionStorage.setItem('persona-screen-return', String(Date.now())); }
+          catch { /* Without storage the next page simply appears. */ }
+        }
+        if (back) history.back(); else location.assign(url.href);
+      });
   }, true);
 
   // Restored from the back/forward cache: clear the switched-off screen.
