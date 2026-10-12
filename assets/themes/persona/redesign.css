@@ -105,10 +105,10 @@ body.persona-design figcaption {
 }
 body.persona-design .case-study-prose .image-caption { text-align: center; }
 body.persona-design :is(.tag-list li, .technology-list li, .case-study-tools li) {
-  background: transparent; color: var(--on-panel); border-radius: 8px;
+  background: transparent; color: var(--on-panel); border-radius: var(--ref-radius);
 }
 body.persona-design :is(.achievement-badge, .collaborator-icon) {
-  background: var(--secondary); color: var(--on-secondary); border-radius: 12px;
+  background: var(--secondary); color: var(--on-secondary); border-radius: var(--ref-radius);
 }
 body.persona-design .achievement-badge::before { background: var(--panel); }
 
@@ -287,7 +287,7 @@ body.persona-design :is(.imu-toolbar, .imu-axis-controls) {
 body.persona-design .imu-axis-controls { border-top: 2px solid var(--border); }
 body.persona-design :is(.arrow-link, .source-link, .case-study-source, .contact-secondary-links a) {
   color: inherit;
-  border-radius: 12px;
+  border-radius: var(--ref-radius);
 }
 body.persona-design .arrow-link {
   background: var(--secondary); color: var(--on-secondary);
@@ -297,7 +297,7 @@ body.persona-design .site-navigation a:is(:hover, :focus-visible),
 body.persona-design .site-navigation a[aria-current] {
   color: var(--on-secondary); background: var(--secondary);
 }
-body.persona-design .site-navigation a::after { border-radius: 12px; }
+body.persona-design .site-navigation a::after { border-radius: var(--ref-radius); }
 body.persona-design button[aria-pressed='true'] {
   background: var(--secondary);
   color: var(--on-secondary);
@@ -325,10 +325,6 @@ body.persona-design button[aria-disabled='true'] {
 body.persona-design .hero-copy h1 { color: var(--palette-yellow); }
 body.persona-design .hero-copy h1 .kinetic-letter { color: inherit; }
 body.persona-design .monogram-dot { color: var(--secondary); }
-body.persona-design :is(.tag-list li, .technology-list li, .case-study-tools li) {
-  background: var(--secondary);
-  color: var(--on-secondary);
-}
 body.persona-design :is(.text-link, .source-link, .case-study-source, .contact-secondary-links a)::after,
 body.persona-design .site-navigation a::after { background: var(--secondary); }
 body.persona-design a:not(.project-demo-link, .hero-links .text-link):is(:hover, :focus-visible) {
@@ -618,4 +614,41 @@ body.persona-design:is(.page-rf-receiver, .page-aps380) .case-study,
 body.persona-design:is(.page-rf-receiver, .page-aps380) .case-study :is(h1, h2, h3, h4, p, a, li, dt, dd, figcaption, span, strong, em, code, th, td) {
   color: var(--palette-black);
   -webkit-text-fill-color: var(--palette-black);
+}
+
+/* Reference-study refinements live outside the legacy @scope: its
+   body-prefixed descendant selectors do not match in current Chromium. Keep
+   the fix limited to the requested chrome and chips, not the whole overlay. */
+body.persona-design :is(.tag-list li, .technology-list li, .case-study-tools li,
+  .achievement-badge, .collaborator-icon, .arrow-link, .source-link,
+  .case-study-source, .contact-secondary-links a),
+body.persona-design .site-navigation a::after {
+  border-radius: var(--ref-radius);
+}
+
+/* Keep the plain case-study tool list and Skills' own marker treatment.
+   :where() keeps the exclusions from increasing the generic rule's specificity. */
+body.persona-design :is(.tag-list li, .technology-list li, .case-study-tools li):not(:where(.case-study-meta li, #skills li)) {
+  position: relative;
+  isolation: isolate;
+  background: transparent;
+  color: var(--on-secondary);
+  font-family: var(--menu-font);
+  text-transform: uppercase;
+  padding: var(--ref-tag-padding-block) var(--ref-tag-padding-inline);
+}
+body.persona-design :is(.tag-list li, .technology-list li, .case-study-tools li):not(:where(.case-study-meta li, #skills li))::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: skewX(var(--ref-skew));
+  background: var(--secondary);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Override the broad homepage body-copy font for these short labels only;
+   project-cards.css still owns their color and underline. */
+body.persona-design #projects .technology-list li {
+  font-family: var(--menu-font);
 }

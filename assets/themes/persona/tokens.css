@@ -36,6 +36,29 @@
   --config-violet: #5A25F5;
   --config-lime: #DFFF00;
 
+  /* Reference study (docs/design-reference.md) — sampled from P4G screenshots. */
+  --ref-band: #232323;          /* Selected row / tab bar. */
+  --ref-tab-idle: #464646;      /* Unselected tab fill. */
+  --ref-row: #FEFF7F;           /* Unselected list row. */
+  --ref-field-deep: #FECA12;    /* Deep end of the yellow field gradient. */
+  --ref-plate-start: #FFAE16;   /* Dialogue name plate, left. */
+  --ref-plate-end: #FF7B02;     /* Dialogue name plate, right. */
+  --ref-dialog-edge: #5E4F30;   /* Dialogue panel edges. */
+  --ref-dialog-glow: #7A6641;   /* Dialogue panel center; lightened from the
+                                   sampled #947D51 only as far as keeps
+                                   #FFFDF3 text at 5.4:1. */
+  --ref-dialog-rim: #F8980F;    /* Dialogue panel right edge. */
+
+  /* Reference geometry (non-color; allowed here because tokens.css is the
+     theme's token file — keep them below the colors). */
+  --ref-skew: -10deg;           /* Lean for capsules and name plates. */
+  --ref-row-height: 46px;       /* List row min-height. */
+  --ref-row-gap: 5px;           /* Gap between stacked rows. */
+  --ref-marker-width: 6px;      /* Lime marker bar on a selected row. */
+  --ref-radius: 0;              /* All non-circular chrome. */
+  --ref-tag-padding-block: .2em;
+  --ref-tag-padding-inline: .8em;
+
   /* Tier 2 — game-panel/HUD component tokens (consumed by redesign.css) */
   --field: var(--palette-yellow);
   --panel: var(--palette-olive);
