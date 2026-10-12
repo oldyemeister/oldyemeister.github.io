@@ -2,6 +2,13 @@
 
 Newest entries first. Each entry: date, from → to, task, status, where to start.
 
+## 2026-10-12 17:44 · Codex
+- Changed: Verified suggestions 1–3 are present; removed the straight underline under the slanted project chips, collapsed the selector to the actual rendered project chips, and documented that their content has no links. Tokens, corner rules and protected section styles are unchanged.
+- Files touched: `assets/themes/persona/redesign.css`, `HANDOFF.md`, `docs/screenshots/2026-10-12-chip-followup-1280.png`, `docs/screenshots/2026-10-12-chip-followup-375.png`.
+- Unfinished / concerns: Suggestions 4–8 remain untouched. Claude's uncommitted cleanup and documentation remain separate from this follow-up. No push. Tests: 127/127 pass; production build succeeds; original CSS bundle remains `66fffa4f89.css`. Final chips checked at 1280px/375px: no horizontal overflow, upright menu-font text, visible keyboard focus and preserved plain case-study tools.
+- Please review: Chip edge alignment and narrow-screen wrapping after the small follow-up.
+- Review of previous entry: Read Claude's full 17:37 handoff and inspected its diff against `71938d1`. The deleted scope is inactive by selector construction; no other functional CSS change is present in its diff. Confirmed `index.html` renders technology chips as plain text and `_data/content.yml` has no anchor markup. Existing section-specific styles remain protected. Compared the removed block against `71938d1` in Chromium at 1280px/375px with scripts/media blocked equally and animations disabled to isolate CSS: project page, 404, original and mobile homepage were pixel-identical; desktop home differed by five antialiasing pixels in decorative hero artwork, with identical geometry. Full-media comparison had asset-loading failures, so this is not a claim of full-media pixel identity. No reason found to restore the inactive block.
+
 ## 2026-10-12 16:08 · Codex
 - Changed:
   - Implemented design-reference suggestions 1–3 only: added the supplied reference tokens plus two chip-padding tokens, squared the four specified chrome rules, and added skewed pseudo-element chip fills with upright uppercase menu-font text.

@@ -626,18 +626,18 @@ body.persona-design .site-navigation a::after {
   border-radius: var(--ref-radius);
 }
 
-/* Keep the plain case-study tool list and Skills' own marker treatment.
-   :where() keeps the exclusions from increasing the generic rule's specificity. */
-body.persona-design :is(.tag-list li, .technology-list li, .case-study-tools li):not(:where(.case-study-meta li, #skills li)) {
+/* Only homepage project technology labels use capsules. index.html renders
+   plain-text <li> values, and content.yml contains no chip links. */
+body.persona-design #projects .technology-list li {
   position: relative;
   isolation: isolate;
   background: transparent;
-  color: var(--on-secondary);
   font-family: var(--menu-font);
   text-transform: uppercase;
   padding: var(--ref-tag-padding-block) var(--ref-tag-padding-inline);
+  border-bottom-style: none;
 }
-body.persona-design :is(.tag-list li, .technology-list li, .case-study-tools li):not(:where(.case-study-meta li, #skills li))::before {
+body.persona-design #projects .technology-list li::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -645,10 +645,4 @@ body.persona-design :is(.tag-list li, .technology-list li, .case-study-tools li)
   background: var(--secondary);
   z-index: -1;
   pointer-events: none;
-}
-
-/* Override the broad homepage body-copy font for these short labels only;
-   project-cards.css still owns their color and underline. */
-body.persona-design #projects .technology-list li {
-  font-family: var(--menu-font);
 }
