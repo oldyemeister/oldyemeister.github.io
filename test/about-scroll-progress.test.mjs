@@ -69,3 +69,10 @@ test('About stripes wait for the ring, finish before the shockwave, and reverse'
   const descending = [.85, .7, .5, .3, .1].map(aboutStripesProgress);
   for (let i = 1; i < descending.length; i++) assert.ok(descending[i] < descending[i - 1]);
 });
+
+test('tall desktop art completes while the bottom is visible, independently of copy', () => {
+  assert.equal(aboutScrollProgress(0, 1800, 1000, true).text, 1);
+  assert.equal(aboutScrollProgress(0, 1800, 1000, true).progress, 0);
+  assert.equal(aboutScrollProgress(-800, 1800, 1000, true).progress, 1);
+  assert.equal(aboutRibbonProgress(600, 1000, 1800), 1);
+});

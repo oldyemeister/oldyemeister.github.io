@@ -67,8 +67,9 @@
   body.persona-design #home .hero-right-light-flower { width: 4cqi; }
   body.persona-design #about {
     padding: 0 0 7rem;
-    min-height: var(--about-section-min-height, 35rem);
+    min-height: max(var(--about-section-min-height, 35rem), min(103.194444vw, 92.875rem));
   }
+  body.persona-design #education { min-height: 66.75rem; }
   body.persona-design #about .about-status-stripes { width: 16cqi; }
   body.persona-design #about .about-corner-ribbons { width: 42cqi; }
   body.persona-design #about > .content-shell .section-body { width: min(58%, 37.5rem); }

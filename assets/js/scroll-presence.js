@@ -234,7 +234,7 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, aboutStripesP
       (viewport * .9 - educationBox.top) / Math.max(1, viewport * .45))) : 1;
     const pictureTop = pictureRow?.getBoundingClientRect().top;
     const decor = aboutBox && educationBox ? educationDecorProgress(educationBox.top, aboutBox.bottom, aboutBox.height, viewport) : null;
-    const reveal = aboutBox ? aboutScrollProgress(aboutBox.top, aboutBox.height, viewport) : null;
+    const reveal = aboutBox ? aboutScrollProgress(aboutBox.top, aboutBox.height, viewport, window.innerWidth >= 900) : null;
     // Read first, then write, so cards don't trigger repeated layout work.
     const active = [...new Set([...near, ...leaving])];
     leaving.clear();

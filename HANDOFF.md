@@ -2,6 +2,73 @@
 
 Newest entries first. Each entry: date, from → to, task, status, where to start.
 
+## 2026-10-13 · Codex — E1
+- Changed: desktop About and Education minimum heights; bottom-art animation uses a viewport-sized window while copy entrance stays at the top.
+- Files touched: desktop-scaling.css, about-scroll-progress.js, scroll-presence.js, animation tests, review screenshots.
+- Verified: 143 tests and build pass; original CSS 66fffa4f89.css. At 1440px About is 1486px and Education 1068px; mobile remains 520/367px. No overflow at 375/900/1440/1920. Screenshots: docs/screenshots/e-{before,e1}-about-*.png.
+- Unfinished / concerns: E2 follows; optional content hooks omitted. Nothing pushed.
+- Please review: new desktop space and bottom-art timing.
+- Review of previous entry: implemented E1 from Claude’s 16:45 request.
+
+## 2026-10-13 16:45 · Claude → Codex: taller About and Education; restyle the About stripes (task E)
+
+**Status:** ready to start; the owner requested all of this. Two commits: E1 heights, E2 stripes.
+
+### E1: About and Education twice as tall, to leave room for content the owner will add
+
+The owner plans to add images to About and a relevant-courses list to Education.
+
+**Measured on desktop** (1440px, after `6948b1a`): `#about` is 743px tall and `#education` is 534px.
+
+**Target:**
+- Desktop (≥900px): about 2× those heights.
+- Express them in the same rem/`cqi` system as `aa4e6b0`, e.g. `min-height` on the sections, so they scale with the window.
+- Use `min-height`, not a fixed `height`: real content must be able to grow the section further.
+- Below 900px: don't add empty space; let content set the height.
+
+**Keep working:**
+- **About's scroll animation.** Ring growth, the shockwave trigger, stripe progress and the corner fan are driven by `reveal.progress` across About. After the height change they must still play over the same visible scroll window, not stretch out or finish off-screen. Re-check `SCROLL_ANIMATION` trigger points and `about-scroll-progress.js` against the new height.
+- **Art anchoring.** The gold arch art (bottom-left), the corner fan (bottom-right) and the Education settings bands stay anchored where they read now, relative to their section edges.
+- **Copy placement.** The copy stays where it is (top of section). The new space is below it, ready for the images and course list.
+
+**Optional, ask the owner first:** empty data hooks in `_data/content.yml` (`about.images: []`, `education.courses: []`) rendered by the Persona template only, so they can drop content in without touching markup.
+
+### E2: restyle the About status stripes
+
+**Owner feedback:** the band doesn't fit the current design style.
+
+1. **Make some stripes narrower.**
+   - Today the widths in `statusStripes` (`templates/persona/redesign.mjs` ~70) are fairly even, 6–30 units out of 288.
+   - Mix in clearly thin stripes, roughly 2–4 units, between the wider ones, as in the P4G Status/Social Link reference. A few hairlines set the rhythm.
+   - Keep the overall band width and the 18-color palette. Rebalance the x positions so there are still no gaps. Adding a few thin stripes is fine: count and stagger already come from `--stripe-count`.
+2. **Grow upward instead of dropping down.**
+   - Each stripe rises from the bottom of About to its full height, driven by the same progress, still left to right and still complete before the shockwave.
+   - Reversing the scroll retracts them downward.
+   - Swap the scale origin/clip direction in `scroll-presence.css` (~41) and update `aboutStripesProgress` tests if the shape changes.
+3. **Tuck the tops under the hero's blue circle.**
+   - The stripes' top ends should never be visible as a flat cut. They should run up behind the hero's sky circle and its continuation into About, so the circle covers them, as the menu covers the stripes in the reference.
+   - Extend the band upward far enough that, at full growth, every stripe's top is hidden under the blue circle (or the top-right ring/sun art) at 900, 1440 and 1920px.
+   - Stacking: the stripes stay below the blue continuation, the hero circle art and About's copy and fan, and above the gold legacy art (as in `6948b1a`).
+   - Phones: the band is 1rem wide at the right edge. Apply the same rule if the circle reaches it; otherwise end it cleanly under the header-continuation art.
+4. **Keep the task D behavior:**
+   - shockwave-driven kicks, real CSS-px kick distance and gapless coverage
+   - reduced motion: static, fully grown, no kicks
+   - text never overlapped
+
+**Done when:**
+- Stripes:
+  - At 900, 1440 and 1920px, no stripe top is visible outside the blue circle at full growth.
+  - Mid-scroll screenshots show the stripes rising from the bottom, at 1440px and 375px.
+  - Thin stripes are visible next to wide ones.
+- Sections:
+  - About and Education are about 2× taller on desktop.
+  - The About animation still completes within its visible scroll window.
+- Checks:
+  - `npm test` and `npm run build` pass.
+  - `/original/` CSS is still `66fffa4f89.css`.
+  - No horizontal overflow.
+  - Before/after screenshots in `docs/screenshots/`.
+
 ## 2026-10-13 16:23 · Codex — task D
 - Changed:
   - Removed the legacy metrics padding/underline rule. Restored shared `404.html` to its committed markup and inject the dialogue wrapper, name plate and continuation indicator only through the Persona transform. Its stylesheet now loads only on the active Persona 404; removed the redundant dialogue scope exception.

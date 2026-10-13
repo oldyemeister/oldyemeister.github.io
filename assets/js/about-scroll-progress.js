@@ -1,9 +1,11 @@
 import { SCROLL_ANIMATION as settings } from './scroll-animation-config.js';
 const vh = (value, viewport) => value * viewport / 100;
-export function aboutScrollProgress(top, height, viewport) {
+export function aboutScrollProgress(top, height, viewport, anchorToBottom = false) {
   const start = viewport - Math.min(height, viewport) * settings.about.circlesStartFraction;
   const progress = Math.max(0, Math.min(1, (start - top) / Math.max(1, vh(settings.about.circlesTravelVh, viewport))));
-  return { progress, text: Math.min(1, progress / settings.about.textCompleteAt) };
+  const artTop = top + (anchorToBottom ? Math.max(0, height - viewport) : 0);
+  const artProgress = Math.max(0, Math.min(1, (start - artTop) / Math.max(1, vh(settings.about.circlesTravelVh, viewport))));
+  return { progress: artProgress, text: Math.min(1, progress / settings.about.textCompleteAt) };
 }
 
 // Inner ring is 840 - 700 = 140 units thick; outer thickness is 1.2 × 140 = 168.
@@ -29,7 +31,7 @@ export function aboutRibbonProgress(bottom, viewport, height) {
 }
 
 function aboutRibbonStart(viewport, height) {
-  const originalStart = height + viewport * .94 - Math.min(height, viewport) * .5;
+  const originalStart = Math.min(height, viewport) + viewport * .94 - Math.min(height, viewport) * .5;
   return (originalStart + viewport * .95) / 2 - vh(settings.about.barsDelayVh, viewport) - settings.about.barsDelayPx;
 }
 
