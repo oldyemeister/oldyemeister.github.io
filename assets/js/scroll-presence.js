@@ -1,4 +1,5 @@
-import { stripeKickGeometry, shockwaveArrivalDelay } from './about-stripe-kick.js';
+import { stripeFanGeometry } from './about-stripe-fan.js';
+import { shockwaveArrivalDelay } from './about-stripe-kick.js';
 import { SCROLL_ANIMATION as settings } from './scroll-animation-config.js';
 import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, aboutStripesProgress, educationDecorProgress } from './about-scroll-progress.js';
 // Scroll-linked presence: reversible, with no timers or hidden-content gate.
@@ -165,10 +166,21 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, aboutStripesP
     const y = box.height * fraction + settings.about.circleCenterOffsetYPx * stageScale;
     if (stripeBox) {
       const widths = stripeRects.map(rect => Number(rect.dataset.stripeWidth));
-      stripeGeometry = stripeKickGeometry(widths, stripeBox.width, settings.stripes.kickPx).map((geometry, index) => {
+      const svg = about.querySelector('.about-status-stripes');
+      const unitScale = stripeBox.width / 288;
+      const height = stripeBox.height / unitScale;
+      const style = getComputedStyle(about);
+      const step = parseFloat(style.getPropertyValue('--hero-corner-angle-step'));
+      const overlap = parseFloat(style.getPropertyValue('--hero-corner-overlap'));
+      svg.setAttribute('viewBox', `0 0 288 ${height}`);
+      svg.querySelector('.about-status-stripe-shade')?.setAttribute('height', height);
+      stripeGeometry = stripeFanGeometry(widths, height, step, settings.stripes.kickPx / unitScale, overlap).map((geometry, index) => {
         const rect = stripeRects[index];
-        const center = stripeBox.left - box.left + (Number(rect.getAttribute('x')) + widths[index] / 2) * stripeBox.width / 288;
+        rect.setAttribute('x', geometry.x);
         rect.setAttribute('width', geometry.width);
+        rect.setAttribute('height', height);
+        rect.parentElement.setAttribute('transform', `rotate(${geometry.angle} ${geometry.right} ${height})`);
+        const center = stripeBox.left - box.left + geometry.center * unitScale;
         return { ...geometry, distance: Math.hypot(center - x, Math.max(0, Math.min(box.height, y)) - y) };
       });
       // Reach the band while the existing wave is still visible (.65 frame).

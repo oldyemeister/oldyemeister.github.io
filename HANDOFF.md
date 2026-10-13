@@ -2,6 +2,93 @@
 
 Newest entries first. Each entry: date, from → to, task, status, where to start.
 
+## 2026-10-13 17:40 · Codex — F
+- Changed: replaced E2 hairlines with the owner's corner-fan palette, cream/saturated alternation and broader bands. Reused the .4-degree step around a vertical base with bottom pivots. Uniform SVG coordinates preserve physical angles; height-aware overlaps close seams and compensate kicks to keep their horizontal travel at 8 CSS px. The band remains clipped to its desktop/1rem phone footprint, behind the blue continuation.
+- Files touched: templates/persona/redesign.mjs, assets/js/{about-stripe-fan,scroll-presence}.js, assets/themes/persona/hero-poster.css, test/about-stripe-fan.test.mjs, docs/screenshots/{e-f-about,f-seam,f-mid}-*.png, HANDOFF.md.
+- Verified: 145 tests and build pass. No overflow at 375/900/1440/1920; original CSS remains 66fffa4f89.css. Full, seam and mid-growth screenshots saved. Tests sample overlap along the full height and verify projected kick distance for phone and desktop scaling.
+- Unfinished / concerns: owner visual review pending; G follows separately. Nothing pushed.
+- Please review: cream/saturated rhythm and fan angles beside the corner artwork.
+- Review of previous entry: E2's hairline styling intentionally replaced per the new owner feedback in Claude's 17:30 handoff.
+
+## 2026-10-13 17:30 · Claude → Codex: redo the About stripes in the owner's fan style (task F); bigger game TVs and lighter game CRT (task G)
+
+**Status:** ready to start; the owner requested both. Separate commits for F and G.
+
+### F: About status stripes, take 3. Match the owner's own bar design
+
+**Owner feedback on `9356078`:** the bars are not pretty enough. Look at the owner's design for colored bars, especially **the widths and the slight angle between each bar**.
+
+**The reference is the owner's corner fan in the same section:**
+- Markup: `svg.about-corner-ribbons` in `index.html` (~85–113).
+- Rotation: `hero-poster.css` (~310 and ~346), `--hero-corner-angle: 30deg` and `--hero-corner-angle-step: .4deg`.
+- Each band is rotated by `base + index × 0.4°`, so neighbors diverge very slightly and the set fans out instead of running parallel.
+- Widths (SVG `height`) mostly sit in a narrow 12.5–18 range, with a few wider accents (23.7, 24.8, 29.3). The rhythm comes from alternating a light cream band (#FFFFEB, #FFFCE0, #FFFAC1, #FFFDE0) with a saturated one, not from hairlines.
+- The comment there notes 8-unit overlaps that close the seams between neighbors.
+
+**What to do:**
+1. **Widths:** replace the current hairline-plus-wide mix with the fan's width vocabulary. Most bars 12.5–18 units, a few 23–30 accents, cream separators between saturated bars. Keep the band's overall footprint, the 1rem phone width and no gaps.
+2. **Angle:** give each vertical bar its own small rotation that steps by the same `--hero-corner-angle-step` (0.4°) per index around a near-vertical base. The band should fan slightly, like the corner fan turned upright.
+   - Pivot each bar at its bottom, where it grows from. The divergence then opens toward the top, where the bars disappear under the blue circle.
+   - Reuse the existing custom properties rather than new magic numbers.
+   - Use overlaps like the fan's so rotation never opens slivers of background.
+3. **Colors:** keep the stripe palette, or move toward the fan's palette if that reads more coherent next to it. Use your judgment and show both in screenshots if unsure.
+4. **Keep from E2 and D:**
+   - grows upward from a fixed bottom
+   - tops hidden under the hero's blue circle at 900, 1440 and 1920px
+   - stacking order
+   - shockwave kick at real CSS-px distance, gapless during the kick
+   - reduced motion: static, fully grown
+   - no text overlap
+
+**Done when:**
+- Side by side with the corner fan, at 1440px, the stripes read as the same family: similar widths, cream/saturated alternation and the visible 0.4° stepping.
+- Screenshots at 1440px (full and mid-growth) and 375px.
+- Tests and build pass, `/original/` CSS is still `66fffa4f89.css`, and there is no horizontal overflow.
+
+### G: larger TVs on the three playable game pages, and a lighter CRT overlay
+
+**Owner feedback:** in wide-screen windows the TVs look too small, which makes gameplay hard to see. The CRT effect should be turned down a little so the game graphics read better.
+
+**Measured at 1920×1080:**
+
+| Page | TV cabinet | Game screen |
+|---|---|---|
+| `/projects/laser/` | 844×529 | 633×475 canvas, native 320×240 (about 1.98×) |
+| `/projects/donkey-kong/` | same as laser | same as laser |
+| `/projects/imu-sandbox/` | 781×490, left column | — |
+
+- The whole TV, from antenna top (y≈131) to leg bottom (y≈839), uses about 708px of a 1080px viewport, and about 44% of the width.
+- The title/intro column on the left takes about 420px. The rest is empty yellow.
+
+**TV size:**
+- Size the TV from the space available, not a fixed column.
+  - At ≥1280px wide, the full TV (antennas through legs, plus the leg buttons) fills the height between the sticky header and the key-hint HUD, limited by roughly 60–65% of the viewport width.
+  - That works out to about 1.3× today at 1920×1080, and more at 2560×1440.
+  - Narrow the intro column or move it above the TV if needed, but keep the title and intro visible on first load.
+  - Express the sizing in the `aa4e6b0` system (`rem`/container units, `svh` for height).
+- Pixel art (laser, donkey-kong): when the screen is big enough, snap the canvas display size to an integer multiple of 320×240 (2×, 3×), with `image-rendering: pixelated`, so the pixels stay crisp. Fall back to fluid sizing when there isn't room. Check that pointer and keyboard input mapping still works after resizing.
+- Scale the TV hardware (grille, dial, pause/CRT knobs, status bar) with the cabinet, so proportions stay as they are now.
+- Below 900px, keep the current mobile layout.
+
+**CRT:**
+- Change only the `game:` override block in `assets/js/crt-settings.js`. The hero and project previews keep the shared values.
+- Suggested starting point (the owner asked for "a little" less, so stay close):
+  - `scanlineOpacity` 0.30 → about 0.18
+  - `noiseOpacity` 0.2 → about 0.08
+  - `flickerIntensity` 0.05 → about 0.02
+  - `edgeGlowSize` 40 → about 24
+  - `curvatureIntensity` 0.6 → about 0.4
+  - Sweep unchanged.
+- Check that the overrides actually reach `configureScreen`/`appendCrtLayers` through `gameSettings` (`game-crt.js:25`).
+- Keep the CRT knob toggle and `defaultEnabled: true`.
+
+**Done when:**
+- Screenshots of all three game pages at 1440×900, 1920×1080 and 2560×1440: before and after, with CRT on.
+- One crop at 100% zoom showing the game graphics with the old and new CRT.
+- At each size, the TV, legs and leg buttons fit in the viewport without scrolling, and nothing overlaps the header or HUD.
+- Games playable with keyboard and pointer after resizing.
+- Tests and build pass, and `/original/` is unchanged.
+
 ## 2026-10-13 17:12 · Codex — E2
 - Changed: retained all 18 stripe colors and the 288-unit band, mixing 2–4-unit hairlines with wider stripes. Stripes now grow upward from a fixed bottom edge. Their completed tops extend into a narrow clipped corridor under the aligned blue continuation; kick overscan remains clipped at the right edge.
 - Files touched: templates/persona/redesign.mjs, assets/themes/persona/{hero-poster,scroll-presence}.css, assets/js/{scroll-presence,about-scroll-progress}.js, HANDOFF.md, docs/screenshots/e-e2-*.png.

@@ -206,6 +206,9 @@ body.persona-design #home .hero-links .text-link-primary:is(:hover, :focus-visib
 
 /* The previous hero's two sweeping gold circles now frame About. */
 body.persona-design #about {
+  --hero-corner-angle: 30deg;
+  --hero-corner-angle-step: .4deg;
+  --hero-corner-overlap: 8;
   position: relative;
   isolation: isolate;
   overflow: visible;
@@ -307,8 +310,7 @@ body.persona-design #about > .content-shell { position: relative; z-index: 2; }
 
 /* Original rainbow corner artwork, moved with the previous hero background to About. */
 body.persona-design #about .about-corner-ribbons {
-  --hero-corner-angle: 30deg;
-  --hero-corner-angle-step: .4deg;
+
   position: absolute;
   right: 0;
   bottom: 0;
@@ -332,7 +334,7 @@ body.persona-design #about .about-status-stripes {
   top: calc(-1 * var(--about-stripe-rise, 0px));
   right: 0;
   z-index: 1;
-  overflow: visible;
+  overflow: hidden;
   width: clamp(6rem, 16vw, 15rem);
   height: calc(100% + var(--about-stripe-rise, 0px));
   pointer-events: none;

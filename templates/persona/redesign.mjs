@@ -67,27 +67,21 @@ export function redesignContent(html, projectData = {}) {
   // P4G Status-screen stripes down About's right edge, sampled left to right
   // as [x, width, fill] in a 288-unit band (docs/design-reference.md, item 9).
   // Inserted before the corner fan so the fan paints over them.
-  const statusStripes = [
-    [0, 22, '#FFF224'],
-    [22, 3, '#EDE28D'],
-    [25, 21, '#FFA50C'],
-    [46, 32, '#C0F527'],
-    [78, 4, '#8F7309'],
-    [82, 24, '#D6E9EC'],
-    [106, 3, '#F30000'],
-    [109, 29, '#51C633'],
-    [138, 23, '#FFDE04'],
-    [161, 4, '#976D01'],
-    [165, 35, '#FFF46F'],
-    [200, 3, '#726AFF'],
-    [203, 15, '#75B6F6'],
-    [218, 3, '#80012A'],
-    [221, 2, '#C0C5FF'],
-    [223, 3, '#F4F2F3'],
-    [226, 27, '#DF0B48'],
-    [253, 35, '#F4FF6D']
-  ].map(([x, width, fill], index, stripes) =>
-    `<rect style="--stripe: ${index}; --stripe-count: ${stripes.length}" data-stripe-width="${width}" x="${x}" y="0" width="${width}" height="100" fill="${fill}"/>`).join('');
+  const stripePalette = [
+    [12.5, '#FFFFEB'], [18, '#BEE617'], [12.5, '#FFFCE0'], [23.7, '#20C9D3'],
+    [14, '#FFFAC1'], [18, '#FFD229'], [12.5, '#FFFDE0'], [24.8, '#009B3A'],
+    [12.5, '#FFFFEB'], [18, '#E1FF00'], [14, '#FFFCE0'], [29.3, '#FF6500'],
+    [12.5, '#FFFAC1'], [18, '#FFAD08'], [12.5, '#FFFDE0'], [18, '#F4D51C'],
+    [12.5, '#FFFFEB'], [14.7, '#A31C08']
+  ];
+  const stripeTotal = stripePalette.reduce((sum, [width]) => sum + width, 0);
+  let stripeX = 0;
+  const statusStripes = stripePalette.map(([weight, fill], index, stripes) => {
+    const width = weight * 288 / stripeTotal;
+    const x = stripeX;
+    stripeX += width;
+    return `<g class="about-status-stripe-angle"><rect style="--stripe: ${index}; --stripe-count: ${stripes.length}" data-stripe-width="${width}" x="${x}" y="0" width="${width}" height="100" fill="${fill}"/></g>`;
+  }).join('');
   html = replaceRequired(html, '<svg class="about-corner-ribbons"',
     `<svg class="about-status-stripes" viewBox="0 0 288 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
     <defs><linearGradient id="about-status-stripe-shade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".1"/></linearGradient></defs>
