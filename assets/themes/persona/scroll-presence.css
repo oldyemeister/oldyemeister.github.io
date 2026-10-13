@@ -36,18 +36,31 @@ body.persona-design.page-home #about[data-about-scroll] > .about-corner-ribbons 
     calc((1 - var(--about-ribbon-progress, 1)) * 55%)
   );
 }
+/* Right-edge stripes drop from the top, left stripe first; the last one lags
+   by --about-stripes-stagger. Scrolling back retracts them in reverse. */
+body.persona-design.page-home #about[data-about-scroll] .about-status-stripe-bands rect {
+  transform-box: fill-box;
+  transform-origin: right top;
+  scale: 1 clamp(0, calc(var(--about-stripes-progress, 1) * (1 + var(--about-stripes-stagger, .4))
+    - var(--stripe) / max(1, var(--stripe-count) - 1) * var(--about-stripes-stagger, .4)), 1);
+}
+body.persona-design.page-home #about[data-about-scroll] .about-status-stripe-shade {
+  opacity: var(--about-stripes-progress, 1);
+}
 /* Do not multiply About's new reveal by the earlier one-shot item reveal. */
 body.persona-design.page-home #about .reveal-item {
   opacity: 1;
   transform: none;
   transition: none;
 }
-html.about-scroll-pending body.persona-design #about > :is(.about-legacy-art, .about-corner-ribbons) { opacity: 0; }
+html.about-scroll-pending body.persona-design #about > :is(.about-legacy-art, .about-corner-ribbons, .about-status-stripes) { opacity: 0; }
 body.persona-design.page-home #about[data-about-scroll] > .content-shell > :focus-within { opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
-  body.persona-design.page-home #about > :is(.about-legacy-art, .content-shell, .about-corner-ribbons) { opacity: 1 !important; }
+  body.persona-design.page-home #about > :is(.about-legacy-art, .content-shell, .about-corner-ribbons, .about-status-stripes) { opacity: 1 !important; }
   body.persona-design.page-home #about .about-growing-rings { transform: none !important; }
   body.persona-design.page-home #about > .about-corner-ribbons { transform: none !important; }
+  body.persona-design.page-home #about .about-status-stripe-bands rect { scale: none !important; }
+  body.persona-design.page-home #about .about-status-stripe-shade { opacity: 1 !important; }
   body.persona-design.page-home #about[data-about-scroll] > .content-shell > .section-body { transform: none; }
   body.persona-design.page-home #about[data-about-scroll] h2::after { transform: skewX(-16deg); }
 }
@@ -103,3 +116,7 @@ body.persona-design #about[data-about-scroll] .about-picture-frame:nth-child(2) 
 @media (prefers-reduced-motion: reduce) {
   body.persona-design #about .about-picture-frame { transform: none !important; opacity: 1 !important; }
 }
+
+/* Ring/shockwave < stripe band < reading content and corner fan. */
+body.persona-design #about .about-legacy-art { z-index: 0; }
+body.persona-design #about > :is(.content-shell, .about-corner-ribbons, .hero-about-art) { z-index: 2; }

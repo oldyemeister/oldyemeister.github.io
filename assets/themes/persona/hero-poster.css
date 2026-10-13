@@ -323,6 +323,23 @@ body.persona-design #about .about-corner-ribbon-bands {
   body.persona-design #about .about-corner-ribbons { width: min(32%, 11.25rem); }
 }
 
+/* P4G stripes paint above the rings, below copy and the corner fan.
+   The final stripe overscans to the right; About clips the excess. */
+body.persona-design #about .about-status-stripes {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  overflow: visible;
+  width: clamp(6rem, 16vw, 15rem);
+  height: 100%;
+  pointer-events: none;
+  user-select: none;
+}
+@media (max-width: 899px) {
+  body.persona-design #about .about-status-stripes { width: 1rem; }
+}
+
 /* Individual angles: 27.6°–37.6° (outer bands extend below the 30° base). About clips the extended bands at its edges. */
 body.persona-design #about .about-corner-ribbon-bands rect {
   transform: rotate(calc(-1 * (var(--hero-corner-angle) + var(--stripe-index) * var(--hero-corner-angle-step))));

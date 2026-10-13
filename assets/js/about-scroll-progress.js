@@ -14,6 +14,13 @@ export function aboutOuterRing(progress) {
   return { width, radius: 864 + width / 2 };
 }
 
+// Right-edge stripes drop in while the ring grows, finishing before the shockwave.
+export function aboutStripesProgress(progress) {
+  const { startAt, completeAt } = settings.stripes;
+  const p = Math.max(0, Math.min(1, (progress - startAt) / Math.max(.0001, completeAt - startAt)));
+  return 1 - (1 - p) ** 3;
+}
+
 // The settings file controls entrance offsets and scroll travel.
 export function aboutRibbonProgress(bottom, viewport, height) {
   const start = aboutRibbonStart(viewport, height);

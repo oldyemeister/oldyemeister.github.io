@@ -1,5 +1,6 @@
+import { stripeKickGeometry, shockwaveArrivalDelay } from './about-stripe-kick.js';
 import { SCROLL_ANIMATION as settings } from './scroll-animation-config.js';
-import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, educationDecorProgress } from './about-scroll-progress.js';
+import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, aboutStripesProgress, educationDecorProgress } from './about-scroll-progress.js';
 // Scroll-linked presence: reversible, with no timers or hidden-content gate.
 (() => {
   if (!document.body.matches('.persona-design.page-home')) return;
@@ -117,6 +118,10 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, educationDeco
   const rings = about?.querySelector('.about-growing-rings');
   const outerRing = about?.querySelector('.about-outer-ring');
   const shockwave = about?.querySelector('.about-shockwave');
+  const stripeRects = [...(about?.querySelectorAll('.about-status-stripe-bands rect') || [])];
+  about?.style.setProperty('--about-stripes-stagger', settings.stripes.stagger);
+  // The gold rings' center in About coordinates; the shockwave starts here.
+  let stripeGeometry = [];
   const education = document.querySelector('#education');
   const aboutHeightFloor = () => window.innerWidth < 900
     ? { px: 520, vh: 0 }
@@ -124,6 +129,8 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, educationDeco
   const alignGoldCircles = () => {
     if (!about) return;
     const box = about.getBoundingClientRect();
+    // Read the band once before this geometry pass writes any layout.
+    const stripeBox = about.querySelector('.about-status-stripes')?.getBoundingClientRect();
     const goldArt = about.querySelector('.about-legacy-art');
     const stageScale = desktopStageScale();
     const scale = (window.innerWidth >= 900 ? stageScale : Math.max(.45, Math.min(box.width / 1440, 1.1))) * settings.about.goldArtworkScale;
@@ -139,6 +146,21 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, educationDeco
     const heightRule = `max(${floor.px}px, ${floor.vh}svh, ${clearHeight}px)`;
     about.style.setProperty('--about-section-min-height', heightRule);
     const y = box.height * fraction + settings.about.circleCenterOffsetYPx * stageScale;
+    if (stripeBox) {
+      const widths = stripeRects.map(rect => Number(rect.dataset.stripeWidth));
+      stripeGeometry = stripeKickGeometry(widths, stripeBox.width, settings.stripes.kickPx).map((geometry, index) => {
+        const rect = stripeRects[index];
+        const center = stripeBox.left - box.left + (Number(rect.getAttribute('x')) + widths[index] / 2) * stripeBox.width / 288;
+        rect.setAttribute('width', geometry.width);
+        return { ...geometry, distance: Math.hypot(center - x, Math.max(0, Math.min(box.height, y)) - y) };
+      });
+      // Reach the band while the existing wave is still visible (.65 frame).
+      const waveRadius = Math.max(1, ...stripeGeometry.map(g => g.distance)) / .65;
+      shockwave?.setAttribute('r', waveRadius / scale);
+      stripeGeometry.forEach(geometry => {
+        geometry.delay = shockwaveArrivalDelay(geometry.distance, waveRadius, settings.shockwave.durationMs);
+      });
+    }
     goldArt.style.width = `${1440 * scale}px`;
     goldArt.style.left = `${x - 950 * scale}px`;
     goldArt.style.top = `${y + 180 * scale}px`;
@@ -188,6 +210,18 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, educationDeco
   }
 
   let shockAnimation;
+  let stripeKicks = [];
+  // Each stripe kicks sideways as the shockwave reaches it: nearest first.
+  const kickStripes = () => {
+    stripeKicks.forEach(animation => animation.cancel());
+    // All geometry is cached by alignGoldCircles; no layout reads after the
+    // scroll update has written the ring attributes.
+    stripeKicks = stripeGeometry.map(({ scaleX, delay }, index) => stripeRects[index].animate([
+      { transform: 'scaleX(1)', filter: 'brightness(1)' },
+      { transform: `scaleX(${scaleX})`, filter: 'brightness(1.25)', offset: .35 },
+      { transform: 'scaleX(1)', filter: 'brightness(1)' }
+    ], { duration: settings.stripes.kickMs, delay, easing: 'cubic-bezier(.22,.7,.36,1)' }));
+  };
   let shockArmed = false;
   let frame = 0;
   function update() {
@@ -233,6 +267,7 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, educationDeco
             { transform: 'scale(.65)', opacity: settings.shockwave.peakOpacity * (4 / 7), offset: .55 },
             { transform: 'scale(1)', opacity: 0, offset: 1 }
           ], { duration: settings.shockwave.durationMs, easing: 'cubic-bezier(.22,.7,.36,1)' });
+          if (stripeRects[0]?.animate) kickStripes();
         }
       }
       pictureFrames.forEach((picture, index) => {
@@ -242,6 +277,7 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, educationDeco
       });
       write(about, 'data-about-scroll', '');
       write(about, '--about-copy-progress', reveal.text.toFixed(4));
+      write(about, '--about-stripes-progress', aboutStripesProgress(reveal.progress).toFixed(4));
       write(about, '--about-ribbon-progress', aboutRibbonProgress(aboutBox.bottom, viewport, aboutBox.height).toFixed(4));
       write(rings, 'transform', `translate(950 -180) scale(${reveal.progress}) translate(-950 180)`);
     }
@@ -269,6 +305,8 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, educationDeco
     targets.forEach(element => leaving.add(element));
     if (reducedMotion.matches) {
       shockAnimation?.cancel();
+      stripeKicks.forEach(animation => animation.cancel());
+      stripeKicks = [];
       shockArmed = false;
       outerRing?.setAttribute('r', '948');
       outerRing?.setAttribute('stroke-width', '168');
@@ -282,6 +320,7 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, educationDeco
         delete about.dataset.aboutScroll;
         about.style.removeProperty('--about-copy-progress');
         about.style.removeProperty('--about-ribbon-progress');
+        about.style.removeProperty('--about-stripes-progress');
         rings?.removeAttribute('transform');
       }
       targets.forEach(element => {

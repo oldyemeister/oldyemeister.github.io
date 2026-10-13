@@ -3,6 +3,15 @@ import { playBadge } from './play-badge.mjs';
 import { replaceRequired } from './anchors.mjs';
 // Small semantic additions for the optional redesign; original pages stay intact.
 export function redesignContent(html, projectData = {}) {
+  // Shared 404 source remains pristine for /original/ and rollback.
+  if (html.includes('class="page-section error-section"')) {
+    html = replaceRequired(html, /(<section class="page-section error-section">\s*<div class="content-shell">)([\s\S]*?)(<\/div>\s*<\/section>)/,
+      (_, opening, content, closing) => opening + replaceRequired(content,
+        '<p class="eyebrow">404</p>',
+        '<div class="dialogue-box"><p class="eyebrow dialogue-name">404</p><div class="dialogue-panel">',
+        'the 404 name plate') + '<span class="dialogue-continue" aria-hidden="true"></span></div></div>' + closing,
+      'the 404 content shell');
+  }
   // Persona-only decorative short names; the real case-study h1 stays intact.
   const pageClass = html.match(/<body class="page-([^" ]+)"/)?.[1];
   const shortTitle = { 'rf-receiver': 'RF Receiver', aps380: 'ACC' }[pageClass];
@@ -55,6 +64,24 @@ export function redesignContent(html, projectData = {}) {
     .replace('about-corner-ribbon-bands', 'project-corner-ribbon-bands');
   html = replaceRequired(html, /<section[^>]*id="projects"[^>]*>/,
     opening => `${opening}\n  ${projectRibbons}`, 'the #projects section');
+  // P4G Status-screen stripes down About's right edge, sampled left to right
+  // as [x, width, fill] in a 288-unit band (docs/design-reference.md, item 9).
+  // Inserted before the corner fan so the fan paints over them.
+  const statusStripes = [
+    [0, 14, '#FFF224'], [14, 18, '#EDE28D'], [32, 12, '#FFA50C'], [44, 24, '#C0F527'],
+    [68, 14, '#8F7309'], [82, 18, '#D6E9EC'], [100, 10, '#F30000'], [110, 20, '#51C633'],
+    [130, 14, '#FFDE04'], [144, 19, '#976D01'], [163, 25, '#FFF46F'], [188, 8, '#726AFF'],
+    [196, 8, '#75B6F6'], [204, 10, '#80012A'], [214, 6, '#C0C5FF'], [220, 11, '#F4F2F3'],
+    [231, 27, '#DF0B48'], [258, 30, '#F4FF6D']
+  ].map(([x, width, fill], index, stripes) =>
+    `<rect style="--stripe: ${index}; --stripe-count: ${stripes.length}" data-stripe-width="${width}" x="${x}" y="0" width="${width}" height="100" fill="${fill}"/>`).join('');
+  html = replaceRequired(html, '<svg class="about-corner-ribbons"',
+    `<svg class="about-status-stripes" viewBox="0 0 288 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    <defs><linearGradient id="about-status-stripe-shade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".1"/></linearGradient></defs>
+    <g class="about-status-stripe-bands">${statusStripes}</g>
+    <rect class="about-status-stripe-shade" width="288" height="100" fill="url(#about-status-stripe-shade)"/>
+  </svg>
+  <svg class="about-corner-ribbons"`, 'the About corner ribbons');
   // Shared settings-reference edge bands in Education and Contact.
   const settingsBands = [
     ['config-orange', 5], ['config-silver', 6], ['palette-yellow', 4],

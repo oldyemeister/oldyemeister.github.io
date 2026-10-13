@@ -41,6 +41,13 @@ export const SCROLL_ANIMATION = {
     pillsDelayVh: 8, // Pills follow Education bars by this much scrolling.
     pillsTravelVh: 30,
   },
+  stripes: {
+    startAt: .1, // Ring growth (0–1) at which the first right-edge stripe starts dropping in.
+    completeAt: .85, // Ring growth at which the last stripe is complete; keep below shockwave.triggerAt.
+    stagger: .4, // How far the last stripe lags the first; 0 = all together.
+    kickPx: 8, // Sideways kick when the shockwave reaches a stripe.
+    kickMs: 280, // Duration of each stripe's kick (time-based, like the shockwave).
+  },
   shockwave: {
     triggerAt: 1, // Circle expansion: 0 = starting, 1 = fully expanded.
     rearmGap: .05, // Scroll back this far before the pulse can replay.

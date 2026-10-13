@@ -41,7 +41,7 @@ export function personaPreview(html, prefix = '/persona', redesign = true, ui, p
     .replace(/href="(\/[^"#?]*)([^" ]*)"/g, (match, path, suffix) =>
       path === '/' || path.startsWith('/projects/') || path === '/404.html'
         ? `href="${prefix}${path}${suffix}"` : match);
-  html = replaceRequired(html, '</head>', () => `${headAssets(home, redesign, Boolean(guide))}\n    </head>`, '</head>');
+  html = replaceRequired(html, '</head>', () => `${headAssets(home, redesign, Boolean(guide), html.includes('class="page-section error-section"'))}\n    </head>`, '</head>');
   html = replaceRequired(html, /<body class="([^"]*)">/, (_, classes) => `<body class="${classes} persona-design${guide ? ' persona-tv-screen' : ''}" data-persona-base="${prefix}/">
       <div class="page-wipe" aria-hidden="true"><i></i><i></i><i></i></div>`, 'the <body> tag');
   return replaceRequired(html, '</body>', () => `${guide ? '<script src="/assets/themes/persona/tv-frame.js" defer></script><script type="module" src="/assets/js/game-controls-help.js"></script><script type="module" src="/assets/js/game-crt.js"></script>' : ''}${hud(home, gameKeys, ui.hud)}\n    </body>`, '</body>');
@@ -49,7 +49,7 @@ export function personaPreview(html, prefix = '/persona', redesign = true, ui, p
 
 // Stylesheets and scripts for the Persona layer, in cascade order. Sheets that
 // only style homepage sections load on the homepage only.
-function headAssets(home, redesign, game) {
+function headAssets(home, redesign, game, errorPage) {
   const homeSheet = (name, when = true) => home && when ? `<link rel="stylesheet" href="/assets/themes/persona/${name}.css">` : '';
   return `
       <link rel="stylesheet" href="/assets/themes/persona/style.css">
@@ -66,6 +66,7 @@ function headAssets(home, redesign, game) {
       ${homeSheet('hero-poster')}
       ${homeSheet('hero-ambient')}
       <link rel="stylesheet" href="/assets/themes/persona/content-typography.css">
+      ${redesign && errorPage ? '<link rel="stylesheet" href="/assets/themes/persona/dialogue-box.css">' : ''}
       ${!home && redesign ? '<link rel="stylesheet" href="/assets/themes/persona/project-pages.css">' : ''}
       ${game ? '<link rel="stylesheet" href="/assets/themes/persona/tv-frame.css">' : ''}
       ${homeSheet('section-backgrounds', redesign)}

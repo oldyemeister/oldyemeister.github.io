@@ -176,3 +176,12 @@ test('the Projects rainbow is copied from About, not duplicated in the source', 
   const result = personaPreview(page, '', true, ui);
   assert.match(result, /<section class="page-section" id="projects">\s*<svg class="project-corner-ribbons">/);
 });
+
+test('About gains the 18 P4G status stripes, painted beneath the corner fan', () => {
+  const result = personaPreview(page, '', true, ui);
+  const stripes = result.match(/<svg class="about-status-stripes"[\s\S]*?<\/svg>/)?.[0];
+  assert.ok(stripes, 'expected svg.about-status-stripes');
+  assert.equal(stripes.match(/<rect style="--stripe: \d+; --stripe-count: 18"/g).length, 18);
+  assert.ok(result.indexOf('about-status-stripes') < result.indexOf('<svg class="about-corner-ribbons"'));
+  assert.doesNotMatch(result.match(/<svg class="project-corner-ribbons"[\s\S]*?<\/svg>/)[0], /about-status-stripes/);
+});

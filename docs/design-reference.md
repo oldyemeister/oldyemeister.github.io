@@ -367,7 +367,7 @@ Serve the build with `python3 -m http.server 8000 --directory _site`.
    **Layout** goes in `assets/themes/persona/hero-poster.css`, next to the `.about-corner-ribbons` rules:
    - The SVG is `position: absolute; top: 0; right: 0; height: 100%; width: clamp(96px, 16vw, 240px); pointer-events: none`.
    - Its z-index sits between the arch art and `.content-shell` (which has `z-index: 2`), and below the fan.
-   - Phones (`max-width: 760px`): `width: 16px`, so the strip stays inside the 20px side gutter and never sits behind the full-width copy.
+   - Compact screens (`max-width: 899px`): `width: 1rem`, so the strip stays inside the 20px side gutter and never sits behind the full-width copy.
    - Other right-edge elements:
      - About's decorative motifs (`.section-motif--ring` at `right: 2%; top: 52px` and the `--star` motif, both in `section-backgrounds.css`) must still render **on top of** the stripes. Raise their z-index if needed, and don't move them.
      - The blue hero-art continuation (`.hero-about-art`) keeps its current stacking. Check the top-right corner where it meets the stripes; it should cover them, not the reverse.
@@ -393,17 +393,17 @@ Serve the build with `python3 -m http.server 8000 --directory _site`.
      | `kickMs` | `280` | Duration of each kick |
    - In `update()`, write `--about-stripes-progress` on `#about` through the existing `write()` cache.
    - CSS: each rect drops from the top edge, with `transform-box: fill-box; transform-origin: top`.
-     - It scales on Y: `scale: 1 clamp(0, (var(--about-stripes-progress) * (1 + S) - var(--stripe) / 17 * S) / 1, 1)`. Here `S` is the stagger, passed in as a custom property from JS. Equivalent math is fine; the result must be that stripe 0 leads and stripe 17 finishes last.
+     - It scales on Y: `scale: 1 clamp(0, (var(--about-stripes-progress) * (1 + S) - var(--stripe) / max(1, var(--stripe-count) - 1) * S) / 1, 1)`. Here `S` is the stagger, passed in as a custom property from JS. Equivalent math is fine; the result must be that stripe 0 leads and stripe 17 finishes last.
      - Scroll back and the stripes retract in reverse.
 
    **Animation 2: the shockwave reaches the stripes.** This is time-based, tied to the existing pulse.
    - At the same place `shockwave.animate(...)` is called, start one Web Animation per stripe rect:
-     - keyframes: `translate: 0` → `translate: -${kickPx}px 0` (offset .35) → `0`
+     - keyframes: right-anchored `scaleX(1)` → left-edge expansion of `kickPx` CSS pixels (offset .35) → `scaleX(1)`. Convert SVG units from its measured width and overscan the final stripe to the right, so staggered kicks never open gaps.
      - with `filter: brightness(1.25)` at the peak
      - `duration: kickMs`
    - Each stripe's `delay` is proportional to its on-screen distance from the shockwave center. That center is the gold-ring center, computed in `alignGoldCircles()`: `x = box.width * circleCenterXPercent/100 + offsetX`, `y = box.height * circleCenterYPercent/100 + offsetY`.
-     - Use `delay = (distance / maxDistance) * shockwave.durationMs * .8`.
-     - Read each rect's `getBoundingClientRect()` once per pulse, never per frame.
+     - Fit the wave radius to reach the farthest stripe at its visible .65-scale keyframe. Derive each delay by inverting the existing scale keyframes and easing, so the kick starts when the wave arrives.
+     - Cache band geometry and stripe centres in `alignGoldCircles()` before layout writes; read no layout inside the kick routine.
    - Cancel any running kick animations before starting new ones, the same way `shockAnimation?.cancel()` does. Also cancel them in `preferenceChanged()` when reduced motion turns on.
 
    **Reduced motion:** stripes fully drawn, with no drop-in and no kick. Add the rects to the existing `@media (prefers-reduced-motion: reduce)` block in `scroll-presence.css` (`scale: none`), and in JS skip the kick when `reducedMotion.matches`. Before JS runs, the stripes stay hidden under the existing `html.about-scroll-pending` rule; add `.about-status-stripes` to that rule's selector list.

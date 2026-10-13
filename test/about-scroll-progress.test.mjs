@@ -1,6 +1,6 @@
 import test, { beforeEach, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, educationDecorProgress } from '../assets/js/about-scroll-progress.js';
+import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, aboutStripesProgress, educationDecorProgress } from '../assets/js/about-scroll-progress.js';
 import { SCROLL_ANIMATION } from '../assets/js/scroll-animation-config.js';
 // Test the math against a stable fixture, independently of editable design tuning.
 const originalSettings = structuredClone(SCROLL_ANIMATION);
@@ -9,6 +9,7 @@ beforeEach(() => {
     circlesStartFraction: .5, circlesTravelVh: 50, textCompleteAt: .3,
     barsDelayVh: 8, barsDelayPx: 0, barsTravelVh: 30,
   });
+  Object.assign(SCROLL_ANIMATION.stripes, { startAt: .1, completeAt: .85 });
   Object.assign(SCROLL_ANIMATION.education, {
     enterAtVh: 95, afterAboutBarsStartVh: 10, barsDelayVh: 0,
     barsDelayPx: 0, barsTravelVh: 30, pillsDelayVh: 8, pillsTravelVh: 30,
@@ -57,3 +58,14 @@ test('outer ring grows thinner at intermediate progress and preserves final edge
   assert.ok(middle.bars > middle.pills && middle.pills > 0);
   assert.deepEqual(educationDecorProgress(400, 400, 600, 1000), {bars:1, pills:1});
  });
+
+test('About stripes wait for the ring, finish before the shockwave, and reverse', () => {
+  assert.equal(aboutStripesProgress(0), 0);
+  assert.equal(aboutStripesProgress(.1), 0);
+  assert.equal(aboutStripesProgress(.85), 1);
+  assert.equal(aboutStripesProgress(1), 1);
+  const early = aboutStripesProgress(.3), late = aboutStripesProgress(.6);
+  assert.ok(early > 0 && early < late && late < 1);
+  const descending = [.85, .7, .5, .3, .1].map(aboutStripesProgress);
+  for (let i = 1; i < descending.length; i++) assert.ok(descending[i] < descending[i - 1]);
+});

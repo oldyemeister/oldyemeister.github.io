@@ -136,11 +136,68 @@ body.persona-design .laser-notes .project-source-note {
   padding-top: 1rem;
   font-size: .875rem;
 }
-body.persona-design .laser-notes .project-metrics > div {
-  padding: 0.75rem 0;
-  border-bottom: 1px solid var(--palette-gold);
-}
 body.persona-design .laser-notes .project-metrics dt { color: var(--palette-black); }
+/* P4G battle-result stat stack (docs/design-reference.md, item 5): a black
+   icon block beside each stat, large slanted wide numerals, ALL-CAPS label.
+   DOM order (value, then label) is unchanged. */
+body.persona-design .project-metrics {
+  gap: 1.125rem clamp(1rem, 3vw, 2rem);
+  border: 0;
+}
+body.persona-design .project-metrics > div {
+  display: grid;
+  grid-template-columns: 2.75rem minmax(0, 1fr);
+  column-gap: 0.875rem;
+  align-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+body.persona-design .project-metrics > div::before,
+body.persona-design .project-metrics > div::after {
+  content: '';
+  grid-row: 1 / span 2;
+  grid-column: 1;
+}
+body.persona-design .project-metrics > div::before {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.25rem; /* The reference icon blocks are slightly rounded. */
+  background: var(--palette-black);
+}
+/* The four-point sparkle from the site's section motifs (EXP icon shape). */
+body.persona-design .project-metrics > div::after {
+  justify-self: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  background: var(--palette-yellow);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 2C55 39 61 45 98 50C61 55 55 61 50 98C45 61 39 55 2 50C39 45 45 39 50 2Z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 2C55 39 61 45 98 50C61 55 55 61 50 98C45 61 39 55 2 50C39 45 45 39 50 2Z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+body.persona-design .project-metrics dt {
+  grid-row: 1;
+  grid-column: 2;
+  justify-self: start;
+  color: var(--palette-black);
+  font-family: var(--menu-font);
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  letter-spacing: 0;
+  line-height: 1.05;
+  transform: skewX(-8deg);
+  overflow-wrap: anywhere;
+}
+body.persona-design .project-metrics dd {
+  grid-row: 2;
+  grid-column: 2;
+  margin: 0.25rem 0 0;
+  color: var(--palette-black);
+  font-family: var(--menu-font);
+  font-size: .72rem;
+  letter-spacing: .08em;
+}
+@media (max-width: 480px) {
+  body.persona-design .project-metrics { grid-template-columns: minmax(0, 1fr); }
+}
 /* These notes sit below the television, not in its screen or control panel. */
 body.persona-design .laser-shell > :is(.game-message, .game-implementation-note),
 body.persona-design .imu-axis-controls > .imu-implementation-note {
