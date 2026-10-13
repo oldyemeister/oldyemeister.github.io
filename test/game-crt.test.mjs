@@ -43,11 +43,11 @@ function setup({ settings = { ...CRT_SETTINGS, game: { ...CRT_SETTINGS.game, def
     show: visible => notify([{ isIntersecting: visible }]) };
 }
 
-test('production CRT starts enabled with stronger scanlines and can still be switched off', () => {
+test('production CRT starts enabled with game scanlines and can still be switched off', () => {
   const { button, overlay } = setup({ settings: CRT_SETTINGS });
   assert.equal(button['aria-pressed'], 'true');
   assert.equal(overlay.hidden, false);
-  assert.equal(overlay.properties['--crt-line-opacity'], '0.3');
+  assert.equal(overlay.properties['--crt-line-opacity'], '0.18');
   button.events.click();
   assert.equal(button['aria-pressed'], 'false');
   assert.equal(overlay.hidden, true);
@@ -157,4 +157,16 @@ test('every Persona footer owns the HUD clearance instead of exposing yellow bod
   const css = readFileSync(new URL('../assets/themes/persona/style.css', import.meta.url), 'utf8');
   assert.match(css, /\.persona-design\s*\{\s*padding-bottom: 0;/);
   assert.match(css, /\.persona-design \.site-footer\s*\{\s*padding-bottom: calc\(1\.875rem \+ var\(--hud-height\)\);/);
+});
+
+test('default game CRT is lighter while inheriting the unchanged sweep', () => {
+  const { overlay } = setup({ settings: CRT_SETTINGS });
+  assert.equal(overlay.hidden, false);
+  assert.equal(overlay.properties['--crt-line-opacity'], '0.18');
+  assert.equal(overlay.properties['--crt-noise-opacity'], '0.08');
+  assert.equal(overlay.properties['--crt-flicker-intensity'], '0.02');
+  assert.equal(overlay.properties['--crt-edge-glow-size'], '24px');
+  assert.equal(overlay.properties['--crt-curvature-intensity'], '0.4');
+  assert.equal(overlay.properties['--crt-sweep-duration'], `${CRT_SETTINGS.sweepDuration}s`);
+  assert.equal(CRT_SETTINGS.scanlineOpacity, .3);
 });

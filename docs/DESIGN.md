@@ -115,8 +115,9 @@ Pause and CRT sit beside each other; below a 650px cabinet width they stack with
 44px targets so the canvas retains its width. Reset remains the bottom gear dial.
 `assets/js/game-crt.js` adds an optional pointer-transparent screen overlay using
 the shared CRT layers. The white CRT toggle stays available before Start, exposes
-`aria-pressed`, and starts on. Shared scanline opacity is 0.30 across hero artwork,
-project media and gameplay; sweep/glow brightness is unchanged. Edit `CRT_SETTINGS.game` in `assets/js/crt-settings.js`
+`aria-pressed`, and starts on. Shared scanline opacity remains 0.30 for hero artwork and project media. Game TVs
+override scanline opacity to 0.18, noise to 0.08, flicker to 0.02, inner edge glow
+size to 24px and curvature to 0.4; sweep settings are unchanged. Edit `CRT_SETTINGS.game` in `assets/js/crt-settings.js`
 for game-only overrides or to change the default. Off removes all CRT decoration;
 reduced motion, offscreen screens and hidden tabs stop its animated layers.
 Game state and controls are independent of the filter.
@@ -193,3 +194,12 @@ exact bitmap scaling of all text. At 1440px the reference dimensions are retaine
 at narrow desktop sizes copy can wrap sooner than the decorative art. Browser
 zoom remains able to enlarge text. Compare saved desktop contact sheets in
 `docs/screenshots/2026-10-13-scaling-*.png` and review locally before publishing.
+
+At 1280px and wider, the game layout uses available small-viewport height and
+a 65vw ceiling. Cabinet-relative units scale the grille, knobs and readouts;
+short antennas and feet reserve clearance for the fixed header/HUD and leg buttons.
+IMU additionally reserves its measured intro height. Below 900px the existing
+mobile layout remains unchanged. Pixel games keep intrinsic 320×240 coordinates:
+3× (or larger) integer display sizes are used when they fit, and 2× when it uses
+at least 90% of the available screen width. Intermediate sizes stay fluid rather
+than shrinking gameplay back to 2×; pointer mapping uses the actual canvas bounds.

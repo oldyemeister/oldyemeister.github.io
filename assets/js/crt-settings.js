@@ -56,6 +56,11 @@ export const CRT_SETTINGS = {
   // Other parameters inherit the shared values above; add overrides here.
   game: {
     defaultEnabled: true,
+    scanlineOpacity: .18,
+    noiseOpacity: .08,
+    flickerIntensity: .02,
+    edgeGlowSize: 24,
+    curvatureIntensity: .4,
   },
 
   // HERO ONLY — the blue sky is artwork, not a dark glass TV screen.

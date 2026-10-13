@@ -85,4 +85,23 @@
     // Keep help last so disclosure never moves an input during a click.
     if (help) settings.append(help);
   } else if (help) television.after(help);
+  // Layout-only sizing: intrinsic game coordinates and event targets stay intact.
+  const entry = television.closest('.game-entry');
+  const intro = entry?.querySelector('.laser-intro');
+  const pixelCanvas = stage.querySelector('[data-laser-canvas], [data-donkey-kong-canvas]');
+  const fitGame = () => {
+    if (intro) entry.style.setProperty('--game-intro-height', `${intro.getBoundingClientRect().height}px`);
+    if (!pixelCanvas) return;
+    const available = stage.clientWidth;
+    const integer = Math.floor(available / 320) * 320;
+    // Snap when the integer size uses almost the whole screen; between those
+    // steps retain fluid enlargement rather than sacrificing gameplay area.
+    const snapped = window.innerWidth >= 1280 && integer >= 640 && (integer >= 960 || integer / available >= .9);
+    stage.style.setProperty('--game-pixel-width', snapped ? `${integer}px` : '100%');
+  };
+  new ResizeObserver(fitGame).observe(stage);
+  if (intro) new ResizeObserver(fitGame).observe(intro);
+  window.addEventListener('resize', fitGame, { passive: true });
+  document.fonts?.ready.then(fitGame);
+  fitGame();
 }());

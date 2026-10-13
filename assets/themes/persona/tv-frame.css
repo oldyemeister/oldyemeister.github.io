@@ -371,3 +371,63 @@ body.persona-tv-screen .imu-control-panel :is(.imu-toolbar-group > span, .imu-ax
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
+
+/* Wide-screen play space: the full set, including feet/buttons, fits between
+   header and HUD. Hardware dimensions inherit the cabinet's container scale. */
+@media (min-width: 1280px) {
+  body.persona-tv-screen .game-entry {
+    --tv-stage-width: min(65vw, calc((100svh - 14.25rem) / .783));
+    width: calc(100% - 4rem);
+    grid-template-columns: minmax(15rem, 1fr) minmax(0, var(--tv-stage-width));
+    gap: 2rem;
+    padding-top: .75rem;
+  }
+  body.persona-tv-screen .game-entry .persona-tv {
+    --tv-antenna-height: calc(var(--tv-stage-width) * .06);
+    --tv-feet-height: calc(var(--tv-stage-width) * .04);
+    --tv-knob-offset: .76cqi;
+    width: var(--tv-stage-width);
+    margin-top: calc(var(--tv-antenna-height) + .5rem);
+  }
+  body.persona-tv-screen .game-entry .persona-tv-panel { padding: .61cqi 4% 1.07cqi; }
+  body.persona-tv-screen .game-entry .game-status-bar span { font-size: 1.46cqi; }
+  body.persona-tv-screen .game-entry .game-status-bar strong { font-size: 2.07cqi; }
+  body.persona-tv-screen .game-entry .tv-secondary-controls {
+    top: calc(55% - 2.68cqi + var(--tv-knob-offset));
+    gap: .98cqi;
+  }
+  body.persona-tv-screen .game-entry .tv-secondary-controls .game-action-button {
+    width: max(2.75rem, 5.37cqi);
+    height: max(2.75rem, 5.37cqi);
+    flex-basis: max(2.75rem, 5.37cqi);
+  }
+  body.persona-tv-screen .game-entry .crt-knob-label { font-size: 1.22cqi; }
+  body.persona-tv-screen .game-entry .tv-leg-controls { top: calc(100% + var(--tv-feet-height) + .75rem); }
+  body.persona-tv-screen .game-entry .game-board {
+    width: var(--game-pixel-width, 100%);
+    height: auto;
+    aspect-ratio: 4 / 3;
+    max-width: 100%;
+    position: absolute;
+    inset: 50% auto auto 50%;
+    transform: translate(-50%, -50%);
+    image-rendering: pixelated;
+  }
+  body.persona-tv-screen .game-entry.game-entry-imu {
+    --tv-stage-width: min(65vw, calc((100svh - 14rem - var(--game-intro-height, 7rem)) / .78));
+    grid-template-columns: minmax(0, 1fr);
+    gap: .5rem;
+  }
+  body.persona-tv-screen .game-entry-imu .laser-intro { padding-inline-end: 6rem; }
+  body.persona-tv-screen .game-entry-imu .laser-intro-layout {
+    grid-template-columns: minmax(0, .75fr) minmax(0, 1fr);
+  }
+  body.persona-tv-screen .game-entry-imu .imu-demo-section {
+    grid-template-columns: minmax(0, var(--tv-stage-width)) minmax(18rem, 1fr);
+  }
+  body.persona-tv-screen .game-entry-imu .persona-tv {
+    /* The intro is above this TV, so reserve its measured block height. */
+    --tv-antenna-height: calc(var(--tv-stage-width) * .08);
+  }
+  body.persona-tv-screen .game-entry-imu .imu-live-readouts :is(span, strong, small, b) { font-size: 1.7cqi; }
+}

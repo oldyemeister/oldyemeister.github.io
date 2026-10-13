@@ -2,6 +2,16 @@
 
 Newest entries first. Each entry: date, from → to, task, status, where to start.
 
+## 2026-10-13 17:48 · Codex — G
+- Changed: wide-screen game TVs use available viewport height with a 65vw ceiling, measured IMU intro clearance, and cabinet-relative hardware/readout sizing. Reserved space for antennas, feet, leg buttons, header and HUD. Mobile layout rules are unchanged. Pixel games keep native 320×240 coordinates with integer display sizes where practical.
+- Changed: game-only CRT overrides now use scanlines .18, noise .08, flicker .02, edge glow 24px and curvature .4. Shared/hero/preview values, sweep, default-on state and CRT knob behavior remain unchanged.
+- Files touched: assets/themes/persona/tv-frame.{css,js}, assets/js/crt-settings.js, test/game-crt.test.mjs, docs/DESIGN.md, docs/screenshots/g-*.png, HANDOFF.md.
+- Verified: 146 tests and production build pass; original CSS still 66fffa4f89.css. Browser assertions at 1440×900, 1920×1080 and 2560×1440 confirm all three TVs (antennas, feet and leg buttons) fit above the HUD and below the header, with no horizontal overflow. Laser keyboard selection and pointer mirror selection pass after resizing; Donkey Kong keyboard pause/pointer resume and direction controls work; IMU pointer mode selection and keyboard rotation work. CRT toggles both ways on each game at every size.
+- Screenshots: docs/screenshots/g-{before,after}-{laser,donkey-kong,imu-sandbox}-{1440,1920,2560}.png, g-crt-{before,after}-100pct.png and g-mobile-*-375.png. Crops retain native screenshot resolution; gameplay frames are not synchronized.
+- Unfinished / concerns: owner visual review pending. Integer-scaling tradeoff: Laser/DK display at 640×480 at 1440 and 960×720 at 2560. At 1920 they remain fluid (~783×587), because 3× cannot fit vertically and snapping to 2× would discard the requested enlargement. TV size prioritizes full control clearance over an exact 1.3× multiplier. Local server remains http://127.0.0.1:8000/; nothing pushed.
+- Please review: larger gameplay area, hardware proportions and lighter CRT on all three pages. Unrelated project-card comment changes, AGENTS.md and root screenshots remain outside these commits.
+- Review of previous entry: F and G from Claude's 17:30 handoff are implemented separately; original routes and day/night colors are preserved.
+
 ## 2026-10-13 17:40 · Codex — F
 - Changed: replaced E2 hairlines with the owner's corner-fan palette, cream/saturated alternation and broader bands. Reused the .4-degree step around a vertical base with bottom pivots. Uniform SVG coordinates preserve physical angles; height-aware overlaps close seams and compensate kicks to keep their horizontal travel at 8 CSS px. The band remains clipped to its desktop/1rem phone footprint, behind the blue continuation.
 - Files touched: templates/persona/redesign.mjs, assets/js/{about-stripe-fan,scroll-presence}.js, assets/themes/persona/hero-poster.css, test/about-stripe-fan.test.mjs, docs/screenshots/{e-f-about,f-seam,f-mid}-*.png, HANDOFF.md.
