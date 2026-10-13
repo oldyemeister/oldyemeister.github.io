@@ -489,7 +489,7 @@ body.persona-design #experience .experience-scroll-previous { left: -8px; }
 body.persona-design #experience .experience-scroll-next { right: -8px; }
 body.persona-design #experience .experience-scroll-arrow[hidden] { display: none; }
 body.persona-design #experience .experience-scroll-arrow:disabled {
-  background: color-mix(in srgb, var(--inactive) 70%, transparent);
+  background: color-mix(in srgb, var(--palette-muted) 70%, transparent);
   cursor: default;
 }
 body.persona-design #experience .experience-scroll-arrow:active { transform: translateY(-50%); }
@@ -565,8 +565,8 @@ body.persona-design #projects :is(.project-demo-link, button, [role='button']):i
   box-shadow: 0 0 0 -2em color-mix(in srgb, var(--palette-yellow) 0%, transparent);
 }
 body.persona-design #projects :is(button:disabled, [aria-disabled='true']) {
-  background: var(--inactive);
-  border-color: var(--inactive);
+  background: var(--palette-muted);
+  border-color: var(--palette-muted);
   color: var(--on-panel);
   box-shadow: none;
 }

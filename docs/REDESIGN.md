@@ -7,11 +7,11 @@ There is one appearance, regardless of a saved or system light/dark preference.
 The theme switch is hidden by the new visual layer; its original implementation
 is retained for rollback.
 
-`assets/themes/persona/redesign.css` applies the palette to existing section wrappers,
-navigation, controls, TV cabinets, and sandbox settings. Section-heading fonts
-and their installed wider variants are retained. Heading white strokes and letter animation are disabled;
-link word-hover animations are preserved. Images and controls outside the protected
-TV/HUD use hard offset shadows.
+`assets/themes/persona/redesign.css` supplies the remaining section and control
+refinements, including the project chips. Component sheets own the current
+appearance: `tv-frame.css` styles the TV cabinet and controls, `key-instructions.css`
+styles the HUD, and `content-typography.css` defines the supporting type roles.
+There are no TV/HUD override rules in `redesign.css`.
 
 ## Edit and preview
 
@@ -30,22 +30,22 @@ previous presentation. Game logic is unchanged; `/original/` stays preserved.
 
 ## Step 3 treatment
 
-Sections use one enclosing olive panel, including the sandbox and case-study
-hero. Inner project entries share that panel; their images and controls carry
-hard yellow shadows. Hero and case-study visuals appear above their headings;
-project images have small centered captions before the project title/divider.
-Heading letter effects are disabled, while link hover animations and the
-original keyboard instruction bar remain. The section-heading font is retained
-with a heavier weight. Black TV casing, bezel, and foot styling are unchanged.
+The current section treatments live in their component stylesheets: project
+cards in `project-cards.css`, reading surfaces in `project-pages.css`, and the
+save-menu rows in `experience-save-menu.css`. Their backgrounds and shadows
+are not governed by the former all-section olive-panel rules. TV casing,
+bezel, feet and controls are styled by `tv-frame.css`; the HUD retains its
+scoped palette in `tokens.css` and layout in `key-instructions.css`.
 
 ## Color-scan exceptions
 
-The general site palette has four colors. `tokens.css` also restores the original
-keyboard HUD variables and black TV casing colors as an explicit user-requested exception. `redesign.css` uses
-`@scope` to exclude only `.persona-hud` and its descendants from redesign rules.
-The TV casing and bezel retain their original black finish through targeted
-overrides; the game buttons, controls, and overlays keep the new design. No hex/rgb/hsl
-declarations are added to `redesign.css`.
+`tokens.css` contains the shared P4G/P4 Revival palette and semantic aliases,
+plus the scoped original keyboard-HUD palette. TV styling uses the live tokens
+in `tv-frame.css`; the unused `.persona-tv` token block has been removed.
+A former `@scope (body.persona-design) to (.persona-hud)` block was removed
+because its body-prefixed descendant selectors never matched. It did not
+protect or restyle the TV/HUD, their buttons or their overlays. The separate
+black-text scope using `:scope` remains active. `redesign.css` adds no color literals.
 
 The original styles retain their literals deliberately for rollback. The new
 layer overrides their UI treatment; this is not a destructive replacement of
