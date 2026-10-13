@@ -205,7 +205,7 @@ geometry tokens after them with the comment shown.
 | 1–3 | Done (Codex, `71938d1`, `6714c70`) |
 | 4, 5, 9 | Done (Claude, uncommitted; see `HANDOFF.md`) |
 | 6 | **Dropped.** The open menu is already a P4G vertical-stripe ribbon that shows selection by enlarging the item; a dark selection band would clash with it. |
-| 7, 8 | Not started |
+| 7, 8 | Implemented by Codex on 2026-10-13; owner-requested |
 
 Items 2 and 3 below use stable selector references to their current implementation. Item 6 remains dropped; its deleted redesign rule is not a current target.
 
@@ -303,19 +303,19 @@ Serve the build with `python3 -m http.server 8000 --directory _site`.
      - Text contrast is 15.4:1.
      - `node --test test/persona-navigation.test.mjs test/ribbon-menu.test.mjs` passes.
 
-### P3: optional, ask the owner first
+### P3: approved by the owner and implemented (2026-10-13)
 
 7. **Cropped giant title on case-study heroes** (reference: "Result" bleeding off the bottom edge).
    - Target: `.case-study-hero` in `project-pages.css`.
-   - Add a decorative `::after` with the project's short name. It needs a `data-` attribute added in `_layouts/project_case_study.html`, which is a markup change, so confirm first.
+   - A decorative `::after` reads the project's short name from a `data-title` attribute on an `aria-hidden` span. Inject this Persona-only markup in `templates/persona/redesign.mjs`; keep the shared case-study layout unchanged.
    - Styling: `font-size: clamp(5rem, 14vw, 12rem)`, positioned so ~30% of its height is clipped by `overflow: hidden`, `aria-hidden` (pseudo-elements are not read by most screen readers, but keep the real `h1` intact).
    - Done when:
      - The title appears behind the hero media and never covers text or controls.
      - It is hidden below 600px wide.
 
 8. **Project category tabs** (reference: Config tab bar).
-   - This is a new feature (filter UI and category data in `_data/content.yml`), not a restyle. Only do it if the owner asks.
-   - Visual spec if approved:
+   - Implemented with All, Hardware, Software and Media filters. Labels and project categories live in `_data/content.yml`; Persona-only controls and card attributes are injected by `templates/persona/redesign.mjs`. All cards remain visible without JavaScript.
+   - Visual spec:
      - `var(--ref-band)` bar, `var(--ref-tab-idle)` tabs, active tab `var(--config-orange)` with `var(--palette-black)` text, no radius.
      - Square key-cap hints only if the tabs get real keyboard shortcuts.
 

@@ -2,7 +2,7 @@ import { flowerPetals } from './flower.mjs';
 import { playBadge } from './play-badge.mjs';
 import { replaceRequired } from './anchors.mjs';
 // Small semantic additions for the optional redesign; original pages stay intact.
-export function redesignContent(html) {
+export function redesignContent(html, projectData = {}) {
   // Persona-only decorative short names; the real case-study h1 stays intact.
   const pageClass = html.match(/<body class="page-([^" ]+)"/)?.[1];
   const shortTitle = { 'rf-receiver': 'RF Receiver', aps380: 'ACC' }[pageClass];
@@ -13,6 +13,7 @@ export function redesignContent(html) {
   }
   // Section art only exists on the homepage.
   if (!/<body class="page-home">/.test(html)) return html;
+  html = projectCategoryControls(html, projectData);
   // Replace only playable markers; case studies and the original design stay intact.
   html = html.replace(/<span class="project-playable-badge" data-play-url="([^"]+)" data-play-label="([^"]+)">[^<]*<\/span>/g,
     (_, url, label) => playBadge(url, label));
@@ -80,4 +81,39 @@ export function redesignContent(html) {
         <g class="contact-flower-face contact-flower-spin">${petals}</g>
       </svg>`, 'the #contact section');
   return html;
+}
+
+const escapeAttribute = value => String(value).replace(/[&<>"']/g,
+  character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character]);
+
+// The shared source markup stays untouched. Cards follow content.yml order.
+export function projectCategoryControls(html, { projects_section: section, projects } = {}) {
+  if (!section?.categories?.length) return html;
+  const categories = section.categories;
+  const ids = new Set(categories.map(category => category.id));
+  if (ids.size !== categories.length || ids.has('all') ||
+      categories.some(category => !/^[a-z][a-z0-9-]*$/.test(category.id))) {
+    throw new Error('Persona project categories must have unique slug IDs, excluding "all".');
+  }
+  let index = 0;
+  html = html.replace(/<article class="project-card([^"]*)">/g, (_, classes) => {
+    const project = projects?.[index++];
+    if (!project?.categories?.length || project.categories.some(id => !ids.has(id))) {
+      throw new Error('Every Persona project must reference a configured category.');
+    }
+    return `<article class="project-card${classes}" data-project-categories="${project.categories.join(' ')}">`;
+  });
+  if (index !== projects?.length) throw new Error('Persona project cards must match the content project list.');
+  const button = (id, label) => `<button type="button" class="project-category-tab" data-project-category="${id}" aria-pressed="${id === 'all'}" aria-controls="persona-project-grid">${escapeAttribute(label)}</button>`;
+  const count = projects.length === 1 ? section.count_one : section.count_many.replace('{count}', projects.length);
+  const controls = `<div class="project-category-controls" data-project-filters hidden>
+    <div class="project-category-bar" role="group" aria-label="${escapeAttribute(section.filter_label)}">
+      ${button('all', section.all_label)}${categories.map(category => button(category.id, category.label)).join('')}
+    </div>
+    <p class="project-category-count" role="status" aria-live="polite" aria-atomic="true" data-project-count data-count-one="${escapeAttribute(section.count_one)}" data-count-many="${escapeAttribute(section.count_many)}">${escapeAttribute(count)}</p>
+  </div>`;
+  html = replaceRequired(html, '<div class="project-grid">',
+    `${controls}<div class="project-grid" id="persona-project-grid">`, 'the project grid');
+  return replaceRequired(html, '</body>',
+    '<script type="module" src="/assets/js/project-categories.js"></script>\n</body>', 'the document body');
 }

@@ -228,9 +228,21 @@ experience:
 
 projects_section:
   heading: "Selected projects"
+  filter_label: "Project category"
+  all_label: "All"
+  count_one: "1 project"
+  count_many: "{count} projects"
+  categories:
+    - id: hardware
+      label: "Hardware"
+    - id: software
+      label: "Software"
+    - id: media
+      label: "Media"
 
 projects:
   - title: "Laser Puzzle"
+    categories: [hardware, software]
     summary: "A laser-reflection puzzle written in C and RISC-V assembly for the DE1-SoC's RV32 processor, drawing to a 320 × 240 VGA framebuffer — 13 rotatable mirrors, six targets, four hazards, and a two-minute timer."
     playable: true
     placeholder_index: "01"
@@ -248,6 +260,7 @@ projects:
     live_url: "/projects/laser/"
     live_label: "Play Laser Puzzle"
   - title: "Donkey Kong FPGA Game"
+    categories: [hardware]
     summary: "A hardware recreation of the classic Donkey Kong game on an FPGA, with full game logic, sprite rendering, and collision detection implemented directly in Verilog. Achieved smooth 60 FPS gameplay on the DE1-SoC through timing analysis and resource optimization."
     playable: true
     placeholder_index: "02"
@@ -269,6 +282,7 @@ projects:
     live_label: "Play Donkey Kong"
     featured: false
   - title: "IMU Sandbox"
+    categories: [hardware, software]
     summary: "An IMU-controlled STM32 sandbox running up to 3,000 sand particles at approximately 30 FPS, with dual OLEDs, selectable gravity, materials, and environmental effects."
     playable: true
     placeholder_index: "03"
@@ -292,6 +306,7 @@ projects:
 
   # EDITABLE PROJECT CARD 4
   - title: "RF Frequency Downconversion System"
+    categories: [hardware]
     summary: "A three-person analog receiver project combining an 8–16 MHz bandpass filter, ±0.7 V limiter, Gilbert-cell mixer, and low-pass filter to produce an approximately 100 kHz downconverted output with 18 dB measured chain gain."
     collaborators:
       - name: "Michael Wei"
@@ -317,6 +332,7 @@ projects:
     featured: false
 
   - title: "Vision-Assisted Adaptive Cruise Control"
+    categories: [hardware, software]
     summary: "A Raspberry Pi 5 autonomous vehicle combining PID-based adaptive cruise control, IR lane keeping, emergency braking, and CNN stop-sign detection, with 100 ms control response and following accuracy within 5 cm."
     collaborators:
       - name: "Yilong Chen"
@@ -344,6 +360,7 @@ projects:
     featured: false
 
   - title: "F1 Engineering on Bilibili"
+    categories: [media]
     summary: "Technical videos that turn Formula 1 engineering, team history, and motorsport design into researched, accessible stories for an audience of more than 10,000 followers."
     technologies:
       - "Technical Research"

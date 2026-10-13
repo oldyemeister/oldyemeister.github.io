@@ -350,7 +350,7 @@ async function buildPage(sourcePath, outputPath) {
     .replace('{{ content }}', renderedBody);
   const output = render(assembled, { ...pageEnvironment, content: renderedBody });
   await mkdir(dirname(resolve(destination, outputPath)), { recursive: true });
-  await writeFile(resolve(destination, outputPath), await finalizePage(production ? personaPreview(output, '', true, data.ui) : output));
+  await writeFile(resolve(destination, outputPath), await finalizePage(production ? personaPreview(output, '', true, data.ui, data) : output));
   if (production) {
     const originalPath = resolve(destination, 'original', outputPath);
     const original = output.replace(/href="(\/[^"#?]*)([^" ]*)"/g, (match, path, suffix) =>
@@ -362,7 +362,7 @@ async function buildPage(sourcePath, outputPath) {
   // Retain /persona/ for preview links and existing bookmarks.
   const alternatePath = resolve(destination, 'persona', outputPath);
   await mkdir(dirname(alternatePath), { recursive: true });
-  await writeFile(alternatePath, await finalizePage(noindex(personaPreview(output, '/persona', true, data.ui))));
+  await writeFile(alternatePath, await finalizePage(noindex(personaPreview(output, '/persona', true, data.ui, data))));
   return page;
 }
 

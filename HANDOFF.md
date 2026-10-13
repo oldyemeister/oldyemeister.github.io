@@ -2,6 +2,19 @@
 
 Newest entries first. Each entry: date, from → to, task, status, where to start.
 
+## 2026-10-13 11:00 · Codex
+- Changed:
+  - Task 1 (`57cbbab`): corrected stale redesign ownership descriptions and checklist references, removed unused TV/shadow/on-interactive tokens, and replaced the three live `--inactive` references with their identical `--palette-muted` value before removing that alias. Updated Tier 2 comments.
+  - Task 2 (`7dcb216`): added decorative cropped RF Receiver/ACC hero titles through the Persona transform, behind content, clipped by about 30%, and hidden below 600px. Real headings and shared layouts are unchanged.
+  - Task 3: added P4G Config-style All/Hardware/Software/Media project filters, editable category data, keyboard-operable buttons, announced result counts and progressive enhancement. Updated checklist completion notes.
+- Files touched: `assets/themes/persona/{tokens,redesign,project-pages,project-categories}.css`, `assets/js/project-categories.js`, `templates/persona/{redesign,render}.mjs`, `tools/preview-build.mjs`, `_data/content.yml`, `test/{persona-cropped-title,project-categories}.test.mjs`, `docs/{REDESIGN,design-reference}.md`, `HANDOFF.md`, and the dated screenshots below.
+- Verified: `npm test` and `npm run build` after each task: 129/129, 132/132 and 136/136 tests respectively. `/original/` CSS remained `66fffa4f89.css` each time. No day/night color changes, no `index.html` edits, no root `screenshots/` files committed, and no push.
+- Visual verification: cleanup before/after at 1280px and 375px for `/` and `/original/`, with clock/media/animations controlled, showed no visible change. Home mobile and original desktop were pixel-identical; other comparisons had only low-level antialiasing differences, so this is not a claim of universal pixel identity. Evidence: `docs/screenshots/2026-10-13-cleanup-{before,after}-{home,original}-{1280,375}.png`.
+- Feature verification: case-study titles checked at 1280/600/375px for clipping, layering, intact headings and no horizontal overflow; screenshots `docs/screenshots/2026-10-13-title-{rf-receiver,aps380}-{1280,375}.png`. Filters checked at 1280/375px: All 6, Hardware 5, Software 3, Media 1; exactly one pressed button; Space activation and visible keyboard focus; no overflow or browser errors. With JavaScript disabled all six projects remain visible; original output has no category controls or attributes. Screenshots: `docs/screenshots/2026-10-13-category-tabs-{1280,375}.png`.
+- Unfinished / concerns: no requested implementation remains open. Claude's pre-existing uncommitted work (including items 4, 5 and 9) remains in the working tree, separate from these commits; item 6 remains dropped. Category assignments are editorial and can be adjusted in the content file.
+- Please review: category assignments and filter wrapping on mobile; cropped RF Receiver/ACC title placement. Do not redo checklist items 1–5 or 9.
+- Review of previous entry: read the full handoff, latest 19:25 entry and recent commit history/diff. Respected completed items and the dropped nav change. The 17:37 cleanup premise was partly stale: `--inactive` had three active uses, handled without changing their computed color. Claude's prior dead-scope review remains documented in the 17:44 entry.
+
 ## 2026-10-12 17:44 · Codex
 - Changed: Verified suggestions 1–3 are present; removed the straight underline under the slanted project chips, collapsed the selector to the actual rendered project chips, and documented that their content has no links. Tokens, corner rules and protected section styles are unchanged.
 - Files touched: `assets/themes/persona/redesign.css`, `HANDOFF.md`, `docs/screenshots/2026-10-12-chip-followup-1280.png`, `docs/screenshots/2026-10-12-chip-followup-375.png`.

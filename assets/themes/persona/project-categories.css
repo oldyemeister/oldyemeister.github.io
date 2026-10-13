@@ -1,0 +1,56 @@
+/* P4G Config-style category filters; no shared/original-design selectors. */
+body.persona-design #projects .project-category-controls {
+  --category-gap: .375rem;
+  --category-bar-padding: .5rem;
+  --category-tab-padding: .65rem 1rem;
+  --category-target: 2.75rem;
+  --category-margin: 2rem;
+  --category-count-gap: .75rem;
+  --category-font-size: 1rem;
+  --category-count-size: .875rem;
+  --category-focus-width: 2px;
+  --category-focus-offset: 3px;
+  margin-block-end: var(--category-margin);
+}
+body.persona-design #projects .project-category-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--category-gap);
+  padding: var(--category-bar-padding);
+  background: var(--ref-band);
+}
+body.persona-design #projects .project-category-bar .project-category-tab {
+  flex: 1 1 auto;
+  min-height: var(--category-target);
+  padding: var(--category-tab-padding);
+  border: 0;
+  border-radius: var(--ref-radius);
+  background: var(--ref-tab-idle);
+  color: var(--palette-white);
+  font-family: var(--menu-font);
+  font-size: var(--category-font-size);
+  line-height: 1.2;
+  text-transform: uppercase;
+  box-shadow: none;
+  transform: none;
+  cursor: pointer;
+}
+body.persona-design #projects .project-category-bar .project-category-tab:is(:hover, :focus-visible),
+body.persona-design #projects .project-category-bar .project-category-tab[aria-pressed='true'] {
+  background: var(--config-orange);
+  color: var(--palette-black);
+  box-shadow: none;
+}
+body.persona-design #projects .project-category-bar .project-category-tab:focus-visible {
+  outline: var(--category-focus-width) solid var(--config-lime);
+  outline-offset: var(--category-focus-offset);
+}
+body.persona-design #projects .project-category-count {
+  margin: var(--category-count-gap) 0 0;
+  color: var(--palette-black);
+  font-family: var(--content-font);
+  font-size: var(--category-count-size);
+}
+body.persona-design #projects :is(.project-category-controls, .project-card)[hidden] {
+  display: none;
+}
