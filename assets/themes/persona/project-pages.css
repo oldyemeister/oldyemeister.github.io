@@ -295,3 +295,44 @@ body.persona-design .imu-axis-control input { accent-color: var(--palette-olive)
 @media (max-width: 380px) {
   body.persona-design .case-study-meta dl { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* P4G Result-style decoration, injected only by the Persona renderer. */
+body.persona-design .case-study-cropped-title { display: none; }
+@media (min-width: 600px) {
+  body.persona-design .case-study-hero:has(.case-study-cropped-title) {
+    --case-title-size: clamp(5rem, 14vw, 12rem);
+    --case-title-weight: 300;
+    --case-title-tracking: -.025em;
+    --case-title-crop: .3;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding-block-end: calc(var(--case-title-size) * (1 - var(--case-title-crop)));
+  }
+  body.persona-design .case-study-cropped-title {
+    display: block;
+    position: absolute;
+    inset-inline: 0;
+    bottom: calc(var(--case-title-size) * var(--case-title-crop) * -1);
+    height: var(--case-title-size);
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+  }
+  body.persona-design .case-study-cropped-title::after {
+    content: attr(data-title);
+    display: block;
+    color: var(--palette-olive);
+    font-family: var(--menu-font);
+    font-size: var(--case-title-size);
+    font-weight: var(--case-title-weight);
+    letter-spacing: var(--case-title-tracking);
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  body.persona-design .case-study-hero:has(.case-study-cropped-title) > :is(.case-study-hero-copy, .case-study-hero-media) {
+    position: relative;
+    z-index: 1;
+  }
+}

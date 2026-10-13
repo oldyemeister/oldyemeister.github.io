@@ -3,6 +3,14 @@ import { playBadge } from './play-badge.mjs';
 import { replaceRequired } from './anchors.mjs';
 // Small semantic additions for the optional redesign; original pages stay intact.
 export function redesignContent(html) {
+  // Persona-only decorative short names; the real case-study h1 stays intact.
+  const pageClass = html.match(/<body class="page-([^" ]+)"/)?.[1];
+  const shortTitle = { 'rf-receiver': 'RF Receiver', aps380: 'ACC' }[pageClass];
+  if (shortTitle && html.includes('<header class="case-study-hero">')) {
+    html = replaceRequired(html, '<header class="case-study-hero">',
+      `<header class="case-study-hero"><span class="case-study-cropped-title" data-title="${shortTitle}" aria-hidden="true"></span>`,
+      'the case-study hero');
+  }
   // Section art only exists on the homepage.
   if (!/<body class="page-home">/.test(html)) return html;
   // Replace only playable markers; case studies and the original design stay intact.
