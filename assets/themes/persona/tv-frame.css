@@ -2,10 +2,10 @@
 body.persona-tv-screen .persona-tv {
   --tv-ink: #080808;
   --tv-paper: #fffdf3;
-  --tv-feet-height: clamp(46px, 8vw, 72px);
-  --tv-knob-offset: clamp(6px, .8vw, 10px);
-  width: min(100%, 820px);
-  margin: clamp(104px, 23vw, 240px) auto calc(var(--tv-feet-height) + 80px);
+  --tv-feet-height: clamp(2.875rem, 8vw, 4.5rem);
+  --tv-knob-offset: clamp(0.375rem, .8vw, 0.625rem);
+  width: min(100%, 51.25rem);
+  margin: clamp(6.5rem, 23vw, 15rem) auto calc(var(--tv-feet-height) + 5rem);
   padding: 0;
   border: 0;
   border-radius: 4% 5% 4% 4% / 5% 5% 5% 5%;
@@ -17,7 +17,7 @@ body.persona-tv-screen .persona-tv {
 
 body.persona-tv-screen .tv-antennas {
   top: auto;
-  bottom: calc(100% - 6px);
+  bottom: calc(100% - 0.375rem);
   left: 17%;
   width: 66%;
   height: auto;
@@ -27,7 +27,7 @@ body.persona-tv-screen .tv-antennas {
 
 .tv-frame-cabinet {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(48px, 16%);
+  grid-template-columns: minmax(0, 1fr) minmax(3rem, 16%);
   align-items: center;
   gap: 3%;
   padding: 5% 3.5% 1.5% 4%;
@@ -48,12 +48,12 @@ body.persona-tv-screen .tv-frame-cabinet > :is(.game-board-wrap, .imu-scene) {
 .tv-frame-hardware svg { display: block; width: 100%; height: auto; pointer-events: none; }
 
 body.persona-tv-screen .persona-tv-panel {
-  padding: 8px 4% 14px;
+  padding: 0.5rem 4% 0.875rem;
   gap: 0;
 }
 body.persona-tv-screen .persona-tv-panel > :is(.tv-speaker, .tv-power, .tv-knob) { display: none; }
 body.persona-tv-screen .persona-tv .game-status-bar { flex: 1; min-width: 0; margin: 0; grid-template-columns: repeat(4, minmax(0, 1fr)); }
-body.persona-tv-screen .persona-tv .game-status-bar > div { padding: 0 4px; align-items: center; gap: 4px; }
+body.persona-tv-screen .persona-tv .game-status-bar > div { padding: 0 0.25rem; align-items: center; gap: 0.25rem; }
 body.persona-tv-screen .persona-tv .game-status-bar :is(span, strong) {
   font-family: 'Persona Slim Local', Arial, sans-serif;
   font-style: normal;
@@ -62,15 +62,15 @@ body.persona-tv-screen .persona-tv .game-status-bar :is(span, strong) {
   -webkit-text-stroke: 0;
   line-height: 1.1;
 }
-body.persona-tv-screen .persona-tv .game-status-bar span { font-size: 12px; text-transform: uppercase; }
-body.persona-tv-screen .persona-tv .game-status-bar strong { font-size: 17px; font-variant-numeric: tabular-nums; }
+body.persona-tv-screen .persona-tv .game-status-bar span { font-size: 0.75rem; text-transform: uppercase; }
+body.persona-tv-screen .persona-tv .game-status-bar strong { font-size: 1.0625rem; font-variant-numeric: tabular-nums; }
 
 body.persona-tv-screen .persona-tv .game-actions { position: absolute; inset: 0; display: block; margin: 0; }
 body.persona-tv-screen .persona-tv .game-action-button {
   position: absolute;
   left: 50%;
-  width: 44px;
-  height: 44px;
+  width: 2.75rem;
+  height: 2.75rem;
   padding: 0;
   border: 3px solid var(--tv-paper);
   border-radius: 50%;
@@ -81,16 +81,16 @@ body.persona-tv-screen .persona-tv .game-action-button {
 }
 .tv-secondary-controls {
   position: absolute;
-  top: calc(55% - 22px + var(--tv-knob-offset));
+  top: calc(55% - 1.375rem + var(--tv-knob-offset));
   left: 50%;
   display: flex;
-  gap: 8px;
+  gap: 0.5rem;
   transform: translateX(-50%);
 }
 body.persona-tv-screen .persona-tv .tv-secondary-controls .game-action-button {
   position: relative;
   left: auto;
-  flex: 0 0 44px;
+  flex: 0 0 2.75rem;
   transform: none;
 }
 body.persona-tv-screen .persona-tv .tv-secondary-controls .game-action-button:active:enabled { transform: scale(.96); }
@@ -99,14 +99,14 @@ body.persona-tv-screen .persona-tv .tv-secondary-controls .game-action-button::b
 body.persona-tv-screen .tv-leg button::before {
   content: '';
   position: absolute;
-  inset: 4px;
+  inset: 0.25rem;
   border-radius: 50%;
   background: var(--tv-paper);
   pointer-events: none;
 }
 body.persona-tv-screen .persona-tv .pause-symbol { position: relative; z-index: 1; color: var(--tv-ink); }
-.crt-knob-label { position: relative; z-index: 1; color: var(--tv-ink); font: 700 10px/1 Arial, sans-serif; letter-spacing: -.04em; }
-.crt-knob-indicator { position: absolute; z-index: 1; bottom: 8px; left: calc(50% - 3px); width: 6px; height: 3px; border: 1px solid var(--tv-ink); border-radius: 2px; }
+.crt-knob-label { position: relative; z-index: 1; color: var(--tv-ink); font: 700 0.625rem/1 Arial, sans-serif; letter-spacing: -.04em; }
+.crt-knob-indicator { position: absolute; z-index: 1; bottom: 0.5rem; left: calc(50% - 3px); width: 0.375rem; height: 3px; border: 1px solid var(--tv-ink); border-radius: 2px; }
 .tv-crt-control[aria-pressed="true"] .crt-knob-indicator { background: var(--tv-ink); }
 .tv-crt-control[aria-pressed="false"] .crt-knob-label { text-decoration: line-through; text-decoration-thickness: 1px; }
 body.persona-tv-screen .persona-tv .game-action-button:focus-visible { outline: 3px solid #fff000; outline-offset: 3px; }
@@ -117,9 +117,9 @@ body.persona-tv-screen .persona-tv .game-action-button:focus-visible { outline: 
 .game-crt-overlay[hidden] { display: none; }
 body.persona-tv-screen .game-overlay { z-index: 10; }
 body.persona-tv-screen .persona-tv .tv-reset-control {
-  bottom: calc(2% - var(--tv-knob-offset) - 8px);
+  bottom: calc(2% - var(--tv-knob-offset) - 0.5rem);
   width: 100%;
-  min-width: 44px;
+  min-width: 2.75rem;
   height: auto;
   aspect-ratio: 1;
   border: 0;
@@ -133,7 +133,7 @@ body.persona-tv-screen .persona-tv .game-action-button:active:enabled { transfor
 /* Preserve the real controls; the silhouette feet are decoration, not buttons. */
 body.persona-tv-screen .persona-tv .tv-leg-controls {
   position: absolute;
-  top: calc(100% + var(--tv-feet-height) + 12px);
+  top: calc(100% + var(--tv-feet-height) + 0.75rem);
   left: 6%;
   right: 6%;
   width: auto;
@@ -142,24 +142,24 @@ body.persona-tv-screen .persona-tv .tv-leg-controls {
 }
 body.persona-tv-screen .tv-leg { width: auto; height: auto; padding: 0; border: 0; background: none; box-shadow: none; }
 body.persona-tv-screen .tv-leg::before { display: none; }
-body.persona-tv-screen .tv-leg .control-group { grid-template-columns: repeat(2, 44px); gap: 10px; }
-body.persona-tv-screen .tv-leg button { position: relative; width: 44px; min-width: 44px; height: 44px; border: 3px solid var(--tv-paper); background: var(--tv-ink); color: var(--tv-ink); box-shadow: none; }
-body.persona-tv-screen .tv-leg button svg { position: relative; z-index: 1; width: 20px; height: 20px; }
+body.persona-tv-screen .tv-leg .control-group { grid-template-columns: repeat(2, 2.75rem); gap: 0.625rem; }
+body.persona-tv-screen .tv-leg button { position: relative; width: 2.75rem; min-width: 2.75rem; height: 2.75rem; border: 3px solid var(--tv-paper); background: var(--tv-ink); color: var(--tv-ink); box-shadow: none; }
+body.persona-tv-screen .tv-leg button svg { position: relative; z-index: 1; width: 1.25rem; height: 1.25rem; }
 body.persona-tv-screen .tv-leg button:hover:enabled { color: var(--tv-ink); border-color: var(--tv-paper); background: var(--tv-ink); }
 body.persona-tv-screen .tv-leg button:focus-visible { outline: 3px solid var(--tv-ink); outline-offset: 3px; }
 body.persona-tv-screen .persona-tv .game-action-button:disabled,
 body.persona-tv-screen .tv-leg button:disabled { opacity: 1; cursor: not-allowed; }
 
-body.persona-tv-screen .persona-tv .game-start-prompt { padding: 12px; }
+body.persona-tv-screen .persona-tv .game-start-prompt { padding: 0.75rem; }
 :root body.persona-tv-screen .persona-tv .game-start-button {
-  min-height: 44px;
-  gap: 10px;
-  padding: 10px 16px;
+  min-height: 2.75rem;
+  gap: 0.625rem;
+  padding: 0.625rem 1rem;
   border: 2px solid var(--tv-ink);
-  border-radius: 4px;
+  border-radius: 0.25rem;
   background: var(--tv-paper);
   box-shadow: none;
-  font-size: 20px;
+  font-size: 1.25rem;
   line-height: 1.1;
   transform: none;
 }
@@ -187,85 +187,85 @@ body.persona-tv-screen .persona-tv .game-start-button [data-start-label] {
 
 /* Each game keeps its own counters and input model. */
 body.persona-tv-screen .persona-tv .dk-status-bar { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-body.persona-tv-screen .tv-leg .dk-jump-button { width: 78px; border-radius: 22px; font: 400 14px/1 'Persona Slim Local', Arial, sans-serif; }
+body.persona-tv-screen .tv-leg .dk-jump-button { width: 4.875rem; border-radius: 1.375rem; font: 400 0.875rem/1 'Persona Slim Local', Arial, sans-serif; }
 body.persona-tv-screen .tv-leg .dk-jump-button::before { border-radius: inherit; }
 body.persona-tv-screen .tv-leg .dk-jump-button span { position: relative; z-index: 1; color: var(--tv-ink); }
-body.persona-tv-screen .persona-tv-sandbox { margin-bottom: calc(var(--tv-feet-height) + 28px); }
-body.persona-tv-screen .tv-frame-cabinet > .imu-scene { height: auto; min-height: 260px; }
-body.persona-tv-screen .persona-tv .imu-live-readouts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; margin: 0; gap: 12px; text-align: center; }
+body.persona-tv-screen .persona-tv-sandbox { margin-bottom: calc(var(--tv-feet-height) + 1.75rem); }
+body.persona-tv-screen .tv-frame-cabinet > .imu-scene { height: auto; min-height: 16.25rem; }
+body.persona-tv-screen .persona-tv .imu-live-readouts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; margin: 0; gap: 0.75rem; text-align: center; }
 body.persona-tv-screen .persona-tv .imu-live-readouts > div { min-width: 0; align-items: center; white-space: normal; }
-body.persona-tv-screen .persona-tv .imu-live-readouts :is(span, strong, small, b) { color: var(--tv-paper); font: 400 14px/1.3 'Persona Slim Local', Arial, sans-serif; }
-body.persona-tv-screen .persona-tv .imu-live-readouts > div > span { font-size: 12px; text-transform: uppercase; }
+body.persona-tv-screen .persona-tv .imu-live-readouts :is(span, strong, small, b) { color: var(--tv-paper); font: 400 0.875rem/1.3 'Persona Slim Local', Arial, sans-serif; }
+body.persona-tv-screen .persona-tv .imu-live-readouts > div > span { font-size: 0.75rem; text-transform: uppercase; }
 body.persona-tv-screen .persona-tv .imu-mode-readout strong { min-width: 0; text-align: center; }
-body.persona-tv-screen .persona-tv .imu-gravity-readout strong { flex-wrap: wrap; justify-content: center; gap: 2px 6px; }
-body.persona-tv-screen .persona-tv .imu-gravity-readout small { flex-basis: 100%; font-size: 12px; }
+body.persona-tv-screen .persona-tv .imu-gravity-readout strong { flex-wrap: wrap; justify-content: center; gap: 2px 0.375rem; }
+body.persona-tv-screen .persona-tv .imu-gravity-readout small { flex-basis: 100%; font-size: 0.75rem; }
 
 /* Keep the narrow rail and full-width game screen. Stack the two small knobs
    only when the cabinet cannot fit two accessible 44px targets side by side. */
 @container television (max-width: 650px) {
-  .tv-frame-hardware { height: 210px; aspect-ratio: auto; }
-  .tv-frame-hardware .tv-frame-grille { height: 54px; }
-  .tv-secondary-controls { top: 62px; flex-direction: column; gap: 6px; }
-  body.persona-tv-screen .persona-tv .tv-reset-control { bottom: 0; width: 44px; }
+  .tv-frame-hardware { height: 13.125rem; aspect-ratio: auto; }
+  .tv-frame-hardware .tv-frame-grille { height: 3.375rem; }
+  .tv-secondary-controls { top: 3.875rem; flex-direction: column; gap: 0.375rem; }
+  body.persona-tv-screen .persona-tv .tv-reset-control { bottom: 0; width: 2.75rem; }
 }
 
 @media (max-width: 600px) {
   /* Give the actual 320×240 game as much phone width as the reference allows. */
-  body.persona-tv-screen .laser-play-section .laser-shell { width: calc(100% - 24px); padding: 16px 8px; }
-  body.persona-tv-screen .imu-demo-section { width: calc(100% - 24px); margin-inline: auto; padding-inline: 8px; }
-  body.persona-tv-screen .persona-tv { margin-top: 102px; }
-  .tv-frame-cabinet { grid-template-columns: minmax(0, 1fr) minmax(44px, 14%); gap: 3%; padding: 5% 3% 2% 3%; }
-  body.persona-tv-screen .persona-tv-panel { padding: 7px 3% 12px; }
-  body.persona-tv-screen .persona-tv .game-status-bar span { font-size: 11px; }
-  body.persona-tv-screen .persona-tv .game-status-bar strong { font-size: 15px; }
-  :root body.persona-tv-screen .persona-tv .game-start-button { font-size: 18px; padding: 8px 10px; gap: 8px; }
+  body.persona-tv-screen .laser-play-section .laser-shell { width: calc(100% - 1.5rem); padding: 1rem 0.5rem; }
+  body.persona-tv-screen .imu-demo-section { width: calc(100% - 1.5rem); margin-inline: auto; padding-inline: 0.5rem; }
+  body.persona-tv-screen .persona-tv { margin-top: 6.375rem; }
+  .tv-frame-cabinet { grid-template-columns: minmax(0, 1fr) minmax(2.75rem, 14%); gap: 3%; padding: 5% 3% 2% 3%; }
+  body.persona-tv-screen .persona-tv-panel { padding: 0.4375rem 3% 0.75rem; }
+  body.persona-tv-screen .persona-tv .game-status-bar span { font-size: 0.6875rem; }
+  body.persona-tv-screen .persona-tv .game-status-bar strong { font-size: 0.9375rem; }
+  :root body.persona-tv-screen .persona-tv .game-start-button { font-size: 1.125rem; padding: 0.5rem 0.625rem; gap: 0.5rem; }
 }
 
 @media (max-width: 360px) {
-  body.persona-tv-screen .persona-tv-sandbox .game-start-prompt { padding: 8px; }
-  :root body.persona-tv-screen .persona-tv-sandbox .game-start-button { font-size: 16px; padding-inline: 8px; gap: 6px; }
+  body.persona-tv-screen .persona-tv-sandbox .game-start-prompt { padding: 0.5rem; }
+  :root body.persona-tv-screen .persona-tv-sandbox .game-start-button { font-size: 1rem; padding-inline: 0.5rem; gap: 0.375rem; }
 }
 
 /* Give the game the first viewport. The title remains first in reading order;
    below desktop widths it stacks naturally, without clipping any copy. */
-body.persona-tv-screen .game-entry .laser-intro { padding-block: 24px 8px; }
-body.persona-tv-screen .game-entry .laser-play-section { padding-block: 8px 24px; }
+body.persona-tv-screen .game-entry .laser-intro { padding-block: 1.5rem 0.5rem; }
+body.persona-tv-screen .game-entry .laser-play-section { padding-block: 0.5rem 1.5rem; }
 body.persona-tv-screen .game-entry .laser-shell { display: flow-root; }
 body.persona-tv-screen .game-entry .persona-tv {
-  --tv-antenna-height: clamp(80px, 18vw, 160px);
-  margin-top: calc(var(--tv-antenna-height) + 8px);
+  --tv-antenna-height: clamp(5rem, 18vw, 10rem);
+  margin-top: calc(var(--tv-antenna-height) + 0.5rem);
 }
 body.persona-tv-screen .game-entry .tv-antennas { height: var(--tv-antenna-height); }
 body.persona-tv-screen .game-entry .imu-demo-section {
   display: flow-root;
-  width: calc(100% - 40px);
+  width: calc(100% - 2.5rem);
   margin-inline: auto;
-  margin-block: 0 24px;
-  padding: 0 8px;
+  margin-block: 0 1.5rem;
+  padding: 0 0.5rem;
   overflow: visible;
 }
-body.persona-tv-screen .game-entry .imu-toolbar { margin-block: 16px; }
-body.persona-tv-screen .game-entry .imu-toolbar-groups { flex-wrap: wrap; gap: 12px 24px; }
+body.persona-tv-screen .game-entry .imu-toolbar { margin-block: 1rem; }
+body.persona-tv-screen .game-entry .imu-toolbar-groups { flex-wrap: wrap; gap: 0.75rem 1.5rem; }
 
 @media (min-width: 1000px) {
   body.persona-tv-screen .game-entry {
-    --tv-stage-width: max(360px, min(820px, calc(108svh - 280px)));
+    --tv-stage-width: max(22.5rem, min(51.25rem, calc(108svh - 17.5rem)));
     display: grid;
-    grid-template-columns: minmax(260px, .7fr) minmax(0, 1.6fr);
+    grid-template-columns: minmax(16.25rem, .7fr) minmax(0, 1.6fr);
     align-items: start;
-    gap: clamp(24px, 3vw, 48px);
+    gap: clamp(1.5rem, 3vw, 3rem);
     /* Same measure as .content-shell, so the notes below share this left edge. */
-    width: min(1180px, calc(100% - 56px));
+    width: min(73.75rem, calc(100% - 3.5rem));
     margin-inline: auto;
-    padding-top: 24px;
+    padding-top: 1.5rem;
   }
   body.persona-tv-screen .game-entry > * { min-width: 0; }
-  body.persona-tv-screen .game-entry .laser-intro { padding: clamp(64px, 12svh, 120px) 0 0; }
+  body.persona-tv-screen .game-entry .laser-intro { padding: clamp(4rem, 12svh, 7.5rem) 0 0; }
   body.persona-tv-screen .game-entry .laser-intro-layout {
     width: 100%;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: 24px;
+    gap: 1.5rem;
   }
   body.persona-tv-screen .game-entry .laser-intro h1 {
     font-size: clamp(2rem, 3vw, 3.25rem);
@@ -279,10 +279,10 @@ body.persona-tv-screen .game-entry .imu-toolbar-groups { flex-wrap: wrap; gap: 1
     background: transparent;
   }
   body.persona-tv-screen .game-entry .persona-tv {
-    --tv-antenna-height: clamp(60px, 11svh, 104px);
-    --tv-feet-height: clamp(40px, 6svh, 56px);
+    --tv-antenna-height: clamp(3.75rem, 11svh, 6.5rem);
+    --tv-feet-height: clamp(2.5rem, 6svh, 3.5rem);
     width: min(100%, var(--tv-stage-width));
-    margin-top: calc(var(--tv-antenna-height) + 8px);
+    margin-top: calc(var(--tv-antenna-height) + 0.5rem);
   }
   body.persona-tv-screen .game-entry .tv-antennas {
     height: var(--tv-antenna-height);
@@ -294,26 +294,26 @@ body.persona-tv-screen .game-entry .imu-toolbar-groups { flex-wrap: wrap; gap: 1
     flex-wrap: wrap;
     overflow: visible;
   }
-  body.persona-tv-screen .game-entry .imu-toolbar button { min-height: 44px; }
+  body.persona-tv-screen .game-entry .imu-toolbar button { min-height: 2.75rem; }
 }
 
 /* The sandbox's screen and settings are one workspace, not a vertical queue.
    Keep the short introduction above both; phone order is TV, then settings. */
 body.persona-tv-screen .imu-control-panel {
   min-width: 0;
-  padding: 20px;
+  padding: 1.25rem;
   background: var(--palette-olive);
   color: var(--palette-white);
 }
 body.persona-tv-screen .game-entry .imu-control-panel :is(.imu-toolbar, .imu-axis-controls) {
   width: 100%;
   margin: 0;
-  padding: 16px 0;
+  padding: 1rem 0;
 }
 body.persona-tv-screen .imu-control-panel .imu-toolbar-groups {
   display: grid;
   width: 100%;
-  gap: 16px;
+  gap: 1rem;
   overflow: visible;
 }
 body.persona-tv-screen .imu-control-panel .imu-toolbar-group { width: 100%; }
@@ -325,13 +325,13 @@ body.persona-tv-screen .imu-control-panel :is(.imu-mode-control, .imu-planet-con
 body.persona-tv-screen .imu-control-panel .imu-planet-control { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 body.persona-tv-screen .imu-control-panel :is(.imu-mode-control, .imu-planet-control) button {
   min-width: 0;
-  min-height: 44px;
-  padding-inline: 8px;
+  min-height: 2.75rem;
+  padding-inline: 0.5rem;
 }
-body.persona-tv-screen .imu-control-panel .imu-axis-control { min-height: 44px; }
-body.persona-tv-screen .imu-control-panel .imu-axis-control input { min-height: 32px; }
+body.persona-tv-screen .imu-control-panel .imu-axis-control { min-height: 2.75rem; }
+body.persona-tv-screen .imu-control-panel .imu-axis-control input { min-height: 2rem; }
 body.persona-tv-screen .imu-control-panel .game-keyboard-help {
-  margin-top: 16px;
+  margin-top: 1rem;
   color: var(--palette-white);
 }
 body.persona-tv-screen .imu-control-panel .game-implementation-note { color: var(--palette-white); }
@@ -341,28 +341,28 @@ body.persona-tv-screen .imu-control-panel :is(.imu-toolbar-group > span, .imu-ax
 
 @media (min-width: 1000px) {
   body.persona-tv-screen .game-entry.game-entry-imu {
-    --tv-stage-width: max(400px, min(760px, calc(100svh - 260px)));
+    --tv-stage-width: max(25rem, min(47.5rem, calc(100svh - 16.25rem)));
     grid-template-columns: minmax(0, 1fr);
-    gap: 16px;
+    gap: 1rem;
   }
   body.persona-tv-screen .game-entry-imu .laser-intro { padding: 0; }
   body.persona-tv-screen .game-entry-imu .laser-intro-layout {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
     align-items: start;
-    gap: 32px;
+    gap: 2rem;
   }
   body.persona-tv-screen .game-entry-imu .laser-description { margin-top: 0; }
   body.persona-tv-screen .game-entry-imu .imu-demo-section {
     display: grid;
-    grid-template-columns: minmax(0, 1.6fr) minmax(320px, 1fr);
+    grid-template-columns: minmax(0, 1.6fr) minmax(20rem, 1fr);
     align-items: start;
-    gap: 32px;
+    gap: 2rem;
   }
   body.persona-tv-screen .game-entry-imu .imu-control-panel {
-    margin-top: calc(clamp(48px, 8svh, 72px) + 8px);
+    margin-top: calc(clamp(3rem, 8svh, 4.5rem) + 0.5rem);
   }
   body.persona-tv-screen .game-entry-imu .persona-tv {
-    --tv-antenna-height: clamp(48px, 8svh, 72px);
+    --tv-antenna-height: clamp(3rem, 8svh, 4.5rem);
   }
 }
 

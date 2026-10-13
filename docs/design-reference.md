@@ -308,7 +308,7 @@ Serve the build with `python3 -m http.server 8000 --directory _site`.
 7. **Cropped giant title on case-study heroes** (reference: "Result" bleeding off the bottom edge).
    - Target: `.case-study-hero` in `project-pages.css`.
    - A decorative `::after` reads the project's short name from a `data-title` attribute on an `aria-hidden` span. Inject this Persona-only markup in `templates/persona/redesign.mjs`; keep the shared case-study layout unchanged.
-   - Styling: `font-size: clamp(5rem, 14vw, 12rem)`, positioned so ~30% of its height is clipped by `overflow: hidden`, `aria-hidden` (pseudo-elements are not read by most screen readers, but keep the real `h1` intact).
+   - Styling: `font-size: min(12rem, calc(98cqi / (var(--case-title-chars) * var(--case-title-advance))))` using measured uppercase font advances; overlap the image by 20% of title height and position so ~30% of its height is clipped by `overflow: hidden`, `aria-hidden` (pseudo-elements are not read by most screen readers, but keep the real `h1` intact).
    - Done when:
      - The title appears behind the hero media and never covers text or controls.
      - It is hidden below 600px wide.

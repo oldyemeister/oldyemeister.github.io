@@ -7,6 +7,8 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, educationDeco
   // extension above the first visible frame. Normal page scrolling is unchanged.
   document.documentElement.classList.add('home-overscroll-contained');
   const hero = document.querySelector('#home');
+  // Physical stage scale; never alter browser coordinates with body zoom.
+  const desktopStageScale = () => window.innerWidth >= 900 ? hero.getBoundingClientRect().width / 1440 : 1;
   document.body.style.setProperty('--hero-circle-scale', settings.heroBackdrop.scale);
   let heroVisible = true;
   const syncFlowers = () => hero?.classList.toggle('hero-flowers-running', heroVisible && !document.hidden);
@@ -60,7 +62,7 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, educationDeco
       continuation.style.top = `${artBox.top - aboutBox.top}px`;
       continuation.style.width = `${artBox.width}px`;
       const artScale = artBox.width / 796;
-      const lift = settings.heroBackdrop.liftPx;
+      const lift = settings.heroBackdrop.liftPx * desktopStageScale();
       heroArt.style.setProperty('--hero-circle-lift-svg', `${-lift / artScale}px`);
       continuation.style.setProperty('--hero-circle-lift-svg', `${-lift / artScale}px`);
       const headerArt = document.querySelector('.hero-header-art');
@@ -83,14 +85,14 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, educationDeco
       flowers.forEach(([selector, tx, ty]) => {
         const flower = hero.querySelector(selector);
         const size = flower.getBoundingClientRect().width;
-        const half = size / 2 + 8;
+        const half = size / 2 + 8 * desktopStageScale();
         let best;
         for (let angle = 0; angle < 360; angle += 2) {
           const x = cx + Math.cos(angle * Math.PI / 180) * radius;
           const y = cy + Math.sin(angle * Math.PI / 180) * radius;
           if (x < half || x > stage.width - half || y < half || y > stage.height - half) continue;
           const collision = obstacles.some(r => x + half > r.left - stage.left && x - half < r.right - stage.left && y + half > r.top - stage.top && y - half < r.bottom - stage.top);
-          const crowded = placed.some(p => Math.hypot(x - p.x, y - p.y) < half + p.half + 12);
+          const crowded = placed.some(p => Math.hypot(x - p.x, y - p.y) < half + p.half + 12 * desktopStageScale());
           const score = Math.hypot(x - stage.width * tx, y - stage.height * ty) + (collision ? 10000 : 0) + (crowded ? 10000 : 0);
           if (!best || score < best.score) best = {x, y, half, score};
         }
@@ -116,41 +118,41 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, educationDeco
   const outerRing = about?.querySelector('.about-outer-ring');
   const shockwave = about?.querySelector('.about-shockwave');
   const education = document.querySelector('#education');
-  const aboutHeightFloor = () => window.innerWidth <= 760
+  const aboutHeightFloor = () => window.innerWidth < 900
     ? { px: 520, vh: 0 }
-    : window.innerHeight <= 600 ? { px: 440, vh: 0 }
-    : { px: settings.about.minHeightPx, vh: settings.about.minHeightVh };
+    : { px: settings.about.minHeightPx * desktopStageScale(), vh: 0 };
   const alignGoldCircles = () => {
     if (!about) return;
     const box = about.getBoundingClientRect();
     const goldArt = about.querySelector('.about-legacy-art');
-    const scale = Math.max(.45, Math.min(box.width / 1440, 1.1)) * settings.about.goldArtworkScale;
-    const x = box.width * settings.about.circleCenterXPercent / 100 + settings.about.circleCenterOffsetXPx;
+    const stageScale = desktopStageScale();
+    const scale = (window.innerWidth >= 900 ? stageScale : Math.max(.45, Math.min(box.width / 1440, 1.1))) * settings.about.goldArtworkScale;
+    const x = box.width * settings.about.circleCenterXPercent / 100 + settings.about.circleCenterOffsetXPx * stageScale;
     const blueBottom = Number(about.style.getPropertyValue('--hero-blue-bottom')) || 0;
     const fraction = settings.about.circleCenterYPercent / 100;
     // The actual outer radius includes the stroke. Account for the cropped
     // center offset so the two rings stay separate without excessive height.
     const clearHeight = fraction > 0 ? Math.max(0,
-      (blueBottom + 1032 * scale + settings.about.minimumRingGapPx - settings.about.circleCenterOffsetYPx) / fraction) : 0;
-    about.style.setProperty('--about-content-top', `${Math.max(48, blueBottom + 24)}px`);
+      (blueBottom + 1032 * scale + settings.about.minimumRingGapPx * stageScale - settings.about.circleCenterOffsetYPx * stageScale) / fraction) : 0;
+    about.style.setProperty('--about-content-top', `${Math.max(48 * stageScale, blueBottom + 24 * stageScale)}px`);
     const floor = aboutHeightFloor();
     const heightRule = `max(${floor.px}px, ${floor.vh}svh, ${clearHeight}px)`;
     about.style.setProperty('--about-section-min-height', heightRule);
-    const y = box.height * fraction + settings.about.circleCenterOffsetYPx;
+    const y = box.height * fraction + settings.about.circleCenterOffsetYPx * stageScale;
     goldArt.style.width = `${1440 * scale}px`;
     goldArt.style.left = `${x - 950 * scale}px`;
     goldArt.style.top = `${y + 180 * scale}px`;
     // Fit both portrait rectangles within the inner opening of the final arch.
     const radius = 700 * scale;
-    const width = Math.min(560, box.width - 48, radius * 1.2);
-    const gap = Math.min(32, Math.max(16, box.width * .03));
+    const width = Math.min(560 * stageScale, box.width - 48 * stageScale, radius * 1.2);
+    const gap = Math.min(32 * stageScale, Math.max(16 * stageScale, box.width * .03));
     const height = (width - gap) / 2 * 4 / 3;
-    const left = Math.max(24, Math.min(x - width / 2, box.width - width - 24));
-    const reach = Math.max(Math.abs(left - x), Math.abs(left + width - x)) + 12;
-    const top = y - Math.sqrt(Math.max(0, radius * radius - reach * reach)) + 24;
+    const left = Math.max(24 * stageScale, Math.min(x - width / 2, box.width - width - 24 * stageScale));
+    const reach = Math.max(Math.abs(left - x), Math.abs(left + width - x)) + 12 * stageScale;
+    const top = y - Math.sqrt(Math.max(0, radius * radius - reach * reach)) + 24 * stageScale;
     about.style.setProperty('--arch-photos-width', `${width}px`);
     about.style.setProperty('--arch-photos-left', `${left}px`);
-    about.style.setProperty('--arch-photos-top', `${Math.min(top, box.height - height - 32)}px`);
+    about.style.setProperty('--arch-photos-top', `${Math.min(top, box.height - height - 32 * stageScale)}px`);
   };
   const initialAboutFloor = aboutHeightFloor();
   about?.style.setProperty('--about-section-min-height', `max(${initialAboutFloor.px}px, ${initialAboutFloor.vh}svh)`);

@@ -8,19 +8,19 @@ body.persona-design :is(#about, #skills, #projects) > .content-shell { position:
   pointer-events: none;
   z-index: 0;
 }
-.section-motif { position: absolute; width: 64px; height: 64px; fill: currentColor; }
-#about .section-motif--star { right: 7%; top: 12px; transform: rotate(-14deg); }
-#about .section-motif--ring { right: 2%; top: 52px; width: 36px; height: 36px; }
-#skills .section-motif--sparkle { left: 2%; bottom: 16px; width: 50px; height: 50px; }
-#skills .section-motif--flower { right: 4%; bottom: 8px; transform: rotate(15deg); }
-#projects .section-motif--rings { right: -18px; top: -38px; width: 150px; height: 150px; }
-#contact .section-motif--flower { left: 16px; bottom: 8px; width: 70px; height: 70px; transform: rotate(-10deg); }
-#contact .section-motif--sparkle { left: 100px; bottom: 30px; width: 30px; height: 30px; }
-@media (max-width: 760px) {
-  #about .section-motif--star { width: 44px; height: 44px; top: 8px; right: 14%; }
-  #about .section-motif--ring { top: 27px; right: 4%; width: 28px; height: 28px; }
-  #projects .section-motif--rings { width: 100px; height: 100px; top: -30px; }
-  #skills .section-motif--flower, #contact .section-motif--flower { width: 48px; height: 48px; }
+.section-motif { position: absolute; width: 4rem; height: 4rem; fill: currentColor; }
+#about .section-motif--star { right: 7%; top: 0.75rem; transform: rotate(-14deg); }
+#about .section-motif--ring { right: 2%; top: 3.25rem; width: 2.25rem; height: 2.25rem; }
+#skills .section-motif--sparkle { left: 2%; bottom: 1rem; width: 3.125rem; height: 3.125rem; }
+#skills .section-motif--flower { right: 4%; bottom: 0.5rem; transform: rotate(15deg); }
+#projects .section-motif--rings { right: -1.125rem; top: -2.375rem; width: 9.375rem; height: 9.375rem; }
+#contact .section-motif--flower { left: 1rem; bottom: 0.5rem; width: 4.375rem; height: 4.375rem; transform: rotate(-10deg); }
+#contact .section-motif--sparkle { left: 6.25rem; bottom: 1.875rem; width: 1.875rem; height: 1.875rem; }
+@media (max-width: 899px) {
+  #about .section-motif--star { width: 2.75rem; height: 2.75rem; top: 0.5rem; right: 14%; }
+  #about .section-motif--ring { top: 1.6875rem; right: 4%; width: 1.75rem; height: 1.75rem; }
+  #projects .section-motif--rings { width: 6.25rem; height: 6.25rem; top: -1.875rem; }
+  #skills .section-motif--flower, #contact .section-motif--flower { width: 3rem; height: 3rem; }
 }
 body.persona-design #about {
   background: var(--palette-yellow);
@@ -45,7 +45,7 @@ body.persona-design #contact .contact-link-row:is(:hover, :focus-visible) {
 }
 body.persona-design #contact .contact-link-row:focus-visible {
   outline: 2px solid var(--palette-olive);
-  outline-offset: 6px;
+  outline-offset: 0.375rem;
 }
 body.persona-design #contact .contact-link-row:is(:hover, :focus-visible) .contact-link-icon {
   background: var(--palette-black, #111);
@@ -58,7 +58,7 @@ body.persona-design #contact .contact-link-address {
 /* Bright yellow case-file field with faint diagonal hazard stripes. */
 body.persona-design #projects {
   background: var(--palette-yellow) repeating-linear-gradient(-45deg,
-    transparent 0 26px, color-mix(in srgb, var(--palette-black) 5%, transparent) 26px 52px);
+    transparent 0 1.625rem, color-mix(in srgb, var(--palette-black) 5%, transparent) 1.625rem 3.25rem);
   overflow: hidden;
 }
 
@@ -71,7 +71,7 @@ body.persona-design #projects .project-corner-ribbons {
   z-index: 0;
   right: 0;
   bottom: 0;
-  width: min(42%, 640px);
+  width: min(42%, 40rem);
   height: auto;
   overflow: visible;
   pointer-events: none;
@@ -83,20 +83,20 @@ body.persona-design #projects .project-corner-ribbon-bands {
 body.persona-design #projects .project-corner-ribbon-bands rect {
   transform: rotate(calc(-1 * (var(--hero-corner-angle) + var(--stripe-index) * var(--hero-corner-angle-step))));
 }
-@media (max-width: 760px) {
-  body.persona-design #projects .project-corner-ribbons { width: min(32%, 180px); }
+@media (max-width: 899px) {
+  body.persona-design #projects .project-corner-ribbons { width: min(32%, 11.25rem); }
 }
 
 body.persona-design #contact {
-  --pill-gap: clamp(3px, .5vw, 8px);
-  --pill-height: clamp(10px, 2vw, 30px);
+  --pill-gap: clamp(3px, .5vw, 0.5rem);
+  --pill-height: clamp(0.625rem, 2vw, 1.875rem);
   --contact-pill-height: calc(6 * var(--pill-height) + 5 * var(--pill-gap));
-  --contact-flower-size: clamp(150px, 14vw, 210px);
+  --contact-flower-size: clamp(9.375rem, 14vw, 13.125rem);
   --contact-flower-scale: 1.2;
   --contact-flower-period: 30s; /* Two counterclockwise revolutions per minute. */
   /* A spacious closing panel, with a natural height if more links are added. */
-  --contact-min-height: clamp(680px, 85svh, 880px);
-  --contact-space-y: clamp(112px, 14svh, 176px);
+  --contact-min-height: clamp(42.5rem, 85svh, 55rem);
+  --contact-space-y: clamp(7rem, 14svh, 11rem);
   min-height: var(--contact-min-height);
   padding-block: var(--contact-space-y);
   display: grid;
@@ -113,11 +113,11 @@ body.persona-design #contact > .content-shell {
 }
 @media (max-width: 680px) {
   body.persona-design #contact {
-    --contact-min-height: clamp(600px, 78svh, 720px);
-    --contact-space-y: 96px;
+    --contact-min-height: clamp(37.5rem, 78svh, 45rem);
+    --contact-space-y: 6rem;
     --contact-ribbon-inset: 0px;
   }
-  body.persona-design #contact > .content-shell { padding-inline-end: 24px; }
+  body.persona-design #contact > .content-shell { padding-inline-end: 1.5rem; }
   /* Keep the full ribbon palette, without running bands underneath the links. */
   body.persona-design #contact .contact-edge-ribbons {
     transform: scaleX(.3);
@@ -127,8 +127,8 @@ body.persona-design #contact > .content-shell {
 /* Short desktop/landscape windows should not gain a screenful of empty space. */
 @media (max-height: 600px) {
   body.persona-design #contact {
-    --contact-min-height: 480px;
-    --contact-space-y: 80px;
+    --contact-min-height: 30rem;
+    --contact-space-y: 5rem;
   }
 }
 /* Top-edge decoration behind the content, ribbons, flower, and other motifs. */
@@ -136,7 +136,7 @@ body.persona-design #contact .contact-pill-field {
   position: absolute;
   left: 0;
   top: 0;
-  width: calc((min(85vw, 1100px) - 14 * var(--pill-gap)) / 15 * 22 + 21 * var(--pill-gap));
+  width: calc((min(85vw, 68.75rem) - 14 * var(--pill-gap)) / 15 * 22 + 21 * var(--pill-gap));
   height: var(--contact-pill-height);
   display: flex;
   gap: var(--pill-gap);
@@ -161,7 +161,7 @@ body.persona-design #contact .about-pill {
 /* Education's band pattern turned clockwise: top band becomes rightmost. */
 body.persona-design #contact .contact-edge-ribbons {
   position: absolute;
-  inset: 0 var(--contact-ribbon-inset, 20px) 0 auto;
+  inset: 0 var(--contact-ribbon-inset, 1.25rem) 0 auto;
   display: flex;
   flex-direction: row-reverse;
   z-index: 0;
@@ -176,8 +176,8 @@ body.persona-design #contact .contact-edge-ribbons > span {
 
 body.persona-design #contact .contact-flower {
   position: absolute;
-  top: calc(var(--contact-flower-size) * -.3 + 35px);
-  right: calc(var(--contact-flower-size) * -.13 + 10px);
+  top: calc(var(--contact-flower-size) * -.3 + 2.1875rem);
+  right: calc(var(--contact-flower-size) * -.13 + 0.625rem);
   width: calc(var(--contact-flower-size) * var(--contact-flower-scale));
   height: calc(var(--contact-flower-size) * var(--contact-flower-scale));
   z-index: 0;

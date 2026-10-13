@@ -22,11 +22,11 @@ body.persona-design #home .hero-ambient {
 }
 body.persona-design #home .hero-ambient-orb {
   position: absolute;
-  width: clamp(280px, 42vw, 600px);
+  width: clamp(17.5rem, 42vw, 37.5rem);
   aspect-ratio: 1;
   border-radius: 50%;
   background: radial-gradient(circle, var(--hero-glow-white) 0% 22%, var(--hero-glow-accent) 48%, transparent 74%);
-  filter: blur(50px);
+  filter: blur(3.125rem);
   opacity: .20;
   pointer-events: none;
   animation: hero-ambient-drift 26s ease-in-out infinite;

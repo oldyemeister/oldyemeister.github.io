@@ -2,6 +2,19 @@
 
 Newest entries first. Each entry: date, from → to, task, status, where to start.
 
+## 2026-10-13 15:46 · Codex — task B, ready for owner review
+- Changed:
+  - Implemented the owner's selected 900px desktop minimum, 14px body-copy floor and 115% growth cap. Added the Persona-only root class and desktop scaling sheet; converted component dimensions from px to rem while retaining media-query pixels, hairlines and SVG drawing coordinates.
+  - Hero elements now share a container-based stage; Hero/About cap at the same 90rem canvas. About geometry scales its existing offsets/gaps from the measured stage width without body zoom. Skills stays three columns and the featured project retains its desktop arrangement from 900px. Compact layouts take over below 900px; existing phone layouts remain.
+  - Documented the sizing model and updated the cropped-title specification to its measured container fit. No palette changes or push.
+- Files touched: Persona theme CSS files, new `assets/themes/persona/desktop-scaling.css`, `templates/persona/render.mjs`, `assets/js/scroll-presence.js`, `test/persona-scaling.test.mjs`, two existing CRT CSS assertions, `docs/DESIGN.md`, `docs/design-reference.md`, `HANDOFF.md`, and dated screenshots.
+- Verified: 137/137 tests, production build, `/original/` bundle `66fffa4f89.css`; no page overflow at 1920/1600/1440/1280/1100/1000/900/800/375px. Measured root sizes: 18.4px at 1920, 16px at 1440 and 12px at 900; project body copy bottoms out at 14px. Hero, About, Skills, Projects and RF case-study screenshot grids saved as `docs/screenshots/2026-10-13-scaling-{home,about,skills,projects,case}.png`.
+- Regression evidence: `/original/` before/after screenshots at 1440/375px are pixel-identical; saved as `docs/screenshots/2026-10-13-scaling-{before,after}-original-{1440,375}.png`. At 375px the checked Persona Hero/Skills/RF hero captures are pixel-identical. At 1440px Skills and RF hero are pixel-identical; Hero retains reference geometry with minor control/rendering differences. A native-coordinate scroll smoke check at 1920/1440/1000/900/800 found no browser errors, with the rings, all 18 stripes and the fan present. Existing scroll unit tests pass.
+- Zoom check: emulated a 200% zoom-equivalent CSS viewport/device-scale pair; case-study copy grew from 17.28px to an effective 32px without horizontal overflow. This checks zoom-equivalent layout, not the browser's actual zoom menu; please include actual browser zoom in owner review.
+- Unfinished / concerns: owner visual review is pending. The 14px reading floor intentionally allows text wrapping to differ from exact bitmap scaling. Claude's prior uncommitted work remains separate; its existing component additions received equivalent unit conversions in the working tree, without bundling those additions into this commit. Local preview is running at `http://127.0.0.1:8000/`.
+- Please review: resize from 1920px down through 900px; check the transition below 900px, date/header/HUD size, hero buttons, case-study reading comfort, actual 200% browser zoom, and ring/shockwave/stripe alignment while scrolling. Also review task A's RF/ACC title and caption placement.
+- Review of previous entry: the owner answered task B's three choices in this chat, removing the 15:40 handoff's waiting condition. Task A is committed separately as `739b870`.
+
 ## 2026-10-13 15:33 · Codex — task A
 - Changed: Fixed horizontal title clipping using measured per-character font advances and container sizing. Removed the separate padded strip, overlapped the image by 20% of title height, retained 30% bottom crop, and reduced decorative opacity to .85. Caption moves above the image at 600px and wider to stay readable.
 - Files touched: `templates/persona/redesign.mjs`, `assets/themes/persona/project-pages.css`, `test/persona-cropped-title.test.mjs`, `HANDOFF.md`, `docs/screenshots/2026-10-13-title-fix-{before,after}-{rf-receiver,aps380}-{1440,800}.png`.

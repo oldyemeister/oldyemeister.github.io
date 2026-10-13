@@ -5,7 +5,10 @@ import { redesignContent } from './redesign.mjs';
 import { replaceRequired } from './anchors.mjs';
 
 export function personaPreview(html, prefix = '/persona', redesign = true, ui, projectData) {
-  if (redesign) html = redesignContent(html, projectData);
+  if (redesign) {
+    html = redesignContent(html, projectData);
+    html = replaceRequired(html, /<html([^>]*)>/, (_, attributes) => `<html${attributes} class="persona-root">`, 'the <html> tag');
+  }
   const home = /<body class="page-home">/.test(html);
   const guide = html.match(/<aside class="keyboard-guide[^"]*"[^>]*>[\s\S]*?<\/aside>/);
   const gameKeys = guide ? [...guide[0].matchAll(/<li>([\s\S]*?)<\/li>/g)]
@@ -70,6 +73,7 @@ function headAssets(home, redesign, game) {
       ${home && redesign ? '<link rel="stylesheet" href="/assets/themes/persona/education-settings.css?v=2">' : ''}
       ${homeSheet('experience-save-menu')}
       ${homeSheet('project-categories', redesign)}
+      ${redesign ? '<link rel="stylesheet" href="/assets/themes/persona/desktop-scaling.css">' : ''}
       ${redesign ? '<script src="/assets/js/about-pills.js" defer></script>' : ''}
       ${home ? '<link rel="stylesheet" href="/assets/themes/persona/scroll-presence.css">\n      <script type="module" src="/assets/js/scroll-presence.js"></script>' : ''}
       ${home ? `<script>

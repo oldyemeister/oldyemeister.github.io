@@ -27,12 +27,12 @@ body.persona-design :is(.hero-role, .hero-introduction, .eyebrow, .section-index
   .monogram-dot, .game-message, .game-start-prompt p, .game-status-bar span,
   .imu-live-readouts span, .imu-live-readouts strong, .contact-message) { color: var(--on-panel); }
 body.persona-design :is(.section-header h2, .two-column-section h2, .contact-layout h2)::after {
-  width: 100%; height: 6px; border-radius: 3px;
+  width: 100%; height: 0.375rem; border-radius: 3px;
   background: var(--interactive); transform: none;
 }
 body.persona-design :is(.laser-intro h1, .case-study-hero h1) {
-  border-bottom: 6px solid var(--interactive);
-  padding-bottom: 18px;
+  border-bottom: 0.375rem solid var(--interactive);
+  padding-bottom: 1.125rem;
 }
 
 /* One enclosing panel on each existing section wrapper; no new card layout. */
@@ -46,10 +46,10 @@ body.persona-design :is(.case-study-hero-copy, .case-study-layout, .laser-shell)
   background: var(--panel);
   color: var(--on-panel);
   border: 3px solid var(--border);
-  border-radius: 28px;
-  padding: clamp(22px, 3.5vw, 44px);
+  border-radius: 1.75rem;
+  padding: clamp(1.375rem, 3.5vw, 2.75rem);
 }
-body.persona-design .hero-layout { margin-block: 32px; }
+body.persona-design .hero-layout { margin-block: 2rem; }
 body.persona-design .skip-link { background: var(--interactive); color: var(--on-field); }
 body.persona-design :is(.experience-item, .case-study-meta,
   .project-metrics, .project-metrics > div) {
@@ -64,18 +64,18 @@ body.persona-design .experience-item:hover { background: transparent; }
 body.persona-design #projects .project-card {
   background: var(--panel);
   border: 2px solid var(--border);
-  border-radius: 22px;
+  border-radius: 1.375rem;
   box-shadow: var(--control-shadow);
-  padding: 16px;
-  gap: 16px;
+  padding: 1rem;
+  gap: 1rem;
 }
 body.persona-design #projects .project-file-index {
   display: inline-flex;
   align-items: baseline;
-  gap: 6px;
-  margin: 0 0 10px;
-  padding: 3px 11px;
-  border-radius: 999px;
+  gap: 0.375rem;
+  margin: 0 0 0.625rem;
+  padding: 3px 0.6875rem;
+  border-radius: 62.4375rem;
   background: var(--secondary);
   color: var(--on-secondary);
   font: 800 .72rem/1.4 Arial, sans-serif;
@@ -89,19 +89,19 @@ body.persona-design .project-content { background: transparent; }
 body.persona-design :is(.project-media, .portrait-frame, .case-study-hero-media,
   .case-study-prose img) {
   border: 2px solid var(--border);
-  border-radius: 22px;
+  border-radius: 1.375rem;
   background: var(--panel);
   box-shadow: var(--offset-shadow);
 }
 body.persona-design .project-media { overflow: hidden; }
-body.persona-design .project-media :is(img, video) { border-radius: 20px; }
+body.persona-design .project-media :is(img, video) { border-radius: 1.25rem; }
 body.persona-design .persona-monogram {
   background: var(--panel); color: var(--on-panel);
   transform: none;
 }
 body.persona-design figcaption {
   color: var(--on-panel); background: var(--panel);
-  text-align: center; font-size: .8rem; border-radius: 0 0 20px 20px;
+  text-align: center; font-size: .8rem; border-radius: 0 0 1.25rem 1.25rem;
 }
 body.persona-design .case-study-prose .image-caption { text-align: center; }
 body.persona-design :is(.tag-list li, .technology-list li, .case-study-tools li) {
@@ -120,30 +120,30 @@ body.persona-design :is(a, .site-navigation a, .contact-section a, .hud-home) {
   color: inherit;
   text-decoration-color: var(--secondary);
 }
-body.persona-design .site-navigation a { border-radius: 12px; padding-inline: 14px; }
+body.persona-design .site-navigation a { border-radius: 0.75rem; padding-inline: 0.875rem; }
 body.persona-design :is(.identity-mark, .persona-hud kbd) {
   background: var(--secondary); color: var(--on-secondary);
-  border-radius: 8px; transform: none;
+  border-radius: 0.5rem; transform: none;
   box-shadow: var(--small-shadow);
 }
 :root body.persona-design :is(button, .project-demo-link, .hero-links .text-link) {
   color: var(--on-secondary);
   background: var(--secondary);
   border: 2px solid var(--border);
-  border-radius: 16px;
+  border-radius: 1rem;
   box-shadow: var(--control-shadow);
 }
 :root body.persona-design :is(button, .project-demo-link, .hero-links .text-link) * {
   color: inherit;
 }
 body.persona-design :is(button, .project-demo-link, .hero-links .text-link):hover {
-  text-decoration: underline; text-underline-offset: 4px;
+  text-decoration: underline; text-underline-offset: 0.25rem;
 }
 body.persona-design :is(button, .project-demo-link, .hero-links .text-link):active {
   transform: translate(2px, 2px); box-shadow: var(--small-shadow);
 }
 body.persona-design :is(button, a, input, canvas):focus-visible {
-  outline: 3px solid var(--interactive); outline-offset: 6px;
+  outline: 3px solid var(--interactive); outline-offset: 0.375rem;
 }
 body.persona-design :is(button:disabled, [aria-disabled="true"], .source-link-pending, .project-draft-label) {
   background: var(--inactive); color: var(--on-panel);
@@ -157,11 +157,11 @@ body.persona-design .project-media-placeholder {
 
 /* Sandbox settings and CSS fallback chassis; preserve 3D/canvas artwork. */
 body.persona-design :is(.imu-toolbar, .imu-axis-controls) {
-  background: var(--panel); color: var(--on-panel); border-radius: 18px;
+  background: var(--panel); color: var(--on-panel); border-radius: 1.125rem;
 }
-body.persona-design .imu-toolbar { padding: 12px; }
-body.persona-design .imu-axis-controls { padding-inline: 20px; }
-body.persona-design :is(.imu-mode-control, .imu-planet-control) { gap: 8px; padding: 6px; }
+body.persona-design .imu-toolbar { padding: 0.75rem; }
+body.persona-design .imu-axis-controls { padding-inline: 1.25rem; }
+body.persona-design :is(.imu-mode-control, .imu-planet-control) { gap: 0.5rem; padding: 0.375rem; }
 body.persona-design :is(.imu-mode-control, .imu-planet-control) button:not(.is-active) {
   background: var(--inactive); color: var(--on-panel);
   box-shadow: none;
@@ -172,10 +172,10 @@ body.persona-design :is(.imu-scene, .imu-scene-status, .imu-world-axes,
 }
 body.persona-design .imu-css-stage::before,
 body.persona-design .imu-css-stage::after { background-image: none; }
-body.persona-design .imu-css-device { box-shadow: var(--offset-shadow); border-radius: 20px; }
+body.persona-design .imu-css-device { box-shadow: var(--offset-shadow); border-radius: 1.25rem; }
 body.persona-design .imu-css-screw { background: var(--border); }
 body.persona-design .imu-css-pins {
-  background: repeating-linear-gradient(90deg, var(--border) 0 7px, transparent 7px 13px);
+  background: repeating-linear-gradient(90deg, var(--border) 0 0.4375rem, transparent 0.4375rem 0.8125rem);
 }
 body.persona-design .imu-world-axes :is(line, circle) { stroke: var(--border); }
 body.persona-design .imu-world-axes :is(text, polygon, .imu-axis-x-dot) { fill: var(--on-panel); }
@@ -190,7 +190,7 @@ body.persona-design :is(.imu-live-readouts, .game-status-bar) :is(span, strong, 
 @media (max-width: 600px) {
   body.persona-design :is(.hero-section, .page-section, .laser-intro) > .content-shell,
   body.persona-design :is(.case-study-hero-copy, .case-study-layout, .laser-shell) {
-    padding: 20px; border-radius: 22px;
+    padding: 1.25rem; border-radius: 1.375rem;
   }
 }
 
@@ -209,48 +209,48 @@ body.persona-design :is(h1, h2, h3, h4) .kinetic-letter {
 }
 body.persona-design :is(.hero-copy h1, .project-content h3, .case-study-prose h2, .case-study-prose h3) {
   text-align: left;
-  padding-bottom: 18px;
-  border-bottom: 6px solid var(--interactive);
+  padding-bottom: 1.125rem;
+  border-bottom: 0.375rem solid var(--interactive);
 }
 body.persona-design :is(.section-header h2, .two-column-section h2, .contact-layout h2) {
   width: 100%; text-align: left;
 }
 body.persona-design .hero-layout {
   grid-template-columns: minmax(0, 1fr);
-  gap: 36px;
-  padding-block: 48px;
+  gap: 2.25rem;
+  padding-block: 3rem;
 }
 body.persona-design .hero-copy { order: 2; width: 100%; }
 body.persona-design .hero-layout .persona-monogram {
   order: 1;
-  width: min(440px, 85%);
+  width: min(27.5rem, 85%);
   max-height: none;
   justify-self: center;
-  margin: 0 0 24px;
+  margin: 0 0 1.5rem;
 }
 body.persona-design .hero-layout .persona-monogram > span { font-size: clamp(7rem, 20vw, 14rem); }
 body.persona-design .hero-visual-caption {
   position: absolute;
-  top: calc(100% + 14px);
+  top: calc(100% + 0.875rem);
   left: 0; right: 0;
   font: 400 .8rem/1.5 Arial, sans-serif;
   text-align: center;
 }
-body.persona-design .project-content { padding: 0 0 16px; }
+body.persona-design .project-content { padding: 0 0 1rem; }
 body.persona-design #projects .project-content { padding: 0; }
-body.persona-design .project-content h3 { margin-bottom: 24px; font-size: clamp(1.6rem, 2.5vw, 2.2rem); }
-body.persona-design .project-grid { gap: 56px 40px; }
+body.persona-design .project-content h3 { margin-bottom: 1.5rem; font-size: clamp(1.6rem, 2.5vw, 2.2rem); }
+body.persona-design .project-grid { gap: 3.5rem 2.5rem; }
 /* Content entries share the section panel; only their visuals have a shadow. */
 body.persona-design .experience-item { margin-inline: 0; padding-inline: 0; }
 body.persona-design .case-study-hero {
   display: flex;
   flex-direction: column;
-  gap: 32px;
-  width: min(1180px, calc(100% - 40px));
-  margin: 40px auto;
-  padding: clamp(22px, 3.5vw, 44px);
+  gap: 2rem;
+  width: min(73.75rem, calc(100% - 2.5rem));
+  margin: 2.5rem auto;
+  padding: clamp(1.375rem, 3.5vw, 2.75rem);
   border: 3px solid var(--border);
-  border-radius: 28px;
+  border-radius: 1.75rem;
   background: var(--panel);
   color: var(--on-panel);
 }
@@ -264,19 +264,19 @@ body.persona-design .case-study-hero-media {
   box-shadow: none;
 }
 body.persona-design .case-study-hero-media img {
-  border-radius: 22px;
+  border-radius: 1.375rem;
   box-shadow: var(--offset-shadow);
 }
 body.persona-design .case-study-hero-media figcaption {
-  padding: 0 8px; margin-top: 20px; border: 0;
+  padding: 0 0.5rem; margin-top: 1.25rem; border: 0;
 }
-body.persona-design .case-study-layout { margin-bottom: 48px; }
+body.persona-design .case-study-layout { margin-bottom: 3rem; }
 body.persona-design .imu-demo-section {
-  width: min(1280px, calc(100% - 40px));
-  margin: 40px auto;
-  padding: clamp(20px, 3vw, 36px);
+  width: min(80rem, calc(100% - 2.5rem));
+  margin: 2.5rem auto;
+  padding: clamp(1.25rem, 3vw, 2.25rem);
   border: 3px solid var(--border);
-  border-radius: 28px;
+  border-radius: 1.75rem;
   background: var(--panel);
   color: var(--on-panel);
   overflow: visible;
@@ -313,12 +313,12 @@ body.persona-design button[aria-disabled='true'] {
   body.persona-design .project-links .source-link {
     display: inline-flex;
     align-items: center;
-    min-height: 44px;
-    padding-inline: 4px;
+    min-height: 2.75rem;
+    padding-inline: 0.25rem;
   }
 
   body.persona-design .case-study-hero-copy { padding: 0; }
-  body.persona-design .project-grid { gap: 44px; }
+  body.persona-design .project-grid { gap: 2.75rem; }
 }
 
 /* Color emphasis only: these rules work for either data-theme value. */
@@ -354,14 +354,14 @@ body.persona-design .hero-links .text-link:not(.text-link-primary) {
 body.persona-design .hero-links .text-link:hover,
 body.persona-design .hero-links .text-link:focus-visible {
   text-decoration: underline;
-  text-underline-offset: 4px;
+  text-underline-offset: 0.25rem;
 }
 
 /* Restore only the black cabinet and bezel, not its buttons or screen UI. */
 body.persona-design .persona-tv {
   background: var(--tv-black);
   border-color: var(--tv-black);
-  box-shadow: inset 0 3px 0 var(--tv-highlight), inset 0 -6px 0 var(--tv-deep-shadow), 8px 10px 0 var(--tv-shadow);
+  box-shadow: inset 0 3px 0 var(--tv-highlight), inset 0 -0.375rem 0 var(--tv-deep-shadow), 0.5rem 0.625rem 0 var(--tv-shadow);
 }
 body.persona-design .persona-tv > :is(.game-board-wrap, .imu-scene) {
   border-color: var(--tv-bezel);
@@ -369,7 +369,7 @@ body.persona-design .persona-tv > :is(.game-board-wrap, .imu-scene) {
 }
 body.persona-design .tv-leg {
   border-color: var(--tv-black);
-  box-shadow: inset 0 1px 0 var(--tv-highlight), 3px 4px 0 var(--tv-shadow);
+  box-shadow: inset 0 1px 0 var(--tv-highlight), 3px 0.25rem 0 var(--tv-shadow);
 }
 body.persona-design .tv-leg::before { background: var(--tv-black); }
 body.persona-design :is(.game-overlay, .game-pause-overlay, .persona-game-start) {
@@ -381,7 +381,7 @@ body.persona-design .tv-leg button { box-shadow: var(--small-shadow); }
 body.persona-design .game-start-button [data-start-label] { color: var(--on-interactive); }
 body.persona-design .game-overlay strong { color: var(--on-panel); }
 @media (max-width: 600px) {
-  body.persona-design .persona-tv { box-shadow: 4px 6px 0 var(--tv-shadow); }
+  body.persona-design .persona-tv { box-shadow: 0.25rem 0.375rem 0 var(--tv-shadow); }
 }
 }
 
@@ -393,18 +393,18 @@ body.persona-design #experience > .content-shell {
 body.persona-design #experience .section-header :is(h2, p) {
   color: var(--on-field);
 }
-body.persona-design #experience .experience-carousel { position: relative; padding-inline: 26px; }
+body.persona-design #experience .experience-carousel { position: relative; padding-inline: 1.625rem; }
 body.persona-design #experience .experience-card-track {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: calc((100% - 48px) / 3);
-  gap: 24px;
+  grid-auto-columns: calc((100% - 3rem) / 3);
+  gap: 1.5rem;
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
   scrollbar-width: thin;
   scrollbar-color: var(--border) var(--panel);
-  padding: 8px 0 18px;
+  padding: 0.5rem 0 1.125rem;
 }
 body.persona-design #experience .experience-card {
   min-width: 0;
@@ -412,7 +412,7 @@ body.persona-design #experience .experience-card {
   scroll-snap-align: start;
   background: var(--panel);
   border: 3px solid var(--border);
-  border-radius: 28px;
+  border-radius: 1.75rem;
   color: var(--on-panel);
 }
 body.persona-design #experience .experience-card-visual {
@@ -420,10 +420,10 @@ body.persona-design #experience .experience-card-visual {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  min-height: 180px;
-  padding: 20px;
-  border-radius: 25px 25px 0 0;
+  gap: 0.5rem;
+  min-height: 11.25rem;
+  padding: 1.25rem;
+  border-radius: 1.5625rem 1.5625rem 0 0;
   background: var(--secondary);
   color: var(--on-secondary);
   text-align: center;
@@ -432,17 +432,17 @@ body.persona-design #experience .experience-card-visual > span {
   font: 900 4rem/1 'Arial Black', Arial, sans-serif;
 }
 body.persona-design #experience .experience-card-visual small { font-size: .8rem; }
-body.persona-design #experience .experience-card-copy { padding: 24px; }
+body.persona-design #experience .experience-card-copy { padding: 1.5rem; }
 body.persona-design #experience .experience-card h3 {
   font-size: clamp(1.6rem, 2.5vw, 2.2rem);
   line-height: 1.15;
   text-align: center;
   color: var(--on-panel);
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
 }
 body.persona-design #experience .experience-card h3 > span {
   display: block;
-  margin-top: 10px;
+  margin-top: 0.625rem;
   font-size: 1rem;
   font-weight: 700;
 }
@@ -450,12 +450,12 @@ body.persona-design #experience .experience-card :is(p, li, time, small) { color
 body.persona-design #experience .experience-card-meta {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 0.25rem;
   text-align: center;
   font-size: .8rem;
 }
 body.persona-design #experience .experience-card-impact {
-  padding-block: 12px;
+  padding-block: 0.75rem;
   border-block: 1px solid var(--border);
   text-align: center;
   font-size: .85rem;
@@ -463,30 +463,30 @@ body.persona-design #experience .experience-card-impact {
 }
 body.persona-design #experience .experience-card ul {
   margin: 0;
-  padding-left: 18px;
+  padding-left: 1.125rem;
   font-size: .94rem;
   line-height: 1.65;
 }
-body.persona-design #experience .experience-card li + li { margin-top: 14px; }
+body.persona-design #experience .experience-card li + li { margin-top: 0.875rem; }
 body.persona-design #experience .experience-scroll-arrow {
   position: absolute;
   top: 50%;
   z-index: 2;
   display: grid;
   place-items: center;
-  width: 40px;
-  height: 40px;
+  width: 2.5rem;
+  height: 2.5rem;
   padding: 0;
   border: 2px solid var(--border);
   border-radius: 50%;
   background: color-mix(in srgb, var(--palette-yellow) 85%, transparent);
   color: var(--on-field);
-  font: 700 22px/1 Arial, sans-serif;
+  font: 700 1.375rem/1 Arial, sans-serif;
   transform: translateY(-50%);
   box-shadow: none;
 }
-body.persona-design #experience .experience-scroll-previous { left: -8px; }
-body.persona-design #experience .experience-scroll-next { right: -8px; }
+body.persona-design #experience .experience-scroll-previous { left: -0.5rem; }
+body.persona-design #experience .experience-scroll-next { right: -0.5rem; }
 body.persona-design #experience .experience-scroll-arrow[hidden] { display: none; }
 body.persona-design #experience .experience-scroll-arrow:disabled {
   background: color-mix(in srgb, var(--palette-muted) 70%, transparent);
@@ -506,23 +506,23 @@ body.persona-design .site-footer {
 }
 body.persona-design .site-footer p { color: var(--palette-white); }
 @media (max-width: 1000px) {
-  body.persona-design #experience .experience-card-track { grid-auto-columns: calc((100% - 24px) / 2); }
+  body.persona-design #experience .experience-card-track { grid-auto-columns: calc((100% - 1.5rem) / 2); }
 }
 @media (max-width: 600px) {
   body.persona-design #experience .experience-card-track { grid-auto-columns: 100%; }
-  body.persona-design #experience .experience-carousel { padding-inline: 12px; }
-  body.persona-design #experience .experience-card { border-radius: 22px; }
-  body.persona-design #experience .experience-card-visual { border-radius: 19px 19px 0 0; }
-  body.persona-design #experience .experience-card-copy { padding: 20px; }
+  body.persona-design #experience .experience-carousel { padding-inline: 0.75rem; }
+  body.persona-design #experience .experience-card { border-radius: 1.375rem; }
+  body.persona-design #experience .experience-card-visual { border-radius: 1.1875rem 1.1875rem 0 0; }
+  body.persona-design #experience .experience-card-copy { padding: 1.25rem; }
 }
 
 /* 2. Projects buttons only: the hard shadow contracts into the button. */
 body.persona-design #projects :is(.project-demo-link, button, [role='button']) {
-  border-radius: 22px;
+  border-radius: 1.375rem;
   border-color: var(--palette-black);
   background: var(--palette-black);
   color: var(--palette-yellow);
-  box-shadow: 8px 5px 0 0 var(--palette-yellow);
+  box-shadow: 0.5rem 0.3125rem 0 0 var(--palette-yellow);
   transform: none;
   transition: background-color 650ms cubic-bezier(.34, 1.56, .64, 1),
     border-color 650ms cubic-bezier(.34, 1.56, .64, 1),
@@ -538,9 +538,9 @@ body.persona-design #projects .project-demo-link {
 body.persona-design #projects .project-demo-link::before {
   content: '';
   position: absolute;
-  inset: -6px;
+  inset: -0.375rem;
   border: 2px solid var(--palette-black);
-  border-radius: 28px;
+  border-radius: 1.75rem;
   opacity: 0;
   transform: scale(.94);
   pointer-events: none;
@@ -555,7 +555,7 @@ body.persona-design #projects .project-demo-link:is(:hover, :focus-visible)::bef
 /* Project image windows: keep their olive treatment, with a slightly shorter
    yellow drop so it does not peek around the rounded corners. */
 body.persona-design #projects .project-media {
-  box-shadow: 8px 5px 0 var(--palette-yellow);
+  box-shadow: 0.5rem 0.3125rem 0 var(--palette-yellow);
 }
 body.persona-design #projects :is(.project-demo-link, button, [role='button']) * { color: inherit; }
 body.persona-design #projects :is(.project-demo-link, button, [role='button']):is(:hover, :focus-visible):not(:disabled, [aria-disabled='true']) {

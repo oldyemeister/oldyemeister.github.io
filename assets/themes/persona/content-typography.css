@@ -27,9 +27,9 @@ body.persona-design :is(#about, #education, #skills, #experience, #projects, #co
   color: var(--palette-black);
   -webkit-text-fill-color: currentColor;
   -webkit-text-stroke: 0;
-  text-shadow: 3px 4px 1px var(--section-topic-shadow);
+  text-shadow: 3px 0.25rem 1px var(--section-topic-shadow);
   width: 100%;
-  translate: calc(-1 * clamp(0px, (100vw - 1180px) / 2 - 16px, 100px)) 0;
+  translate: calc(-1 * clamp(0px, (100vw - 73.75rem) / 2 - 1rem, 6.25rem)) 0;
 }
 /* Reserve the stretched width in the line layout so headings can still wrap.
    Stretch the visual label, leaving heading height and letter motion intact. */

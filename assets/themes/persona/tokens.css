@@ -52,9 +52,9 @@
   /* Reference geometry (non-color; allowed here because tokens.css is the
      theme's token file — keep them below the colors). */
   --ref-skew: -10deg;           /* Lean for capsules and name plates. */
-  --ref-row-height: 46px;       /* List row min-height. */
-  --ref-row-gap: 5px;           /* Gap between stacked rows. */
-  --ref-marker-width: 6px;      /* Lime marker bar on a selected row. */
+  --ref-row-height: 2.875rem;       /* List row min-height. */
+  --ref-row-gap: 0.3125rem;           /* Gap between stacked rows. */
+  --ref-marker-width: 0.375rem;      /* Lime marker bar on a selected row. */
   --ref-radius: 0;              /* All non-circular chrome. */
   --ref-tag-padding-block: .2em;
   --ref-tag-padding-inline: .8em;
@@ -68,8 +68,8 @@
   --on-field: var(--palette-black);
   --secondary: var(--palette-blue);
   --on-secondary: var(--palette-white);
-  --offset-shadow: 8px 8px 0 var(--palette-yellow);
-  --control-shadow: 4px 4px 0 var(--palette-yellow);
+  --offset-shadow: 0.5rem 0.5rem 0 var(--palette-yellow);
+  --control-shadow: 0.25rem 0.25rem 0 var(--palette-yellow);
 
   /* Tier 3 — page-level tokens, shared in name with site.css/persona/style.css. */
   --page: var(--field);

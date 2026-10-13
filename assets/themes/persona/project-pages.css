@@ -79,39 +79,39 @@ body.persona-design :is(.laser-intro, .laser-notes, .case-study) a.kinetic-text:
 }
 body.persona-design :is(.laser-intro, .laser-notes, .case-study) a:focus-visible {
   outline: 2px solid var(--palette-black);
-  outline-offset: 5px;
+  outline-offset: 0.3125rem;
 }
 body.persona-design .laser-intro {
-  padding-block: clamp(32px, 5vw, 64px) 20px;
+  padding-block: clamp(2rem, 5vw, 4rem) 1.25rem;
 }
 body.persona-design .laser-intro-layout {
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
   align-items: center;
-  gap: clamp(24px, 5vw, 72px);
+  gap: clamp(1.5rem, 5vw, 4.5rem);
 }
 body.persona-design .laser-description {
-  margin: 0 0 12px;
+  margin: 0 0 0.75rem;
   font-size: 1.125rem;
   line-height: 1.6;
 }
 body.persona-design .laser-objective {
-  margin: 0 0 18px;
+  margin: 0 0 1.125rem;
   font-size: 1rem;
   line-height: 1.6;
 }
 body.persona-design .laser-intro .collaborator-byline {
-  margin: 16px 0 0;
+  margin: 1rem 0 0;
   font-size: .875rem;
 }
 body.persona-design .laser-notes {
-  padding-block: clamp(40px, 6vw, 80px);
+  padding-block: clamp(2.5rem, 6vw, 5rem);
 }
 body.persona-design .laser-notes .two-column-section {
   grid-template-columns: minmax(0, .65fr) minmax(0, 1.35fr);
-  gap: clamp(24px, 5vw, 72px);
+  gap: clamp(1.5rem, 5vw, 4.5rem);
   align-items: start;
   border-top: 2px solid var(--palette-olive);
-  padding-top: 32px;
+  padding-top: 2rem;
 }
 body.persona-design .laser-notes .section-body {
   max-width: 70ch;
@@ -119,25 +119,25 @@ body.persona-design .laser-notes .section-body {
 }
 body.persona-design .laser-notes .section-body > p {
   color: var(--palette-olive);
-  margin: 0 0 18px;
+  margin: 0 0 1.125rem;
   font-size: 1rem;
   line-height: 1.7;
   letter-spacing: normal;
 }
 body.persona-design .laser-notes .section-body > h3 {
   color: var(--palette-black);
-  margin: 28px 0 8px;
+  margin: 1.75rem 0 0.5rem;
   font: 750 1rem/1.4 var(--content-font);
   letter-spacing: normal;
   text-transform: none;
 }
 body.persona-design .laser-notes .project-source-note {
   border-top: 1px solid var(--palette-gold);
-  padding-top: 16px;
+  padding-top: 1rem;
   font-size: .875rem;
 }
 body.persona-design .laser-notes .project-metrics > div {
-  padding: 12px 0;
+  padding: 0.75rem 0;
   border-bottom: 1px solid var(--palette-gold);
 }
 body.persona-design .laser-notes .project-metrics dt { color: var(--palette-black); }
@@ -150,10 +150,10 @@ body.persona-design .imu-axis-controls > .imu-implementation-note {
 body.persona-design .case-study-hero {
   display: flex;
   flex-direction: column;
-  width: min(1180px, calc(100% - 40px));
+  width: min(73.75rem, calc(100% - 2.5rem));
   margin: 0 auto;
-  padding: clamp(32px, 5vw, 64px) 0 0;
-  gap: 32px;
+  padding: clamp(2rem, 5vw, 4rem) 0 0;
+  gap: 2rem;
 }
 body.persona-design .case-study-hero-copy {
   order: 0;
@@ -167,7 +167,7 @@ body.persona-design .case-study-hero-copy {
 }
 body.persona-design .case-study-summary {
   max-width: 65ch;
-  margin-top: 20px;
+  margin-top: 1.25rem;
   font-size: 1.125rem;
   line-height: 1.65;
 }
@@ -183,38 +183,38 @@ body.persona-design .case-study-hero-media img {
   height: auto;
   aspect-ratio: 16 / 7;
   object-fit: cover;
-  max-height: 480px;
-  border-radius: 12px;
+  max-height: 30rem;
+  border-radius: 0.75rem;
   box-shadow: none;
 }
 body.persona-design .case-study-hero-media figcaption {
   background: transparent;
-  margin-top: 12px;
+  margin-top: 0.75rem;
   padding: 0;
   text-align: left;
   font-size: .875rem;
 }
 body.persona-design .case-study-layout {
-  grid-template-columns: minmax(180px, 240px) minmax(0, 70ch);
-  gap: clamp(32px, 5vw, 80px);
-  padding: clamp(40px, 6vw, 80px) 0;
+  grid-template-columns: minmax(11.25rem, 15rem) minmax(0, 70ch);
+  gap: clamp(2rem, 5vw, 5rem);
+  padding: clamp(2.5rem, 6vw, 5rem) 0;
   margin-bottom: 0;
 }
 body.persona-design .case-study-meta {
   position: static;
   border-top: 2px solid var(--palette-olive);
-  padding-top: 20px;
+  padding-top: 1.25rem;
 }
 body.persona-design .case-study-meta div {
   grid-template-columns: 1fr;
-  gap: 4px;
+  gap: 0.25rem;
 }
 body.persona-design .case-study-meta dt {
   font-size: .75rem;
   letter-spacing: .04em;
 }
 body.persona-design .case-study-meta dd { font-size: .9375rem; }
-body.persona-design .case-study-tools { display: grid; gap: 4px; }
+body.persona-design .case-study-tools { display: grid; gap: 0.25rem; }
 body.persona-design .case-study-tools li {
   background: none;
   border: 0;
@@ -228,21 +228,21 @@ body.persona-design .case-study-prose {
   letter-spacing: normal;
 }
 body.persona-design .case-study-prose h2 {
-  margin: 48px 0 16px;
-  padding-top: 24px;
+  margin: 3rem 0 1rem;
+  padding-top: 1.5rem;
   border-top: 1px solid var(--palette-gold);
 }
 body.persona-design .case-study-prose > h2:first-child { margin-top: 0; padding-top: 0; border: 0; }
-body.persona-design .case-study-prose p { margin: 0 0 20px; }
+body.persona-design .case-study-prose p { margin: 0 0 1.25rem; }
 body.persona-design .case-study-prose strong { color: var(--palette-black); }
 body.persona-design .case-study-prose img {
-  margin: 16px 0 0;
+  margin: 1rem 0 0;
   border: 1px solid var(--palette-olive);
-  border-radius: 12px;
+  border-radius: 0.75rem;
   box-shadow: none;
 }
 body.persona-design .case-study-prose .image-caption {
-  margin: -8px 0 28px;
+  margin: -0.5rem 0 1.75rem;
   text-align: left;
   font-size: .875rem;
   font-style: normal;
@@ -250,7 +250,7 @@ body.persona-design .case-study-prose .image-caption {
 body.persona-design .case-study-prose table { font-variant-numeric: tabular-nums; }
 body.persona-design .case-study-prose :is(th, td) {
   border-color: var(--palette-gold);
-  padding: 10px 8px;
+  padding: 0.625rem 0.5rem;
   overflow-wrap: anywhere;
 }
 body.persona-design .case-study-prose th { color: var(--palette-black); background: var(--palette-gold); }
@@ -274,10 +274,10 @@ body.persona-design .imu-axis-control input:focus-visible {
   outline-offset: 3px;
 }
 body.persona-design .imu-axis-control input { accent-color: var(--palette-olive); }
-@media (max-width: 760px) {
+@media (max-width: 899px) {
   body.persona-design :is(.laser-intro-layout, .laser-notes .two-column-section, .case-study-layout) {
     grid-template-columns: minmax(0, 1fr);
-    gap: 24px;
+    gap: 1.5rem;
   }
   body.persona-design .laser-intro h1 { max-width: 24ch; }
   body.persona-design .case-study-meta dl { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -287,10 +287,10 @@ body.persona-design .imu-axis-control input { accent-color: var(--palette-olive)
   }
   body.persona-design .case-study-hero-media img { aspect-ratio: 4 / 3; }
   body.persona-design .imu-toolbar { align-items: start; }
-  body.persona-design .imu-toolbar-groups { display: grid; gap: 8px; overflow: visible; }
+  body.persona-design .imu-toolbar-groups { display: grid; gap: 0.5rem; overflow: visible; }
   body.persona-design .imu-toolbar-group { width: auto; min-width: 0; }
-  body.persona-design :is(.imu-mode-control, .imu-planet-control) { flex-wrap: wrap; overflow: visible; gap: 4px; }
-  body.persona-design :is(.imu-mode-control, .imu-planet-control) button { min-width: 0; min-height: 44px; }
+  body.persona-design :is(.imu-mode-control, .imu-planet-control) { flex-wrap: wrap; overflow: visible; gap: 0.25rem; }
+  body.persona-design :is(.imu-mode-control, .imu-planet-control) button { min-width: 0; min-height: 2.75rem; }
 }
 @media (max-width: 380px) {
   body.persona-design .case-study-meta dl { grid-template-columns: minmax(0, 1fr); }

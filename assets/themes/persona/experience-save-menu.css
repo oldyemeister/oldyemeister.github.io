@@ -20,7 +20,7 @@
   --save-ink: color-mix(in srgb, var(--save-reference-ink) 64%, var(--save-black));
 }
 body.persona-design #experience {
-  padding-block: clamp(28px, 4vw, 48px) 32px;
+  padding-block: clamp(1.75rem, 4vw, 3rem) 2rem;
   background: linear-gradient(115deg, var(--save-orange), var(--save-yellow) 65%, var(--save-disc));
   color: var(--save-ink);
 }
@@ -30,7 +30,7 @@ body.persona-design #experience > .content-shell {
   border: 0;
   padding: 0;
 }
-body.persona-design #experience .section-header { display: block; margin-bottom: 16px; }
+body.persona-design #experience .section-header { display: block; margin-bottom: 1rem; }
 body.persona-design #experience .section-header h2 { margin-bottom: 0; }
 body.persona-design #experience .section-header p { color: var(--save-ink); }
 body.persona-design #experience .section-header p {
@@ -47,21 +47,21 @@ body.persona-design #experience .section-header p {
 }
 #experience .experience-save-option {
   /* Let the marker column give up space before the description column. */
-  --sphere-size: clamp(80px, calc(100vw - 950px), 250px);
+  --sphere-size: clamp(5rem, calc(100vw - 59.375rem), 15.625rem);
   --sphere-width: var(--sphere-size);
-  --sphere-stagger: clamp(12px, calc(var(--sphere-size) * .109), 36px);
+  --sphere-stagger: clamp(0.75rem, calc(var(--sphere-size) * .109), 2.25rem);
   --sphere-offset: 0px;
-  --row-left-padding: max(64px, calc((100vw - 1280px) / 2));
+  --row-left-padding: max(4rem, calc((100vw - 80rem) / 2));
   position: relative;
   isolation: isolate;
   display: grid;
   grid-template-columns: var(--sphere-width) minmax(0, 1fr);
   align-items: center;
-  gap: calc(clamp(20px, 3vw, 44px) + 18px);
-  min-height: 250px;
+  gap: calc(clamp(1.25rem, 3vw, 2.75rem) + 1.125rem);
+  min-height: 15.625rem;
   height: var(--experience-row-height, auto);
-  scroll-margin-top: 96px;
-  padding: 8px clamp(24px, 4vw, 80px) 8px var(--row-left-padding);
+  scroll-margin-top: 6rem;
+  padding: 0.5rem clamp(1.5rem, 4vw, 5rem) 0.5rem var(--row-left-padding);
   cursor: pointer;
   color: var(--save-ink);
   background: transparent;
@@ -79,7 +79,7 @@ body.persona-design #experience .section-header p {
 #experience .experience-save-option[aria-selected="true"] {
   z-index: 2;
   color: var(--save-disc);
-  background: repeating-conic-gradient(var(--save-black) 0 25%, var(--save-check) 0 50%) 0 0 / 12px 12px;
+  background: repeating-conic-gradient(var(--save-black) 0 25%, var(--save-check) 0 50%) 0 0 / 0.75rem 0.75rem;
 }
 /* Keyboard focus is shown by underlining the selected title, not an outline box. */
 #experience .experience-save-list:focus { outline: none; }
@@ -109,12 +109,12 @@ body.persona-design #experience .experience-save-filler .experience-save-number 
 }
 #experience .experience-save-list:focus-visible .experience-save-option[aria-selected="true"] h3 {
   text-decoration: underline;
-  text-underline-offset: 5px;
+  text-underline-offset: 0.3125rem;
 }
 #experience .experience-save-option[data-position="first"] { grid-row: 1; --sphere-offset: calc(-1 * var(--sphere-stagger)); }
 #experience .experience-save-option[data-position="middle"] { grid-row: 2; }
 #experience .experience-save-option[data-position="last"] { grid-row: 3; --sphere-offset: var(--sphere-stagger); }
-#experience .experience-save-option:hover:not([aria-selected="true"], .experience-save-filler) { box-shadow: inset 4px 0 var(--save-ink); }
+#experience .experience-save-option:hover:not([aria-selected="true"], .experience-save-filler) { box-shadow: inset 0.25rem 0 var(--save-ink); }
 #experience .experience-save-copy { position: relative; grid-column: 2; }
 body.persona-design #experience .experience-save-copy :is(h3, p, li, strong, span) {
   color: inherit !important;
@@ -124,8 +124,8 @@ body.persona-design #experience .experience-save-copy :is(h3, p, li, strong, spa
 #experience .experience-save-heading-row {
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin: 0 0 8px;
+  gap: 0.875rem;
+  margin: 0 0 0.5rem;
 }
 body.persona-design #experience .experience-save-copy h3 {
   margin: 0;
@@ -140,10 +140,10 @@ body.persona-design #experience .experience-save-option[aria-selected="true"] .e
   display: grid;
   place-items: center;
   flex: none;
-  width: 64px;
-  height: 40px;
+  width: 4rem;
+  height: 2.5rem;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   border: 2px solid var(--save-black);
   background: var(--save-white);
   box-shadow: 3px 3px 0 var(--save-black);
@@ -152,23 +152,23 @@ body.persona-design #experience .experience-save-option[aria-selected="true"] .e
   width: 100%;
   height: 100%;
   object-fit: contain;
-  padding: 4px;
+  padding: 0.25rem;
 }
 @media (max-width: 600px) {
   body.persona-design #experience .experience-save-option[aria-selected="true"] .experience-save-logo-frame {
-    width: 52px; height: 32px;
+    width: 3.25rem; height: 2rem;
   }
 }
-#experience .experience-save-meta { margin: 0 0 8px; font-size: .875rem; }
+#experience .experience-save-meta { margin: 0 0 0.5rem; font-size: .875rem; }
 #experience .experience-save-date { font-style: italic; }
 #experience .experience-save-summary { list-style: none; margin: 0; padding: 0; max-width: none; font-size: .875rem; line-height: 1.35; }
-#experience .experience-save-summary li + li { margin-top: 4px; }
+#experience .experience-save-summary li + li { margin-top: 0.25rem; }
 body.persona-design #experience .experience-save-copy .experience-save-impact {
   display: table;
   max-width: 100%;
-  margin: 12px 0 0;
-  padding: 3px 12px;
-  border-radius: 999px;
+  margin: 0.75rem 0 0;
+  padding: 3px 0.75rem;
+  border-radius: 62.4375rem;
   background: var(--save-ink);
   color: var(--save-disc-light) !important;
   font-size: .85rem;
@@ -227,7 +227,7 @@ body.persona-design #experience .experience-save-option[aria-selected="true"] .e
   height: 65%;
   border-radius: 50%;
   background: radial-gradient(circle, var(--save-white), var(--sphere-glow) 35%, transparent 72%);
-  filter: blur(8px);
+  filter: blur(0.5rem);
   opacity: .65;
   pointer-events: none;
 }
@@ -240,36 +240,36 @@ body.persona-design #experience .experience-save-option[aria-selected="true"] .e
 #experience .experience-save-controls {
   position: absolute;
   /* Keep each 44px arrow fully on the yellow row outside the selection. */
-  top: calc(var(--selected-row-top, 220px) - 56px);
-  height: calc(var(--selected-row-height, 220px) + 112px);
-  width: 44px; margin-left: 8px; z-index: 3;
+  top: calc(var(--selected-row-top, 13.75rem) - 3.5rem);
+  height: calc(var(--selected-row-height, 13.75rem) + 7rem);
+  width: 2.75rem; margin-left: 0.5rem; z-index: 3;
   display: flex; flex-direction: column; justify-content: space-between;
   pointer-events: none;
 }
 #experience .experience-save-controls button {
-  display: grid; place-items: center; width: 44px; height: 44px;
-  flex: 0 0 44px;
-  padding: 10px; border: 0; border-radius: 0;
+  display: grid; place-items: center; width: 2.75rem; height: 2.75rem;
+  flex: 0 0 2.75rem;
+  padding: 0.625rem; border: 0; border-radius: 0;
   background: transparent !important; color: var(--save-black) !important;
   pointer-events: auto;
   box-shadow: none !important; cursor: pointer;
 }
-#experience .experience-save-controls svg { width: 24px; height: 24px; fill: currentColor; stroke: var(--save-yellow); stroke-width: 2px; paint-order: stroke fill; }
+#experience .experience-save-controls svg { width: 1.5rem; height: 1.5rem; fill: currentColor; stroke: var(--save-yellow); stroke-width: 2px; paint-order: stroke fill; }
 #experience .experience-save-controls button:disabled { opacity: .4; cursor: default; }
 #experience .experience-save-controls button:focus-visible { outline: 3px solid var(--save-black); outline-offset: 2px; }
 #experience .experience-save-stars { display: none; position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
 #experience [aria-selected="true"] .experience-save-stars { display: block; }
 #experience .experience-save-stars i {
-  position: absolute; width: 68px; height: 68px;
+  position: absolute; width: 4.25rem; height: 4.25rem;
   background: var(--save-star); opacity: .65;
   clip-path: polygon(50% 0, 60% 38%, 100% 50%, 60% 62%, 50% 100%, 40% 62%, 0 50%, 40% 38%);
 }
 #experience .experience-save-stars i:nth-child(1) { left: 3%; top: 40%; }
-#experience .experience-save-stars i:nth-child(2) { left: 40%; top: 6%; width: 38px; height: 38px; }
+#experience .experience-save-stars i:nth-child(2) { left: 40%; top: 6%; width: 2.375rem; height: 2.375rem; }
 #experience .experience-save-stars i:nth-child(3) { right: 16%; bottom: 8%; }
-#experience .experience-save-stars i:nth-child(4) { right: 2%; top: 10%; width: 100px; height: 100px; }
-@media (max-width: 760px) {
-  #experience .experience-save-option { --sphere-size: clamp(56px, 18vw, 80px); --sphere-stagger: 12px; }
+#experience .experience-save-stars i:nth-child(4) { right: 2%; top: 10%; width: 6.25rem; height: 6.25rem; }
+@media (max-width: 899px) {
+  #experience .experience-save-option { --sphere-size: clamp(3.5rem, 18vw, 5rem); --sphere-stagger: 0.75rem; }
   #experience .experience-save-sphere { font-size: 2.8rem; }
 }
 @media (max-width: 600px) {
@@ -277,35 +277,35 @@ body.persona-design #experience .experience-save-option[aria-selected="true"] .e
     max-width: 100%;
     font-size: clamp(1.4rem, 6vw, 2.1rem);
   }
-  body.persona-design #experience { padding-bottom: max(28px, env(safe-area-inset-bottom)); }
-  body.persona-design #experience .section-header { margin-bottom: 8px; }
-  #experience .experience-save-menu { padding-top: 60px; }
+  body.persona-design #experience { padding-bottom: max(1.75rem, env(safe-area-inset-bottom)); }
+  body.persona-design #experience .section-header { margin-bottom: 0.5rem; }
+  #experience .experience-save-menu { padding-top: 3.75rem; }
   #experience .experience-save-list {
     display: flex;
     flex-direction: column;
     height: auto !important;
   }
   #experience .experience-save-option {
-    --row-left-padding: 18px;
-    --sphere-size: 56px;
-    --sphere-width: 56px;
+    --row-left-padding: 1.125rem;
+    --sphere-size: 3.5rem;
+    --sphere-width: 3.5rem;
     --sphere-stagger: 0px;
-    grid-template-columns: 56px minmax(0, 1fr);
-    gap: 16px;
-    min-height: 92px;
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    gap: 1rem;
+    min-height: 5.75rem;
     height: auto !important;
-    padding: 14px 16px 14px var(--row-left-padding);
+    padding: 0.875rem 1rem 0.875rem var(--row-left-padding);
   }
   #experience .experience-save-option[aria-selected="true"] {
     min-height: 0;
-    padding-block: 22px;
+    padding-block: 1.375rem;
   }
   #experience .experience-save-copy { grid-column: 2; }
   body.persona-design #experience .experience-save-copy h3 {
     font-size: 1.08rem;
     line-height: 1.22;
   }
-  #experience .experience-save-heading-row { margin-bottom: 5px; }
+  #experience .experience-save-heading-row { margin-bottom: 0.3125rem; }
   #experience .experience-save-meta {
     margin-bottom: 0;
     font-size: .875rem;
@@ -317,7 +317,7 @@ body.persona-design #experience .experience-save-option[aria-selected="true"] .e
   }
   #experience .experience-save-option[aria-selected="true"] .experience-save-summary {
     display: block;
-    margin-top: 12px;
+    margin-top: 0.75rem;
     font-size: .975rem;
     line-height: 1.5;
   }
@@ -326,8 +326,8 @@ body.persona-design #experience .experience-save-option[aria-selected="true"] .e
   }
   body.persona-design #experience .experience-save-option[aria-selected="true"] .experience-save-impact {
     display: table;
-    margin-top: 14px;
-    padding: 5px 12px;
+    margin-top: 0.875rem;
+    padding: 0.3125rem 0.75rem;
     font-size: .875rem;
   }
   #experience .experience-save-sphere {
@@ -339,9 +339,9 @@ body.persona-design #experience .experience-save-option[aria-selected="true"] .e
   }
   #experience .experience-save-controls {
     top: 0;
-    right: 14px;
-    width: 100px;
-    height: 44px;
+    right: 0.875rem;
+    width: 6.25rem;
+    height: 2.75rem;
     margin: 0;
     flex-direction: row;
     justify-content: space-between;

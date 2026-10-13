@@ -14,8 +14,8 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 24px;
-  height: 30px;
+  width: 1.5rem;
+  height: 1.875rem;
   opacity: 0;
   pointer-events: none;
   will-change: transform, opacity;

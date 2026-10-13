@@ -156,5 +156,5 @@ test('overlay is pointer-transparent, off means fully hidden, and results stay a
 test('every Persona footer owns the HUD clearance instead of exposing yellow body padding', () => {
   const css = readFileSync(new URL('../assets/themes/persona/style.css', import.meta.url), 'utf8');
   assert.match(css, /\.persona-design\s*\{\s*padding-bottom: 0;/);
-  assert.match(css, /\.persona-design \.site-footer\s*\{\s*padding-bottom: calc\(30px \+ var\(--hud-height\)\);/);
+  assert.match(css, /\.persona-design \.site-footer\s*\{\s*padding-bottom: calc\(1\.875rem \+ var\(--hud-height\)\);/);
 });

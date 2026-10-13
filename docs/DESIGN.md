@@ -168,3 +168,28 @@ Browser Back/Forward uses native restoration without replaying that overlay.
 Change `--wipe-duration` and `--wipe-stagger` near the top of the theme CSS to
 adjust speed. For example, `800` and `100` make each sweep take about one second.
 The easing curve and horizontal travel are in `sweep()` in `interface.js`.
+
+## Proportional Persona desktop sizing
+
+Owner-approved on 2026-10-13: desktop composition starts at 900px; body copy
+may shrink to 14px; the root scale grows above 1440px to a maximum of 115%.
+`render.mjs` adds `html.persona-root` only for the active redesign.
+`desktop-scaling.css` supplies the fluid root and inherited shared-layout
+sizes. Persona component dimensions use rem (16px at the 1440px reference).
+Hairline borders, media-query thresholds and SVG user-space drawing coordinates
+remain in px. The original stylesheet and day/night palette values are untouched.
+
+Hero and About establish inline-size containers. Hero typography, buttons,
+monogram and flowers use cqi as one 1440px poster composition; its width caps
+at 90rem. About's JS geometry measures the actual stage width and scales its
+art offsets, gaps and photo placement in physical browser coordinates. There is
+no body zoom or transform scaling. Scroll progress, ring growth and shockwave
+trigger logic are unchanged. Skills retains three columns and the featured
+project retains its desktop arrangement down to 900px. Below that threshold,
+the compact Persona layout takes over; the existing phone layout is retained.
+
+The 14px reading floor and fluid root's rem contribution intentionally prevent
+exact bitmap scaling of all text. At 1440px the reference dimensions are retained;
+at narrow desktop sizes copy can wrap sooner than the decorative art. Browser
+zoom remains able to enlarge text. Compare saved desktop contact sheets in
+`docs/screenshots/2026-10-13-scaling-*.png` and review locally before publishing.

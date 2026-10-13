@@ -181,7 +181,7 @@ test('tint saturation affects only CRT decoration and supports neutral/original 
     assert.equal(screen.properties['--crt-tint-saturation'], expected);
   }
   assert.match(stylesheet, /\.crt-scanlines, \.crt-edge-glow, \.crt-noise\s*\{\s*filter: saturate\(var\(--crt-tint-saturation, 1\)\);/);
-  assert.match(stylesheet, /filter: saturate\(var\(--crt-tint-saturation, 1\)\) blur\(8px\);/);
+  assert.match(stylesheet, /filter: saturate\(var\(--crt-tint-saturation, 1\)\) blur\(0\.5rem\);/);
   const rules = stylesheet.replace(/\/\*[\s\S]*?\*\//g, '');
   assert.doesNotMatch(rules, /(?:\.crt-surface|\bvideo|\bimg)[^{}]*\{[^}]*saturate\(/);
 });
