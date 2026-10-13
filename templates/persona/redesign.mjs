@@ -68,11 +68,24 @@ export function redesignContent(html, projectData = {}) {
   // as [x, width, fill] in a 288-unit band (docs/design-reference.md, item 9).
   // Inserted before the corner fan so the fan paints over them.
   const statusStripes = [
-    [0, 14, '#FFF224'], [14, 18, '#EDE28D'], [32, 12, '#FFA50C'], [44, 24, '#C0F527'],
-    [68, 14, '#8F7309'], [82, 18, '#D6E9EC'], [100, 10, '#F30000'], [110, 20, '#51C633'],
-    [130, 14, '#FFDE04'], [144, 19, '#976D01'], [163, 25, '#FFF46F'], [188, 8, '#726AFF'],
-    [196, 8, '#75B6F6'], [204, 10, '#80012A'], [214, 6, '#C0C5FF'], [220, 11, '#F4F2F3'],
-    [231, 27, '#DF0B48'], [258, 30, '#F4FF6D']
+    [0, 22, '#FFF224'],
+    [22, 3, '#EDE28D'],
+    [25, 21, '#FFA50C'],
+    [46, 32, '#C0F527'],
+    [78, 4, '#8F7309'],
+    [82, 24, '#D6E9EC'],
+    [106, 3, '#F30000'],
+    [109, 29, '#51C633'],
+    [138, 23, '#FFDE04'],
+    [161, 4, '#976D01'],
+    [165, 35, '#FFF46F'],
+    [200, 3, '#726AFF'],
+    [203, 15, '#75B6F6'],
+    [218, 3, '#80012A'],
+    [221, 2, '#C0C5FF'],
+    [223, 3, '#F4F2F3'],
+    [226, 27, '#DF0B48'],
+    [253, 35, '#F4FF6D']
   ].map(([x, width, fill], index, stripes) =>
     `<rect style="--stripe: ${index}; --stripe-count: ${stripes.length}" data-stripe-width="${width}" x="${x}" y="0" width="${width}" height="100" fill="${fill}"/>`).join('');
   html = replaceRequired(html, '<svg class="about-corner-ribbons"',

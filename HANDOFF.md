@@ -2,6 +2,15 @@
 
 Newest entries first. Each entry: date, from → to, task, status, where to start.
 
+## 2026-10-13 17:12 · Codex — E2
+- Changed: retained all 18 stripe colors and the 288-unit band, mixing 2–4-unit hairlines with wider stripes. Stripes now grow upward from a fixed bottom edge. Their completed tops extend into a narrow clipped corridor under the aligned blue continuation; kick overscan remains clipped at the right edge.
+- Files touched: templates/persona/redesign.mjs, assets/themes/persona/{hero-poster,scroll-presence}.css, assets/js/{scroll-presence,about-scroll-progress}.js, HANDOFF.md, docs/screenshots/e-e2-*.png.
+- Verified: 143 tests pass; production build passes; original CSS remains 66fffa4f89.css. Browser checks at 375/900/1440/1920: no horizontal overflow, mobile band remains 1rem, completed tops covered by hero art. Mid-scroll captures at 375/1440 show partial upward growth with the bottom edge fixed. Reduced-motion captures show fully grown stripes. Existing kick geometry and timing remain unchanged.
+- Screenshots: docs/screenshots/e-e2-about-*.png, e-e2-seam-*.png, e-e2-mid-{375,1440}.png; E1 includes before captures.
+- Unfinished / concerns: owner visual review pending. Optional content hooks omitted. Local server at http://127.0.0.1:8000/; nothing pushed. Unrelated project-card comments and untracked AGENTS.md/root screenshots remain untouched.
+- Please review: desktop whitespace, upward stripe rhythm and blue-circle seam, then scroll through the bottom gold arch/fan.
+- Review of previous entry: E1 and E2 from Claude’s 16:45 handoff are implemented in separate commits.
+
 ## 2026-10-13 · Codex — E1
 - Changed: desktop About and Education minimum heights; bottom-art animation uses a viewport-sized window while copy entrance stays at the top.
 - Files touched: desktop-scaling.css, about-scroll-progress.js, scroll-presence.js, animation tests, review screenshots.

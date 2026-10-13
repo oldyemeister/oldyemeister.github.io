@@ -40,7 +40,7 @@ body.persona-design.page-home #about[data-about-scroll] > .about-corner-ribbons 
    by --about-stripes-stagger. Scrolling back retracts them in reverse. */
 body.persona-design.page-home #about[data-about-scroll] .about-status-stripe-bands rect {
   transform-box: fill-box;
-  transform-origin: right top;
+  transform-origin: right bottom;
   scale: 1 clamp(0, calc(var(--about-stripes-progress, 1) * (1 + var(--about-stripes-stagger, .4))
     - var(--stripe) / max(1, var(--stripe-count) - 1) * var(--about-stripes-stagger, .4)), 1);
 }

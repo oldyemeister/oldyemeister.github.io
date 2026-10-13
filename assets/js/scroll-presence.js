@@ -73,6 +73,23 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, aboutStripesP
       const centerY = artBox.top - aboutBox.top + (270 + offset) * artScale - lift;
       const blueBottom = centerY + 445 * artScale * settings.heroBackdrop.scale;
       about.style.setProperty('--hero-blue-bottom', blueBottom);
+      // Place the flat stripe ends inside the lower blue annulus, including
+      // the kick's leftward reach. The continuation paints above this corridor.
+      const band = about.querySelector('.about-status-stripes').getBoundingClientRect();
+      const circleX = artBox.left + 500 * artScale;
+      const outerRadius = 445 * artScale * settings.heroBackdrop.scale;
+      const innerRadius = outerRadius * 315 / 445;
+      const left = band.left - settings.stripes.kickPx - circleX;
+      const right = band.right - circleX;
+      const nearest = left <= 0 && right >= 0 ? 0 : Math.min(Math.abs(left), Math.abs(right));
+      const farthest = Math.max(Math.abs(left), Math.abs(right));
+      const innerBottom = Math.sqrt(Math.max(0, innerRadius ** 2 - nearest ** 2));
+      const outerBottom = Math.sqrt(Math.max(0, outerRadius ** 2 - farthest ** 2));
+      const stripeTop = centerY + (innerBottom + outerBottom) / 2;
+      about.style.setProperty('--about-stripe-rise', `${Math.max(0, -stripeTop)}px`);
+      about.style.setProperty('--about-stripe-width', `${band.width}px`);
+      about.style.setProperty('--about-stripe-kick', `${settings.stripes.kickPx}px`);
+
       const stage = hero.querySelector('.hero-visual-stage').getBoundingClientRect();
       const cx = artBox.left - stage.left + 500 * artScale;
       const cy = artBox.top - stage.top + (270 + offset) * artScale - lift;

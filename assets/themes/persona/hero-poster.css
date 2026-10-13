@@ -208,7 +208,9 @@ body.persona-design #home .hero-links .text-link-primary:is(:hover, :focus-visib
 body.persona-design #about {
   position: relative;
   isolation: isolate;
-  overflow: hidden;
+  overflow: visible;
+  /* Only the stripe corridor may cross the hero seam. */
+  clip-path: polygon(0 0, calc(100% - var(--about-stripe-width, 0px) - var(--about-stripe-kick, 0px)) 0, calc(100% - var(--about-stripe-width, 0px) - var(--about-stripe-kick, 0px)) calc(-1 * var(--about-stripe-rise, 0px)), 100% calc(-1 * var(--about-stripe-rise, 0px)), 100% 100%, 0 100%);
   min-height: clamp(26.875rem, 56vw, 43.75rem);
   background: var(--palette-yellow);
 }
@@ -327,12 +329,12 @@ body.persona-design #about .about-corner-ribbon-bands {
    The final stripe overscans to the right; About clips the excess. */
 body.persona-design #about .about-status-stripes {
   position: absolute;
-  top: 0;
+  top: calc(-1 * var(--about-stripe-rise, 0px));
   right: 0;
   z-index: 1;
   overflow: visible;
   width: clamp(6rem, 16vw, 15rem);
-  height: 100%;
+  height: calc(100% + var(--about-stripe-rise, 0px));
   pointer-events: none;
   user-select: none;
 }
