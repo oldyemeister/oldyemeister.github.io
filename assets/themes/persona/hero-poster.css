@@ -1,6 +1,12 @@
 /* Opening poster: concentric stage, side sky, and one central monogram figure. */
 html.home-overscroll-contained { overscroll-behavior-y: none; }
-body.persona-design.page-home #main-content { position: relative; }
+body.persona-design.page-home #main-content {
+  position: relative;
+  /* One geometry contract for the hero and its continuation behind the header. */
+  --hero-art-top: 0px;
+  --hero-art-left: 0px;
+  --hero-art-width: 100%;
+}
 
 body.persona-design .hero-top-extension {
   --hero-header-height: 4.875rem;
@@ -16,9 +22,9 @@ body.persona-design .hero-top-extension {
 }
 body.persona-design .hero-top-extension .hero-header-art {
   position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
+  top: calc(100% + var(--hero-art-top));
+  left: var(--hero-art-left);
+  width: var(--hero-art-width);
   height: auto;
   overflow: visible;
 }
@@ -36,8 +42,8 @@ body.persona-design #home::before { content: none !important; }
 body.persona-design #home .hero-visual-stage { position: relative; min-height: inherit; overflow: hidden; z-index: 1; }
 body.persona-design #home .hero-reference-art {
   position: absolute;
-  inset: 0;
-  width: 100%;
+  inset: var(--hero-art-top) auto auto var(--hero-art-left);
+  width: var(--hero-art-width);
   height: auto;
   overflow: visible; /* Scale circles with width, not the section height. */
   pointer-events: none;
@@ -219,6 +225,11 @@ body.persona-design #about > .content-shell { position: relative; z-index: 2; }
 
 /* Phone poster: content controls spacing; rings frame the monogram. */
 @media (max-width: 899px) {
+  body.persona-design.page-home #main-content {
+    --hero-art-top: 8.75rem;
+    --hero-art-left: -44%;
+    --hero-art-width: 150%;
+  }
   body.persona-design #home { min-height: 0; }
   body.persona-design #home .hero-visual-stage {
     display: flex;
@@ -229,8 +240,6 @@ body.persona-design #about > .content-shell { position: relative; z-index: 2; }
     box-sizing: border-box;
   }
   body.persona-design #home .hero-reference-art {
-    inset: 8.75rem auto auto -44%;
-    width: 150%;
     max-width: none;
     transform: none;
   }

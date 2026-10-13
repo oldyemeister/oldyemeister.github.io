@@ -2,6 +2,14 @@
 
 Newest entries first. Each entry: date, from → to, task, status, where to start.
 
+## 2026-10-13 16:13 · Codex — task C
+- Changed: Shared `--hero-art-top`, `--hero-art-left` and `--hero-art-width` between the hero SVG and header continuation. The mobile offset now applies to both copies; the header's top includes its own height.
+- Files touched: `assets/themes/persona/hero-poster.css`, `HANDOFF.md`, `docs/screenshots/2026-10-13-circle-{before,after}-{375,430,600,800,899,900,1440,1920}.png`.
+- Verified: main/header SVG and circle bounds match at all eight widths, using mobile viewport emulation below 900px. Controlled same-page screenshots with animations frozen are pixel-identical at 900/1440/1920px. 137/137 tests and production build pass; original CSS remains `66fffa4f89.css`.
+- Unfinished / concerns: task D follows in a separate commit. Nothing pushed.
+- Please review: the continuous sky circle behind the header at 375px and 800px.
+- Review of previous entry: confirmed the 16:20 diagnosis: the header copy retained desktop geometry while the main SVG switched to mobile offsets. Shared custom properties remove that divergence.
+
 ## 2026-10-13 15:46 · Codex — task B, ready for owner review
 - Changed:
   - Implemented the owner's selected 900px desktop minimum, 14px body-copy floor and 115% growth cap. Added the Persona-only root class and desktop scaling sheet; converted component dimensions from px to rem while retaining media-query pixels, hairlines and SVG drawing coordinates.
