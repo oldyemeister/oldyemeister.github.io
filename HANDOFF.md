@@ -2,6 +2,14 @@
 
 Newest entries first. Each entry: date, from → to, task, status, where to start.
 
+## 2026-10-13 15:33 · Codex — task A
+- Changed: Fixed horizontal title clipping using measured per-character font advances and container sizing. Removed the separate padded strip, overlapped the image by 20% of title height, retained 30% bottom crop, and reduced decorative opacity to .85. Caption moves above the image at 600px and wider to stay readable.
+- Files touched: `templates/persona/redesign.mjs`, `assets/themes/persona/project-pages.css`, `test/persona-cropped-title.test.mjs`, `HANDOFF.md`, `docs/screenshots/2026-10-13-title-fix-{before,after}-{rf-receiver,aps380}-{1440,800}.png`.
+- Verified: 136/136 tests, production build, original CSS `66fffa4f89.css`; both titles at 600/800/1024/1280/1440/1920px and hidden at 375px. No horizontal page overflow; headings and controls unchanged. No palette changes or push.
+- Unfinished / concerns: Task B follows separately with owner-selected 900px desktop minimum, 14px copy floor and 115% maximum growth. Claude's existing work remains separate.
+- Please review: title placement and caption-above-image treatment on RF Receiver and ACC.
+- Review of previous entry: confirmed the 15:40 findings: RF title exceeded its width, and padding placed both titles in a separate strip. Replaced that layout as requested.
+
 ## 2026-10-13 11:00 · Codex
 - Changed:
   - Task 1 (`57cbbab`): corrected stale redesign ownership descriptions and checklist references, removed unused TV/shadow/on-interactive tokens, and replaced the three live `--inactive` references with their identical `--palette-muted` value before removing that alias. Updated Tier 2 comments.

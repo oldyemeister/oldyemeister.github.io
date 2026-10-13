@@ -8,6 +8,7 @@ for (const [page, shortName] of [['rf-receiver', 'RF Receiver'], ['aps380', 'ACC
     const source = `<html><head></head><body class="page-${page}"><header class="case-study-hero"><div class="case-study-hero-copy"><h1>Full project title</h1><p>Summary</p></div><figure class="case-study-hero-media"><img alt="Project"></figure></header></body></html>`;
     const result = redesignContent(source);
     assert.match(result, new RegExp(`data-title="${shortName}" aria-hidden="true"`));
+    assert.match(result, new RegExp(`--case-title-chars: ${shortName.length}; --case-title-advance: [0-9.]+`));
     assert.match(result, /<h1>Full project title<\/h1><p>Summary<\/p>/);
     assert.equal((result.match(/case-study-cropped-title/g) || []).length, 1);
     const rollback = personaPreview(source, '', false, {hud: {}});

@@ -8,7 +8,7 @@ export function redesignContent(html, projectData = {}) {
   const shortTitle = { 'rf-receiver': 'RF Receiver', aps380: 'ACC' }[pageClass];
   if (shortTitle && html.includes('<header class="case-study-hero">')) {
     html = replaceRequired(html, '<header class="case-study-hero">',
-      `<header class="case-study-hero"><span class="case-study-cropped-title" data-title="${shortTitle}" aria-hidden="true"></span>`,
+      `<header class="case-study-hero"><span class="case-study-cropped-title" data-title="${shortTitle}" aria-hidden="true" style="--case-title-chars: ${shortTitle.length}; --case-title-advance: ${pageClass === 'rf-receiver' ? .831 : 1.008}"></span>`,
       'the case-study hero');
   }
   // Section art only exists on the homepage.

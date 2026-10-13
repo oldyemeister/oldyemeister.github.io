@@ -300,24 +300,33 @@ body.persona-design .imu-axis-control input { accent-color: var(--palette-olive)
 body.persona-design .case-study-cropped-title { display: none; }
 @media (min-width: 600px) {
   body.persona-design .case-study-hero:has(.case-study-cropped-title) {
-    --case-title-size: clamp(5rem, 14vw, 12rem);
-    --case-title-weight: 300;
-    --case-title-tracking: -.025em;
     --case-title-crop: .3;
+    --case-title-overlap: .2;
+    --case-hero-gap: 2rem;
+    container-type: inline-size;
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    padding-block-end: calc(var(--case-title-size) * (1 - var(--case-title-crop)));
+    gap: var(--case-hero-gap);
   }
   body.persona-design .case-study-cropped-title {
+    /* Measured uppercase advances at 100px in Persona Slim Wide. The small
+       inset allows for glyph overhang; no horizontal crop or fixed minimum. */
+    --case-title-size: min(12rem, calc(98cqi / (var(--case-title-chars) * var(--case-title-advance))));
+    --case-title-weight: 300;
+    --case-title-tracking: -.025em;
+    --case-title-opacity: .85;
     display: block;
-    position: absolute;
-    inset-inline: 0;
-    bottom: calc(var(--case-title-size) * var(--case-title-crop) * -1);
-    height: var(--case-title-size);
+    order: 2;
+    flex: none;
+    position: relative;
+    width: 100%;
+    height: calc(var(--case-title-size) * (1 - var(--case-title-crop)));
+    margin-block-start: calc(-1 * (var(--case-hero-gap) + var(--case-title-size) * var(--case-title-overlap)));
     z-index: 0;
     pointer-events: none;
     user-select: none;
+    opacity: var(--case-title-opacity);
   }
   body.persona-design .case-study-cropped-title::after {
     content: attr(data-title);
@@ -334,5 +343,15 @@ body.persona-design .case-study-cropped-title { display: none; }
   body.persona-design .case-study-hero:has(.case-study-cropped-title) > :is(.case-study-hero-copy, .case-study-hero-media) {
     position: relative;
     z-index: 1;
+  }
+  /* Keep the caption above the image, clear of the decorative overlap. */
+  body.persona-design .case-study-hero:has(.case-study-cropped-title) .case-study-hero-media {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+  }
+  body.persona-design .case-study-hero:has(.case-study-cropped-title) figcaption {
+    order: -1;
+    margin: 0;
   }
 }
