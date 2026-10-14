@@ -57,6 +57,29 @@ export function redesignContent(html, projectData = {}) {
     .replace(/url\(#(hero-[^)]+)\)/g, 'url(#header-$1)');
   html = replaceRequired(html, '<div class="hero-top-extension" aria-hidden="true" hidden></div>',
     `<div class="hero-top-extension" aria-hidden="true">${headerArt}</div>`, 'the hero top extension');
+  // Original tapered ribbon geometry: a yellow field with transparent sky gaps.
+  // Independent mobile composition preserves curvature instead of compressing it.
+  const desktopCuts = [
+    'M-30 100 C280 130 550 610 1470 580 C550 635 275 150 -30 100Z',
+    'M-30 125 C300 170 570 650 1470 602 C570 675 295 185 -30 125Z',
+    'M-30 160 C300 215 580 675 1470 630 C580 692 290 225 -30 160Z',
+    'M-30 1190 C400 1220 750 740 1470 790 C750 715 390 1205 -30 1190Z',
+    'M-30 1220 C420 1250 770 775 1470 810 C770 752 405 1235 -30 1220Z',
+    'M-30 1260 C440 1290 800 800 1470 836 C800 785 425 1275 -30 1260Z'
+  ];
+  const mobileCuts = [
+    'M-15 30 C90 35 180 175 395 160 C180 183 87 41 -15 30Z',
+    'M-15 42 C95 53 185 188 395 173 C185 195 93 59 -15 42Z',
+    'M-15 58 C100 72 190 202 395 187 C190 207 98 77 -15 58Z',
+    'M-15 414 C110 433 235 286 395 307 C235 277 106 428 -15 414Z',
+    'M-15 428 C116 445 243 304 395 320 C243 296 111 440 -15 428Z',
+    'M-15 445 C122 459 250 318 395 335 C250 312 117 454 -15 445Z'
+  ];
+  const maskArt = (variant, width, height, cuts) => `<svg class="about-sky-mask about-sky-mask--${variant}" viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M0 0H${width}V${height}H0Z ${cuts.join(' ')}"/></svg>`;
+  const clouds = heroArt.match(/<g class="hero-sky-clouds">[\s\S]*?<\/g>/)?.[0];
+  if (!clouds) throw new Error('Persona template: expected reusable sky clouds.');
+  html = replaceRequired(html, /<section[^>]*id="about"[^>]*>/,
+    opening => `${opening}<div class="about-sky-base about-sky-texture" aria-hidden="true"><svg viewBox="0 0 1440 1486" preserveAspectRatio="xMidYMid slice" focusable="false"><g transform="translate(200 0) scale(1.5)">${clouds}</g><g transform="translate(-100 750)">${clouds}</g></svg></div>${maskArt('desktop', 1440, 1486, desktopCuts)}${maskArt('mobile', 375, 520, mobileCuts)}`, 'the About sky mask');
   // Projects reuses About's rainbow corner bands (the old-TV motif) from one source.
   const ribbons = html.match(/<svg class="about-corner-ribbons"[\s\S]*?<\/svg>/)?.[0];
   if (!ribbons) throw new Error('Persona template: expected the About corner ribbons (svg.about-corner-ribbons) on the homepage.');

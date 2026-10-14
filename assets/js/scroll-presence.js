@@ -85,6 +85,16 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, aboutStripesP
         screen.style.setProperty('--hero-texture-offset', `${texture.offset}px`);
         texture.rows.forEach((row, i) => screen.style.setProperty(`--hero-texture-row-${i + 1}`, `${row}px`));
       }
+      const aboutSky = about.querySelector('.about-sky-texture');
+      if (aboutSky) {
+        // HTML surface uses physical CSS pixels; phase shares the SVG's snapped
+        // document-space origin, not a separately rounded section origin.
+        const period = texture.period * textureScale;
+        const phase = textureTop + texture.offset * textureScale - aboutBox.top - window.scrollY;
+        aboutSky.style.setProperty('--hero-texture-period', `${period}px`);
+        aboutSky.style.setProperty('--hero-texture-offset', `${phase % period}px`);
+        texture.rows.forEach((row, i) => aboutSky.style.setProperty(`--hero-texture-row-${i + 1}`, `${row * textureScale}px`));
+      }
       // Convert the shared hero center into About SVG coordinates without changing ring radii.
       const centerY = artBox.top - aboutBox.top + (270 + offset) * artScale - lift;
       const blueBottom = centerY + 445 * artScale * settings.heroBackdrop.scale;

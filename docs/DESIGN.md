@@ -211,3 +211,13 @@ mobile layout remains unchanged. Pixel games keep intrinsic 320×240 coordinates
 3× (or larger) integer display sizes are used when they fit, and 2× when it uses
 at least 90% of the available screen width. Intermediate sizes stay fluid rather
 than shrinking gameplay back to 2×; pointer mapping uses the actual canvas bounds.
+
+### About sky openings (I2)
+
+Persona's `redesign.mjs` authors separate desktop (1440×1486) and mobile
+(375×520) even-odd yellow paths. Their narrow Bézier openings expose existing
+cloud SVGs over `--hero-sky`. The `.about-sky-texture` shares H2's CSS row
+profile; `alignBackdrop` converts the hero texture grid to HTML pixel units and
+anchors its phase to the same document origin. Static CSS remains before JS.
+Copy pads retain yellow backgrounds. These layers sit below all existing About
+art, and do not change its animation timings or geometry.

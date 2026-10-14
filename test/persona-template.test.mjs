@@ -6,7 +6,7 @@ import { flowerPetals } from '../templates/persona/flower.mjs';
 // A minimal homepage carrying every anchor the Persona decorators require.
 const page = `<!doctype html><html><head></head><body class="page-home">
 <div class="hero-top-extension" aria-hidden="true" hidden></div>
-<section class="hero-section" id="home"><svg class="hero-reference-art"><g data-contact-petals></g></svg></section>
+<section class="hero-section" id="home"><svg class="hero-reference-art"><g class="hero-sky-clouds"></g><g data-contact-petals></g></svg></section>
 <section class="page-section" id="about"><svg class="about-corner-ribbons"><g class="about-corner-ribbon-bands"></g></svg></section>
 <section class="page-section" id="education"></section>
 <section class="page-section" id="skills"></section>

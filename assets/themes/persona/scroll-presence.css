@@ -119,4 +119,6 @@ body.persona-design #about[data-about-scroll] .about-picture-frame:nth-child(2) 
 
 /* Ring/shockwave < stripe band < reading content and corner fan. */
 body.persona-design #about .about-legacy-art { z-index: 0; }
-body.persona-design #about > :is(.content-shell, .about-corner-ribbons, .hero-about-art) { z-index: 2; }
+body.persona-design #about > .hero-about-art { z-index: 2; }
+body.persona-design #about > .about-corner-ribbons { z-index: 3; }
+body.persona-design #about > :is(.content-shell, .about-picture-placeholders) { z-index: 4; }

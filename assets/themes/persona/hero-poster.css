@@ -479,7 +479,7 @@ body.persona-design.sky-clouds-running :is(#home, .hero-top-extension, #about) .
    copied artwork. JS snaps period/edges to device pixels in shared SVG space;
    fallback values provide a dense static texture before scripts initialize. */
 body.persona-design .hero-crt-window { mix-blend-mode: normal; }
-body.persona-design .hero-crt-screen {
+body.persona-design :is(.hero-crt-screen, .about-sky-texture) {
   --hero-texture-period: 3.414216px;
   --hero-texture-white: rgb(230 250 255);
   --hero-texture-pale: rgb(193 255 255);
@@ -493,7 +493,7 @@ body.persona-design .hero-crt-screen {
   --hero-texture-row-5: calc(var(--hero-texture-period) * 5 / 7);
   --hero-texture-row-6: calc(var(--hero-texture-period) * 6 / 7);
 }
-body.persona-design .hero-crt-screen::before {
+body.persona-design :is(.hero-crt-screen, .about-sky-texture)::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -510,4 +510,35 @@ body.persona-design .hero-crt-screen::before {
 }
 @media (max-width: 899px) {
   body.persona-design .hero-crt-screen { --hero-texture-period: 5.826928px; }
+}
+
+/* I2: independent painted masks expose the common cloud/CRT sky. */
+body.persona-design #about > .about-sky-base,
+body.persona-design #about > .about-sky-mask {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+body.persona-design #about > .about-sky-base {
+  z-index: -2;
+  overflow: hidden;
+  background: var(--hero-sky);
+  --hero-texture-period: max(3.5px, calc(100vw * 7 / 1920));
+}
+body.persona-design #about > .about-sky-base > svg { width: 100%; height: 100%; }
+body.persona-design #about > .about-sky-base::before { z-index: 1; }
+body.persona-design #about > .about-sky-mask { z-index: -1; fill: var(--palette-yellow); }
+body.persona-design #about > .about-sky-mask--mobile { display: none; }
+body.persona-design #about > .about-corner-ribbons { z-index: 3; }
+body.persona-design #about > :is(.content-shell, .about-picture-placeholders) { z-index: 4; }
+/* Narrow pads protect copy wherever a curved opening passes beneath it. */
+body.persona-design #about > .content-shell h2 { width: fit-content; }
+body.persona-design #about > .content-shell :is(h2, .section-body) {
+  background: var(--palette-yellow);
+}
+@media (max-width: 899px) {
+  body.persona-design #about > .about-sky-mask--desktop { display: none; }
+  body.persona-design #about > .about-sky-mask--mobile { display: block; }
 }

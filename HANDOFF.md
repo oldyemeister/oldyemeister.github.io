@@ -2,6 +2,15 @@
 
 Newest entries first. Each entry: date, from → to, task, status, where to start.
 
+## 2026-10-14 · Codex — I2 complete
+- Changed: About now layers its own blue cloud sky and H2 texture beneath original desktop/mobile yellow compound-path masks, each with two bundles of three tapered Bézier openings. Copy keeps solid yellow pads. The masks are static; no optional scroll reveal was added.
+- Changed: explicit stacking is sky, mask, legacy gold art, status stripes, hero continuation, corner fan, then copy/pictures. Existing stripe/shockwave/ring/fan animation code and settings are unchanged. The HTML sky shares the hero SVG's device-snapped period, row edges and document-space phase.
+- Files touched: templates/persona/redesign.mjs, assets/js/scroll-presence.js, assets/themes/persona/{hero-poster,scroll-presence}.css, two Persona test fixtures, docs/screenshots/i-after-*.png, docs/DESIGN.md, HANDOFF.md.
+- Verified: 148 tests pass; npm run build passes; /original/ CSS remains 66fffa4f89.css; git diff --check clean. Full About captures at 1440, 1920 and 375px are in docs/screenshots/i-after-about-*.png; before captures are i-before-about-*.png. No horizontal overflow or browser errors at those widths. Texture periods are 5/7/4px respectively and phase error is below .01px modulo the period. No-JS mask/texture render; reduced motion removes flower spin. Forward/reverse scroll restores stripe/fan progress, and the shockwave triggers on the forward pass.
+- Unfinished / concerns: owner visual review pending, including copy pads interrupting the top ribbon bundle. Fixed HUD can appear over tall section screenshots during capture; its behavior was not changed. Nothing pushed; review at http://127.0.0.1:8000/.
+- Please review: ribbon composition and cloud glints across desktop and mobile, alongside the I1 flower fringe.
+- Review of previous entry: applied the requested layer technique using original geometry and existing cloud assets. No P4R reference file/path data is tracked. Unrelated project-card comments, AGENTS.md and root screenshots remain untouched.
+
 ## 2026-10-14 · Codex — I1 complete
 - Changed: white hero flowers now have red upper/right and green lower/right offset petal silhouettes, rotating together with the face. Olive and Contact flowers remain unchanged. Flower palette tokens are centralized in tokens.css; shared rainbow gradient remains intact for the original route.
 - Files touched: templates/persona/redesign.mjs, assets/themes/persona/{hero-poster,tokens}.css, docs/screenshots/i-{before,i1}-*.png, HANDOFF.md.
