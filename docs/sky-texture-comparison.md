@@ -1,5 +1,8 @@
 # Task H sky comparison — 2026-10-14
 
+Historical comparison: H2 supersedes H’s sparse bands with the denser seven-row
+profile described in HANDOFF.md. These timings describe H, not H2.
+
 A is the existing hero CRT stack (noise, scanlines, sweep, flicker).
 B is our own CSS horizontal-band tile plus the existing slow sweep. Clouds,
 fonts, colors and layout are otherwise preserved; B also clips existing

@@ -1,3 +1,4 @@
+import { skyTextureGeometry } from './sky-texture.js';
 import { stripeFanGeometry } from './about-stripe-fan.js';
 import { shockwaveArrivalDelay } from './about-stripe-kick.js';
 import { SCROLL_ANIMATION as settings } from './scroll-animation-config.js';
@@ -69,8 +70,22 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, aboutStripesP
       continuation.style.setProperty('--hero-circle-lift-svg', `${-lift / artScale}px`);
       const headerArt = document.querySelector('.hero-header-art');
       if (headerArt) headerArt.style.setProperty('--hero-circle-lift-svg', `${-lift / (headerArt.getBoundingClientRect().width / 796)}px`);
-      // Convert the shared hero center into About SVG coordinates without changing ring radii.
+      // One device-snapped grid shared by every aligned sky copy. Recompute
+      // for resize/browser zoom without animating or rounding each copy alone.
       const offset = parseFloat(getComputedStyle(heroArt).getPropertyValue('--hero-circle-offset-y')) || 0;
+      const textureScale = artScale * settings.heroBackdrop.scale;
+      const textureY = Number(heroArt.querySelector('.hero-crt-window').getAttribute('y'));
+      const textureTop = artBox.top + (270 + offset) * artScale
+        + (textureY - 270) * textureScale - lift + window.scrollY;
+      const texture = skyTextureGeometry(window.innerWidth, textureScale,
+        window.devicePixelRatio, textureTop);
+      for (const art of [heroArt, continuation, headerArt].filter(Boolean)) {
+        const screen = art.querySelector('.hero-crt-screen');
+        screen.style.setProperty('--hero-texture-period', `${texture.period}px`);
+        screen.style.setProperty('--hero-texture-offset', `${texture.offset}px`);
+        texture.rows.forEach((row, i) => screen.style.setProperty(`--hero-texture-row-${i + 1}`, `${row}px`));
+      }
+      // Convert the shared hero center into About SVG coordinates without changing ring radii.
       const centerY = artBox.top - aboutBox.top + (270 + offset) * artScale - lift;
       const blueBottom = centerY + 445 * artScale * settings.heroBackdrop.scale;
       about.style.setProperty('--hero-blue-bottom', blueBottom);
@@ -124,6 +139,7 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, aboutStripesP
     };
     alignBackdrop();
     window.addEventListener('resize', alignBackdrop, { passive: true });
+    window.addEventListener('load', alignBackdrop, { once: true });
     document.fonts?.ready.then(alignBackdrop);
     if ('ResizeObserver' in window) {
       const geometryObserver = new ResizeObserver(alignBackdrop);

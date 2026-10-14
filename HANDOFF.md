@@ -2,6 +2,60 @@
 
 Newest entries first. Each entry: date, from → to, task, status, where to start.
 
+## 2026-10-14 12:18 · Codex — H2
+- Changed: replaced H’s sparse/faint bands with a seven-row near-white/pale-cyan/soft-edge/cyan CSS profile at 30% opacity. Uses normal alpha composition for reference-like contrast. Sweep remains the sole hero CRT animation; clouds, game CRT and day/night colors are unchanged.
+- Changed: added sky-texture.js to round period, row edges and phase onto the device grid using the configured final SVG scale. The same values are applied to hero/header/About. Periods measured after layout: 1440px at 1× ≈5px, 2× ≈5.5px; 375px at 1× 4px, 2× 3.5px; 1920px at 1× 7px. Dense CSS fallback remains available before JavaScript.
+- Files touched: assets/themes/persona/hero-poster.css, assets/js/{scroll-presence,sky-texture}.js, test/sky-texture.test.mjs, docs/DESIGN.md, docs/sky-texture-comparison.md, docs/screenshots/h2-*.png, HANDOFF.md.
+- Verified: 148 tests and production build pass; original CSS 66fffa4f89.css. Hero/About screenshots at 1440/375 with 1×/2× DPR plus 1920×1080 at 1×. All three texture surfaces have matching positions/periods/phase and .30 opacity; no horizontal overflow. No obvious moiré in the inspected native captures. Geometry tests cover responsive scales and device-pixel boundaries.
+- Reference check: read the local poster only, and compared equal-size 100×50 native crops composited over our cyan. Reference red-channel contrast range 3–73; ours 3–66 (rasterization softens the edge). The local poster column actually correlates most strongly at 8px, whereas the handoff specifies 7px; implemented the requested 7px profile, so this is a close visual recreation rather than pixel identity. Reference/comparison crops remain in /private/tmp; only our own crop is saved in docs/screenshots/h2-sky-crop-1920-1x.png. No reference asset was added; tracked-file scan is clean.
+- Unfinished / concerns: owner visual review pending. Fine rows merge where necessary at 1× phone resolution. H’s historical performance numbers are not claims about H2. Nothing pushed; localhost remains http://127.0.0.1:8000/.
+- Please review: denser sky at desktop and phone widths, especially the 1× line contrast.
+- Review of previous entry: intentionally replaced H’s 27px spacing and faint white hairlines following the owner’s rejection. Unrelated project-card comments, AGENTS.md and root screenshots remain untouched.
+
+## 2026-10-14 · Claude → Codex: H2, make the sky lines dense, like the owner's reference
+
+**Status:** ready to start; the owner rejected H's result. One commit.
+
+**Owner feedback:** the CRT bars are too far apart and not dense enough. It should look like `/Users/jacky/Documents/DIY/p4r-reverse-engineering/assets/fv_bg_overlay.BIKHMYL-.webp`. That file is the hero video's poster: a 1920×1080 frame of fine horizontal lines. As before, use it as a measurement reference only; never copy the file into the repo. Recreate the pattern in CSS.
+
+**Measured from the reference** (pixel column at x=960; the pattern is uniform across the frame):
+
+| Row in 7px period | RGB | Role |
+|---|---|---|
+| 1 | 230,250,255 | near-white |
+| 2 | 193,255,255 | pale-cyan edge |
+| 3 | 36,210,233 | soft edge |
+| 4 | 0,224,252 | cyan |
+| 5 | 0,224,252 | cyan |
+| 6 | 36,210,233 | soft edge |
+| 7 | 193,255,255 | pale-cyan edge |
+
+- **Period:** 7px at 1920×1080, about 154 lines over the full height, so ≈0.365vw. That's about 5.25px at 1440 wide.
+- **Balance:** roughly half cyan, half white/pale, with one-row soft edges. These are not thin white hairlines on a wash.
+- **Alpha:** every pixel has alpha 77/255, so the whole layer sits at **≈30% opacity** over the moving sky.
+
+**H vs the reference** (`hero-poster.css` ~491–508):
+- Period 17.56 SVG units: ≈1.875% of stage width, about 27px on screen at 1440. The reference is ≈5px, so H is about **5× too sparse**.
+- H's white is a thin 7% slice at 12% alpha over an 8% cyan wash, so it's **too faint**. The reference is a 50/50 alternation at 30%.
+
+**Do:**
+- Rebuild the `repeating-linear-gradient` from the 7-row profile above:
+  - cyan core, about 2/7 of the period
+  - soft edges, pale cyan and the 36,210,233 tone, about 1/7 each side
+  - near-white, about 3/7
+  - whole layer at ≈0.30 opacity
+- Use the reference cyan or derive it from `--hero-sky` mixed toward white: pick whichever matches better over our sky, and show both if unsure.
+- Period about 0.365vw of the stage width on desktop. Keep the shared SVG-unit phase so the hero, header continuation and About copies stay seamless.
+- Snap the period to whole device pixels (`round()`, or a fixed device-px value per breakpoint) so the fine lines don't shimmer or show moiré, especially on 1× screens and while the circle scales.
+- On phones, set a floor of about 3–4 CSS px per period. Sub-2px lines blur into a flat tint.
+- Keep H's B choice: texture plus slow sweep, with noise and flicker off. Clouds, game CRT and day/night colors unchanged.
+
+**Done when:**
+- A crop at 100% zoom of our hero sky at 1920×1080 next to the same-size crop of the reference shows matching line density and contrast.
+- Hero and About at 1440px and 375px, with no seams between the three copies and no visible moiré on 1× and 2× DPR captures.
+- Tests and build pass, and `/original/` CSS is still `66fffa4f89.css`.
+- `git ls-files` shows nothing from the P4R folder.
+
 ## 2026-10-14 12:02 · Codex — H
 - Changed: original CSS cyan/soft-white repeating sky tile in shared SVG coordinates, aligned across hero/header/About. Kept B (texture + slow sweep); disabled hero-only noise, flicker and scanlines. Existing SVG clouds, shared preview CRT, task G game overrides and day/night colors are unchanged. No new image/video or reference-folder assets.
 - Changed: contained pre-existing horizontal decorative overflow with a homepage-only horizontal clip; upward header continuation remains visible.

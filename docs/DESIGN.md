@@ -56,11 +56,15 @@ Each drop is scaled around its inward head to be 20% thinner and 8% longer radia
 The outer end uses a scale-compensated circular arc for the reference's rounded bulb.
 The bulb radius and flat inner-head width are both enlarged by 20% from that baseline.
 Existing fills, rainbow outlines, shadows, placements, sizes and rotation styles are preserved.
-The hero sky uses an original static CSS band texture over our SVG clouds,
+The hero sky uses an original dense seven-row CSS texture over our SVG clouds,
 plus the slow CRT sweep. Hero-only noise, flicker and scanlines are disabled.
 The tile is defined in `hero-poster.css` in shared SVG coordinates so the hero,
 header and About copies have identical scale and phase. It appears before JS
-and remains visible under reduced motion; clouds and sweep stop. Project media
+and remains visible under reduced motion; clouds and sweep stop. H2 uses a
+30%-opacity near-white/pale-cyan/soft-edge/cyan profile. `sky-texture.js` snaps
+its period, row boundaries and phase to device pixels after the configured SVG
+scale: 7px at 1920px wide, about 5px at 1440px, with a 3.5px phone floor.
+The rounded row allocation may merge narrow rows on 1× screens. Project media
 and gameplay retain their own CRT layers and 2px lines with 2px gaps.
 
 ### Project Play stickers

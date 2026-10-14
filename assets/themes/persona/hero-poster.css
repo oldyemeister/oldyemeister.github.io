@@ -484,25 +484,39 @@ body.persona-design.sky-clouds-running :is(#home, .hero-top-extension, #about) .
   body.persona-design.sky-clouds-running :is(#home, .hero-top-extension, #about) .hero-cloud { animation-play-state: paused; }
 }
 
-/* Original CSS sky tile: cyan wash and a soft white horizontal band.
-   SVG user units share one phase across hero/header/About copies. With the
-   .85 circle scale these periods are 1.875% of the desktop stage width and
-   4.8vw in the 150%-wide mobile composition. No image or video asset needed. */
+/* Original seven-row CSS sky profile, measured from a reference rather than
+   copied artwork. JS snaps period/edges to device pixels in shared SVG space;
+   fallback values provide a dense static texture before scripts initialize. */
+body.persona-design .hero-crt-window { mix-blend-mode: normal; }
 body.persona-design .hero-crt-screen {
-  --hero-texture-period: 17.558824px;
-  --hero-texture-white: color-mix(in srgb, var(--palette-white) 12%, transparent);
-  --hero-texture-cyan: color-mix(in srgb, var(--hero-sky) 8%, transparent);
+  --hero-texture-period: 3.414216px;
+  --hero-texture-white: rgb(230 250 255);
+  --hero-texture-pale: rgb(193 255 255);
+  --hero-texture-soft: rgb(36 210 233);
+  --hero-texture-cyan: rgb(0 224 252);
+  --hero-texture-opacity: .30;
+  --hero-texture-row-1: calc(var(--hero-texture-period) / 7);
+  --hero-texture-row-2: calc(var(--hero-texture-period) * 2 / 7);
+  --hero-texture-row-3: calc(var(--hero-texture-period) * 3 / 7);
+  --hero-texture-row-4: calc(var(--hero-texture-period) * 4 / 7);
+  --hero-texture-row-5: calc(var(--hero-texture-period) * 5 / 7);
+  --hero-texture-row-6: calc(var(--hero-texture-period) * 6 / 7);
 }
 body.persona-design .hero-crt-screen::before {
   content: '';
   position: absolute;
   inset: 0;
   pointer-events: none;
+  opacity: var(--hero-texture-opacity);
   background: repeating-linear-gradient(to bottom,
-    var(--hero-texture-cyan) 0 calc(var(--hero-texture-period) * .72),
-    var(--hero-texture-white) calc(var(--hero-texture-period) * .72) calc(var(--hero-texture-period) * .79),
-    transparent calc(var(--hero-texture-period) * .79) var(--hero-texture-period));
+    var(--hero-texture-white) 0 var(--hero-texture-row-1),
+    var(--hero-texture-pale) var(--hero-texture-row-1) var(--hero-texture-row-2),
+    var(--hero-texture-soft) var(--hero-texture-row-2) var(--hero-texture-row-3),
+    var(--hero-texture-cyan) var(--hero-texture-row-3) var(--hero-texture-row-5),
+    var(--hero-texture-soft) var(--hero-texture-row-5) var(--hero-texture-row-6),
+    var(--hero-texture-pale) var(--hero-texture-row-6) var(--hero-texture-period));
+  background-position-y: var(--hero-texture-offset, 0px);
 }
 @media (max-width: 899px) {
-  body.persona-design .hero-crt-screen { --hero-texture-period: 29.967059px; }
+  body.persona-design .hero-crt-screen { --hero-texture-period: 5.826928px; }
 }
