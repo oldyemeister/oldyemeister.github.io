@@ -1,6 +1,8 @@
 /* Opening poster: concentric stage, side sky, and one central monogram figure. */
 html.home-overscroll-contained { overscroll-behavior-y: none; }
 body.persona-design.page-home #main-content {
+  /* Bound offscreen decoration horizontally while preserving the header continuation. */
+  overflow-x: clip;
   position: relative;
   /* One geometry contract for the hero and its continuation behind the header. */
   --hero-art-top: 0px;
@@ -480,4 +482,27 @@ body.persona-design.sky-clouds-running :is(#home, .hero-top-extension, #about) .
 @media (prefers-reduced-motion: reduce) {
   /* Freeze the staggered composition, rather than resetting clouds out of view. */
   body.persona-design.sky-clouds-running :is(#home, .hero-top-extension, #about) .hero-cloud { animation-play-state: paused; }
+}
+
+/* Original CSS sky tile: cyan wash and a soft white horizontal band.
+   SVG user units share one phase across hero/header/About copies. With the
+   .85 circle scale these periods are 1.875% of the desktop stage width and
+   4.8vw in the 150%-wide mobile composition. No image or video asset needed. */
+body.persona-design .hero-crt-screen {
+  --hero-texture-period: 17.558824px;
+  --hero-texture-white: color-mix(in srgb, var(--palette-white) 12%, transparent);
+  --hero-texture-cyan: color-mix(in srgb, var(--hero-sky) 8%, transparent);
+}
+body.persona-design .hero-crt-screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(to bottom,
+    var(--hero-texture-cyan) 0 calc(var(--hero-texture-period) * .72),
+    var(--hero-texture-white) calc(var(--hero-texture-period) * .72) calc(var(--hero-texture-period) * .79),
+    transparent calc(var(--hero-texture-period) * .79) var(--hero-texture-period));
+}
+@media (max-width: 899px) {
+  body.persona-design .hero-crt-screen { --hero-texture-period: 29.967059px; }
 }

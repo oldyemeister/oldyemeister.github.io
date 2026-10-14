@@ -64,10 +64,14 @@ export const CRT_SETTINGS = {
   },
 
   // HERO ONLY — the blue sky is artwork, not a dark glass TV screen.
-  // Everything omitted here (grain, flicker, sweep timing) inherits the values above.
+  // Everything omitted here (including sweep timing) inherits the values above.
   // Uses the actual sky color from hero-poster.css instead of painting gray over it.
   hero: {
-    // Half-width lines and gaps: twice as many bars, same brightness and color.
+    // Static palette texture is CSS-only; the slow sweep is the sole CRT animation.
+    enableScanlines: false,
+    enableNoise: false,
+    enableFlicker: false,
+    // Retained scanline tuning for an optional rollback; the static tile replaces it.
     scanlineThickness: 1,
     scanlineGap: 1,
     theme: 'custom',

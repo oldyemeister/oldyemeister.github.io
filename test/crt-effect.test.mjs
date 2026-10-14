@@ -203,7 +203,8 @@ test('hero preserves its original sky color and shimmer without changing project
     assert.equal(hero.properties['--crt-tint-saturation'], '1');
     assert.equal(hero.properties['--crt-sweep-color'], CRT_SETTINGS.hero.sweepColor);
     for (const name of ['curvature', 'vignette', 'edge-glow']) assert.equal(hasLayer(hero, name), false);
-    for (const name of ['noise', 'scanlines', 'sweep', 'flicker']) assert.equal(hasLayer(hero, name), true);
+    for (const name of ['noise', 'scanlines', 'flicker']) assert.equal(hasLayer(hero, name), false);
+    assert.equal(hasLayer(hero, 'sweep'), true);
     assert.equal(hero.properties['--crt-noise-opacity'], String(CRT_SETTINGS.noiseOpacity));
     assert.equal(hero.properties['--crt-flicker-intensity'], String(CRT_SETTINGS.flickerIntensity));
   }
