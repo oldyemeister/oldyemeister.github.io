@@ -103,9 +103,9 @@ export function redesignContent(html, projectData = {}) {
   const petals = flowerPetals;
   // The hero and Contact share exactly the same six teardrop petals.
   html = replaceRequired(html, /(<g[^>]* data-contact-petals)>\s*<\/g>/g, (_, opening) => {
-    const outline = (opening.includes('hero-flower-new') || opening.includes('hero-flower-light'))
-      ? `<g class="hero-flower-rainbow-outline">${petals}</g>` : '';
-    return `${opening}><g class="hero-flower-spin">${outline}<g>${petals}</g></g></g>`;
+    const fringe = (opening.includes('hero-flower-new') || opening.includes('hero-flower-light'))
+      ? `<g class="hero-flower-fringe-red" transform="translate(5 -6)">${petals}</g><g class="hero-flower-fringe-green" transform="translate(6 5)">${petals}</g>` : '';
+    return `${opening}><g class="hero-flower-spin">${fringe}<g>${petals}</g></g></g>`;
   }, 'the flower placeholders (g[data-contact-petals])');
   html = replaceRequired(html, '<section class="page-section contact-section" id="contact">',
     `<section class="page-section contact-section" id="contact">

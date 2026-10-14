@@ -2,6 +2,93 @@
 
 Newest entries first. Each entry: date, from → to, task, status, where to start.
 
+## 2026-10-14 · Codex — I1 complete
+- Changed: white hero flowers now have red upper/right and green lower/right offset petal silhouettes, rotating together with the face. Olive and Contact flowers remain unchanged. Flower palette tokens are centralized in tokens.css; shared rainbow gradient remains intact for the original route.
+- Files touched: templates/persona/redesign.mjs, assets/themes/persona/{hero-poster,tokens}.css, docs/screenshots/i-{before,i1}-*.png, HANDOFF.md.
+- Verified: 148 tests pass; production build passes; original CSS remains 66fffa4f89.css. Screenshots at 1440, 1920 and 375px show the scaled fringe and no horizontal overflow. Compared the white flower against the local reference, without copying reference assets.
+- Unfinished / concerns: I2 follows in a separate commit. Nothing pushed.
+- Please review: white petal registration fringe at localhost:8000.
+- Review of previous entry: followed I1's offset-copy method; retained existing flower geometry and motion rules.
+
+## 2026-10-14 · Claude → Codex: P4R "Revival" flower fringe (I1) and About redone as a yellow mask over blue sky (I2)
+
+**Status:** ready to start; the owner requested both. Separate commits: I1, then I2.
+
+**Reference:** `/Users/jacky/Documents/DIY/p4r-reverse-engineering/revival-assets/FINDINGS.txt`, plus the SVG/PNG files beside it.
+- Same rule as H: learn the method, never copy the files. Do not put their SVG path data (`mask-geometry.json`), PNGs or WebPs into the repo.
+- Draw our own geometry. Colors and the layering technique are fine to reuse.
+
+### I1: only white flowers get the offset red/green fringe
+
+**Reference** (`deco_flower_revival_4…embedded.png`):
+- The white flower has an uneven *offset registration fringe*: a hot-pink/red copy (#FF0040) peeks out on the upper/upper-right edges, and a neon-green copy (#02FE01) on the right/lower-right edges.
+- It is not a uniform outline. The visible thickness is about 2% of the flower width, fattest on the outer bulbs and thinning toward the center.
+- The black flower (`…_1`) has no edging at all.
+
+**Ours today** (`templates/persona/redesign.mjs` ~103–108, `hero-poster.css` ~74–102):
+- The white flowers (`.hero-flower-new` in `.hero-left-flower`, and `.hero-flower-light` in `.hero-right-light-flower`) get a 1px non-scaling rainbow-gradient stroke underneath (`.hero-flower-rainbow-outline`, gradient `#hero-petal-rainbow`).
+- The olive flowers (`.hero-flower-dark`, `.hero-name-flower`) have none.
+
+**Do:**
+- For the white flowers only, replace the rainbow-outline group with two full copies of `flowerPetals` placed underneath the white face inside the same `.hero-flower-spin` group, so all three rotate together, as in the reference:
+  - a red copy translated up and to the right
+  - a green copy translated to the right and down
+- Start at about 5–6 units in the 320-unit petal space, then tune visually against the reference until the fringe reads the same at the desktop sizes.
+- Scale with the flower. Do **not** use `non-scaling-stroke`.
+- Add tokens `--flower-fringe-red: #FF0040` and `--flower-fringe-green: #02FE01` next to the existing `--flower-*`.
+- Delete the `.hero-flower-rainbow-outline` CSS.
+- Leave the `#hero-petal-rainbow` gradient in `index.html`, since `/original/` shares that file, unless you confirm it is unused there; then remove it through the Persona transform instead.
+- The rule covers every white flower on the site. Today that's the hero left and right light flowers.
+- Olive, orange (Contact motif) and yellow (Contact big flower) flowers keep no fringe. The Contact flower's amber drop shadow is a shadow, not a trace, so leave it.
+
+**Done when:** a zoomed crop at 1440px next to the reference PNG shows a matching fringe while spinning. Olive flowers are unchanged, and reduced motion still stops the spin.
+
+### I2: About becomes a blue CRT sky under a yellow mask with narrow sweeping cut-outs
+
+**Reference** (`bg_revival.DxHW_odn.svg`, desktop viewBox 1920×2789, and `bg_revival_sp…svg`, mobile 750×3069, with separate art below 751px):
+- One flat yellow layer (#FFF300 there; use our `--palette-yellow`) covers the section.
+- Long, narrow, tapered gaps in it reveal the blue cloud sky and CRT texture underneath.
+- The gaps sweep in two bundles of 3–4 curves:
+  - one enters at the top-left, arcs down across the middle and exits on the right edge about 40% down
+  - the other enters on the left about 75–85% down and arcs up to the right edge
+- Within a bundle, lines run nearly parallel, cross or merge once, and vary in thickness (very thin to about 1% of the width). Each one tapers to a point at its ends.
+- Ignore their stacked-TV silhouette; it's their artwork.
+- Implemented as a painted SVG, absolutely positioned at `inset: 0`, width 100%, `object-fit: cover`, `pointer-events: none`.
+
+**Do:**
+1. **Blue base.**
+   - Under everything in `#about`, fill the section with our sky: `--hero-sky`, the H2 dense texture (the same CSS profile and device-pixel snapping from `sky-texture.js`) and the existing SVG clouds, drifting under the same reduced-motion rules.
+   - Line the texture phase up with the hero/header/About sky copies so there is no seam where the hero circle enters About.
+2. **Yellow mask layer.**
+   - Author our own SVG: a full `--palette-yellow` rect with the cut-outs made through an SVG `<mask>`, or a compound path with `fill-rule="evenodd"`.
+   - Shape the cut-outs as filled, tapered Bézier ribbons in the two-bundle composition above. Use our own curves; don't trace theirs.
+   - Make separate desktop (≥900px) and mobile (<900px) artwork, as the reference does. Size the viewBoxes to About's E1 aspect: about 1440×1486 desktop, and the mobile section height.
+   - Use `preserveAspectRatio` slice/cover so the composition crops rather than squashes.
+3. **Keep these exactly as they are** (owner): the colored status stripes and the shockwave, including their code, timing, kick and stacking under the hero circle. Also keep the gold ring growth, the corner fan and the hero-circle continuation.
+4. **Stacking, bottom to top:**
+   1. blue sky with texture and clouds
+   2. yellow mask
+   3. gold legacy art: rings, shockwave, arch
+   4. status stripes
+   5. hero-circle continuation
+   6. corner fan
+   7. `.content-shell` and the picture placeholders
+
+   Check that the stripes still disappear under the blue circle, now that the base itself is blue.
+5. **Legibility.**
+   - Route the cut-outs away from the heading, prose and picture placeholders, so text always sits on solid yellow with its current colors.
+   - If a sweep must cross the copy column, pass it behind a solid yellow pad.
+   - Do not change the day/night `data-theme` tokens.
+6. **Pre-JS and reduced motion:** the mask and texture are static and render without JS.
+7. **Optional, ask the owner first:** draw the cut-outs in on scroll (a mask stroke-dash reveal) in sync with the ring progress.
+
+**Done when:**
+- About at 1440 and 1920px (full section) and 375px reads as yellow with blue sky glinting through narrow sweeping lines, in the reference's two-bundle rhythm.
+- There's a seamless join with the hero circle, and the stripes, shockwave, rings and fan behave exactly as before. Scroll forwards and backwards to check.
+- Text contrast is unchanged and there's no horizontal overflow.
+- Tests and build pass, `/original/` CSS is still `66fffa4f89.css`, and `git ls-files` shows nothing from the P4R folder.
+- Before/after screenshots in `docs/screenshots/`.
+
 ## 2026-10-14 12:18 · Codex — H2
 - Changed: replaced H’s sparse/faint bands with a seven-row near-white/pale-cyan/soft-edge/cyan CSS profile at 30% opacity. Uses normal alpha composition for reference-like contrast. Sweep remains the sole hero CRT animation; clouds, game CRT and day/night colors are unchanged.
 - Changed: added sky-texture.js to round period, row edges and phase onto the device grid using the configured final SVG scale. The same values are applied to hero/header/About. Periods measured after layout: 1440px at 1× ≈5px, 2× ≈5.5px; 375px at 1× 4px, 2× 3.5px; 1920px at 1× 7px. Dense CSS fallback remains available before JavaScript.

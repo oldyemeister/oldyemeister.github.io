@@ -72,9 +72,7 @@ body.persona-design :is(#home, .hero-top-extension, #about) .hero-dot-field { op
 body.persona-design #home .hero-visual-stage > .hero-ambient { opacity: .2; }
 
 body.persona-design {
-  --flower-red: #FF1600;
-  --flower-green: #2CB900;
-  --flower-cyan: #50F0FA;
+
 }
 body.persona-design #home .hero-flower-dark { fill: var(--palette-olive); }
 body.persona-design #home .hero-left-flower {
@@ -89,16 +87,9 @@ body.persona-design #home .hero-left-flower {
   pointer-events: none;
   fill: var(--palette-white);
 }
-/* Stroke exact petal contours underneath the complete white silhouette.
-   This leaves only the outside half of the stroke visible, with no offset. */
-body.persona-design #home .hero-flower-rainbow-outline {
-  fill: none;
-  stroke: url(#hero-petal-rainbow);
-  stroke-width: 2px; /* White fill covers the inner half, leaving a 1px trace. */
-  stroke-linejoin: round;
-  stroke-linecap: round;
-}
-body.persona-design #home .hero-flower-rainbow-outline path { vector-effect: non-scaling-stroke; }
+/* Offset silhouettes scale and rotate with the white face. */
+body.persona-design #home .hero-flower-fringe-red { fill: var(--flower-fringe-red); }
+body.persona-design #home .hero-flower-fringe-green { fill: var(--flower-fringe-green); }
 body.persona-design #home .hero-flower-light { fill: var(--palette-white); }
 
 body.persona-design #home .hero-reference-copy {

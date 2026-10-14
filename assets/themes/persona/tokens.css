@@ -14,6 +14,11 @@
 :root,
 :root[data-theme] {
   /* Tier 1 — raw palette colors */
+  --flower-red: #FF1600;
+  --flower-green: #2CB900;
+  --flower-cyan: #50F0FA;
+  --flower-fringe-red: #FF0040;
+  --flower-fringe-green: #02FE01;
   --palette-yellow: #FFF000;
   --hero-yellow-light: #FCFF89;
   --palette-olive: #4B4A30;
