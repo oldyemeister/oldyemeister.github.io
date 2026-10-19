@@ -2,6 +2,11 @@
 
 Newest entries first. Each entry: date, from → to, task, status, where to start.
 
+## 2026-10-19 · Codex — Archive unused assets and demo code
+- Archived 176 files locally under `.local-archive/2026-10-19-cleanup/`: historical QA screenshots, unused PNG/JPEG originals and placeholder images, and optional Persona/TV demo tools. Manifest preserves paths, sizes, and hashes. Added archive/screenshot ignore rules.
+- Removed 55.52 MB of tracked contents; production output drops from ~14.30 MB to ~5.18 MB. All retained built files are byte-identical to baseline, including original routes. Active runtime modules, font sources, licenses, and tests retained.
+- Build and all 150 current tests pass; local homepage browser check passes. Server started in exec session 95374 at port 8000. No commit/push or history rewrite. Recovery and limits: `docs/CLEANUP.md`.
+
 ## 2026-10-19 · Claude — Experience disc marks, project role/date
 - Content (owner-approved): added resume results to Tencent 2025/2024 and BesTV; trimmed the TOEFL entry to two bullets and the standard location/date format. Neoteai text untouched (internship ongoing). Bilibili stays in both sections. RF card now notes 1 of 4 of 20 teams to fully integrate.
 - Persona only (`redesign.mjs`): `experienceDiscMarks` prints `disc_mark` logos on save-menu discs; `projectCardMeta` adds `role` + `dates` under card titles. New marks in `assets/images/experience/`, sourced in ATTRIBUTION.md. `/original/` markup unchanged.

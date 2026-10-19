@@ -133,8 +133,9 @@ All Persona pages reserve the fixed keyboard-hint clearance inside the olive
 footer, never as yellow body padding below it. The shared measured HUD height
 keeps the final content reachable, including when touch layouts hide the hints.
 
-`node tools/tv-demo-build.mjs` restores the optional `/tv-demo/` alias after a
-production build, using the same shared frame rather than a separate design copy.
+The former optional TV and Persona upgrade studies are archived locally; use
+the three production game routes to preview the shared TV frame. See
+`docs/CLEANUP.md` for archive and recovery details.
 
 The menu font controls are `--menu-font`, `--menu-font-size`, and
 `--menu-outline` in the theme stylesheet.
