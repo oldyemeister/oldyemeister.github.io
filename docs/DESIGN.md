@@ -49,13 +49,12 @@ keyboard controls. Numeric section labels are removed by the Persona renderer.
 
 ### Flowers and hero CRT
 
-Flower artwork uses six water drops with short, flat inward heads aligned at
-one shared center in `templates/persona/flower.mjs`, including the small Contact motif.
-Petals taper to that center without extending past it into a rounded rosette.
-Each drop is scaled around its inward head to be 20% thinner and 8% longer radially.
-The outer end uses a scale-compensated circular arc for the reference's rounded bulb.
-The bulb radius and flat inner-head width are both enlarged by 20% from that baseline.
-Existing fills, rainbow outlines, shadows, placements, sizes and rotation styles are preserved.
+Solid-color flowers use the joined six-petal silhouette traced from the supplied
+Revival black-flower alpha in `templates/persona/flower.mjs`. All hero, About,
+Contact and small motif copies inherit their existing fills/shadows. White hero
+flowers instead use `images/revival/flower-white.svg`, preserving the supplied
+embedded PNG and its baked uneven red/green registration fringe. Solid variants
+have no colored fringe. Existing sizes, placements and rotation directions stay.
 The hero sky uses an original dense seven-row CSS texture over our SVG clouds,
 plus the slow CRT sweep. Hero-only noise, flicker and scanlines are disabled.
 The tile is defined in `hero-poster.css` in shared SVG coordinates so the hero,
@@ -214,10 +213,64 @@ than shrinking gameplay back to 2×; pointer mapping uses the actual canvas boun
 
 ### About sky openings (I2)
 
-Persona's `redesign.mjs` authors separate desktop (1440×1486) and mobile
-(375×520) even-odd yellow paths. Their narrow Bézier openings expose existing
+Persona renders 36 small clouds and nine large background clouds per sky
+field. Large clouds retain 1.4× the original source silhouette area. Clouds drift
+horizontally with staggered 32–98s small-cloud and 180–252s large-cloud loops.
+The sky field stays anchored against scrolling; only the clouds themselves
+translate horizontally. Hidden/offscreen skies and reduced motion pause drift.
+`fixed-sky.js` projects the identical field into viewport space through every
+hero/header/About sky window, cancelling each scrolling SVG's parent transform.
+The yellow interface, masks and CRT overlays stay in document space and scroll
+normally. Projection updates are frame-batched on scroll/resize, including under
+reduced motion; this compensation keeps the background stationary. Without JS,
+clouds remain paused within their section. About flowers keep visibility pausing.
+
+Persona adapts the extracted Revival desktop and mobile silhouettes in
+`assets/themes/persona/images/revival/`, as requested by the owner. The viewBoxes
+extend the upper curves leftward so all three enter from the left edge rather
+than being cut off at the hero/About seam. Only the upper desktop artwork is
+remapped; the lower curves retain their positions. The desktop
+TV stack is replaced by an original tilted playing card drawn in thin circuit
+linework: the card body opens sky, divided by narrow yellow double frames, a
+solid chip pip with symmetric traces and vias, and code-bracket corner indices.
+An affine turn-and-squash makes it read as a card lying on a table. The compact mobile composition has no TV stack. CSS alpha masks
+preserve the remaining curve geometry while using
+the existing yellow token. Cover sizing preserves aspect ratio. Openings expose existing
 cloud SVGs over `--hero-sky`. The `.about-sky-texture` shares H2's CSS row
 profile; `alignBackdrop` converts the hero texture grid to HTML pixel units and
 anchors its phase to the same document origin. Static CSS remains before JS.
-Copy pads retain yellow backgrounds. These layers sit below all existing About
-art, and do not change its animation timings or geometry.
+Copy pads retain yellow backgrounds. About's status stripes, corner fan, gold
+rings/shockwave and small motifs are now hidden with visibility; their nodes
+remain measurable for the existing scroll geometry and available for rollback.
+The hero sky continuation and doubled section height stay. The source geometry
+replaces the hand-drawn half-width ribbons. Copy
+is centered in the clear yellow field below the upper sweep. Attribution and
+source URLs are recorded in `docs/ATTRIBUTION.md`.
+
+### Experience disc marks and project meta
+
+Persona prints each employer's mark on its save-menu disc, as P4G prints sakura
+on the selected save disc. Set `disc_mark` on an experience entry in
+`content.yml`; entries without one keep a plain disc. The mark is a CSS alpha
+mask: 50% `--save-disc-shadow` on gold discs, 62% white on the selected blue
+disc. The shared `logo` thumbnail stays for `/original/` and is hidden in
+Persona.
+
+Project cards take optional `role` and `dates` fields, rendered under the title
+as a yellow wide-face label, a skewed divider and the italic term. Phones stack
+the two lines. Both additions are inserted by `redesign.mjs`, so `/original/`
+markup is unchanged.
+
+### About flower pair
+
+Persona adds a large gold six-petal flower with a bright yellow offset shadow
+and a smaller charcoal companion in the lower-left About field. Both reuse
+`flowerPetals`, rotating counterclockwise in 28s and 22s respectively. The
+pair scales down on phones, stays decorative/noninteractive, and pauses when
+About is offscreen or the document is hidden. Reduced motion leaves it static.
+The three reference colors are additive Tier 1 `--ref-flower-*` tokens.
+
+About sky traces are widened approximately 40% at typical channel widths using
+static SVG alpha erosion on the silhouette paths (4 units desktop, 3 mobile).
+This preserves their curves and the separate circuit-card cutout. A small
+horizontal viewBox inset excludes the eroded outer edges and antialias fringe.

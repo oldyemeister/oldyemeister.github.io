@@ -168,21 +168,28 @@ experience:
     dates: "Jun 2026 — Present"
     impact: "Embodied AI data pipeline"
     logo: ""
+    # Persona prints this mark on the save-menu disc, like P4G's sakura disc.
+    disc_mark: "/assets/images/experience/neoteai.svg"
+    # Full-color mark shown after the company name (Persona only).
+    name_logo: "/assets/images/experience/neoteai-color.svg"
     highlights:
-      - "Built a <strong>Python QA pipeline</strong> for ~62,000 robot episodes; parallelization delivered a <strong>4.5–4.8x speedup</strong> and cut false positives from 90%+ to near zero."
-      - "Designed a semantic applicant-review tool with rule-based triage and deterministic <strong>accept, decline, or pending</strong> decisions."
-      - "Prototyped a <strong>VIO-only UMI-style</strong> data-collection device using <strong>ORB-SLAM3</strong> and ArUco tracking, benchmarked against Vive Trackers."
-      - "Built computer-vision tooling to detect gripper defects against per-gripper calibration baselines."
+      - "Built a <strong>Python QA pipeline</strong> to check ~62,000 robot episodes. Parallelized processing for a <strong>4.5–4.8× speedup</strong> and reduced false positives from over 90% to near zero."
+      - "Designed an applicant-review tool combining semantic matching with rule-based triage to produce consistent <strong>accept, decline, or pending</strong> decisions."
+      - "Prototyped a <strong>robotics data-collection device</strong> using ORB-SLAM3 visual-inertial odometry and ArUco tracking; benchmarked it against Vive Trackers."
+      - "Built <strong>computer-vision defect detection</strong> for robot grippers using individual calibration baselines."
   - company: "Tencent Cloud"
     role: "AI Engineering Intern"
     location: "Shanghai, China"
-    dates: "Jul — Sep 2025"
+    dates: "Jun — Aug 2025"
     impact: "3,000+ clips/week"
     logo: ""
+    disc_mark: "/assets/images/experience/tencent-cloud.svg"
+    name_logo: "/assets/images/experience/tencent-cloud-color.svg"
     highlights:
-      - "Built a <strong>Flask, Dify, and Python</strong> pipeline that categorized <strong>3,000+ provincial-TV clips weekly</strong>."
-      - "Built a WeCom news bot and secure translation API with ~<strong>200 ms</strong> average latency and streaming correction."
-      - "Created a user-behavior simulator with persona generation, rule-based logic, and JSON analytics."
+      - "Built a <strong>Python, Flask, and Dify</strong> pipeline on Tencent COS to categorize <strong>3,000+ TV clips per week</strong> for a provincial TV channel."
+      - "Built a <strong>WeCom group-chat bot</strong> for AI news search and report generation."
+      - "Built a secure translation API with streaming-output correction and approximately <strong>200 ms average latency</strong>."
+      - "Created a <strong>user-behavior simulator</strong> with generated personas, rule-based actions, and JSON analytics."
   - company: "BesTV"
     role: "AI Tech Intern"
     location: "Shanghai, China"
@@ -190,41 +197,43 @@ experience:
     impact: "LLM infrastructure"
     logo: ""
     highlights:
-      - "Deployed <strong>Docker</strong> AI infrastructure and custom <strong>MCP servers</strong> for structured-data and API orchestration."
-      - "Implemented presentation-summarization and image-generation workflows with DeepSeek and Tongyi APIs."
-      - "Optimized local speech pipelines with <strong>Whisper</strong> and <strong>CosyVoice</strong>."
+      - "Deployed <strong>Docker-based AI infrastructure</strong> on Ubuntu with custom <strong>MCP servers</strong> for structured output and API orchestration, enabling scalable LLM workflows."
+      - "Built <strong>presentation summarization and image generation</strong> workflows using DeepSeek and Alibaba Tongyi APIs."
+      - "Optimized local <strong>speech recognition and synthesis</strong> pipelines using Whisper and CosyVoice."
   - company: "Tencent Cloud"
     role: "AI Product Intern"
     location: "Shanghai, China"
     dates: "May — Aug 2024"
     impact: "Rehired for 2025"
     logo: ""
+    disc_mark: "/assets/images/experience/tencent-cloud.svg"
+    name_logo: "/assets/images/experience/tencent-cloud-color.svg"
     highlights:
-      - "Built kindergarten datasets with Shanghai Education Television using <strong>Selenium</strong> and <strong>PyTorch</strong>."
-      - "Deployed Dockerized scrapers for daily WeChat public-account collection."
-      - "Contributed to an AI news-sorting system and earned a return internship for 2025."
+      - "Built <strong>kindergarten datasets</strong> with Shanghai Education Television using Selenium and PyTorch."
+      - "Deployed <strong>Dockerized scrapers</strong> to collect WeChat public-account content daily."
+      - "Contributed to an <strong>AI news-sorting system</strong> for Zhejiang Television, improving content categorization."
   - company: "Bilibili Group"
     role: "Content Creator"
     location: "Shanghai, China"
     dates: "Mar 2022 — Sep 2025"
     impact: "10K+ followers, 1.7M+ views"
     logo: ""
+    disc_mark: "/assets/images/experience/bilibili.svg"
+    name_logo: "/assets/images/experience/bilibili-color.svg"
     highlights:
-      - "Grew a Bilibili channel to <strong>10,000+ followers</strong> with Mandarin videos on F1 history and racecar engineering."
-      - "Edited in <strong>Adobe Premiere</strong> and designed Photoshop thumbnails; the top video reached <strong>400,000+ views</strong> and the channel 1.7M+."
-      - "Turned complex motorsport-engineering research into accessible scripts."
+      - "Grew an F1 engineering channel to <strong>10,000+ followers and 1.7M+ views</strong> through researched Mandarin videos."
+      - "Produced videos in <strong>Adobe Premiere</strong> and designed Photoshop thumbnails; the top video reached <strong>400,000+ views</strong>."
+      - "Translated complex <strong>motorsport engineering</strong> research into accessible scripts on vehicle design and F1 history."
 
   - company: "Damrey Education"
-    role: "TOEFL Tutor — Internship"
-    location: "Jing'an District, Shanghai, China · On-site"
-    dates: "Jun — Aug 2023 · 3 mos"
+    role: "TOEFL Tutor Intern"
+    location: "Shanghai, China"
+    dates: "Jun — Aug 2023"
     impact: "116/120 TOEFL · 4 students"
     logo: ""
     highlights:
-      - "Provided personalized <strong>1-on-1 TOEFL instruction to four students</strong>, creating tailored study schedules for each student's target score."
-      - "Developed students' test-taking strategies through structured drills and real-time feedback."
-      - "Strengthened communication, mentoring, and curriculum planning skills in an international academic context."
-      - "Selected to tutor TOEFL after achieving <strong>116/120</strong> as a non-native English speaker."
+      - "Selected to tutor after scoring <strong>116/120</strong> on the TOEFL as a non-native English speaker."
+      - "Taught <strong>four students 1-on-1</strong> with tailored study plans, structured drills, and real-time feedback."
 
 projects_section:
   heading: "Selected projects"
@@ -242,8 +251,10 @@ projects_section:
 
 projects:
   - title: "Laser Puzzle"
+    role: "Solo developer"
+    dates: "Jan — Apr 2025"
     categories: [hardware, software]
-    summary: "A laser-reflection puzzle written in C and RISC-V assembly for the DE1-SoC's RV32 processor, drawing to a 320 × 240 VGA framebuffer — 13 rotatable mirrors, six targets, four hazards, and a two-minute timer."
+    summary: "Built a laser-reflection puzzle in C and RISC-V assembly for the DE1-SoC. Separated beam geometry, timing, and game state to keep collisions and 320 × 240 VGA rendering consistent."
     playable: true
     placeholder_index: "01"
     technologies:
@@ -260,8 +271,10 @@ projects:
     live_url: "/projects/laser/"
     live_label: "Play Laser Puzzle"
   - title: "Donkey Kong FPGA Game"
+    role: "Co-developer"
+    dates: "Nov — Dec 2024"
     categories: [hardware]
-    summary: "A hardware recreation of the classic Donkey Kong game on an FPGA, with full game logic, sprite rendering, and collision detection implemented directly in Verilog. Achieved smooth 60 FPS gameplay on the DE1-SoC through timing analysis and resource optimization."
+    summary: "Co-built a 60 FPS Donkey Kong recreation on the DE1-SoC FPGA. The design implements game logic, sprite rendering, and collision detection in Verilog, with timing analysis and resource optimization."
     playable: true
     placeholder_index: "02"
     collaborator:
@@ -282,8 +295,10 @@ projects:
     live_label: "Play Donkey Kong"
     featured: false
   - title: "IMU Sandbox"
+    role: "Particle engine & effects"
+    dates: "Jan — Apr 2026"
     categories: [hardware, software]
-    summary: "An IMU-controlled STM32 sandbox running up to 3,000 sand particles at approximately 30 FPS, with dual OLEDs, selectable gravity, materials, and environmental effects."
+    summary: "Built the fixed-point particle engine and 1 KB occupancy grid for a tilt-controlled STM32 sandbox. Supports up to 3,000 sand particles at approximately 30 FPS, with optimized collisions and interactive effects."
     playable: true
     placeholder_index: "03"
     collaborator:
@@ -306,8 +321,10 @@ projects:
 
   # EDITABLE PROJECT CARD 4
   - title: "RF Frequency Downconversion System"
+    role: "RF design, prototyping & validation"
+    dates: "Jan — Apr 2025"
     categories: [hardware]
-    summary: "A three-person analog receiver project combining an 8–16 MHz bandpass filter, ±0.7 V limiter, Gilbert-cell mixer, and low-pass filter to produce an approximately 100 kHz downconverted output with 18 dB measured chain gain."
+    summary: "Designed and tested the bandpass filter, limiter, and Gilbert-cell mixer for a three-person RF receiver; a teammate built the PCB. One of only 4 of 20 teams to reach full system integration, with 18 dB measured chain gain and a 10 MHz input downconverted to approximately 100 kHz."
     collaborators:
       - name: "Michael Wei"
         url: "https://www.linkedin.com/in/minghan-wei-420802241/"
@@ -332,8 +349,10 @@ projects:
     featured: false
 
   - title: "Vision-Assisted Adaptive Cruise Control"
+    role: "Raspberry Pi software"
+    dates: "Sep — Dec 2025"
     categories: [hardware, software]
-    summary: "A Raspberry Pi 5 autonomous vehicle combining PID-based adaptive cruise control, IR lane keeping, emergency braking, and CNN stop-sign detection, with 100 ms control response and following accuracy within 5 cm."
+    summary: "Wrote Raspberry Pi software for IR lane steering and ultrasonic vehicle and obstacle detection. Our four-person team built an autonomous vehicle with approximately 100 ms control response and following accuracy within 5 cm."
     collaborators:
       - name: "Yilong Chen"
         url: ""
@@ -360,8 +379,10 @@ projects:
     featured: false
 
   - title: "F1 Engineering on Bilibili"
+    role: "Creator: research, script & editing"
+    dates: "Mar 2022 — Sep 2025"
     categories: [media]
-    summary: "Technical videos that turn Formula 1 engineering, team history, and motorsport design into researched, accessible stories for an audience of more than 10,000 followers."
+    summary: "Research, script, and video production translating Formula 1 engineering into accessible Mandarin stories. Grew the channel to 10,000+ followers and 1.7M+ views, with 400,000+ views on the top video."
     technologies:
       - "Technical Research"
       - "Scriptwriting"

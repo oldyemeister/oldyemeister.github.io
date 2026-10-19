@@ -94,34 +94,20 @@ test('comparison preview retains its Persona route prefix', () => {
 });
 
 test('all flower variants reuse the six-petal reference silhouette', () => {
-  assert.equal((flowerPetals.match(/<path /g) || []).length, 6);
-  assert.deepEqual([...flowerPetals.matchAll(/rotate\((\d+) 160 160\)/g)].map(match => Number(match[1])), [0, 60, 120, 180, 240, 300]);
+  assert.equal((flowerPetals.match(/<path /g) || []).length, 1);
   const result = personaPreview(page, '', true, ui);
   assert.ok(result.includes(`<g transform="translate(50 50) scale(.32) translate(-160 -160)">${flowerPetals}</g>`));
   assert.ok(result.includes(`<g class="contact-flower-face contact-flower-spin">${flowerPetals}</g>`));
   assert.ok(result.includes(`<g class="hero-flower-spin"><g>${flowerPetals}</g></g>`));
 });
 
-test('flower drops have flat inward heads centered on their shared rotation point', () => {
-  assert.equal((flowerPetals.match(/translate\(160 160\) scale\(\.8 1\.08\) translate\(-160 -160\)/g) || []).length, 6);
-  const paths = [...flowerPetals.matchAll(/d="([^"]+)"/g)].map(match => match[1]);
-  assert.equal(new Set(paths).size, 1);
-  for (const path of paths) {
-    // The cap midpoint is (160, 160), exactly the pivot of every rotated drop.
-    const cap = path.match(/^M([\d.]+) 160 H([\d.]+) /);
-    assert.ok(cap);
-    assert.equal((Number(cap[1]) + Number(cap[2])) / 2, 160);
-    assert.ok(Math.abs(Number(cap[2]) - Number(cap[1]) - 6 * 1.2) < .001,
-      'the flat inner head is exactly 20% wider');
-    assert.match(path, /156\.4 160Z$/);
-    assert.doesNotMatch(path, /Q/); // No rounded, overshooting inner tip.
-    const outerArc = path.match(/A([\d.]+) ([\d.]+) 0 1 0 /);
-    assert.ok(outerArc, 'a broad outer arc forms the rounded bulb');
-    assert.ok(Math.abs(Number(outerArc[1]) - 38 * 1.2) < .001,
-      'the outer circle radius is 20% larger');
-    assert.ok(Math.abs(Number(outerArc[1]) * .8 - Number(outerArc[2]) * 1.08) < .001,
-      'the outer bulb stays circular after the thinner/longer petal scaling');
-  }
+test('only white flower placeholders receive the baked registration artwork', () => {
+  const fixture = page.replace('<g data-contact-petals></g>',
+    '<g class="hero-flower-light" data-contact-petals></g><g class="hero-flower-dark" data-contact-petals></g>');
+  const result = personaPreview(fixture, '', true, ui);
+  assert.match(result, /class="hero-flower-light"[^>]*><g class="hero-flower-spin"><g><image href="[^"]*flower-white.svg"/);
+  assert.ok(result.includes(`<g class="hero-flower-dark" data-contact-petals><g class="hero-flower-spin"><g>${flowerPetals}</g></g></g>`));
+  assert.doesNotMatch(result, /class="hero-flower-fringe-/);
 });
 
 test('redesign keeps project descriptions accessible without adding visible image captions', () => {

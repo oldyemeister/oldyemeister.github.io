@@ -42,6 +42,9 @@
   --config-lime: #DFFF00;
 
   /* Reference study (docs/design-reference.md) — sampled from P4G screenshots. */
+  --ref-flower-gold: #FFE400;
+  --ref-flower-shadow: #FFFF40;
+  --ref-flower-dark: #30352D;
   --ref-band: #232323;          /* Selected row / tab bar. */
   --ref-tab-idle: #464646;      /* Unselected tab fill. */
   --ref-row: #FEFF7F;           /* Unselected list row. */

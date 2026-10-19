@@ -103,8 +103,7 @@ body.persona-design #projects .project-content {
   transition: transform 240ms cubic-bezier(.16, 1, .3, 1),
     box-shadow 240ms cubic-bezier(.16, 1, .3, 1);
 }
-/* The "FILE 0X" tag on the panel's top edge. Styled in full here: the
-   redesign.css rule sits inside its @scope and never matches. The child
+/* The "FILE 0X" tag on the panel's top edge, styled in full here. The child
    selector outranks the panel's white `.project-content > p` text. */
 body.persona-design #projects .project-content > .project-file-index {
   display: inline-block;
@@ -186,4 +185,43 @@ body.persona-design #projects .project-card:focus-within .project-content {
   body.persona-design #projects .project-card:is(:hover, :focus-within) .project-content {
     transform: none;
   }
+}
+/* Role and date under the title (Persona only, from content.yml): a yellow
+   save-file label, a skewed divider, then the term in italics. */
+body.persona-design #projects .project-content > p.project-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.75rem;
+  margin: 0.375rem 0 0.75rem;
+  font-size: var(--content-label-size);
+  line-height: 1.4;
+}
+body.persona-design #projects .project-meta-role {
+  color: var(--project-panel-accent);
+  -webkit-text-fill-color: currentColor;
+  font: 600 0.8125rem/1.4 'Persona Slim Wide', 'Persona Slim Local', Arial, sans-serif;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+body.persona-design #projects .project-meta-date {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  color: var(--project-panel-ink);
+  -webkit-text-fill-color: currentColor;
+  font-style: italic;
+  font-weight: 500;
+}
+body.persona-design #projects .project-meta-role + .project-meta-date::before {
+  content: '';
+  align-self: center;
+  width: 0.25rem;
+  height: 0.875rem;
+  background: var(--project-panel-accent);
+  transform: skew(-12deg);
+}
+@media (max-width: 600px) {
+  body.persona-design #projects .project-content > p.project-meta { flex-direction: column; gap: 0.125rem; }
+  body.persona-design #projects .project-meta-role + .project-meta-date::before { display: none; }
 }

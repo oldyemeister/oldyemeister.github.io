@@ -2,6 +2,86 @@
 
 Newest entries first. Each entry: date, from → to, task, status, where to start.
 
+## 2026-10-19 · Claude — Experience disc marks, project role/date
+- Content (owner-approved): added resume results to Tencent 2025/2024 and BesTV; trimmed the TOEFL entry to two bullets and the standard location/date format. Neoteai text untouched (internship ongoing). Bilibili stays in both sections. RF card now notes 1 of 4 of 20 teams to fully integrate.
+- Persona only (`redesign.mjs`): `experienceDiscMarks` prints `disc_mark` logos on save-menu discs; `projectCardMeta` adds `role` + `dates` under card titles. New marks in `assets/images/experience/`, sourced in ATTRIBUTION.md. `/original/` markup unchanged.
+- Open: BesTV and Damrey have no mark (no reliable official file found). Owner to resolve two mismatches: Tencent 2025 dates (site Jul—Sep vs resume Jun—Aug) and RF role (site filter/limiter vs resume Gilbert-cell mixer/PCB).
+- 150 tests and build pass; checked at 1440 and 375px.
+
+## 2026-10-19 · Codex — Recruiter-focused descriptions
+- Rewrote five technical/media experience entries and all six homepage project summaries in `_data/content.yml` for clearer contributions, scope, and results. Preserved existing metrics; separated individual RF/ACC work from team outcomes and retained shared ownership for FPGA work.
+- Content-only update: no ordering, styling, titles, dates, links, or new performance claims. Shared content also updates `/original/`, as documented in PUBLISHING.md; its design is unchanged.
+- Validation: 148 tests and production build pass. Existing unrelated changes preserved; no push.
+
+## 2026-10-19 · Claude — About circuit card
+- Owner found the solid processor-board cutout too generic. Replaced it in `mask-desktop.svg` with an "ace of chips" playing card in thin sky linework: card outline, inner frame, centre chip pip with traces/vias rotated 180° like a court card, and `</>` + chip corner indices. Follow-up: inverted to the P4R tarot-card style, with a sky card body divided by narrow yellow frames and linework, and a solid yellow chip. Then foreshortened (rotate −30°, scale 1.08×.72) to lie flat like a card on a table, shifted left so it stays whole at 1440 and 1920px. Mobile mask unchanged.
+- Docs and the redesign.mjs comment updated. 148 tests and production build pass; checked at 1440px.
+
+## 2026-10-15 · Codex — Horizontal drift with scroll anchoring
+- Clarification supersedes the preceding freeze: restored staggered 32–98s small and 180–252s large horizontal cloud loops inside the viewport-anchored field. All copies use the same travel distance; the About-only 2000-unit override was removed.
+- Yellow masks and CRT continue scrolling. Reduced-motion/hidden/offscreen drift pauses restored. 148 tests and build pass.
+
+## 2026-10-15 · Codex — Stationary sky under scrolling masks/CRT
+- Froze cloud drift into explicit SVG coordinates and added fixed-sky.js to cancel parent SVG screen transforms for a single shared viewport sky field. Hero/header/About copies align; removed duplicate About field.
+- Yellow artwork and CRT stay in scrolling document space. About flower motion remains independent; viewport compensation also runs under reduced motion. Fixed WebKit SVGMatrix/DOMMatrix interop during browser testing.
+- Verified cloud screen coordinates stay within .001px across a 726px desktop scroll while CRT moves 726px; desktop/mobile geometry has no overflow. 148 tests/build pass. Original source untouched; no push.
+
+## 2026-10-15 · Codex — Extracted Revival flower shape
+- Replaced the symmetric flat-headed petal construction with a Potrace contour of the supplied black flower alpha for all solid hero/About/Contact/motif copies. Preserved inherited colors, shadows and rotation.
+- White hero flowers use the supplied original SVG/embedded PNG, retaining baked uneven red/green registration; removed the reconstructed offset groups and CSS. Only white flowers have this fringe.
+- Updated attribution, design notes and obsolete geometry tests; added white-only artwork regression coverage.
+- Verified 148 tests, production build, detector and diff whitespace checks. Desktop/mobile hero visually checked, no overflow; browser confirms exactly two white artwork instances. Original homepage and CSS hashes unchanged. Nothing pushed.
+
+## 2026-10-15 · Codex — Wider About sky traces
+- Widened desktop/mobile mask openings on both sides using static SVG erosion (4/3 source units), approximately 40% at typical widths. Existing curves, blue cloud/CRT layer and separate circuit-board details preserved.
+- Inset viewBoxes slightly to crop the eroded outer-edge fringe. Updated DESIGN.md.
+- Validation: 148 tests and build pass; detector and whitespace checks clean. Desktop/mobile previews checked, no horizontal overflow. No push.
+
+## 2026-10-15 · Codex — About counterclockwise flowers
+- Added two decorative SVG flowers using the existing six-petal artwork: large gold with yellow offset shadow and small charcoal, arranged like the supplied reference in the lower-left About field.
+- Counterclockwise 28s/22s rotation; existing intersection observer pauses About flowers offscreen and on hidden tabs, with a static reduced-motion fallback. Responsive positioning and sizing, no pointer targets.
+- Added three reference color tokens without changing existing day/night values. Updated Persona template, hero-poster.css, scroll-presence.js and DESIGN.md.
+- Verified: 148 tests, production build, clean detector and diff whitespace checks. Desktop visual check and computed running animation durations; desktop/mobile geometry has no horizontal overflow. Original homepage/CSS hashes unchanged. No push.
+
+## 2026-10-15 · Codex — Large slow cloud texture
+- Added nine background clouds per sky group behind the 36 small clouds. Each has 40% more area than its original source dimensions (sqrt(1.4) width/height), with 180–252s loops, slower than every small cloud.
+- Spread vertical positions from -130 to 590 SVG units and permuted horizontal phases across the sky. Shared hero/header/About copies inherit the layer; reduced-motion and visibility pausing remain intact.
+- Verified 148 tests, production build, clean detector and whitespace checks. Desktop 1440px and mobile 375px visually checked with no horizontal overflow; computed slow durations confirmed. Original homepage and CSS hashes unchanged. No push.
+
+## 2026-10-15 · Codex — Smaller, denser clouds with varied drift
+- Persona now renders 36 clouds per group, each 54–64% of its previous dimensions. Combined silhouette area increases about 40%; vertical offsets and independent phases spread clouds across the sky.
+- Individual 32–98s loops give roughly 3:1 speed variation. Rightward travel, offscreen loop endpoints, existing pause behavior and static SVG turbulence textures are preserved.
+- Updated redesign.mjs, hero-poster.css and DESIGN.md. Existing unrelated edits preserved; nothing pushed.
+- Verified: 148 tests pass, build succeeds, detector has no findings, diff whitespace check passes. Browser confirms 36 hero clouds and varied durations. Desktop 1440px and phone 375px have no horizontal overflow; desktop About and phone hero visually inspected. Original homepage and original CSS hashes match the pre-edit build exactly.
+
+## 2026-10-15 · Codex — Left-edge sweep continuation
+- Corrected the interpretation of the owner's annotated screenshot: all three upper curves now enter through the left screen edge instead of terminating at About's top seam.
+- Extended only the upper desktop SVG composition with a clipped affine remap; preserved the lower artwork, circuit board, text and section height. Removed previously offscreen source motifs exposed by the extension. A one-unit clip overlap prevents an antialiased seam. Mobile uses its original left-entry framing.
+- Production build and 148 tests pass; desktop/mobile previews show no horizontal overflow.
+
+## 2026-10-14 · Codex — Stronger, faster clouds
+- Enlarged Persona clouds 25%, increased group opacity to 1 and brightness to 1.15. Duration/delay multiplier .4 gives 42–60s loops with preserved stagger.
+- Explicit normal-direction loops travel rightward, fully exiting before restarting offscreen left. Fixed About's formerly too-short travel with a 2000-unit range and offscreen group origins; hero range is 1360.
+- Verified browser quarter/three-quarter animation positions increase (hero 340→1020; About 500→1500), reduced motion pauses every cloud, desktop/mobile have no overflow, 148 tests and build pass. Shared cloud files and original markup untouched.
+
+## 2026-10-14 · Codex — Portfolio mask motif
+- Cropped the desktop/mobile upper-left viewBoxes beyond the visible curve entries, preserving aspect ratio and doubled About height.
+- Removed the TV-stack contour and its interior subpaths from the desktop mask. Added an original tilted processor board with code brackets and circuit traces in the same sky-cutout treatment. Mobile retains its existing simpler, TV-free artwork.
+- Updated source attribution to identify the adaptations. Desktop/mobile previews checked; 148 tests and production build pass. Palette and original design unchanged.
+
+## 2026-10-14 · Codex — Exact extracted Revival masks
+- Owner explicitly requested direct implementation from the folder beside revival-assets/FINDINGS.txt, superseding the earlier own-geometry restriction and half-width approximation.
+- Copied the two extracted SVGs byte-for-byte to assets/themes/persona/images/revival/. CSS alpha masks retain original geometry, clipping and TV silhouette with the site's existing yellow token. No new REA analysis was needed; used the existing extraction supplied by the owner.
+- Kept doubled section height, blue CRT/cloud background and hidden legacy decorations. Centered portfolio copy within the clear yellow area.
+- Source provenance is in docs/ATTRIBUTION.md. Existing unrelated project-cards.css changes remain untouched.
+
+## 2026-10-14 · Codex — About simplification
+- Follow-up: replaced separate bundles with continuous upper/right-turn/downward ribbons, halved opening widths and doubled section height (2200px at 1440px wide; 1400px at 375px wide). Moved starting curves clear of copy and narrowed the phone copy measure to keep the sky corridor uninterrupted.
+- The owner's new request supersedes I2's requirement to keep older About decorations visible.
+- Hidden About status stripes, corner fan, gold rings/shockwave and small motifs; nodes remain measurable for rollback and existing JS. Hero continuation stays.
+- Redrew original desktop/mobile openings as broad graduated curves, separated the bundles, and shortened the desktop stage to the 1440×1100 composition. No reference assets copied.
+- Validation: 148 tests and production build pass; desktop/mobile visual checks show no horizontal overflow. Original stylesheet remains 66fffa4f89.css. Existing project-cards.css edits are unrelated and untouched.
+
 ## 2026-10-14 · Codex — I2 complete
 - Changed: About now layers its own blue cloud sky and H2 texture beneath original desktop/mobile yellow compound-path masks, each with two bundles of three tapered Bézier openings. Copy keeps solid yellow pads. The masks are static; no optional scroll reveal was added.
 - Changed: explicit stacking is sky, mask, legacy gold art, status stripes, hero continuation, corner fan, then copy/pictures. Existing stripe/shockwave/ring/fan animation code and settings are unchanged. The HTML sky shares the hero SVG's device-snapped period, row edges and document-space phase.

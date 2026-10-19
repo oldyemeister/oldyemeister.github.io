@@ -64,7 +64,11 @@ body.persona-design :is(#home, .hero-top-extension, #about) .hero-circle-composi
 }
 body.persona-design :is(#home, .hero-top-extension, #about) .hero-side-field { fill: var(--hero-sky); }
 body.persona-design :is(#home, .hero-top-extension, #about) .hero-side-highlight { fill: none; stroke: var(--palette-white); stroke-width: 5px; }
-body.persona-design :is(#home, .hero-top-extension, #about) .hero-sky-clouds { opacity: .86; pointer-events: none; }
+body.persona-design :is(#home, .hero-top-extension, #about) .hero-sky-clouds {
+  opacity: 1;
+  filter: brightness(1.15);
+  pointer-events: none;
+}
 body.persona-design :is(#home, .hero-top-extension, #about) .hero-ring-outer { fill: var(--palette-yellow); stroke: var(--config-orange); stroke-width: 14px; }
 body.persona-design :is(#home, .hero-top-extension, #about) .hero-ring-middle { fill: none; stroke: var(--config-orange); stroke-width: 5px; }
 body.persona-design :is(#home, .hero-top-extension, #about) .hero-ring-inner { fill: var(--palette-yellow); stroke: none; }
@@ -87,9 +91,7 @@ body.persona-design #home .hero-left-flower {
   pointer-events: none;
   fill: var(--palette-white);
 }
-/* Offset silhouettes scale and rotate with the white face. */
-body.persona-design #home .hero-flower-fringe-red { fill: var(--flower-fringe-red); }
-body.persona-design #home .hero-flower-fringe-green { fill: var(--flower-fringe-green); }
+/* White artwork contains its own red/green registration fringe. */
 body.persona-design #home .hero-flower-light { fill: var(--palette-white); }
 
 body.persona-design #home .hero-reference-copy {
@@ -456,23 +458,24 @@ body.persona-design #about > .about-picture-placeholders {
   padding: 0;
 }
 
-/* Three fixed SVG textures are shared by all cloud instances and continuations.
-   Only translation changes; resets happen entirely outside the blue annulus. */
+/* Sky projection is viewport-anchored; CRT surfaces remain in document space. */
 body.persona-design :is(#home, .hero-top-extension, #about) .hero-cloud {
-  animation: hero-cloud-drift var(--cloud-duration, 120s) linear infinite;
-  animation-delay: var(--cloud-delay, -40s);
+  animation: hero-cloud-drift var(--cloud-duration, 64s) linear infinite;
+  animation-delay: var(--cloud-delay, -24s);
   animation-play-state: paused;
 }
 body.persona-design.sky-clouds-running :is(#home, .hero-top-extension, #about) .hero-cloud {
   animation-play-state: running;
 }
+/* All copies share the same 1000-unit viewport field, including About. */
 @keyframes hero-cloud-drift {
   from { transform: translateX(0); }
-  to { transform: translateX(1260px); }
+  to { transform: translateX(1360px); }
 }
 @media (prefers-reduced-motion: reduce) {
-  /* Freeze the staggered composition, rather than resetting clouds out of view. */
-  body.persona-design.sky-clouds-running :is(#home, .hero-top-extension, #about) .hero-cloud { animation-play-state: paused; }
+  body.persona-design.sky-clouds-running :is(#home, .hero-top-extension, #about) .hero-cloud {
+    animation-play-state: paused;
+  }
 }
 
 /* Original seven-row CSS sky profile, measured from a reference rather than
@@ -529,7 +532,18 @@ body.persona-design #about > .about-sky-base {
 }
 body.persona-design #about > .about-sky-base > svg { width: 100%; height: 100%; }
 body.persona-design #about > .about-sky-base::before { z-index: 1; }
-body.persona-design #about > .about-sky-mask { z-index: -1; fill: var(--palette-yellow); }
+body.persona-design #about > .about-sky-mask {
+  z-index: -1;
+  background: var(--palette-yellow);
+  mask-image: url("/assets/themes/persona/images/revival/mask-desktop.svg");
+  mask-mode: alpha;
+  mask-size: cover;
+  mask-position: center top;
+  mask-repeat: no-repeat;
+}
+body.persona-design #about > .about-sky-mask--mobile {
+  mask-image: url("/assets/themes/persona/images/revival/mask-mobile.svg");
+}
 body.persona-design #about > .about-sky-mask--mobile { display: none; }
 body.persona-design #about > .about-corner-ribbons { z-index: 3; }
 body.persona-design #about > :is(.content-shell, .about-picture-placeholders) { z-index: 4; }
@@ -541,4 +555,75 @@ body.persona-design #about > .content-shell :is(h2, .section-body) {
 @media (max-width: 899px) {
   body.persona-design #about > .about-sky-mask--desktop { display: none; }
   body.persona-design #about > .about-sky-mask--mobile { display: block; }
+}
+
+/* About's quieter Revival composition. Keep legacy nodes available for rollback
+   and geometry measurements, but remove their visual competition with the sky. */
+body.persona-design #about > :is(.about-status-stripes, .about-corner-ribbons, .about-legacy-art, .section-motifs) {
+  visibility: hidden;
+  pointer-events: none;
+}
+body.persona-design #about {
+  clip-path: inset(0);
+  min-height: max(96rem, 152.7778vw);
+  padding-bottom: 10rem;
+}
+@media (max-width: 899px) {
+  body.persona-design #about {
+    min-height: max(87.5rem, 373.3334vw);
+    padding-bottom: 22rem;
+  }
+}
+
+/* Extracted Revival layout: centered copy inside the open yellow field. */
+body.persona-design #about > .content-shell {
+  width: min(46.9792%, 42rem);
+  padding-top: max(48vw, var(--about-content-top, 12rem));
+  text-align: center;
+}
+body.persona-design #about > .content-shell h2 { margin-inline: auto; }
+body.persona-design #about > .content-shell .section-body { width: 100%; }
+@media (max-width: 899px) {
+  body.persona-design #about > .content-shell {
+    width: calc(100% - 2.5rem);
+    padding-top: max(88vw, var(--about-content-top, 3rem));
+  }
+}
+
+/* Reference flower pair: a yellow shadow beneath gold, with a dark companion. */
+body.persona-design #about > .about-flower-pair {
+  position: absolute;
+  left: 6%;
+  top: 61%;
+  width: 32%;
+  aspect-ratio: 1.2;
+  z-index: 2;
+  pointer-events: none;
+}
+body.persona-design #about .about-flower { position: absolute; overflow: visible; }
+body.persona-design #about .about-flower--gold {
+  width: 76%;
+  left: 0;
+  top: 0;
+  fill: var(--ref-flower-gold);
+  filter: drop-shadow(-.25rem -.1875rem 0 var(--ref-flower-shadow));
+}
+body.persona-design #about .about-flower--dark {
+  width: 28%;
+  right: 0;
+  bottom: 0;
+  fill: var(--ref-flower-dark);
+}
+body.persona-design #about .about-flower-spin {
+  transform-origin: 160px 160px;
+  animation: about-flower-ccw 28s linear infinite paused;
+}
+body.persona-design #about .about-flower--dark .about-flower-spin { animation-duration: 22s; }
+body.persona-design #about.about-flowers-running .about-flower-spin { animation-play-state: running; }
+@keyframes about-flower-ccw { to { transform: rotate(-360deg); } }
+@media (max-width: 899px) {
+  body.persona-design #about > .about-flower-pair { width: 62%; left: 7%; top: 65%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.persona-design #about .about-flower-spin { animation: none; }
 }

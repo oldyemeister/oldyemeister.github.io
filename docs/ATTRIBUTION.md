@@ -66,3 +66,42 @@ does not change any rights associated with the supplied game font or mod.
 - https://potrace.sourceforge.net/ — raster contour tracing
 
 The conversion is reproducible with `tools/convert-persona-font.py`.
+
+## Persona 4 Revival About masks
+
+At the owner's request, About directly uses these extracted SVG silhouettes from
+the official Persona 4 Revival site (SEGA / ATLUS):
+
+- Desktop: https://asia.sega.com/p4r/en/resources/img/top/bg_revival.DxHW_odn.svg
+- Mobile: https://asia.sega.com/p4r/en/resources/img/top/bg_revival_sp.BjI926qS.svg
+
+The local assets in `assets/themes/persona/images/revival/` adapt the supplied
+extraction: the upper curves are extended to enter from the left edge, and the
+desktop TV stack is replaced with an original "ace of chips" playing card in
+fine circuit linework.
+CSS uses their alpha with the portfolio's yellow token. The underlying curves
+remain third-party artwork; attribution does not confer a license. The circuit
+card, cloud artwork, texture and portfolio copy are local.
+
+## Experience disc marks
+
+The Persona save menu prints employer marks on its discs
+(`assets/images/experience/`). They identify the employers only; each mark
+remains its owner's trademark.
+
+- NeoteAI: the "N" mark cropped from the wordmark at https://neoteai.com
+- Tencent Cloud: `tencentcloud.svg` from `@lobehub/icons-static-svg` 1.80.0 (MIT)
+- Bilibili: the Simple Icons glyph already used by the Contact link
+
+BesTV and Damrey Education have no mark yet; their discs stay plain.
+
+## Revival flower silhouettes
+
+At the owner's request, solid flowers use a Potrace contour of the extracted
+`deco_flower_revival_1.CVukmDCf.embedded.png` alpha (threshold 128, Potrace 1.16).
+White flowers use the original `deco_flower_revival_4.BTmkUX6x.svg` wrapper and
+its embedded PNG, saved locally as `flower-white.svg`. Sources are SEGA/ATLUS's
+Persona 4 Revival site, supplied in `p4r-reverse-engineering/revival-assets/`.
+The solid contour is normalized to the existing 320-unit stage and recolored;
+the white artwork retains the baked red/green fringe. These are adapted
+third-party assets, not newly authored flower illustrations.

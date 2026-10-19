@@ -67,11 +67,11 @@
   body.persona-design #home .hero-right-light-flower { width: 4cqi; }
   body.persona-design #about {
     padding: 0 0 7rem;
-    min-height: max(var(--about-section-min-height, 35rem), min(103.194444vw, 92.875rem));
+    min-height: max(96rem, 152.7778vw);
   }
   body.persona-design #education { min-height: 66.75rem; }
   body.persona-design #about .about-status-stripes { width: 16cqi; }
   body.persona-design #about .about-corner-ribbons { width: 42cqi; }
-  body.persona-design #about > .content-shell .section-body { width: min(58%, 37.5rem); }
+  body.persona-design #about > .content-shell .section-body { width: 100%; }
   body.persona-design #about .section-body .prose p { font-size: max(14px, 1.25rem); }
 }

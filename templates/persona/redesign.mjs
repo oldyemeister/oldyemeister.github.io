@@ -1,4 +1,4 @@
-import { flowerPetals } from './flower.mjs';
+import { flowerPetals, whiteFlower } from './flower.mjs';
 import { playBadge } from './play-badge.mjs';
 import { replaceRequired } from './anchors.mjs';
 // Small semantic additions for the optional redesign; original pages stay intact.
@@ -23,6 +23,8 @@ export function redesignContent(html, projectData = {}) {
   // Section art only exists on the homepage.
   if (!/<body class="page-home">/.test(html)) return html;
   html = projectCategoryControls(html, projectData);
+  html = experienceDiscMarks(html, projectData);
+  html = projectCardMeta(html, projectData);
   // Replace only playable markers; case studies and the original design stay intact.
   html = html.replace(/<span class="project-playable-badge" data-play-url="([^"]+)" data-play-label="([^"]+)">[^<]*<\/span>/g,
     (_, url, label) => playBadge(url, label));
@@ -49,6 +51,37 @@ export function redesignContent(html, projectData = {}) {
     html = replaceRequired(html, new RegExp(`<section[^>]*id="${section}"[^>]*>`),
       opening => `${opening}<div class="section-motifs" aria-hidden="true">${artwork}</div>`, `the #${section} section`);
   }
+  // Four smaller, independently staggered clouds per source silhouette.
+  // Keep the static SVG turbulence texture cached; animate only translation.
+  const largeClouds = [];
+  let cloudIndex = 0;
+  html = html.replace(/<image class="hero-cloud"[^>]*\/>/g, cloud => {
+    const index = cloudIndex++;
+    const sourceY = Number(cloud.match(/ y="([-\d.]+)"/)[1]);
+    // sqrt(1.4) enlarges area by 40%, preserving each source's proportions.
+    // A permuted phase spreads the slow background clouds across the full sky.
+    const largeDuration = 180 + index * 9;
+    const largePhase = .24 + (index * 4 % 9) * .075;
+    largeClouds.push(cloud
+      .replace('class="hero-cloud"', 'class="hero-cloud hero-cloud--large"')
+      .replace(/ x="[-\d.]+"/, ' x="-360"')
+      .replace(/ y="[-\d.]+"/, ` y="${-130 + index * 90}"`)
+      .replace(/(width|height)="([\d.]+)"/g, (_, name, size) => `${name}="${(Number(size) * Math.sqrt(1.4)).toFixed(2)}"`)
+      .replace(/style="[^"]*"/, `style="--cloud-duration: ${largeDuration}s; --cloud-delay: -${(largeDuration * largePhase).toFixed(2)}s"`));
+    return Array.from({ length: 4 }, (_, layer) => {
+      const scale = [.68, .75, .8, .72][layer];
+      const duration = [88, 64, 44, 32][layer] + (index * 7 % 13);
+      const phase = (.14 + index * .137 + layer * .241) % 1;
+      return cloud
+        .replace(/ x="[-\d.]+"/, ' x="-240"')
+        .replace(/ y="[-\d.]+"/, ` y="${sourceY + [-26, 14, 44, -8][layer]}"`)
+        .replace(/(width|height)="([\d.]+)"/g, (_, name, size) => `${name}="${(Number(size) * scale).toFixed(2)}"`)
+        .replace(/style="[^"]*"/, `style="--cloud-duration: ${duration}s; --cloud-delay: -${(duration * phase).toFixed(2)}s"`);
+    }).join('');
+  });
+  html = html.replace('<g class="hero-sky-clouds">',
+    `<g class="hero-sky-clouds">${largeClouds.join('')}`);
+  // Keep independent horizontal drift inside the viewport-anchored sky field.
   // Continue the actual hero SVG into the area uncovered by the sliding header.
   const heroArt = html.match(/<svg class="hero-reference-art"[\s\S]*?<\/svg>/)?.[0];
   if (!heroArt) throw new Error('Persona template: expected the hero artwork (svg.hero-reference-art) on the homepage.');
@@ -57,29 +90,19 @@ export function redesignContent(html, projectData = {}) {
     .replace(/url\(#(hero-[^)]+)\)/g, 'url(#header-$1)');
   html = replaceRequired(html, '<div class="hero-top-extension" aria-hidden="true" hidden></div>',
     `<div class="hero-top-extension" aria-hidden="true">${headerArt}</div>`, 'the hero top extension');
-  // Original tapered ribbon geometry: a yellow field with transparent sky gaps.
-  // Independent mobile composition preserves curvature instead of compressing it.
-  const desktopCuts = [
-    'M-30 100 C280 130 550 610 1470 580 C550 635 275 150 -30 100Z',
-    'M-30 125 C300 170 570 650 1470 602 C570 675 295 185 -30 125Z',
-    'M-30 160 C300 215 580 675 1470 630 C580 692 290 225 -30 160Z',
-    'M-30 1190 C400 1220 750 740 1470 790 C750 715 390 1205 -30 1190Z',
-    'M-30 1220 C420 1250 770 775 1470 810 C770 752 405 1235 -30 1220Z',
-    'M-30 1260 C440 1290 800 800 1470 836 C800 785 425 1275 -30 1260Z'
-  ];
-  const mobileCuts = [
-    'M-15 30 C90 35 180 175 395 160 C180 183 87 41 -15 30Z',
-    'M-15 42 C95 53 185 188 395 173 C185 195 93 59 -15 42Z',
-    'M-15 58 C100 72 190 202 395 187 C190 207 98 77 -15 58Z',
-    'M-15 414 C110 433 235 286 395 307 C235 277 106 428 -15 414Z',
-    'M-15 428 C116 445 243 304 395 320 C243 296 111 440 -15 428Z',
-    'M-15 445 C122 459 250 318 395 335 C250 312 117 454 -15 445Z'
-  ];
-  const maskArt = (variant, width, height, cuts) => `<svg class="about-sky-mask about-sky-mask--${variant}" viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M0 0H${width}V${height}H0Z ${cuts.join(' ')}"/></svg>`;
+  // Adapted Revival silhouettes: offscreen sweeps and a portfolio circuit card.
+  // CSS uses their alpha as a mask so the existing yellow token remains intact.
+  const maskArt = variant => `<div class="about-sky-mask about-sky-mask--${variant}" aria-hidden="true"></div>`;
   const clouds = heroArt.match(/<g class="hero-sky-clouds">[\s\S]*?<\/g>/)?.[0];
   if (!clouds) throw new Error('Persona template: expected reusable sky clouds.');
   html = replaceRequired(html, /<section[^>]*id="about"[^>]*>/,
-    opening => `${opening}<div class="about-sky-base about-sky-texture" aria-hidden="true"><svg viewBox="0 0 1440 1486" preserveAspectRatio="xMidYMid slice" focusable="false"><g transform="translate(200 0) scale(1.5)">${clouds}</g><g transform="translate(-100 750)">${clouds}</g></svg></div>${maskArt('desktop', 1440, 1486, desktopCuts)}${maskArt('mobile', 375, 520, mobileCuts)}`, 'the About sky mask');
+    opening => `${opening}<div class="about-sky-base about-sky-texture" aria-hidden="true"><svg viewBox="0 0 1440 1486" preserveAspectRatio="xMidYMid slice" focusable="false"><g transform="translate(-80 0) scale(1.5)">${clouds}</g></svg></div>${maskArt('desktop')}${maskArt('mobile')}`, 'the About sky mask');
+  const aboutFlowers = `<div class="about-flower-pair" aria-hidden="true">
+    <svg class="about-flower about-flower--gold" viewBox="-16 -16 352 352" focusable="false"><g class="about-flower-spin">${flowerPetals}</g></svg>
+    <svg class="about-flower about-flower--dark" viewBox="-16 -16 352 352" focusable="false"><g class="about-flower-spin">${flowerPetals}</g></svg>
+  </div>`;
+  html = replaceRequired(html, /<section[^>]*id="about"[^>]*>/,
+    opening => `${opening}${aboutFlowers}`, 'the About flower pair');
   // Projects reuses About's rainbow corner bands (the old-TV motif) from one source.
   const ribbons = html.match(/<svg class="about-corner-ribbons"[\s\S]*?<\/svg>/)?.[0];
   if (!ribbons) throw new Error('Persona template: expected the About corner ribbons (svg.about-corner-ribbons) on the homepage.');
@@ -122,13 +145,12 @@ export function redesignContent(html, projectData = {}) {
   html = replaceRequired(html, /(<section[^>]*id="education"[\s\S]*?)(<\/section>)/,
     (_, section, closing) => `${section}<div class="education-horizontal-ribbons" aria-hidden="true">${settingsBands}</div>\n${closing}`,
     'the #education section');
-    // Six water drops with flat inward heads aligned at one shared center.
+    // The supplied joined-center silhouette is shared by all solid flowers.
   const petals = flowerPetals;
   // The hero and Contact share exactly the same six teardrop petals.
   html = replaceRequired(html, /(<g[^>]* data-contact-petals)>\s*<\/g>/g, (_, opening) => {
-    const fringe = (opening.includes('hero-flower-new') || opening.includes('hero-flower-light'))
-      ? `<g class="hero-flower-fringe-red" transform="translate(5 -6)">${petals}</g><g class="hero-flower-fringe-green" transform="translate(6 5)">${petals}</g>` : '';
-    return `${opening}><g class="hero-flower-spin">${fringe}<g>${petals}</g></g></g>`;
+    const isWhite = opening.includes('hero-flower-new') || opening.includes('hero-flower-light');
+    return `${opening}><g class="hero-flower-spin"><g>${isWhite ? whiteFlower : petals}</g></g></g>`;
   }, 'the flower placeholders (g[data-contact-petals])');
   html = replaceRequired(html, '<section class="page-section contact-section" id="contact">',
     `<section class="page-section contact-section" id="contact">
@@ -142,6 +164,40 @@ export function redesignContent(html, projectData = {}) {
 
 const escapeAttribute = value => String(value).replace(/[&<>"']/g,
   character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character]);
+
+// P4G's save discs carry a print (sakura on the selected one); ours carry the
+// employer's mark, plus a full-color logo after the company name. Options
+// follow content.yml order; entries without either field stay plain.
+export function experienceDiscMarks(html, { experience } = {}) {
+  if (!experience?.length) return html;
+  let index = 0;
+  html = html.replace(/(<div class="experience-save-option" role="option"[\s\S]*?<span class="experience-save-sphere" aria-hidden="true">)([\s\S]*?<\/span>)(<\/h3>)/g,
+    (_, sphere, middle, closing) => {
+      const { disc_mark: mark, name_logo: logo } = experience[index++] ?? {};
+      return sphere +
+        (mark ? `<span class="experience-save-mark" style="--save-mark: url('${escapeAttribute(mark)}')"></span>` : '') +
+        middle +
+        (logo ? `<img class="experience-save-name-logo" src="${escapeAttribute(logo)}" alt="" loading="lazy">` : '') +
+        closing;
+    });
+  if (index !== experience.length) throw new Error('Persona experience options must match the content experience list.');
+  return html;
+}
+
+// A role and date line under each card title, from content.yml in card order.
+export function projectCardMeta(html, { projects } = {}) {
+  if (!projects?.length) return html;
+  let index = 0;
+  html = html.replace(/(<p class="project-file-index"[\s\S]*?<\/p>\s*<h3>[\s\S]*?<\/h3>)/g, (match) => {
+    const { role, dates } = projects[index++] ?? {};
+    if (!role && !dates) return match;
+    const parts = [role && `<span class="project-meta-role">${escapeAttribute(role)}</span>`,
+      dates && `<span class="project-meta-date">${escapeAttribute(dates)}</span>`].filter(Boolean);
+    return `${match}\n          <p class="project-meta">${parts.join('')}</p>`;
+  });
+  if (index !== projects.length) throw new Error('Persona project cards must match the content project list.');
+  return html;
+}
 
 // The shared source markup stays untouched. Cards follow content.yml order.
 export function projectCategoryControls(html, { projects_section: section, projects } = {}) {

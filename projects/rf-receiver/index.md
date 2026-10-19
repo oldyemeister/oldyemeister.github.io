@@ -81,7 +81,7 @@ Bring-up revealed an incorrect trace and reversed op-amp terminals. We isolated 
 
 ## My contribution
 
-I worked on requirements, bandpass-filter and limiter design, simulation, component selection, and prototype testing. I also helped verify and redesign the mixer, assemble and debug the PCB, and define tests for cutoff frequency, limiting, gain, downconversion, and I/Q phase.
+I worked on requirements and designed the bandpass filter, limiter, and Gilbert-cell mixer, including the mixer redesign, simulation, component selection, and prototype testing. A teammate built the PCB; I helped debug it and defined tests for cutoff frequency, limiting, gain, downconversion, and I/Q phase.
 
 ## Validation & next steps
 

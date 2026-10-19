@@ -1,3 +1,4 @@
+import { pinSkyToViewport } from './fixed-sky.js';
 import { skyTextureGeometry } from './sky-texture.js';
 import { stripeFanGeometry } from './about-stripe-fan.js';
 import { shockwaveArrivalDelay } from './about-stripe-kick.js';
@@ -30,7 +31,10 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, aboutStripesP
   ].join(','))];
   const about = document.querySelector('#about');
   const skySections = new Map([hero, about].filter(Boolean).map(section => [section, true]));
-  const syncClouds = () => document.body.classList.toggle('sky-clouds-running', !document.hidden && [...skySections.values()].some(Boolean));
+  const syncClouds = () => {
+    document.body.classList.toggle('sky-clouds-running', !document.hidden && [...skySections.values()].some(Boolean));
+    about?.classList.toggle('about-flowers-running', !document.hidden && skySections.get(about));
+  };
   if ('IntersectionObserver' in window) {
     const skyObserver = new IntersectionObserver(entries => {
       entries.forEach(entry => skySections.set(entry.target, entry.isIntersecting));
@@ -385,6 +389,7 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, aboutStripesP
     });
     } else schedule();
   }
+  pinSkyToViewport(document.querySelectorAll('.hero-sky-clouds'));
   window.addEventListener('scroll', schedule, { passive: true });
   window.addEventListener('resize', schedule, { passive: true });
   window.addEventListener('pageshow', schedule);
