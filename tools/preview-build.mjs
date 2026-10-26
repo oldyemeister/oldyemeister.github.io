@@ -30,15 +30,20 @@ function valueOf(expression, environment) {
   const notEmpty = path.match(/^(.+?)\s*!=\s*empty$/);
   if (notEmpty) {
     const value = valueOf(notEmpty[1], environment);
-    return value !== undefined && value !== null && value !== '';
+    return value !== undefined && value !== null && value !== '' && !(Array.isArray(value) && value.length === 0);
   }
   const isEmpty = path.match(/^(.+?)\s*==\s*empty$/);
   if (isEmpty) {
     const value = valueOf(isEmpty[1], environment);
-    return value === undefined || value === null || value === '';
+    return value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0);
   }
   if ((path.startsWith('"') && path.endsWith('"')) || (path.startsWith("'") && path.endsWith("'"))) return path.slice(1, -1);
-  return path.split('.').reduce((value, key) => value?.[key], environment);
+  // Liquid's `first` and `size` work on arrays (`first` is nil when empty).
+  return path.split('.').reduce((value, key) => {
+    if (Array.isArray(value) && key === 'first') return value[0];
+    if (Array.isArray(value) && key === 'size') return value.length;
+    return value?.[key];
+  }, environment);
 }
 
 // Intrinsic size of a local WebP, PNG or JPEG, so lazy images reserve their space.
@@ -193,6 +198,8 @@ function applyFilters(expression, environment) {
       }
     }
     if (name === 'jsonify') value = JSON.stringify(value);
+    if (name === 'escape') value = String(value ?? '').replace(/[&<>"']/g,
+      character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character]);
     if (name === 'upcase') value = String(value).toUpperCase();
     if (name === 'slice') value = String(value).slice(Number(argument), Number(argument) + 1);
     if (name === 'markdownify') value = String(value).split(/\n\s*\n/).map((paragraph) => `<p>${paragraph.trim()}</p>`).join('\n');

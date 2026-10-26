@@ -59,8 +59,10 @@ The hero sky uses an original dense seven-row CSS texture over our SVG clouds,
 plus the slow CRT sweep. Hero-only noise, flicker and scanlines are disabled.
 The tile is defined in `hero-poster.css` in shared SVG coordinates so the hero,
 header and About copies have identical scale and phase. It appears before JS
-and remains visible under reduced motion; clouds and sweep stop. H2 uses a
-30%-opacity near-white/pale-cyan/soft-edge/cyan profile. `sky-texture.js` snaps
+and remains visible under reduced motion; clouds and sweep stop. Our character-page
+adaptation uses a brighter crest/darker return-line profile at 46% opacity, with
+clouds at 60% opacity to recreate the reference cyan veil using the existing sky
+color. `sky-texture.js` snaps
 its period, row boundaries and phase to device pixels after the configured SVG
 scale: 7px at 1920px wide, about 5px at 1440px, with a 3.5px phone floor.
 The rounded row allocation may merge narrow rows on 1× screens. Project media
@@ -190,7 +192,8 @@ remain in px. The original stylesheet and day/night palette values are untouched
 
 Hero and About establish inline-size containers. Hero typography, buttons,
 monogram and flowers use cqi as one 1440px poster composition; its width caps
-at 90rem. About's JS geometry measures the actual stage width and scales its
+at 90rem. About now spans the full viewport width so its sky curves do not stop
+at the capped poster edge on large screens. Its JS geometry measures the actual stage width and scales its
 art offsets, gaps and photo placement in physical browser coordinates. There is
 no body zoom or transform scaling. Scroll progress, ring growth and shockwave
 trigger logic are unchanged. Skills retains three columns and the featured
@@ -275,3 +278,127 @@ About sky traces are widened approximately 40% at typical channel widths using
 static SVG alpha erosion on the silhouette paths (4 units desktop, 3 mobile).
 This preserves their curves and the separate circuit-card cutout. A small
 horizontal viewBox inset excludes the eroded outer edges and antialias fringe.
+
+CRT source analysis and future scroll/title ideas are recorded in
+[p4r-character-effects.md](p4r-character-effects.md). The About title treatment
+below is now implemented; the broader scroll ideas remain research only.
+
+### About character-page title
+
+`about-title.css` composes an oversized italic serif “About” across the upper CRT
+openings and yellow mask. The readable black heading retains the original
+italic Inter, stretched lettering and gold shadow from `content-typography.css`.
+The decorative lettering is `aria-hidden`, pointer-transparent and drawn with
+the platform Georgia/serif stack; no reference image or new font file is used.
+
+Two aligned text layers reproduce the reference's color change: white in the
+blue CRT openings, pale yellow on the yellow field (60% existing yellow,
+40% existing white, increased for visibility). The yellow text layer uses the exact silhouette, full-section
+bounds and cover positioning of the background mask. Both share
+`--about-sky-mask-image` from `hero-poster.css`, including the phone breakpoint.
+Palette tokens and the shared CRT grid are unchanged. The desktop upper sweep's
+vertical scale increases from .65 to .975 (50% wider vertically), anchored at
+source y=900 so it joins the preserved lower artwork continuously. The circuit
+card and phone mask retain their geometry. Desktop lettering sits 28cqi above
+the readable heading to expose more of it in the sky; phone offsets remain
+anchored to the content position in container units.
+
+An offset cyan lettering copy supplies the CRT shadow. Its horizontal phosphor
+bands use the existing cyan/blue palette and share the sky's device-snapped period
+and phase through `scroll-presence.js`. A full-section wrapper inverts the yellow
+silhouette with `mask-composite: exclude`, clipping both the shadow and its soft
+edge to blue openings. The yellow lettering has no cyan shadow. The effect is
+static, including under reduced motion, with CSS-only scanline fallbacks.
+
+`redesign.mjs` inserts only the decorative lettering. The earlier “Background &
+interests” subtitle and its wipe script were removed on 2026-10-23. This treatment
+requires no JavaScript; its stylesheet loads only on redesigned Persona homepages.
+The biography, shared source and `/original/` remain unchanged.
+
+### Education Special-page composition
+
+`education-settings.css` now adapts the [Revival Special page](https://asia.sega.com/p4r/en/special/):
+a broad curved sky opening, oversized serif background title, cyan underline,
+pale heading accent and amber-framed centerpiece. The existing University of
+Toronto logo, institution, program and dates form the centerpiece. Desktop puts
+the logo beside the details; phones stack them. No new qualifications or copy
+were introduced. The section's black topic retains italic Inter, without the
+horizontal stretch so its underline aligns with the visible word.
+
+`education-mask-desktop.svg` and `education-mask-mobile.svg` are original alpha
+silhouettes, not downloaded reference artwork. `redesign.mjs` adds the sky and
+decorative title only to Persona. The same local cloud group, CRT palette,
+device-snapped texture geometry and viewport compensation used by About also
+cover Education. Reduced motion pauses cloud drift and shows the finished
+credential. Old ribbon nodes stay hidden for rollback.
+
+The top blue ribbon is scroll-linked (`assets/js/education-ribbon.js`). It
+starts as a short pointed sliver at the left edge and grows rightward and
+thicker as Education rises, retracting on the way back up. It's a `clip-path`
+on `.education-sky-window` layered on top of the yellow mask, so the
+clouds and CRT rows never stretch. Timing lives in `scroll-animation-config.js`
+(`education.ribbonStartVh`, `ribbonEndVh`, `ribbonSmoothingMs`). Movement is
+damped so wheel steps glide, and anchor jumps snap. The clip is removed when
+complete, under reduced motion, and without JS. The band edges in the
+module must match the mask SVGs; a test enforces this. The band is thicker
+than the first version (lower edge about 65 desktop / 45 phone mask units
+lower), and About no longer draws its 2px divider at the seam.
+
+The same damped value is published as `--education-ribbon-progress` on the
+section. `education-motion.js` adds the card's finish sequence without another
+animation loop. Over ribbon progress .55–1, an `aria-hidden` rounded SVG rect
+traces the amber border clockwise from its top-left tangent. A ResizeObserver
+measures the card's border box, border width and radius; the real border keeps
+its space throughout and resumes painting at completion. The contents settle
+from .4 opacity and an 8px offset over the final 30% of that trace. Scrolling
+back reverses the frame and contents together.
+
+A downward crossing to progress 1 starts one 900ms ribbon light sweep, clipped
+by the existing sky mask above the CRT texture and below the decorative title.
+Completion while moving upward or stationary does not trigger that sweep.
+Once the frame is complete and the honour chip is fully visible, it receives
+one 650ms diagonal sweep, starting at least 250ms after the ribbon's sweep.
+These are CSS animations removed on completion/cancellation; neither repeats
+on another pass. Initial anchors and restored/reloaded pages already past the
+completion point suppress both shines. Turning on reduced motion cancels active
+and pending shines and shows the solid frame immediately; no-JS uses the same
+finished card. New timings live in `SCROLL_ANIMATION.education` alongside the
+unchanged ribbon settings. Requirements: [EDUCATION-MOTION-TASK.md](EDUCATION-MOTION-TASK.md).
+
+The band no longer stops flat at the section boundary. Both Education masks
+extend above the section (160 of 1400 desktop units, 120 of 1700 phone units),
+and `.education-sky-window` is offset upward to match (`--education-overhang`).
+The band's upper edge (`rise` in the module) curves up into About's lower edge
+and exits the right side. Education clips only horizontally
+(`overflow-x: clip`) so the overhang can paint over About. Mask URLs carry
+`?v=` so browsers drop the old artwork.
+
+About's own thin stripes needed the same fix below 900px. Its mask is
+cover-scaled and taller than About there, so the stripes ran off About's bottom
+and got cut flat. `assets/js/about-stripe-tails.js` draws the About mask's
+last 24 rows to a canvas at About's real scale, then traces each stripe's
+edges and angle at the boundary. A `clip-path` on `.about-stripe-tails`, the
+first 12rem of Education, then continues each stripe as a curved tail that
+narrows to a point. Tail length scales with the stripe's thickness, from 28 to
+150px. The tails use the same sky colour and scanline grid as the Education
+ribbon. They stay hidden at widths where nothing crosses the boundary (all
+desktop widths checked, and 320px) and when JS is off.
+
+On desktop, About's top-left stripes started flat at the hero boundary.
+The same script reads About's top 64 mask rows and continues each stripe
+straight up and off the left edge at constant width (`exitLeft`). The
+`.about-stripe-heads` layer lives in `.hero-visual-stage`, not About,
+because About clips its overflow (`clip-path: inset(0)`). Its z-index 1 puts
+it above the hero art and below the hero's flowers, copy and buttons.
+
+Both About masks use inset viewBoxes to crop the erosion fringe. Phone is
+740 units inside a 750-wide image, desktop 1828 inside 1840. With the default
+`preserveAspectRatio`, the browser centred that narrower area and left
+transparent strips down both sides, so the sky showed as a thin blue line on
+each edge of About. Both files now set `preserveAspectRatio="none"`. The
+drawing widens by under 1.4%, and the CSS URLs carry `?v=2`.
+
+The desktop minimum grows from 66.75rem to 76rem (about 14%); phones use a 52rem
+floor. These are minimums, not fixed heights: longer descriptions expand the
+section naturally. Reference observations and local evidence are documented in
+[p4r-special-layout.md](p4r-special-layout.md).

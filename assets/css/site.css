@@ -208,6 +208,7 @@ html.reveal-enabled .reveal-item.is-revealed {
 .section-muted { background: var(--surface-muted); }
 .two-column-section, .contact-layout { display: grid; grid-template-columns: minmax(220px, 0.75fr) minmax(0, 1.4fr); gap: clamp(48px, 9vw, 140px); }
 .section-body { max-width: 720px; }
+body:not(.persona-design) .education-honors { margin: 0 0 1em; padding: 0; list-style: none; }
 .prose { color: var(--text-muted); font-size: 1.08rem; line-height: var(--type-project-line-height); }
 .prose p:last-child { margin-bottom: 36px; }
 .section-body h3 { margin-top: 36px; font-size: 0.82rem; text-transform: uppercase; }

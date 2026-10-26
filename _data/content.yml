@@ -106,7 +106,10 @@ education_section:
   graduation: "April 2028 (expected graduation)"
   # Optional line under the dates; leave empty rather than repeat the program.
   description: ""
-  # Optional GPA/honors line: add only if Jacky provides and approves it.
+  # Owner-approved honours, in display order.
+  honors:
+    - name: "Dean's Honour List"
+      terms: "Winter 2024 · Winter 2025"
 
 skills_section:
   heading: "Skills"

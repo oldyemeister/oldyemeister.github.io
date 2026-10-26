@@ -88,10 +88,8 @@ body.persona-design #education[data-decor-scroll] .education-horizontal-ribbons 
 body.persona-design #education[data-decor-scroll] .education-horizontal-ribbons > span:nth-child(even) {
   transform: translateX(calc((1 - var(--education-bars-progress, 1)) * 12vw));
 }
-body.persona-design #education[data-decor-scroll] .education-logo {
-  transform: translateX(calc((1 - var(--education-entry-progress, 1)) * 24px))
-    rotate(calc((1 - var(--education-entry-progress, 1)) * -6deg));
-}
+/* The Special-page credential stays still and readable while its sky moves. */
+body.persona-design #education[data-decor-scroll] .education-logo { transform: none; }
 body.persona-design #education[data-decor-scroll] #education-heading::after {
   transform-origin: left center;
   transform: skewX(-16deg) scaleX(calc(.5 + var(--education-entry-progress, 1) * .5));

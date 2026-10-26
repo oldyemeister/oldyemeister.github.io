@@ -1,0 +1,78 @@
+/* Character-page lettering changes color at the actual sky/mask boundary.
+   The readable heading keeps the site's original typography. */
+body.persona-design #about {
+  container-type: inline-size;
+  --about-heading-top: max(48cqi, var(--about-content-top, 12rem));
+  --about-title-top: calc(var(--about-heading-top) - 28cqi);
+}
+body.persona-design #about > .content-shell {
+  padding-top: var(--about-heading-top);
+}
+body.persona-design #about > .about-title-echo {
+  --about-title-shadow-x: clamp(3px, .55cqi, 8px);
+  --about-title-shadow-y: clamp(2px, .35cqi, 5px);
+  --hero-texture-period: max(3.5px, calc(100vw * 7 / 1920));
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  color: var(--palette-white);
+  font: italic 400 26cqi/1 Georgia, 'Times New Roman', serif;
+  letter-spacing: -.04em;
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+body.persona-design #about .about-title-lettering {
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  padding-top: var(--about-title-top);
+}
+/* Invert the full-section silhouette before painting the offset shadow.
+   Clipping the wrapper also contains its soft edge at the yellow boundary. */
+body.persona-design #about .about-title-sky-shadow {
+  position: absolute;
+  inset: 0;
+  mask-image: linear-gradient(var(--palette-white) 0 0), var(--about-sky-mask-image);
+  mask-mode: alpha;
+  mask-size: cover;
+  mask-position: center top;
+  mask-repeat: no-repeat;
+  mask-composite: exclude;
+}
+body.persona-design #about .about-title-lettering--shadow {
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  background-image: repeating-linear-gradient(to bottom,
+    var(--flower-cyan) 0 var(--hero-texture-row-2, calc(var(--hero-texture-period) * 2 / 7)),
+    var(--palette-cyan) var(--hero-texture-row-2, calc(var(--hero-texture-period) * 2 / 7)) var(--hero-texture-row-4, calc(var(--hero-texture-period) * 4 / 7)),
+    var(--palette-blue) var(--hero-texture-row-4, calc(var(--hero-texture-period) * 4 / 7)) var(--hero-texture-row-5, calc(var(--hero-texture-period) * 5 / 7)),
+    var(--flower-cyan) var(--hero-texture-row-5, calc(var(--hero-texture-period) * 5 / 7)) var(--hero-texture-period));
+  background-position-y: calc(var(--hero-texture-offset, 0px) - var(--about-title-shadow-y));
+  background-clip: text;
+  transform: translate(var(--about-title-shadow-x), var(--about-title-shadow-y));
+  filter: drop-shadow(1px 1px 1px var(--palette-cyan));
+}
+/* Match the full-section mask's image, bounds and sizing, not the text box.
+   The stronger warm fill stays distinct from the white in the CRT openings. */
+body.persona-design #about .about-title-lettering--yellow {
+  color: color-mix(in srgb, var(--palette-yellow) 60%, var(--palette-white));
+  mask-image: var(--about-sky-mask-image);
+  mask-mode: alpha;
+  mask-size: cover;
+  mask-position: center top;
+  mask-repeat: no-repeat;
+}
+body.persona-design #about .about-heading h2 {
+  background: transparent;
+}
+@media (max-width: 899px) {
+  body.persona-design #about {
+    --about-heading-top: max(88cqi, var(--about-content-top, 3rem));
+    --about-title-top: calc(var(--about-heading-top) - 56cqi);
+  }
+  body.persona-design #about > .about-title-echo {
+    font-size: 36cqi;
+  }
+}

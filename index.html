@@ -138,9 +138,16 @@ page_class: home
         </div>
         <p class="education-program">{{ site_content.education_section.program }}</p>
         <p class="education-dates">{{ site_content.education_section.start_year }} — {{ site_content.education_section.graduation }}</p>
+        {% if site_content.education_section.honors.first %}
+        <ul class="education-honors" role="list">
+          {% for honor in site_content.education_section.honors %}
+          <li><span class="education-honor-name">{{ honor.name | escape }}</span>
+            <span class="education-honor-terms">{{ honor.terms | escape }}</span></li>
+          {% endfor %}
+        </ul>
+        {% endif %}
       </div>
       {% if site_content.education_section.description != empty %}<p class="education-descriptor">{{ site_content.education_section.description }}</p>{% endif %}
-      <!-- Optional GPA/honors line: intentionally omitted until supplied and approved. -->
     </div>
   </div>
 </section>

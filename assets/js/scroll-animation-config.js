@@ -40,6 +40,16 @@ export const SCROLL_ANIMATION = {
     barsTravelVh: 30,
     pillsDelayVh: 8, // Pills follow Education bars by this much scrolling.
     pillsTravelVh: 30,
+    ribbonStartVh: 85, // Blue ribbon starts growing when Education's TOP reaches this % from screen top.
+    ribbonEndVh: 18, // ...and is fully open when the TOP reaches this %; smaller = more scrolling.
+    ribbonSmoothingMs: 110, // Glide toward the scroll position; 0 = follow scroll exactly.
+    frameStartAt: .55, // Ribbon progress (0–1) when the amber frame begins tracing.
+    detailsStartAt: .7, // Frame progress when the contents begin settling into place.
+    detailsMinimumOpacity: .4, // Keep the university and honours readable during the trace.
+    detailsOffsetPx: 8, // Initial downward offset of the card's contents.
+    ribbonShineMs: 900, // One light sweep when a downward scroll completes the ribbon.
+    honorShineMs: 650, // One light sweep across the honour, after its chip is fully visible.
+    honorShineDelayMs: 250, // Minimum separation between ribbon and honour shine starts.
   },
   stripes: {
     startAt: .1, // Ring growth (0–1) at which the first right-edge stripe starts dropping in.

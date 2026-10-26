@@ -66,10 +66,12 @@
   body.persona-design #home .hero-right-dark-flower { width: 7cqi; }
   body.persona-design #home .hero-right-light-flower { width: 4cqi; }
   body.persona-design #about {
+    /* Let the sky reach the viewport edges at full-screen widths. */
+    max-width: none;
     padding: 0 0 7rem;
     min-height: max(96rem, 152.7778vw);
   }
-  body.persona-design #education { min-height: 66.75rem; }
+  body.persona-design #education { min-height: 76rem; }
   body.persona-design #about .about-status-stripes { width: 16cqi; }
   body.persona-design #about .about-corner-ribbons { width: 42cqi; }
   body.persona-design #about > .content-shell .section-body { width: 100%; }

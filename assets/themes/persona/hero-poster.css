@@ -64,8 +64,9 @@ body.persona-design :is(#home, .hero-top-extension, #about) .hero-circle-composi
 }
 body.persona-design :is(#home, .hero-top-extension, #about) .hero-side-field { fill: var(--hero-sky); }
 body.persona-design :is(#home, .hero-top-extension, #about) .hero-side-highlight { fill: none; stroke: var(--palette-white); stroke-width: 5px; }
-body.persona-design :is(#home, .hero-top-extension, #about) .hero-sky-clouds {
-  opacity: 1;
+body.persona-design :is(#home, .hero-top-extension, #about, #education) .hero-sky-clouds {
+  /* Recreate the reference's 40% cyan veil with our existing sky color. */
+  opacity: .6;
   filter: brightness(1.15);
   pointer-events: none;
 }
@@ -459,12 +460,12 @@ body.persona-design #about > .about-picture-placeholders {
 }
 
 /* Sky projection is viewport-anchored; CRT surfaces remain in document space. */
-body.persona-design :is(#home, .hero-top-extension, #about) .hero-cloud {
+body.persona-design :is(#home, .hero-top-extension, #about, #education) .hero-cloud {
   animation: hero-cloud-drift var(--cloud-duration, 64s) linear infinite;
   animation-delay: var(--cloud-delay, -24s);
   animation-play-state: paused;
 }
-body.persona-design.sky-clouds-running :is(#home, .hero-top-extension, #about) .hero-cloud {
+body.persona-design.sky-clouds-running :is(#home, .hero-top-extension, #about, #education) .hero-cloud {
   animation-play-state: running;
 }
 /* All copies share the same 1000-unit viewport field, including About. */
@@ -473,7 +474,7 @@ body.persona-design.sky-clouds-running :is(#home, .hero-top-extension, #about) .
   to { transform: translateX(1360px); }
 }
 @media (prefers-reduced-motion: reduce) {
-  body.persona-design.sky-clouds-running :is(#home, .hero-top-extension, #about) .hero-cloud {
+  body.persona-design.sky-clouds-running :is(#home, .hero-top-extension, #about, #education) .hero-cloud {
     animation-play-state: paused;
   }
 }
@@ -484,11 +485,14 @@ body.persona-design.sky-clouds-running :is(#home, .hero-top-extension, #about) .
 body.persona-design .hero-crt-window { mix-blend-mode: normal; }
 body.persona-design :is(.hero-crt-screen, .about-sky-texture) {
   --hero-texture-period: 3.414216px;
-  --hero-texture-white: rgb(230 250 255);
-  --hero-texture-pale: rgb(193 255 255);
-  --hero-texture-soft: rgb(36 210 233);
-  --hero-texture-cyan: rgb(0 224 252);
-  --hero-texture-opacity: .30;
+  /* Character-page CRT: a bright phosphor crest and a darker return line.
+     Our CSS counterpart to its separate repeating texture, above the clouds.
+     See docs/p4r-character-effects.md for the source-layer study. */
+  --hero-texture-white: color-mix(in srgb, var(--palette-white) 85%, var(--hero-sky));
+  --hero-texture-pale: color-mix(in srgb, var(--palette-white) 45%, var(--hero-sky));
+  --hero-texture-soft: color-mix(in srgb, var(--hero-sky) 72%, var(--palette-black));
+  --hero-texture-cyan: var(--hero-sky);
+  --hero-texture-opacity: .46;
   --hero-texture-row-1: calc(var(--hero-texture-period) / 7);
   --hero-texture-row-2: calc(var(--hero-texture-period) * 2 / 7);
   --hero-texture-row-3: calc(var(--hero-texture-period) * 3 / 7);
@@ -503,12 +507,13 @@ body.persona-design :is(.hero-crt-screen, .about-sky-texture)::before {
   pointer-events: none;
   opacity: var(--hero-texture-opacity);
   background: repeating-linear-gradient(to bottom,
-    var(--hero-texture-white) 0 var(--hero-texture-row-1),
-    var(--hero-texture-pale) var(--hero-texture-row-1) var(--hero-texture-row-2),
-    var(--hero-texture-soft) var(--hero-texture-row-2) var(--hero-texture-row-3),
-    var(--hero-texture-cyan) var(--hero-texture-row-3) var(--hero-texture-row-5),
-    var(--hero-texture-soft) var(--hero-texture-row-5) var(--hero-texture-row-6),
-    var(--hero-texture-pale) var(--hero-texture-row-6) var(--hero-texture-period));
+    var(--hero-texture-soft) 0 var(--hero-texture-row-1),
+    var(--hero-texture-cyan) var(--hero-texture-row-1) var(--hero-texture-row-2),
+    var(--hero-texture-pale) var(--hero-texture-row-2) var(--hero-texture-row-3),
+    var(--hero-texture-white) var(--hero-texture-row-3) var(--hero-texture-row-4),
+    var(--hero-texture-pale) var(--hero-texture-row-4) var(--hero-texture-row-5),
+    var(--hero-texture-cyan) var(--hero-texture-row-5) var(--hero-texture-row-6),
+    var(--hero-texture-soft) var(--hero-texture-row-6) var(--hero-texture-period));
   background-position-y: var(--hero-texture-offset, 0px);
 }
 @media (max-width: 899px) {
@@ -516,6 +521,9 @@ body.persona-design :is(.hero-crt-screen, .about-sky-texture)::before {
 }
 
 /* I2: independent painted masks expose the common cloud/CRT sky. */
+body.persona-design #about {
+  --about-sky-mask-image: url("/assets/themes/persona/images/revival/mask-desktop.svg?v=2");
+}
 body.persona-design #about > .about-sky-base,
 body.persona-design #about > .about-sky-mask {
   position: absolute;
@@ -535,14 +543,11 @@ body.persona-design #about > .about-sky-base::before { z-index: 1; }
 body.persona-design #about > .about-sky-mask {
   z-index: -1;
   background: var(--palette-yellow);
-  mask-image: url("/assets/themes/persona/images/revival/mask-desktop.svg");
+  mask-image: var(--about-sky-mask-image);
   mask-mode: alpha;
   mask-size: cover;
   mask-position: center top;
   mask-repeat: no-repeat;
-}
-body.persona-design #about > .about-sky-mask--mobile {
-  mask-image: url("/assets/themes/persona/images/revival/mask-mobile.svg");
 }
 body.persona-design #about > .about-sky-mask--mobile { display: none; }
 body.persona-design #about > .about-corner-ribbons { z-index: 3; }
@@ -553,6 +558,9 @@ body.persona-design #about > .content-shell :is(h2, .section-body) {
   background: var(--palette-yellow);
 }
 @media (max-width: 899px) {
+  body.persona-design #about {
+    --about-sky-mask-image: url("/assets/themes/persona/images/revival/mask-mobile.svg?v=2");
+  }
   body.persona-design #about > .about-sky-mask--desktop { display: none; }
   body.persona-design #about > .about-sky-mask--mobile { display: block; }
 }

@@ -3,6 +3,8 @@ import { skyTextureGeometry } from './sky-texture.js';
 import { stripeFanGeometry } from './about-stripe-fan.js';
 import { shockwaveArrivalDelay } from './about-stripe-kick.js';
 import { SCROLL_ANIMATION as settings } from './scroll-animation-config.js';
+import './education-ribbon.js';
+import './about-stripe-tails.js';
 import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, aboutStripesProgress, educationDecorProgress } from './about-scroll-progress.js';
 // Scroll-linked presence: reversible, with no timers or hidden-content gate.
 (() => {
@@ -30,7 +32,7 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, aboutStripesP
     '#projects .section-header', '#projects .project-card'
   ].join(','))];
   const about = document.querySelector('#about');
-  const skySections = new Map([hero, about].filter(Boolean).map(section => [section, true]));
+  const skySections = new Map([hero, about, document.querySelector('#education')].filter(Boolean).map(section => [section, true]));
   const syncClouds = () => {
     document.body.classList.toggle('sky-clouds-running', !document.hidden && [...skySections.values()].some(Boolean));
     about?.classList.toggle('about-flowers-running', !document.hidden && skySections.get(about));
@@ -95,9 +97,20 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, aboutStripesP
         // document-space origin, not a separately rounded section origin.
         const period = texture.period * textureScale;
         const phase = textureTop + texture.offset * textureScale - aboutBox.top - window.scrollY;
-        aboutSky.style.setProperty('--hero-texture-period', `${period}px`);
-        aboutSky.style.setProperty('--hero-texture-offset', `${phase % period}px`);
-        texture.rows.forEach((row, i) => aboutSky.style.setProperty(`--hero-texture-row-${i + 1}`, `${row * textureScale}px`));
+        // The decorative title's cyan shadow follows this same scanline grid.
+        for (const surface of [aboutSky, about.querySelector('.about-title-echo')].filter(Boolean)) {
+          surface.style.setProperty('--hero-texture-period', `${period}px`);
+          surface.style.setProperty('--hero-texture-offset', `${phase % period}px`);
+          texture.rows.forEach((row, i) => surface.style.setProperty(`--hero-texture-row-${i + 1}`, `${row * textureScale}px`));
+        }
+      }
+      // Education's ribbon and About's stripe tails/heads continue the same grid.
+      for (const surface of document.querySelectorAll('#education > :is(.education-sky-window, .about-stripe-tails), #home .about-stripe-heads')) {
+        const period = texture.period * textureScale;
+        const phase = textureTop + texture.offset * textureScale - surface.getBoundingClientRect().top - window.scrollY;
+        surface.style.setProperty('--hero-texture-period', `${period}px`);
+        surface.style.setProperty('--hero-texture-offset', `${phase % period}px`);
+        texture.rows.forEach((row, i) => surface.style.setProperty(`--hero-texture-row-${i + 1}`, `${row * textureScale}px`));
       }
       // Convert the shared hero center into About SVG coordinates without changing ring radii.
       const centerY = artBox.top - aboutBox.top + (270 + offset) * artScale - lift;

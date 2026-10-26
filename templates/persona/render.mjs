@@ -71,12 +71,13 @@ function headAssets(home, redesign, game, errorPage) {
       ${game ? '<link rel="stylesheet" href="/assets/themes/persona/tv-frame.css">' : ''}
       ${homeSheet('section-backgrounds', redesign)}
       ${homeSheet('project-cards', redesign)}
-      ${home && redesign ? '<link rel="stylesheet" href="/assets/themes/persona/education-settings.css?v=2">' : ''}
+      ${home && redesign ? '<link rel="stylesheet" href="/assets/themes/persona/education-settings.css?v=6">' : ''}
       ${homeSheet('experience-save-menu')}
       ${homeSheet('project-categories', redesign)}
       ${redesign ? '<link rel="stylesheet" href="/assets/themes/persona/desktop-scaling.css">' : ''}
       ${redesign ? '<script src="/assets/js/about-pills.js" defer></script>' : ''}
       ${home ? '<link rel="stylesheet" href="/assets/themes/persona/scroll-presence.css">\n      <script type="module" src="/assets/js/scroll-presence.js"></script>' : ''}
+      ${homeSheet('about-title', redesign)}
       ${home ? `<script>
         if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
           document.documentElement.classList.add('about-scroll-pending');

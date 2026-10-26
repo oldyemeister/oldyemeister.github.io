@@ -1,5 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { personaPreview } from '../templates/persona/render.mjs';
 import { flowerPetals } from '../templates/persona/flower.mjs';
 
@@ -16,6 +20,72 @@ const page = `<!doctype html><html><head></head><body class="page-home">
 <a href="/assets/documents/resume.pdf">Resume</a><a href="https://example.com/">External</a>
 </body></html>`;
 const ui = { hud: { label: 'Keyboard shortcuts', menu: 'Menu', navigate: 'Navigate', open: 'Open' } };
+
+test('shared Education honours render safely on both designs and disappear without data', async (t) => {
+  // Exercise the real builder in isolation: never rewrite the working data or _site.
+  const fixture = mkdtempSync(join(tmpdir(), 'education-honors-test-'));
+  t.after(() => rmSync(fixture, { recursive: true, force: true }));
+  for (const path of ['assets', 'templates', '_data', '_layouts', '_includes', '_config.yml', 'index.html', '404.html']) {
+    cpSync(new URL(`../${path}`, import.meta.url), join(fixture, path), {
+      recursive: true,
+      // Skip any large local media (the production build excludes the project
+      // video); this test only needs the pages, styles and scripts.
+      filter: source => !source.endsWith('/.DS_Store') && (statSync(source).isDirectory() || statSync(source).size < 5e6)
+    });
+  }
+  mkdirSync(join(fixture, 'tools'));
+  mkdirSync(join(fixture, 'projects'));
+  cpSync(new URL('../tools/preview-build.mjs', import.meta.url), join(fixture, 'tools/preview-build.mjs'));
+  const contentPath = join(fixture, '_data/content.yml');
+  const content = JSON.parse(execFileSync('ruby', ['-ryaml', '-rjson', '-e',
+    'puts JSON.generate(YAML.load_file(ARGV[0]))', contentPath], { encoding: 'utf8' }));
+  const approved = [{ name: "Dean's Honour List", terms: 'Winter 2024 · Winter 2025' }];
+  assert.deepEqual(content.education_section.honors[0], approved[0]);
+
+  for (const [state, honors] of [
+    ['populated', [...approved, { name: 'R&D <Award> "Test"', terms: '<Winter> & Summer' }]],
+    ['empty', []],
+    ['missing', undefined]
+  ]) {
+    await t.test(state, () => {
+      const data = structuredClone(content);
+      if (honors === undefined) delete data.education_section.honors;
+      else data.education_section.honors = honors;
+      writeFileSync(contentPath, JSON.stringify(data));
+      execFileSync(process.execPath, [join(fixture, 'tools/preview-build.mjs'), '--production'], { stdio: 'pipe' });
+      for (const route of ['index.html', 'original/index.html']) {
+        const result = readFileSync(join(fixture, '_site', route), 'utf8');
+        if (route === 'index.html') {
+          assert.match(result, /<svg class="education-frame-trace" aria-hidden="true" focusable="false"><rect pathLength="1"/);
+          assert.match(result, /class="education-ribbon-shine"/);
+        } else {
+          assert.doesNotMatch(result, /education-frame-trace|education-ribbon-shine|education-motion\.js/);
+        }
+        if (state !== 'populated') {
+          assert.doesNotMatch(result, /education-honor|Dean(?:'|&#39;)s Honour List|Winter 2024|Winter 2025/);
+          continue;
+        }
+        const list = result.match(/<ul class="education-honors" role="list">[\s\S]*?<\/ul>/)?.[0];
+        assert.ok(list, `${route} exposes the honours as a semantic list`);
+        assert.equal((list.match(/<li>/g) || []).length, 2);
+        assert.match(list, /<span class="education-honor-name">Dean&#39;s Honour List<\/span>/);
+        assert.match(list, /<span class="education-honor-terms">Winter 2024 · Winter 2025<\/span>/);
+        assert.match(list, /R&amp;D &lt;Award&gt; &quot;Test&quot;/);
+        assert.match(list, /&lt;Winter&gt; &amp; Summer/);
+        assert.doesNotMatch(list, /<Award>|<Winter>/);
+        assert.match(result, /<p class="education-dates">[^<]+<\/p>\s*<ul class="education-honors"/);
+      }
+    });
+  }
+});
+
+test('About stripe heads are injected into the hero stage', () => {
+  // The injection matches this exact opening tag; keep it in the real source.
+  const opening = '<div class="hero-visual-stage">';
+  assert.ok(readFileSync(new URL('../index.html', import.meta.url), 'utf8').includes(opening));
+  const result = personaPreview(page.replace('<svg class="hero-reference-art">', `${opening}</div><svg class="hero-reference-art">`), '', true, ui);
+  assert.match(result, /<div class="hero-visual-stage"><div class="about-stripe-heads about-sky-texture" aria-hidden="true"><\/div>/);
+});
 
 test('production Persona uses root routes and leaves shared assets and external links intact', () => {
   const result = personaPreview(page, '', true, ui);

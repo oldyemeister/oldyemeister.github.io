@@ -97,6 +97,13 @@ export function redesignContent(html, projectData = {}) {
   if (!clouds) throw new Error('Persona template: expected reusable sky clouds.');
   html = replaceRequired(html, /<section[^>]*id="about"[^>]*>/,
     opening => `${opening}<div class="about-sky-base about-sky-texture" aria-hidden="true"><svg viewBox="0 0 1440 1486" preserveAspectRatio="xMidYMid slice" focusable="false"><g transform="translate(-80 0) scale(1.5)">${clouds}</g></svg></div>${maskArt('desktop')}${maskArt('mobile')}`, 'the About sky mask');
+  // The oversized serif echo is artwork; the original h2 remains the heading.
+  // The silhouette separates the warm lettering from the sky-only CRT shadow.
+  if (projectData.about?.heading) {
+    const lettering = escapeAttribute(projectData.about.heading);
+    html = replaceRequired(html, /<section[^>]*id="about"[^>]*>/,
+      opening => `${opening}<div class="about-title-echo" aria-hidden="true"><div class="about-title-sky-shadow"><div class="about-title-lettering about-title-lettering--shadow">${lettering}</div></div><div class="about-title-lettering">${lettering}</div><div class="about-title-lettering about-title-lettering--yellow">${lettering}</div></div>`, 'the About title echo');
+  }
   const aboutFlowers = `<div class="about-flower-pair" aria-hidden="true">
     <svg class="about-flower about-flower--gold" viewBox="-16 -16 352 352" focusable="false"><g class="about-flower-spin">${flowerPetals}</g></svg>
     <svg class="about-flower about-flower--dark" viewBox="-16 -16 352 352" focusable="false"><g class="about-flower-spin">${flowerPetals}</g></svg>
@@ -135,6 +142,10 @@ export function redesignContent(html, projectData = {}) {
     <rect class="about-status-stripe-shade" width="288" height="100" fill="url(#about-status-stripe-shade)"/>
   </svg>
   <svg class="about-corner-ribbons"`, 'the About corner ribbons');
+  // About's top stripes continue up into the hero as tapered heads; they sit
+  // above the hero art and below its flowers, copy and buttons.
+  html = html.replace('<div class="hero-visual-stage">',
+    '<div class="hero-visual-stage"><div class="about-stripe-heads about-sky-texture" aria-hidden="true"></div>');
   // Shared settings-reference edge bands in Education and Contact.
   const settingsBands = [
     ['config-orange', 5], ['config-silver', 6], ['palette-yellow', 4],
@@ -145,6 +156,13 @@ export function redesignContent(html, projectData = {}) {
   html = replaceRequired(html, /(<section[^>]*id="education"[\s\S]*?)(<\/section>)/,
     (_, section, closing) => `${section}<div class="education-horizontal-ribbons" aria-hidden="true">${settingsBands}</div>\n${closing}`,
     'the #education section');
+  // Special-page composition: a sky ribbon and a framed university record.
+  // Keep the shared source and all education copy intact.
+  const educationTitle = escapeAttribute(projectData.education_section?.heading || 'Education');
+  html = replaceRequired(html, /<section[^>]*id="education"[^>]*>/,
+    opening => `${opening}<div class="education-sky-window about-sky-texture" aria-hidden="true"><svg viewBox="0 0 1920 1400" preserveAspectRatio="xMidYMid slice" focusable="false">${clouds}</svg><span class="education-ribbon-shine"></span><div class="education-title-echo">${educationTitle}</div></div><div class="about-stripe-tails about-sky-texture" aria-hidden="true"></div>`, 'the Education sky ribbon');
+  html = html.replace(/<div class="section-body education-card">/,
+    '$&<svg class="education-frame-trace" aria-hidden="true" focusable="false"><rect pathLength="1" fill="none" stroke-dasharray="1"/></svg>');
     // The supplied joined-center silhouette is shared by all solid flowers.
   const petals = flowerPetals;
   // The hero and Contact share exactly the same six teardrop petals.

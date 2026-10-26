@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1560" viewBox="0 -160 1920 1560" preserveAspectRatio="none">
+  <!-- Original sweeping yellow field; transparent openings reveal the shared sky.
+       The band rises 160 units above Education into About's lower edge. -->
+  <path fill="white" d="M0 -160H1920V-110C1300 -150 800 -71 620 0C380 95 170 225 0 350Z"/>
+  <path fill="white" d="M1021 -130H1258L425 205Z"/>
+  <path fill="white" d="M0 610C560 230 1290 125 1920 175V1025C1545 1260 580 1190 0 1400Z"/>
+  <path fill="white" d="M270 1400C800 1215 1490 1305 1920 1110V1145C1460 1330 810 1260 370 1400Z"/>
+  <path fill="white" d="M490 1400C1000 1285 1585 1370 1920 1200V1400Z"/>
+</svg>
