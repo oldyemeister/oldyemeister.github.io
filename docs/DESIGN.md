@@ -79,7 +79,8 @@ previews and the original-design badges are unchanged. Stickers sit in the
 top-right edge, overlapping the preview without clipping its CRT layers. They
 are 20% larger than the initial size (105.6–129.6px), with the original bold
 vector lettering restored. A 36% rightward offset keeps the tail over the
-preview, reduced to 22% on phones to avoid overflow, with a small black shadow below.
+preview on desktop. Below 900px, the sticker has no rightward offset so the
+whole link and focus outline fit inside the page gutters, with a small black shadow below.
 Their color is `--palette-play-red` in `tokens.css`.
 
 ### Shared game television
@@ -150,6 +151,33 @@ See [attribution](ATTRIBUTION.md) for design and font sources.
 
 ## Adjusting transitions locally
 
+### Education → Skills boundary
+
+`education-skills-transition.js` and its Persona-only stylesheet adapt the
+outgoing-stage motion documented in the local
+`frontend_REA/analysis/persona-4-revival/{REPORT,RECONSTRUCTION-PLAN}.md` study.
+The owner selected this boundary instead of Projects → About; section order
+and menu behavior stay unchanged. No reference assets or dependencies are added.
+
+Education's existing sky/mask/title and credential content translate together
+while the opaque Skills field rises over them in ordinary document flow.
+The section boxes and anchors stay stationary in layout, preserving Education's
+entrance animation and its earlier seam with About. Progress runs from Skills'
+top reaching the viewport bottom to reaching the viewport top, and reverses
+exactly with scroll position. The amplitude starts at
+`max(viewportHeight * .25, educationHeight * .20) * (.30 mobile / .80 desktop)`.
+It is capped at a quarter viewport, the space below the credential minus 32px,
+and the amount Education exceeds the viewport height. Short sections therefore
+use less or no movement. The site's existing 899/900px breakpoint applies.
+
+Measurements refresh for content/image/font changes and resize; the incoming
+section's current position supplies the scroll progress without saved page
+coordinates or smoothing. Only the two outgoing layers receive translation,
+with `will-change` limited to the active interval. Reduced motion, including
+live preference changes, shows the original static composition. Without JS the
+original layout is the fallback. Desktop/mobile evidence is local and ignored
+under `screenshots/education-skills/`; no screenshots are published.
+
 ### Rainbow cursor afterimages
 
 Every Persona page loads `assets/js/cursor-trail.js` and `cursor-trail.css`.
@@ -181,6 +209,26 @@ adjust speed. For example, `800` and `100` make each sweep take about one second
 The easing curve and horizontal travel are in `sweep()` in `interface.js`.
 
 ## Proportional Persona desktop sizing
+
+The homepage now adds `fullscreen-scaling.css` after its component styles.
+On 2026-10-27 the owner selected the live Chrome window (933 × 908 outer,
+933 × 821 content viewport) as the reference, choosing to preserve vertical
+proportions while using the full width. At desktop aspect ratios wider than
+933/821, `--composition-unit` caps the previous width-based dimensions by
+viewport height. The root follows that height too, retaining its rem component
+and reading-size floor. A 640px artwork floor keeps short desktop windows usable.
+The reference viewport, narrower aspect ratios, and layouts below 900px keep
+their existing rules.
+
+Backgrounds, cards and horizontal anchors use the available width; display
+type, hero art, flowers, padding and media heights follow the vertical scale.
+The hero name and About biography retain their reference line lengths. Hero
+circles stay round, with their center at the same horizontal percentage;
+`scroll-presence.js` measures the actual artwork width for its continuation.
+About's three masks share the reference cover crop fitted to the new section
+height, and `about-stripe-tails.js` samples that same fitted geometry. Content
+can expand beyond the section minimums. This overrides the earlier homepage
+width-only policy below; project/detail pages continue to use that policy.
 
 Owner-approved on 2026-10-13: desktop composition starts at 900px; body copy
 may shrink to 14px; the root scale grows above 1440px to a maximum of 115%.
@@ -299,9 +347,22 @@ bounds and cover positioning of the background mask. Both share
 Palette tokens and the shared CRT grid are unchanged. The desktop upper sweep's
 vertical scale increases from .65 to .975 (50% wider vertically), anchored at
 source y=900 so it joins the preserved lower artwork continuously. The circuit
-card and phone mask retain their geometry. Desktop lettering sits 28cqi above
-the readable heading to expose more of it in the sky; phone offsets remain
-anchored to the content position in container units.
+card and phone mask retain their geometry. Decorative lettering stays at 20cqi
+from the section top on desktop and 32cqi below 900px. The readable heading
+reserves 1.2 times the decorative font size plus 2rem of clearance, with the
+existing 48cqi/88cqi and hero-continuation offsets as minimums. This keeps OS
+font metrics from colliding with the black heading without moving the lettering
+out of the sky. The black heading's stretched label is centered on its own
+box; biography copy stays centered with a 42rem maximum, including tablets.
+
+Responsive verification (2026-10-26): Chromium at 320–2560px, including the
+899/900px breakpoint and 844×390 landscape; live window resizing, emulated
+touch viewports, reduced motion and 200% root text size. Local screenshots and
+geometry reports are under `screenshots/responsive-layout/`. These are emulated
+viewports on macOS, not physical phone or Windows browser verification.
+The desktop hero name uses a .95 line-height and 2cqi role-strip margin to keep
+their rotated bounds separate. Contact's corner flower reduces to a 4–6rem
+base size below 600px so it clears the heading on narrow phones.
 
 An offset cyan lettering copy supplies the CRT shadow. Its horizontal phosphor
 bands use the existing cyan/blue palette and share the sky's device-snapped period
@@ -373,16 +434,21 @@ and exits the right side. Education clips only horizontally
 (`overflow-x: clip`) so the overhang can paint over About. Mask URLs carry
 `?v=` so browsers drop the old artwork.
 
-About's own thin stripes needed the same fix below 900px. Its mask is
-cover-scaled and taller than About there, so the stripes ran off About's bottom
-and got cut flat. `assets/js/about-stripe-tails.js` draws the About mask's
-last 24 rows to a canvas at About's real scale, then traces each stripe's
-edges and angle at the boundary. A `clip-path` on `.about-stripe-tails`, the
-first 12rem of Education, then continues each stripe as a curved tail that
-narrows to a point. Tail length scales with the stripe's thickness, from 28 to
-150px. The tails use the same sky colour and scanline grid as the Education
-ribbon. They stay hidden at widths where nothing crosses the boundary (all
-desktop widths checked, and 320px) and when JS is off.
+Below 900px, `about-title.css` now uses a compact About composition: a 28cqi
+decorative title, a 42%-wide flower pair, smaller proportional spacing, and
+16px-minimum body text. Flowers follow the biography in flow so enlarged or
+longer text cannot collide with them. The section's minimum is
+`max(64rem, 240vw)` rather than the old `max(87.5rem, 373.3334vw)`.
+
+The sky, yellow mask and title-mask surfaces share a shorter artwork box,
+leaving `clamp(16rem, 32cqi, 20rem)` of yellow clearance at the bottom. This is
+a responsive crop of the existing cover-scaled mask, not stretched artwork.
+`assets/js/about-stripe-tails.js` samples its actual last 24 painted rows and
+continues each stripe into a 16–64px tapered tip inside About's clearance.
+The tail element remains owned by Education but is offset up to the artwork's
+bottom, keeping it separate from Education's growing ribbon. Desktop keeps
+the existing mask and 28–150px tail rules. Tails share the sky/scanline grid,
+hide when no stripe crosses the artwork edge, and stay hidden without JS.
 
 On desktop, About's top-left stripes started flat at the hero boundary.
 The same script reads About's top 64 mask rows and continues each stripe

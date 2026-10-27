@@ -14,7 +14,8 @@ import { aboutScrollProgress, aboutOuterRing, aboutRibbonProgress, aboutStripesP
   document.documentElement.classList.add('home-overscroll-contained');
   const hero = document.querySelector('#home');
   // Physical stage scale; never alter browser coordinates with body zoom.
-  const desktopStageScale = () => window.innerWidth >= 900 ? hero.getBoundingClientRect().width / 1440 : 1;
+  const desktopStageScale = () => window.innerWidth >= 900
+    ? hero.querySelector('.hero-reference-art').getBoundingClientRect().width / 1440 : 1;
   document.body.style.setProperty('--hero-circle-scale', settings.heroBackdrop.scale);
   let heroVisible = true;
   const syncFlowers = () => hero?.classList.toggle('hero-flowers-running', heroVisible && !document.hidden);

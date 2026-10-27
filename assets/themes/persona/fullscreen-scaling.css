@@ -1,0 +1,129 @@
+/* The owner's Chrome reference is a 933 × 821 content viewport (933 × 908
+   window). Preserve its vertical rhythm on wider displays, with full-width
+   fields and horizontal anchors. Content remains in normal flow; no zoom or
+   page transform, so scroll masks, focus and reduced motion share real geometry.
+   Short desktop windows retain a 640px composition floor for readable controls. */
+@media (min-width: 900px) and (aspect-ratio > 933/821) {
+  html.persona-root:has(body.page-home) {
+    font-size: clamp(75%, min(calc(1rem + (100vw - 1440px) / 135),
+      calc(.765277778rem + (100svh - 821px) * .014913)), 115%);
+  }
+  body.persona-design.page-home {
+    --composition-unit: min(1vw, max(7.273px, 1.136419svh));
+    /* The reference's supporting type uses a 14px floor over a 12.244px root. */
+    --content-body-size: max(14px, 1.143376rem);
+    --content-label-size: max(14px, 1.143376rem);
+    --content-title-size: clamp(1.25rem, calc(2 * var(--composition-unit)), 1.65rem);
+  }
+  body.persona-design.page-home .content-shell { width: calc(100% - 3.5rem); }
+  body.persona-design.page-home .nav-shell { width: calc(100% - 2.5rem); }
+  body.persona-design.page-home :is(#about, #education, #skills, #experience, #projects, #contact) h2 {
+    font-size: clamp(2.5rem, calc(5.2 * var(--composition-unit)), 5rem);
+    translate: none;
+  }
+
+  /* Keep the circle round and its center at the same horizontal fraction.
+     The yellow field and continuation fill the available screen width. */
+  body.persona-design.page-home #main-content {
+    --hero-art-width: calc(100 * var(--composition-unit));
+    --hero-art-left: calc(62.81407% - 62.81407 * var(--composition-unit));
+  }
+  body.persona-design.page-home :is(#home, .hero-top-extension) { max-width: none; }
+  body.persona-design.page-home #home .hero-visual-stage { min-height: calc(52.777778 * var(--composition-unit)); }
+  body.persona-design.page-home #home .hero-reference-copy { left: 6%; width: calc(42.361111 * var(--composition-unit)); }
+  body.persona-design.page-home #home .hero-reference-copy h1 {
+    font-size: calc(6.2 * var(--composition-unit));
+    text-shadow: calc(.347222 * var(--composition-unit)) calc(.347222 * var(--composition-unit)) 0 var(--palette-white);
+  }
+  body.persona-design.page-home #home .hero-reference-copy p {
+    font-size: calc(2.3 * var(--composition-unit));
+    margin: calc(2 * var(--composition-unit)) 0 0 calc(.555556 * var(--composition-unit));
+    padding: calc(.555556 * var(--composition-unit)) calc(.972222 * var(--composition-unit)) calc(.694444 * var(--composition-unit));
+  }
+  body.persona-design.page-home #home .hero-portrait-frame { width: calc(41 * var(--composition-unit)); }
+  body.persona-design.page-home #home .hero-portrait-monogram {
+    font-size: calc(15.555556 * var(--composition-unit));
+    -webkit-text-stroke-width: calc(.416667 * var(--composition-unit));
+    text-shadow: calc(.347222 * var(--composition-unit)) calc(.347222 * var(--composition-unit)) 0 var(--palette-black);
+  }
+  body.persona-design.page-home #home .hero-actions { left: 6%; bottom: calc(4.861111 * var(--composition-unit)); }
+  body.persona-design.page-home #home .hero-links { gap: calc(1.25 * var(--composition-unit)); }
+  body.persona-design.page-home #home .hero-links .text-link {
+    font-size: calc(1.111111 * var(--composition-unit));
+    padding: calc(.833333 * var(--composition-unit)) calc(1.25 * var(--composition-unit));
+  }
+  body.persona-design.page-home #home .hero-name-flower { width: calc(4.444444 * var(--composition-unit)); }
+  body.persona-design.page-home #home :is(.hero-left-flower, .hero-right-dark-flower) { width: calc(7 * var(--composition-unit)); }
+  body.persona-design.page-home #home .hero-right-light-flower { width: calc(4 * var(--composition-unit)); }
+
+  body.persona-design.page-home #about {
+    --about-title-size: calc(26 * var(--composition-unit));
+    --about-title-top: calc(20 * var(--composition-unit));
+    --about-heading-top: max(calc(48 * var(--composition-unit)),
+      calc(var(--about-title-top) + var(--about-title-size) * 1.2 + 2rem), var(--about-content-top, 12rem));
+    /* Match the reference's cover crop, then fit the same mask vertically.
+       All three painted/title masks and the edge tracer use this geometry. */
+    --about-mask-width: 1.05323;
+    min-height: max(96rem, calc(152.7778 * var(--composition-unit)));
+  }
+  body.persona-design.page-home #about :is(.about-sky-mask, .about-title-sky-shadow, .about-title-lettering--yellow) {
+    mask-size: calc(var(--about-mask-width) * 100%) 100%;
+  }
+  body.persona-design.page-home #about > .content-shell { width: min(46.9792%, calc(46.9792 * var(--composition-unit))); }
+  body.persona-design.page-home #about > .about-flower-pair { width: calc(32 * var(--composition-unit)); }
+
+  body.persona-design.page-home #education { padding-top: clamp(18rem, calc(20 * var(--composition-unit)), 24rem); }
+  body.persona-design.page-home #education > .content-shell { width: min(94.49%, calc(100% - 3.5rem)); }
+  body.persona-design.page-home #education .education-title-echo {
+    top: calc(var(--education-overhang) / (1 + var(--education-overhang)) * 100% + 3 * var(--composition-unit));
+    font-size: calc(13.5 * var(--composition-unit));
+  }
+  body.persona-design.page-home #education .education-card {
+    max-width: none;
+    width: 88.888889%;
+    padding: clamp(2rem, calc(4 * var(--composition-unit)), 4rem);
+    border-width: clamp(8px, calc(.9 * var(--composition-unit)), 14px);
+  }
+  body.persona-design.page-home #education .education-details { column-gap: clamp(2rem, calc(4 * var(--composition-unit)), 4rem); }
+  body.persona-design.page-home #education .education-logo { max-width: calc(27 * var(--composition-unit)); justify-self: center; }
+  body.persona-design.page-home #education .education-details h3 { font-size: clamp(1.75rem, calc(2.8 * var(--composition-unit)), 2.75rem); }
+  body.persona-design.page-home #education .education-program { font-size: clamp(1rem, calc(1.25 * var(--composition-unit)), 1.2rem); }
+
+  body.persona-design.page-home #skills { min-height: calc(95.944 * var(--composition-unit)); }
+  body.persona-design.page-home #skills .skills-category {
+    min-height: calc(29.305 * var(--composition-unit));
+    padding: clamp(1.5rem, calc(3 * var(--composition-unit)), 2.5rem);
+  }
+  body.persona-design.page-home #skills .skills-category h3 { font-size: clamp(1.125rem, calc(1.6 * var(--composition-unit)), 1.35rem); }
+  body.persona-design.page-home #skills .skills-categories { margin-top: clamp(2.375rem, calc(6 * var(--composition-unit)), 4.375rem); }
+  body.persona-design.page-home #experience .experience-save-option {
+    --sphere-size: clamp(5rem, calc(100 * var(--composition-unit) - 59.375rem), 15.625rem);
+    --row-left-padding: 4rem;
+    min-height: calc(22.937 * var(--composition-unit));
+    gap: calc(clamp(1.25rem, calc(3 * var(--composition-unit)), 2.75rem) + 1.125rem);
+    padding-right: clamp(1.5rem, calc(4 * var(--composition-unit)), 5rem);
+  }
+  body.persona-design.page-home #experience .experience-save-filler .experience-save-continued { font-size: clamp(2.4rem, calc(5 * var(--composition-unit)), 4.2rem); }
+  body.persona-design.page-home #projects .section-header h2 { max-width: calc(50 * var(--composition-unit)); }
+  body.persona-design.page-home #projects .project-playable-badge { width: clamp(6.6rem, calc(9.6 * var(--composition-unit)), 8.1rem); }
+  body.persona-design.page-home #projects .project-content { padding: clamp(1.25rem, calc(2.2 * var(--composition-unit)), 1.75rem); }
+  /* Extra horizontal room must not turn every preview into a taller row.
+     Keep the original media treatment; the information panel can still grow. */
+  body.persona-design.page-home #projects .project-media {
+    min-height: calc(28.8 * var(--composition-unit));
+    height: calc(28.8 * var(--composition-unit));
+  }
+  body.persona-design.page-home #projects .project-card:first-child .project-media {
+    min-height: calc(37.32 * var(--composition-unit));
+    height: auto;
+  }
+  body.persona-design.page-home #projects .project-media :is(img, video) {
+    position: absolute;
+    inset: 0;
+    aspect-ratio: auto;
+  }
+  body.persona-design.page-home #contact .contact-link-icon {
+    flex-basis: clamp(44px, calc(5 * var(--composition-unit)), 64px);
+    width: clamp(44px, calc(5 * var(--composition-unit)), 64px);
+  }
+}

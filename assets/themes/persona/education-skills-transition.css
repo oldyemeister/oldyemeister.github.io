@@ -1,0 +1,19 @@
+/* Keep the live section boxes, anchors, and the About/Education seam intact.
+   The existing ribbon/title and framed card retreat together beneath Skills. */
+body.persona-design #education[data-education-skills-outgoing] > :is(.education-sky-window, .content-shell) {
+  translate: 0 var(--education-exit-offset, 0px);
+}
+body.persona-design #education[data-education-skills-moving] > :is(.education-sky-window, .content-shell) {
+  will-change: translate;
+}
+body.persona-design #skills[data-education-skills-incoming] {
+  position: relative;
+  isolation: isolate;
+  z-index: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  body.persona-design #education[data-education-skills-outgoing] > :is(.education-sky-window, .content-shell) {
+    translate: none;
+    will-change: auto;
+  }
+}

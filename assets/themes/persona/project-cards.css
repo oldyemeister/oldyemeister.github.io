@@ -88,9 +88,10 @@ body.persona-design #projects .project-playable-badge:focus-visible {
 body.persona-design #projects .project-playable-badge:active .project-play-sticker {
   transform: scale(.96);
 }
-@media (max-width: 600px) {
-  /* Keep the tail on the preview without pushing the sticker off the phone. */
-  body.persona-design #projects .project-playable-badge { translate: 22% -25%; }
+@media (max-width: 899px) {
+  /* Narrow page gutters cannot contain a rightward overhang. Keep the
+     complete link and its focus ring inside the preview on phones/tablets. */
+  body.persona-design #projects .project-playable-badge { translate: 0 -25%; }
 }
 
 body.persona-design #projects .project-content {

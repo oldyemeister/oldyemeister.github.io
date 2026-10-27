@@ -2,7 +2,8 @@
 // at the bottom on narrow screens (the mask runs past About), and at the top
 // on desktop (the artwork starts there). This reads the mask's edge rows at
 // About's real scale and draws each stripe on past the edge, narrowing to a
-// point: tails into Education, heads up into the hero (whose stage clips
+// point: tails into Education on desktop, inside About's reserved lower space
+// on narrow screens; heads up into the hero (whose stage clips
 // the 1px overlap; About itself clips anything drawn outside it).
 
 // Open (sky) runs in one row of mask alpha: [start, end) pixel pairs.
@@ -85,6 +86,7 @@ export function stripeTailPath(stripes, scale = 1, {
 // Browser wiring.
 if (typeof document !== 'undefined') (() => {
   const about = document.querySelector('body.persona-design.page-home #about');
+  const artwork = about?.querySelector('.about-sky-base');
   const tails = document.querySelector('body.persona-design.page-home #education > .about-stripe-tails');
   const heads = document.querySelector('body.persona-design.page-home #home .about-stripe-heads');
   if (!about || !tails || !CSS.supports?.('clip-path', 'path("M0 0H1V1Z")')) return;
@@ -105,7 +107,9 @@ if (typeof document !== 'undefined') (() => {
     pending = 0;
     const match = getComputedStyle(about).getPropertyValue('--about-sky-mask-image').match(/url\(["']?([^"')]+)["']?\)/);
     const width = about.offsetWidth;
-    const height = about.offsetHeight;
+    // Narrow compositions reserve yellow space below their artwork. Trace
+    // the actual mask surface, not the taller section including that reserve.
+    const height = artwork?.offsetHeight || about.offsetHeight;
     if (!match || !width || !height) return;
     let image;
     try { image = await load(match[1]); } catch { return; }
@@ -114,8 +118,11 @@ if (typeof document !== 'undefined') (() => {
     const { naturalWidth, naturalHeight } = image;
     if (!naturalWidth || !naturalHeight) return;
     const cover = Math.max(width / naturalWidth, height / naturalHeight);
-    const drawnWidth = naturalWidth * cover;
-    const drawnHeight = naturalHeight * cover;
+    // Wide desktops fit the reference mask to the section's vertical rhythm.
+    // Sample that same fitted surface for the seam, including the title masks.
+    const fittedWidth = parseFloat(getComputedStyle(about).getPropertyValue('--about-mask-width'));
+    const drawnWidth = fittedWidth ? width * fittedWidth : naturalWidth * cover;
+    const drawnHeight = fittedWidth ? height : naturalHeight * cover;
     const scale = Math.min(2, Math.max(1, window.devicePixelRatio || 1));
     // Mask alpha for the rows next to one edge, ordered so the edge is last.
     const edgeRows = (atTop, sampleRows) => {
@@ -142,8 +149,15 @@ if (typeof document !== 'undefined') (() => {
       element.style.clipPath = path ? `path("${path}")` : '';
       element.toggleAttribute('data-ready', Boolean(path));
     };
-    // Only when the mask really continues below About.
-    apply(tails, () => drawnHeight > height + 1 ? stripeTailPath(edgeRows(false, 24), scale) : '');
+    // Narrow layouts finish the tails inside About, above Education's growing
+    // ribbon. Desktop keeps its existing seam. This also clears on resize.
+    tails.style.top = `${height - about.offsetHeight - 1}px`;
+    // Only when the mask really continues below its painted surface.
+    const compact = height < about.offsetHeight - 1;
+    apply(tails, () => drawnHeight > height + 1
+      ? stripeTailPath(edgeRows(false, 24), scale, compact
+        ? { minLength: 16, maxLength: 64, lengthPerThickness: 3 }
+        : {}) : '');
     // Heads run up and off the left edge, passing behind the hero's buttons.
     // A taller sample steadies the angle over the longer continuation.
     if (heads) apply(heads, () => {

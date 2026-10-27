@@ -183,6 +183,11 @@ body.persona-design #contact .contact-flower {
   z-index: 0;
   pointer-events: none;
 }
+@media (max-width: 600px) {
+  body.persona-design #contact {
+    --contact-flower-size: clamp(4rem, 18vw, 6rem);
+  }
+}
 
 .contact-flower-shadow { fill: var(--palette-amber); }
 .contact-flower-face { fill: var(--hero-yellow-light); }

@@ -590,10 +590,14 @@ body.persona-design #about > .content-shell {
   text-align: center;
 }
 body.persona-design #about > .content-shell h2 { margin-inline: auto; }
-body.persona-design #about > .content-shell .section-body { width: 100%; }
+body.persona-design #about > .content-shell .section-body {
+  width: 100%;
+  max-width: 42rem;
+  margin-inline: auto;
+}
 @media (max-width: 899px) {
   body.persona-design #about > .content-shell {
-    width: calc(100% - 2.5rem);
+    width: min(42rem, calc(100% - 2.5rem));
     padding-top: max(88vw, var(--about-content-top, 3rem));
   }
 }

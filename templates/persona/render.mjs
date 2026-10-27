@@ -76,8 +76,11 @@ function headAssets(home, redesign, game, errorPage) {
       ${homeSheet('project-categories', redesign)}
       ${redesign ? '<link rel="stylesheet" href="/assets/themes/persona/desktop-scaling.css">' : ''}
       ${redesign ? '<script src="/assets/js/about-pills.js" defer></script>' : ''}
+      ${homeSheet('education-skills-transition', redesign)}
+      ${home && redesign ? '<script type="module" src="/assets/js/education-skills-transition.js"></script>' : ''}
       ${home ? '<link rel="stylesheet" href="/assets/themes/persona/scroll-presence.css">\n      <script type="module" src="/assets/js/scroll-presence.js"></script>' : ''}
       ${homeSheet('about-title', redesign)}
+      ${homeSheet('fullscreen-scaling', redesign)}
       ${home ? `<script>
         if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
           document.documentElement.classList.add('about-scroll-pending');

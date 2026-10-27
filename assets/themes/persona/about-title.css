@@ -2,8 +2,13 @@
    The readable heading keeps the site's original typography. */
 body.persona-design #about {
   container-type: inline-size;
-  --about-heading-top: max(48cqi, var(--about-content-top, 12rem));
-  --about-title-top: calc(var(--about-heading-top) - 28cqi);
+  --about-title-size: 26cqi;
+  --about-title-top: 20cqi;
+  /* Reserve the serif's ascenders/descenders as well as its line box. The
+     readable heading must stay clear when OS font metrics or zoom change. */
+  --about-heading-top: max(48cqi,
+    calc(var(--about-title-top) + var(--about-title-size) * 1.2 + 2rem),
+    var(--about-content-top, 12rem));
 }
 body.persona-design #about > .content-shell {
   padding-top: var(--about-heading-top);
@@ -16,7 +21,7 @@ body.persona-design #about > .about-title-echo {
   z-index: 3;
   inset: 0;
   color: var(--palette-white);
-  font: italic 400 26cqi/1 Georgia, 'Times New Roman', serif;
+  font: italic 400 var(--about-title-size)/1 Georgia, 'Times New Roman', serif;
   letter-spacing: -.04em;
   text-align: center;
   white-space: nowrap;
@@ -67,12 +72,48 @@ body.persona-design #about .about-title-lettering--yellow {
 body.persona-design #about .about-heading h2 {
   background: transparent;
 }
+/* Center the stretched label itself, not its narrower pre-transform box. */
+body.persona-design #about .about-heading h2 .kinetic-label {
+  width: 100%;
+  padding-inline-start: 0;
+  transform-origin: center;
+}
 @media (max-width: 899px) {
   body.persona-design #about {
-    --about-heading-top: max(88cqi, var(--about-content-top, 3rem));
-    --about-title-top: calc(var(--about-heading-top) - 56cqi);
+    --about-title-size: 28cqi;
+    --about-title-top: 24cqi;
+    --about-heading-top: max(65cqi,
+      calc(var(--about-title-top) + var(--about-title-size) * 1.2 + 2rem),
+      var(--about-content-top, 3rem));
+    /* Finish About's own stripes before the incoming Education ribbon.
+       The reserve fits a 150px tapered tail, its overhang, and clear space. */
+    --about-art-clearance: clamp(16rem, 32cqi, 20rem);
+    display: flex;
+    flex-direction: column;
+    min-height: max(64rem, 240vw);
+    padding-bottom: var(--about-art-clearance);
   }
-  body.persona-design #about > .about-title-echo {
-    font-size: 36cqi;
+  body.persona-design #about > :is(.about-sky-base, .about-sky-mask, .about-title-echo) {
+    height: calc(100% - var(--about-art-clearance));
+    bottom: auto;
+  }
+  body.persona-design #about > .content-shell { order: 1; }
+  body.persona-design #about .about-heading h2 {
+    font-size: clamp(2rem, 6cqi, 3rem);
+  }
+  body.persona-design #about > .content-shell .section-body {
+    margin-top: clamp(1.25rem, 3.5cqi, 1.75rem);
+  }
+  body.persona-design #about .section-body .prose p {
+    font-size: clamp(1rem, 2.15cqi, 1.1rem);
+  }
+  body.persona-design #about > .about-flower-pair {
+    /* Flow after the biography so larger text can never run into the flowers. */
+    position: relative;
+    order: 2;
+    flex: none;
+    top: auto;
+    width: 42%;
+    margin-top: clamp(4rem, 18cqi, 9rem);
   }
 }

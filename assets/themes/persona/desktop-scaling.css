@@ -42,11 +42,12 @@
   body.persona-design #home .hero-reference-copy { left: 6cqi; width: 42.361111cqi; }
   body.persona-design #home .hero-reference-copy h1 {
     font-size: 6.2cqi;
+    line-height: .95;
     text-shadow: .347222cqi .347222cqi 0 var(--palette-white);
   }
   body.persona-design #home .hero-reference-copy p {
     font-size: 2.3cqi;
-    margin: 1.527778cqi 0 0 .555556cqi;
+    margin: 2cqi 0 0 .555556cqi;
     padding: .555556cqi .972222cqi .694444cqi;
   }
   body.persona-design #home .hero-portrait-frame { width: 41cqi; }

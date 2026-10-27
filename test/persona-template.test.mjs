@@ -21,6 +21,16 @@ const page = `<!doctype html><html><head></head><body class="page-home">
 </body></html>`;
 const ui = { hud: { label: 'Keyboard shortcuts', menu: 'Menu', navigate: 'Navigate', open: 'Open' } };
 
+test('Education to Skills enhancement loads only on redesigned Persona home, preserving section order', () => {
+  const result = personaPreview(page, '', true, ui);
+  assert.match(result, /education-skills-transition\.js/);
+  assert.match(result, /education-skills-transition\.css/);
+  const order = html => [...html.matchAll(/<section[^>]*id="([^"]+)"/g)].map(match => match[1]);
+  assert.deepEqual(order(result), order(page));
+  assert.doesNotMatch(personaPreview(page, '', false, ui), /education-skills-transition/);
+  assert.doesNotMatch(personaPreview('<html><head></head><body class="page-project"></body></html>', '', true, ui), /education-skills-transition/);
+});
+
 test('shared Education honours render safely on both designs and disappear without data', async (t) => {
   // Exercise the real builder in isolation: never rewrite the working data or _site.
   const fixture = mkdtempSync(join(tmpdir(), 'education-honors-test-'));
