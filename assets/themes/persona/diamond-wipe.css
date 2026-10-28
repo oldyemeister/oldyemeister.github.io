@@ -1,0 +1,28 @@
+/* Only project entry uses this cover; existing page/section wipes stay intact. */
+body.persona-design .diamond-wipe {
+  position: fixed;
+  inset: 0;
+  z-index: 1001;
+  overflow: hidden;
+  visibility: hidden;
+  pointer-events: none;
+}
+body.persona-design .diamond-wipe i {
+  position: absolute;
+  background: var(--persona-yellow);
+  transform: rotate(45deg) scale(0);
+}
+html.persona-diamond body.persona-design .page-wipe {
+  visibility: hidden;
+}
+html.persona-diamond body.persona-design .diamond-wipe {
+  visibility: visible;
+  pointer-events: auto;
+}
+html.persona-diamond.persona-arriving body.persona-design .diamond-wipe,
+html.persona-diamond-covered body.persona-design .diamond-wipe {
+  background: var(--persona-yellow);
+}
+@media (prefers-reduced-motion: reduce) {
+  html.persona-diamond body.persona-design .diamond-wipe { display: none; }
+}

@@ -4,10 +4,12 @@
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const overlay = document.querySelector('.page-wipe');
   const panes = [...overlay.children];
+  const diamonds = window.personaDiamondWipe;
   let busy = false;
   let animations = [];
   let recoveryTimer;
   let transitionVersion = 0;
+  let pendingDiamondUrl;
 
   // Split visible text only. Preserve spaces, word wrapping, existing icons,
   // semantic headings, and one continuous accessible label for each text node.
@@ -58,7 +60,9 @@
     transitionVersion += 1;
     animations.forEach(animation => animation.cancel());
     animations = [];
-    root.classList.remove('persona-arriving', 'persona-navigating');
+    root.classList.remove('persona-arriving', 'persona-navigating', 'persona-diamond', 'persona-diamond-covered');
+    diamonds?.reset();
+    pendingDiamondUrl = undefined;
     clearTimeout(window.personaArrivalTimeout);
     clearTimeout(recoveryTimer);
     busy = false;
@@ -79,7 +83,12 @@
     return 2 * (duration + stagger * (panes.length - 1)) + 5000;
   }
 
-  async function sweep(entering) {
+  async function sweep(entering, diamond = false) {
+    if (diamond) {
+      animations = entering ? diamonds.cover() : diamonds.reveal();
+      await Promise.all(animations.map(animation => animation.finished.catch(() => {})));
+      return;
+    }
     const { duration, stagger } = wipeTiming();
     const offset = entering ? -130 : 130;
     animations = panes.map((pane, index) => pane.animate([
@@ -90,13 +99,15 @@
   }
 
   function arrive() {
+    const diamond = root.classList.contains('persona-diamond') && Boolean(diamonds);
     reset();
     if (motion.matches || !Element.prototype.animate) return;
     busy = true;
     root.classList.add('persona-arriving');
+    if (diamond) root.classList.add('persona-diamond');
     const version = transitionVersion;
     recoveryTimer = setTimeout(reset, recoveryDelay());
-    sweep(false).finally(() => { if (version === transitionVersion) reset(); });
+    sweep(false, diamond).finally(() => { if (version === transitionVersion) reset(); });
   }
   if (root.classList.contains('persona-arriving')) arrive();
   window.addEventListener('pageshow', event => {
@@ -106,7 +117,12 @@
   // Native Back/Forward restores scroll without an extra arrival curtain.
   window.addEventListener('popstate', reset);
   window.addEventListener('pagehide', reset);
-  motion.addEventListener('change', () => { if (motion.matches) reset(); });
+  motion.addEventListener('change', () => {
+    if (!motion.matches) return;
+    const destination = pendingDiamondUrl;
+    reset();
+    if (destination) location.assign(destination);
+  });
 
   // The fixed HUD documents real browser focus/activation behavior. Tab and
   // the arrow keys stay native; the open menu handles its own arrow keys.
@@ -157,11 +173,17 @@
     }
     event.preventDefault();
     busy = true;
+    const diamond = !samePage && Boolean(diamonds) && Boolean(link.closest('#projects')) &&
+      url.pathname.startsWith(`${basePath}projects/`);
+    if (diamond) {
+      root.classList.add('persona-diamond');
+      pendingDiamondUrl = url.href;
+    }
     const version = transitionVersion;
     root.classList.add('persona-navigating');
     // Also recovers from failed/cancelled document loads.
     recoveryTimer = setTimeout(reset, recoveryDelay());
-    await sweep(true);
+    await sweep(true, diamond);
     if (version !== transitionVersion) return;
     if (samePage) {
       history.pushState(null, '', url);
@@ -175,7 +197,8 @@
       await sweep(false);
       if (version === transitionVersion) reset();
     } else {
-      try { sessionStorage.setItem('persona-arrival', JSON.stringify({ url: url.href, time: Date.now() })); }
+      if (diamond) root.classList.add('persona-diamond-covered');
+      try { sessionStorage.setItem('persona-arrival', JSON.stringify({ url: url.href, time: Date.now(), effect: diamond ? 'diamond' : 'panes' })); }
       catch { /* The outgoing wipe still works without storage. */ }
       location.assign(url.href);
     }

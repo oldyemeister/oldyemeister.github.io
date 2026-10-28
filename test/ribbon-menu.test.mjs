@@ -3,13 +3,13 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { runInNewContext } from 'node:vm';
 const source = readFileSync(new URL('../assets/js/ribbon-menu.js', import.meta.url), 'utf8');
-function setup(reduced = false, viewport = 1440, labels = ['About', 'Experience', 'Projects', 'Contact']) {
+function setup(reduced = false, viewport = 1440, labels = ['About', 'Experience', 'Projects', 'Contact'], persona = false) {
   let document;
   const element = (textContent = '') => ({
     getBoundingClientRect() { return { left: viewport - Math.min(480, viewport - 24) - 12, width: Math.min(480, viewport - 24) }; },
     textContent, style: { setProperty(name, value) { this[name] = value; } }, attrs: {}, events: {}, children: [],
     classList: { add() {}, toggle() {} },
-    setAttribute(k, v) { this.attrs[k] = v; },
+    setAttribute(k, v) { this.attrs[k] = v; this.attributeWrites = (this.attributeWrites || 0) + 1; },
     removeAttribute(k) { delete this.attrs[k]; },
     addEventListener(k, v) { this.events[k] = v; },
     append(child) { this.children.push(child); },
@@ -35,12 +35,14 @@ function setup(reduced = false, viewport = 1440, labels = ['About', 'Experience'
   document.createElement = document.createElementNS = () => element();
   const frames = new Map(); let id = 0; let now = 0;
   const motion = { matches: reduced, addEventListener(k, handler) { this.change = handler; } };
-  runInNewContext(source, { document, matchMedia: () => motion, window: Object.assign(element(), { innerWidth: viewport }),
+  const context = { document, matchMedia: () => motion, window: Object.assign(element(), { innerWidth: viewport }),
     requestAnimationFrame(fn) { frames.set(++id, fn); return id; },
     cancelAnimationFrame(id) { frames.delete(id); }
-  });
-  const step = (count = 1) => { for (let i = 0; i < count; i++) {
-    now += 16; const pending = [...frames.values()]; frames.clear(); pending.forEach(fn => fn(now));
+  };
+  if (persona) runInNewContext(readFileSync(new URL('../assets/themes/persona/ribbon-motion.js', import.meta.url), 'utf8'), context);
+  runInNewContext(source, context);
+  const step = (count = 1, interval = 16) => { for (let i = 0; i < count; i++) {
+    now += interval; const pending = [...frames.values()]; frames.clear(); pending.forEach(fn => fn(now));
   } };
   const finish = () => {
     for (let count = 0; frames.size && count < 1000; count++) step();
@@ -263,4 +265,103 @@ test('six-link navigation fully reveals every label and reverses cleanly', () =>
   }
   trigger.events.click(); finish();
   assert.ok(links.every(link => link.style.opacity === 0));
+});
+
+const personaSetup = (reduced = false, viewport = 1440) => setup(reduced, viewport,
+  ['Home', 'About', 'Skills', 'Experience', 'Projects', 'Contact'], true);
+
+test('Persona gathers in 480ms, reveals labels after the ribbons, and exits in 360ms', () => {
+  const { trigger, nav, links, step, frames } = personaSetup();
+  trigger.events.click(); step(1); step(1, 190);
+  assert.ok(links.every(link => link.style.opacity === 0));
+  step(1, 90);
+  assert.ok(links.every(link => link.style.opacity > 0 && link.style.opacity < 1));
+  step(1, 200);
+  assert.equal(frames.size, 0);
+  assert.ok(links.every(link => link.style.opacity === 1));
+  const paths = nav.children[0].children;
+  const x = path => Number(path.attrs.d.split(' ')[1]);
+  const resting = paths.map(x);
+  trigger.events.click(); step(1); step(1, 160);
+  assert.ok(paths.every((path, i) => i < paths.length / 2 ? x(path) < resting[i] : x(path) > resting[i]),
+    'each half must move outward toward its own screen edge');
+  assert.ok(links.every(link => link.style.opacity === 0));
+  assert.equal(nav.hidden, false, 'ribbons outlive the labels during exit');
+  step(1, 200);
+  assert.equal(nav.hidden, true);
+  assert.equal(frames.size, 0);
+});
+
+test('Persona rapid reversals preserve the painted frame and settle without invalid geometry', () => {
+  const { trigger, nav, step, finish } = personaSetup();
+  trigger.events.click(); step(7);
+  const paths = nav.children[0].children;
+  for (let i = 0; i < 8; i++) {
+    const before = paths.map(p => p.attrs.d);
+    trigger.events.click();
+    assert.deepEqual(paths.map(p => p.attrs.d), before);
+    step(3);
+  }
+  finish();
+  assert.equal(nav.hidden, false);
+  assert.ok(paths.every(p => !/NaN|Infinity/.test(p.attrs.d)));
+});
+
+test('Persona caches settled wave geometry instead of rebuilding it every frame', () => {
+  const { trigger, nav, step, finish } = personaSetup();
+  const lobes = nav.children[1].children[0].children[0].children;
+  const writes = lobes.map(p => p.attributeWrites);
+  trigger.events.click(); finish();
+  assert.deepEqual(lobes.map(p => p.attributeWrites), writes);
+  trigger.events.click(); finish();
+  assert.deepEqual(lobes.map(p => p.attributeWrites), writes);
+  // A hidden first measurement may not match the visible menu's bounds.
+  nav.getBoundingClientRect = () => ({ left: 24, width: 320 });
+  trigger.events.click(); step(2);
+  const refreshed = lobes.map(p => p.attributeWrites);
+  assert.ok(refreshed.every((count, i) => count === writes[i] + 1));
+  finish();
+  assert.deepEqual(lobes.map(p => p.attributeWrites), refreshed,
+    'visible geometry must be refreshed once, then cached through settling');
+});
+
+test('Persona preserves keyboard selection and settles immediately for reduced motion', () => {
+  const { trigger, nav, links, event, motion, frames, step } = personaSetup();
+  trigger.events.keydown(event('ArrowDown')); step(6);
+  motion.matches = true; motion.change();
+  assert.equal(frames.size, 0);
+  assert.ok(links.every(link => link.style.opacity === 1));
+  nav.events.keydown(event('End'));
+  assert.equal(links.at(-1).attrs['data-menu-selected'], 'true');
+  trigger.events.click();
+  assert.equal(nav.hidden, true);
+  assert.equal(nav.inert, true);
+});
+
+test('Persona ribbon position follows elapsed time at 60, 30 and 20fps, including dropped frames', () => {
+  const snapshots = [];
+  for (const intervals of [[1000 / 60], [1000 / 30], [50], [16, 80, 34, 120]]) {
+    const { trigger, nav, links, step, frames } = personaSetup();
+    trigger.events.click(); step();
+    const advance = duration => {
+      let elapsed = 0, i = 0;
+      while (elapsed < duration - 1e-7) {
+        const dt = Math.min(intervals[i++ % intervals.length], duration - elapsed);
+        step(1, dt); elapsed += dt;
+      }
+    };
+    advance(240);
+    const paths = nav.children[0].children;
+    snapshots.push(paths.map(p => Number(p.attrs.d.split(' ')[1])));
+    assert.ok(paths.every(p => !/NaN|Infinity/.test(p.attrs.d)));
+    advance(241);
+    assert.ok(links.every(link => link.style.opacity === 1));
+    assert.equal(frames.size, 0);
+    trigger.events.click(); step(); advance(361);
+    assert.equal(nav.hidden, true);
+    assert.equal(frames.size, 0);
+  }
+  for (const positions of snapshots.slice(1)) positions.forEach((x, i) => {
+    assert.ok(Math.abs(x - snapshots[0][i]) < .001, 'same wall time must produce the same position');
+  });
 });

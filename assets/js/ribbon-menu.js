@@ -294,7 +294,15 @@
     waveSvg.style.left = `${-menuLeft}px`;
   }
 
+  // Loaded only by the Persona renderer. The original route keeps the legacy
+  // timeline below, while controls, selection and accessibility stay shared.
+  const personaMotion = window.createPersonaRibbonMotion?.({
+    nav, paths, bands, groupSize, links, hints, description, waveSvg, drawWaves,
+    geometry: () => ({ viewportWidth, menuWidth, renderedBands })
+  });
+
   function draw() {
+    if (personaMotion) { personaMotion.redraw(); return; }
     // Chrome uses the same reversible timeline as the ribbons.
     document.body.style.setProperty('--menu-chrome-progress', 1 - (1 - progress) ** 3);
     const edges = [];
@@ -374,6 +382,7 @@
     if (open) { nav.hidden = false; select(links[0]); measure(); }
     if (open && document.activeElement === trigger) links[0]?.focus({ preventScroll: true });
     if (restoreFocus) trigger.focus({ preventScroll: true });
+    if (personaMotion) { personaMotion.setOpen(open, motion.matches); return; }
     if (motion.matches) {
       cancelAnimationFrame(frame);
       frame = 0;

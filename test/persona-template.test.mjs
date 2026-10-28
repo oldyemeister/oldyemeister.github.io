@@ -21,6 +21,14 @@ const page = `<!doctype html><html><head></head><body class="page-home">
 </body></html>`;
 const ui = { hud: { label: 'Keyboard shortcuts', menu: 'Menu', navigate: 'Navigate', open: 'Open' } };
 
+test('Persona replaces the shared experience controller without changing the source route', () => {
+  const shared = page.replace('</body>', '<script src="/assets/js/experience-save-menu.js?v=old" defer></script></body>');
+  const result = personaPreview(shared, '', true, ui);
+  assert.match(result, /src="\/assets\/themes\/persona\/experience-save-menu\.js"/);
+  assert.doesNotMatch(result, /src="\/assets\/js\/experience-save-menu\.js/);
+  assert.match(shared, /src="\/assets\/js\/experience-save-menu\.js\?v=old"/);
+});
+
 test('Education to Skills enhancement loads only on redesigned Persona home, preserving section order', () => {
   const result = personaPreview(page, '', true, ui);
   assert.match(result, /education-skills-transition\.js/);
@@ -250,4 +258,14 @@ test('About gains the 18 P4G status stripes, painted beneath the corner fan', ()
   assert.equal(stripes.match(/<rect style="--stripe: \d+; --stripe-count: 18"/g).length, 18);
   assert.ok(result.indexOf('about-status-stripes') < result.indexOf('<svg class="about-corner-ribbons"'));
   assert.doesNotMatch(result.match(/<svg class="project-corner-ribbons"[\s\S]*?<\/svg>/)[0], /about-status-stripes/);
+});
+
+test('Persona installs its ribbon motion adapter before the shared controller on every page', () => {
+  for (const body of ['page-home', 'page-project']) {
+    const shared = page.replace('class="page-home"', `class="${body}"`).replace('</body>',
+      '<script src="/assets/js/ribbon-menu.js?v=old" defer></script></body>');
+    const result = personaPreview(shared, '', true, ui);
+    assert.ok(result.indexOf('/assets/themes/persona/ribbon-motion.js') < result.indexOf('/assets/js/ribbon-menu.js'));
+    assert.doesNotMatch(shared, /ribbon-motion/);
+  }
 });

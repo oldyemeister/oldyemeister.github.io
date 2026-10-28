@@ -16,6 +16,17 @@ in milliseconds (default `550`); `--wipe-stagger` is the delay between panels
 section wipes, and transitions between real pages. Reduced-motion preferences
 bypass the effects. External links and résumé downloads retain native behavior.
 
+Project-section links to internal games and articles use the P4G Skill-entry
+diamond wipe instead. `diamond-wipe.js` grows a responsive grid of yellow diamonds
+to full coverage over 620ms (including a short solid hold); the destination fades
+in from that yellow cover over 340ms. `arrival.js` carries the selected effect
+across real page loads before first paint. These are adapted timings; network
+loading may extend the covered interval. The existing yellow token is reused.
+The effect applies only to internal `/projects/` links inside `#projects`,
+including Play stickers and the comparison routes. Reduced motion, modified
+clicks, external links and downloads use native navigation. History restoration
+clears the cover; the existing project CRT exit and other section wipes remain.
+
 The alternate headings and links use a local WOFF containing the 95 printable
 ASCII glyphs traced from the supplied Slim Font mod's `font0.fnt` (Tekka and
 Pixelguin). Characters outside that set use fallback fonts; body copy keeps the
@@ -148,6 +159,35 @@ a server, run `python3 -m http.server 8000 --directory /private/tmp/personal-web
 Open `/persona/` for Persona and `/` for the original.
 
 See [attribution](ATTRIBUTION.md) for design and font sources.
+
+### Pause-menu ribbon motion
+
+`assets/themes/persona/ribbon-motion.js` supplies Persona's pause-menu animation.
+The renderer loads it before the shared `assets/js/ribbon-menu.js` controller on
+Persona home, project and game routes. The original route uses the shared
+controller's existing animation; navigation controls and accessibility remain
+shared rather than duplicated.
+
+The local P4G recording analysis (entry 33.950–34.300s, exit 36.150–36.350s)
+informs the motion sequence, with website pacing expanded to a 480ms entry and
+360ms exit so it remains legible at lower frame rates. Bowed ribbons enter from both screen edges,
+spread their outer strips, then gather into the existing column. Labels fade in
+after the gathering starts; help and the existing core waves follow. On closing,
+labels disappear first, the ribbons bow apart and exit through both screen edges, and the page
+chrome returns. Existing palette, column placement, words and selection behavior
+are retained. Curves/easing are an adaptation, not extracted engine constants.
+
+Continuous cubic edges replace the extended straight-middle arches. Animation
+uses elapsed time rather than capped frame increments; reversals capture position
+and velocity to avoid snapping. Settled lobe geometry is cached rather than
+regenerated every frame, and refreshes when measured core bounds change (including
+hidden-to-visible opening). Both original sine waves keep their 40-second upward
+drift. The animation loop stops at rest. Resizing settles to
+the current target, and reduced motion applies the selected end state directly.
+Tune `OPEN_MS`, `CLOSE_MS`, bend and `fanGap` in the Persona adapter.
+Both this motion and the diamond wipe use elapsed milliseconds, not frame counts;
+lower frame rates do not change their intended duration. The slower website
+timings are deliberate adaptations rather than estimates of the game's timers.
 
 ## Adjusting transitions locally
 
@@ -298,6 +338,43 @@ The hero sky continuation and doubled section height stay. The source geometry
 replaces the hand-drawn half-width ribbons. Copy
 is centered in the clear yellow field below the upper sweep. Attribution and
 source URLs are recorded in `docs/ATTRIBUTION.md`.
+
+### Experience slot movement
+
+Persona's `assets/themes/persona/experience-save-menu.js` replaces the shared
+controller only in the Persona renderer. `/original/` retains
+`assets/js/experience-save-menu.js` and its existing behavior.
+
+The local recording study (`references/analysis/report.md`, slot selection at
+15.850–16.200 seconds) shows rows moving through a stationary dark band.
+The Persona adaptation moves whole rows (circle, number, employer mark and
+metadata) together over 200ms, inside the study's estimated 150–250ms envelope.
+The easing is an approximation; this does not claim exact game-engine timing.
+The existing blue selected circle, gold neighbours and employer marks remain;
+no pink badges or blossom artwork are added. Circles change size uniformly,
+without the previous squash/stretch or separate numeral bounce.
+
+A decorative band and its stars sit outside the animated list. Outgoing rows
+stay rendered until they leave the clipped window, but are inert and hidden
+from assistive technology. Repeated input captures currently painted positions
+before cancelling old motion; completion callbacks cannot overwrite newer
+selections. Arrow keys, Home/End, row clicks and navigation buttons retain the
+same bounded selection behavior and `aria-activedescendant` updates.
+
+Phone layouts reserve the tallest expanded role and compact neighbour at the
+current width, so the band and following section stay still during selection.
+Resizing and font loading remeasure; reduced motion settles directly, including
+when the preference changes during a transition. Timing is the controller's
+`timing` constant; layout and clipping live in `experience-save-menu.css`.
+
+The selected disc's pale circular reflection drifts over a 4.8s alternating
+path (9.6s round trip). Its 90%-diameter circle reaches approximately 34% of
+its area outside the sphere at each soft reversal, clipped by the sphere.
+This follows the owner's requested behavior; exact game reflection timing is
+not established by the recording analysis. CSS animates only the reflection's
+transform; the controller pauses it when the selected circle is offscreen or
+the document is hidden. Reduced motion leaves a static reflection. Tune
+`experience-save-reflection-drift` in the component stylesheet.
 
 ### Experience disc marks and project meta
 

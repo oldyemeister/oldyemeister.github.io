@@ -10,6 +10,14 @@ export function personaPreview(html, prefix = '/persona', redesign = true, ui, p
     html = replaceRequired(html, /<html([^>]*)>/, (_, attributes) => `<html${attributes} class="persona-root">`, 'the <html> tag');
   }
   const home = /<body class="page-home">/.test(html);
+  // Defer preserves script order: install the Persona motion adapter before
+  // the shared menu controller initializes on home, project and game routes.
+  html = html.replace(/(<script src="\/assets\/js\/ribbon-menu\.js[^"]*" defer><\/script>)/,
+    '<script src="/assets/themes/persona/ribbon-motion.js" defer></script>$1');
+  // Keep the original route's controller intact; only Persona adopts the
+  // recording-derived slot motion.
+  if (home) html = html.replace(/src="\/assets\/js\/experience-save-menu\.js[^"]*"/,
+    'src="/assets/themes/persona/experience-save-menu.js"');
   const guide = html.match(/<aside class="keyboard-guide[^"]*"[^>]*>[\s\S]*?<\/aside>/);
   const gameKeys = guide ? [...guide[0].matchAll(/<li>([\s\S]*?)<\/li>/g)]
     .map(([, instruction]) => `<span class="hud-instruction hud-game-key">${instruction.replace(/<kbd>([^<]+)<\/kbd>/g, (_, keys) => keys.trim().split(/\s+/).map(key => `<kbd${/[↑↓←→]/.test(key) ? ' class="hud-arrow"' : ''}>${key}</kbd>`).join(''))}</span>`).join('') : '';
@@ -43,7 +51,8 @@ export function personaPreview(html, prefix = '/persona', redesign = true, ui, p
         ? `href="${prefix}${path}${suffix}"` : match);
   html = replaceRequired(html, '</head>', () => `${headAssets(home, redesign, Boolean(guide), html.includes('class="page-section error-section"'))}\n    </head>`, '</head>');
   html = replaceRequired(html, /<body class="([^"]*)">/, (_, classes) => `<body class="${classes} persona-design${guide ? ' persona-tv-screen' : ''}" data-persona-base="${prefix}/">
-      <div class="page-wipe" aria-hidden="true"><i></i><i></i><i></i></div>`, 'the <body> tag');
+      <div class="page-wipe" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="diamond-wipe" aria-hidden="true"></div>`, 'the <body> tag');
   return replaceRequired(html, '</body>', () => `${guide ? '<script src="/assets/themes/persona/tv-frame.js" defer></script><script type="module" src="/assets/js/game-controls-help.js"></script><script type="module" src="/assets/js/game-crt.js"></script>' : ''}${hud(home, gameKeys, ui.hud)}\n    </body>`, '</body>');
 }
 
@@ -53,6 +62,7 @@ function headAssets(home, redesign, game, errorPage) {
   const homeSheet = (name, when = true) => home && when ? `<link rel="stylesheet" href="/assets/themes/persona/${name}.css">` : '';
   return `
       <link rel="stylesheet" href="/assets/themes/persona/style.css">
+      <link rel="stylesheet" href="/assets/themes/persona/diamond-wipe.css">
       ${redesign ? '<link rel="stylesheet" href="/assets/themes/persona/tokens.css">\n      <link rel="stylesheet" href="/assets/themes/persona/redesign.css">' : ''}
       <link rel="stylesheet" href="/assets/themes/persona/key-instructions.css">
       <link rel="stylesheet" href="/assets/themes/persona/header-calendar.css">
@@ -99,5 +109,6 @@ function hud(home, gameKeys, labels) {
         <span class="hud-instruction"><kbd>Enter</kbd><span>${labels.open}</span></span>`}
         <button class="hud-menu-toggle" type="button" data-hud-menu-toggle aria-controls="site-navigation" aria-keyshortcuts="Escape"><kbd>Esc</kbd><span>${labels.menu}</span></button>
       </nav>
+      <script src="/assets/themes/persona/diamond-wipe.js" defer></script>
       <script src="/assets/themes/persona/interface.js" defer></script>`;
 }

@@ -3,14 +3,17 @@
 (() => {
   const root = document.documentElement;
   let linkedArrival = false;
+  let diamondArrival = false;
   try {
     const arrival = JSON.parse(sessionStorage.getItem('persona-arrival') || 'null');
     sessionStorage.removeItem('persona-arrival');
     linkedArrival = arrival?.url === location.href && Date.now() - arrival.time < 15000;
+    diamondArrival = linkedArrival && arrival.effect === 'diamond';
   } catch { /* Storage can be unavailable; navigation still works. */ }
   if (linkedArrival && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
     root.classList.add('persona-arriving');
-    window.personaArrivalTimeout = setTimeout(() => root.classList.remove('persona-arriving'), 2000);
+    if (diamondArrival) root.classList.add('persona-diamond');
+    window.personaArrivalTimeout = setTimeout(() => root.classList.remove('persona-arriving', 'persona-diamond'), 2000);
   }
   // After a project page's CRT switch-off (project-exit.js) the screen is
   // black, so the page fades in from black rather than appearing at once.

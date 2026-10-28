@@ -2,7 +2,7 @@
    field (40,40) #FFB403; yellow patch (2200,500)-(2300,600) mode #FEDC34;
    lettering patch (710,390)-(1260,480) #AD6900; checker #000000/#1B1B1B;
    star (208,850) #2E2E2E. The selected disc uses the hero's blue, never pink. */
-#experience {
+body.persona-design #experience {
   --save-yellow: #FEDC34;
   --save-orange: #FFB403;
   --save-reference-ink: #AD6900;
@@ -36,8 +36,8 @@ body.persona-design #experience .section-header p { color: var(--save-ink); }
 body.persona-design #experience .section-header p {
   font-family: 'Persona Slim Local', Arial, sans-serif;
 }
-#experience .experience-save-menu { position: relative; }
-#experience .experience-save-list {
+body.persona-design #experience .experience-save-menu { position: relative; }
+body.persona-design #experience .experience-save-list {
   position: relative;
   display: grid;
   grid-template-rows: repeat(3, var(--experience-row-height));
@@ -45,7 +45,7 @@ body.persona-design #experience .section-header p {
   overflow: visible; overflow-anchor: none;
   height: calc(var(--experience-row-height) * var(--experience-visible-count, 3));
 }
-#experience .experience-save-option {
+body.persona-design #experience .experience-save-option {
   /* Let the marker column give up space before the description column. */
   --sphere-size: clamp(5rem, calc(100vw - 59.375rem), 15.625rem);
   --sphere-width: var(--sphere-size);
@@ -66,9 +66,9 @@ body.persona-design #experience .section-header p {
   color: var(--save-ink);
   background: transparent;
 }
-#experience .experience-save-option[hidden],
-#experience .experience-save-menu:not([data-ready]) .experience-save-option:nth-child(n+4) { display: none; }
-#experience .experience-save-menu[data-measuring] .experience-save-option {
+body.persona-design #experience .experience-save-option[hidden],
+body.persona-design #experience .experience-save-menu:not([data-ready]) .experience-save-option:nth-child(n+4) { display: none; }
+body.persona-design #experience .experience-save-menu[data-measuring] .experience-save-option {
   display: grid !important;
   position: absolute;
   width: 100%;
@@ -76,15 +76,15 @@ body.persona-design #experience .section-header p {
   visibility: hidden;
   pointer-events: none;
 }
-#experience .experience-save-option[aria-selected="true"] {
+body.persona-design #experience .experience-save-option[aria-selected="true"] {
   z-index: 2;
   color: var(--save-disc);
   background: repeating-conic-gradient(var(--save-black) 0 25%, var(--save-check) 0 50%) 0 0 / 0.75rem 0.75rem;
 }
 /* Keyboard focus is shown by underlining the selected title, not an outline box. */
-#experience .experience-save-list:focus { outline: none; }
+body.persona-design #experience .experience-save-list:focus { outline: none; }
 /* "To be continued" rows pad both ends so the selection stays in the middle. */
-#experience .experience-save-filler { cursor: default; }
+body.persona-design #experience .experience-save-filler { cursor: default; }
 /* Deep-gold lettering stays legible across the orange-to-yellow field; the
    bright yellow underline keeps the requested two-color Persona treatment. */
 body.persona-design #experience .experience-save-filler .experience-save-continued {
@@ -107,21 +107,21 @@ body.persona-design #experience .experience-save-filler .experience-save-number 
   color: var(--save-ink) !important;
   -webkit-text-fill-color: currentColor;
 }
-#experience .experience-save-list:focus-visible .experience-save-option[aria-selected="true"] h3 {
+body.persona-design #experience .experience-save-list:focus-visible .experience-save-option[aria-selected="true"] h3 {
   text-decoration: underline;
   text-underline-offset: 0.3125rem;
 }
-#experience .experience-save-option[data-position="first"] { grid-row: 1; --sphere-offset: calc(-1 * var(--sphere-stagger)); }
-#experience .experience-save-option[data-position="middle"] { grid-row: 2; }
-#experience .experience-save-option[data-position="last"] { grid-row: 3; --sphere-offset: var(--sphere-stagger); }
-#experience .experience-save-option:hover:not([aria-selected="true"], .experience-save-filler) { box-shadow: inset 0.25rem 0 var(--save-ink); }
-#experience .experience-save-copy { position: relative; grid-column: 2; }
+body.persona-design #experience .experience-save-option[data-position="first"] { grid-row: 1; --sphere-offset: calc(-1 * var(--sphere-stagger)); }
+body.persona-design #experience .experience-save-option[data-position="middle"] { grid-row: 2; }
+body.persona-design #experience .experience-save-option[data-position="last"] { grid-row: 3; --sphere-offset: var(--sphere-stagger); }
+body.persona-design #experience .experience-save-option:hover:not([aria-selected="true"], .experience-save-filler) { box-shadow: inset 0.25rem 0 var(--save-ink); }
+body.persona-design #experience .experience-save-copy { position: relative; grid-column: 2; }
 body.persona-design #experience .experience-save-copy :is(h3, p, li, strong, span) {
   color: inherit !important;
   -webkit-text-fill-color: currentColor;
   font-family: 'Persona Slim Local', Arial, sans-serif;
 }
-#experience .experience-save-heading-row {
+body.persona-design #experience .experience-save-heading-row {
   display: flex;
   align-items: center;
   gap: 0.875rem;
@@ -135,10 +135,10 @@ body.persona-design #experience .experience-save-copy h3 {
   -webkit-text-stroke: 0;
 }
 /* The shared `logo` thumbnail is for /original/; Persona uses disc marks. */
-#experience .experience-save-logo-frame { display: none; }
+body.persona-design #experience .experience-save-logo-frame { display: none; }
 /* Company mark printed on the disc, like the sakura on P4G's selected save
    disc: tone-on-tone on gold discs, pale on the selected blue one. */
-#experience .experience-save-mark {
+body.persona-design #experience .experience-save-mark {
   position: absolute;
   right: -4%;
   bottom: -2%;
@@ -151,13 +151,13 @@ body.persona-design #experience .experience-save-copy h3 {
   transform: rotate(-12deg);
   pointer-events: none;
 }
-#experience [aria-selected="true"] .experience-save-mark {
+body.persona-design #experience [aria-selected="true"] .experience-save-mark {
   background: var(--save-white);
   opacity: .62;
 }
 /* Full-color company logo after the name, on a white save-file chip so brand
    colors read on both the gold rows and the black selected band. */
-#experience .experience-save-name-logo {
+body.persona-design #experience .experience-save-name-logo {
   display: inline-block;
   box-sizing: content-box;
   /* A fixed square keeps the chip sized before the lazy image loads. */
@@ -172,10 +172,10 @@ body.persona-design #experience .experience-save-copy h3 {
   background: var(--save-white);
   box-shadow: 2px 2px 0 var(--save-black);
 }
-#experience .experience-save-meta { margin: 0 0 0.5rem; font-size: .875rem; }
-#experience .experience-save-date { font-style: italic; }
-#experience .experience-save-summary { list-style: none; margin: 0; padding: 0; max-width: none; font-size: .875rem; line-height: 1.35; }
-#experience .experience-save-summary li + li { margin-top: 0.25rem; }
+body.persona-design #experience .experience-save-meta { margin: 0 0 0.5rem; font-size: .875rem; }
+body.persona-design #experience .experience-save-date { font-style: italic; }
+body.persona-design #experience .experience-save-summary { list-style: none; margin: 0; padding: 0; max-width: none; font-size: .875rem; line-height: 1.35; }
+body.persona-design #experience .experience-save-summary li + li { margin-top: 0.25rem; }
 body.persona-design #experience .experience-save-copy .experience-save-impact {
   display: table;
   max-width: 100%;
@@ -192,7 +192,7 @@ body.persona-design #experience [aria-selected="true"] .experience-save-copy .ex
   background: var(--save-disc);
   color: var(--save-black) !important;
 }
-#experience .experience-save-sphere {
+body.persona-design #experience .experience-save-sphere {
   --sphere-glow: var(--save-disc-light);
   position: absolute;
   left: calc(var(--row-left-padding) + var(--sphere-offset));
@@ -209,7 +209,7 @@ body.persona-design #experience [aria-selected="true"] .experience-save-copy .ex
   color: var(--save-ink) !important;
   font: italic 700 clamp(2.2rem, calc(var(--sphere-size) * .7), 11rem)/1 'Persona Slim Local', Arial, sans-serif;
 }
-#experience .experience-save-number {
+body.persona-design #experience .experience-save-number {
   position: absolute;
   left: 10%;
   top: 15%;
@@ -225,14 +225,14 @@ body.persona-design #experience .experience-save-option[aria-selected="true"] .e
   color: var(--save-black) !important;
   -webkit-text-fill-color: currentColor;
 }
-#experience [aria-selected="true"] .experience-save-sphere {
+body.persona-design #experience [aria-selected="true"] .experience-save-sphere {
   --sphere-glow: var(--save-selected-disc-light);
   color: var(--save-black) !important;
   transform: translateY(-50%) scale(1.3);
   background: radial-gradient(circle at 30% 24%, var(--save-selected-disc-light), var(--save-selected-disc) 46%, var(--save-selected-disc-shadow));
 }
-#experience .experience-save-sphere::before,
-#experience .experience-save-sphere::after {
+body.persona-design #experience .experience-save-sphere::before,
+body.persona-design #experience .experience-save-sphere::after {
   content: '';
   position: absolute;
   z-index: -1;
@@ -244,13 +244,38 @@ body.persona-design #experience .experience-save-option[aria-selected="true"] .e
   opacity: .65;
   pointer-events: none;
 }
-#experience .experience-save-sphere::before { top: -5%; left: -5%; }
-#experience .experience-save-sphere::after {
+body.persona-design #experience .experience-save-sphere::before { top: -5%; left: -5%; }
+body.persona-design #experience .experience-save-sphere::after {
   top: 18%; left: -38%; width: 100%; height: 110%;
   background: var(--save-white); opacity: .25; filter: none;
   transform: rotate(-28deg);
 }
-#experience .experience-save-controls {
+/* A pale circular reflection drifts inside the selected blue disc. With a
+   90% diameter and these edge offsets, roughly one third of its area falls
+   outside the sphere at each turnaround. The sphere clips that overflow. */
+body.persona-design #experience [aria-selected="true"] .experience-save-sphere::after {
+  top: 5%;
+  left: 5%;
+  width: 90%;
+  height: 90%;
+  transform: translate(-28%, 0);
+  animation: experience-save-reflection-drift 4.8s ease-in-out infinite alternate;
+  animation-play-state: paused;
+}
+body.persona-design #experience [data-reflection-active="true"] [aria-selected="true"] .experience-save-sphere::after {
+  animation-play-state: running;
+}
+@keyframes experience-save-reflection-drift {
+  0% { transform: translate(-32%, -12%); }
+  50% { transform: translate(-24%, 0); }
+  100% { transform: translate(-32%, 12%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.persona-design #experience [aria-selected="true"] .experience-save-sphere::after {
+    animation: none;
+  }
+}
+body.persona-design #experience .experience-save-controls {
   position: absolute;
   /* Keep each 44px arrow fully on the yellow row outside the selection. */
   top: calc(var(--selected-row-top, 13.75rem) - 3.5rem);
@@ -259,7 +284,7 @@ body.persona-design #experience .experience-save-option[aria-selected="true"] .e
   display: flex; flex-direction: column; justify-content: space-between;
   pointer-events: none;
 }
-#experience .experience-save-controls button {
+body.persona-design #experience .experience-save-controls button {
   display: grid; place-items: center; width: 2.75rem; height: 2.75rem;
   flex: 0 0 2.75rem;
   padding: 0.625rem; border: 0; border-radius: 0;
@@ -267,23 +292,23 @@ body.persona-design #experience .experience-save-option[aria-selected="true"] .e
   pointer-events: auto;
   box-shadow: none !important; cursor: pointer;
 }
-#experience .experience-save-controls svg { width: 1.5rem; height: 1.5rem; fill: currentColor; stroke: var(--save-yellow); stroke-width: 2px; paint-order: stroke fill; }
-#experience .experience-save-controls button:disabled { opacity: .4; cursor: default; }
-#experience .experience-save-controls button:focus-visible { outline: 3px solid var(--save-black); outline-offset: 2px; }
-#experience .experience-save-stars { display: none; position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
-#experience [aria-selected="true"] .experience-save-stars { display: block; }
-#experience .experience-save-stars i {
+body.persona-design #experience .experience-save-controls svg { width: 1.5rem; height: 1.5rem; fill: currentColor; stroke: var(--save-yellow); stroke-width: 2px; paint-order: stroke fill; }
+body.persona-design #experience .experience-save-controls button:disabled { opacity: .4; cursor: default; }
+body.persona-design #experience .experience-save-controls button:focus-visible { outline: 3px solid var(--save-black); outline-offset: 2px; }
+body.persona-design #experience .experience-save-stars { display: none; position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+body.persona-design #experience [aria-selected="true"] .experience-save-stars { display: block; }
+body.persona-design #experience .experience-save-stars i {
   position: absolute; width: 4.25rem; height: 4.25rem;
   background: var(--save-star); opacity: .65;
   clip-path: polygon(50% 0, 60% 38%, 100% 50%, 60% 62%, 50% 100%, 40% 62%, 0 50%, 40% 38%);
 }
-#experience .experience-save-stars i:nth-child(1) { left: 3%; top: 40%; }
-#experience .experience-save-stars i:nth-child(2) { left: 40%; top: 6%; width: 2.375rem; height: 2.375rem; }
-#experience .experience-save-stars i:nth-child(3) { right: 16%; bottom: 8%; }
-#experience .experience-save-stars i:nth-child(4) { right: 2%; top: 10%; width: 6.25rem; height: 6.25rem; }
+body.persona-design #experience .experience-save-stars i:nth-child(1) { left: 3%; top: 40%; }
+body.persona-design #experience .experience-save-stars i:nth-child(2) { left: 40%; top: 6%; width: 2.375rem; height: 2.375rem; }
+body.persona-design #experience .experience-save-stars i:nth-child(3) { right: 16%; bottom: 8%; }
+body.persona-design #experience .experience-save-stars i:nth-child(4) { right: 2%; top: 10%; width: 6.25rem; height: 6.25rem; }
 @media (max-width: 899px) {
-  #experience .experience-save-option { --sphere-size: clamp(3.5rem, 18vw, 5rem); --sphere-stagger: 0.75rem; }
-  #experience .experience-save-sphere { font-size: 2.8rem; }
+  body.persona-design #experience .experience-save-option { --sphere-size: clamp(3.5rem, 18vw, 5rem); --sphere-stagger: 0.75rem; }
+  body.persona-design #experience .experience-save-sphere { font-size: 2.8rem; }
 }
 @media (max-width: 600px) {
   body.persona-design #experience .experience-save-filler .experience-save-continued {
@@ -292,13 +317,13 @@ body.persona-design #experience .experience-save-option[aria-selected="true"] .e
   }
   body.persona-design #experience { padding-bottom: max(1.75rem, env(safe-area-inset-bottom)); }
   body.persona-design #experience .section-header { margin-bottom: 0.5rem; }
-  #experience .experience-save-menu { padding-top: 3.75rem; }
-  #experience .experience-save-list {
+  body.persona-design #experience .experience-save-menu { padding-top: 3.75rem; }
+  body.persona-design #experience .experience-save-list {
     display: flex;
     flex-direction: column;
     height: auto !important;
   }
-  #experience .experience-save-option {
+  body.persona-design #experience .experience-save-option {
     --row-left-padding: 1.125rem;
     --sphere-size: 3.5rem;
     --sphere-width: 3.5rem;
@@ -309,32 +334,32 @@ body.persona-design #experience .experience-save-option[aria-selected="true"] .e
     height: auto !important;
     padding: 0.875rem 1rem 0.875rem var(--row-left-padding);
   }
-  #experience .experience-save-option[aria-selected="true"] {
+  body.persona-design #experience .experience-save-option[aria-selected="true"] {
     min-height: 0;
     padding-block: 1.375rem;
   }
-  #experience .experience-save-copy { grid-column: 2; }
+  body.persona-design #experience .experience-save-copy { grid-column: 2; }
   body.persona-design #experience .experience-save-copy h3 {
     font-size: 1.08rem;
     line-height: 1.22;
   }
-  #experience .experience-save-heading-row { margin-bottom: 0.3125rem; }
-  #experience .experience-save-meta {
+  body.persona-design #experience .experience-save-heading-row { margin-bottom: 0.3125rem; }
+  body.persona-design #experience .experience-save-meta {
     margin-bottom: 0;
     font-size: .875rem;
     line-height: 1.35;
   }
-  #experience .experience-save-summary,
+  body.persona-design #experience .experience-save-summary,
   body.persona-design #experience .experience-save-copy .experience-save-impact {
     display: none;
   }
-  #experience .experience-save-option[aria-selected="true"] .experience-save-summary {
+  body.persona-design #experience .experience-save-option[aria-selected="true"] .experience-save-summary {
     display: block;
     margin-top: 0.75rem;
     font-size: .975rem;
     line-height: 1.5;
   }
-  #experience .experience-save-option[aria-selected="true"] .experience-save-summary li:nth-child(n+2) {
+  body.persona-design #experience .experience-save-option[aria-selected="true"] .experience-save-summary li:nth-child(n+2) {
     display: none;
   }
   body.persona-design #experience .experience-save-option[aria-selected="true"] .experience-save-impact {
@@ -343,14 +368,14 @@ body.persona-design #experience .experience-save-option[aria-selected="true"] .e
     padding: 0.3125rem 0.75rem;
     font-size: .875rem;
   }
-  #experience .experience-save-sphere {
+  body.persona-design #experience .experience-save-sphere {
     left: var(--row-left-padding);
     font-size: 2.35rem;
   }
-  #experience [aria-selected="true"] .experience-save-sphere {
+  body.persona-design #experience [aria-selected="true"] .experience-save-sphere {
     transform: translateY(-50%) scale(1.12);
   }
-  #experience .experience-save-controls {
+  body.persona-design #experience .experience-save-controls {
     top: 0;
     right: 0.875rem;
     width: 6.25rem;
@@ -360,4 +385,50 @@ body.persona-design #experience .experience-save-option[aria-selected="true"] .e
     justify-content: space-between;
   }
 }
-/* Circle squash/stretch and numeral bounce respect reduced motion in the controller. */
+/* The band is outside the animated rows: only badges and metadata travel.
+   Three settled rows plus a temporary outgoing row are clipped to this window. */
+body.persona-design #experience .experience-save-menu[data-ready] { isolation: isolate; }
+body.persona-design #experience .experience-save-menu[data-ready] .experience-save-list {
+  overflow: clip;
+  /* Also clip promoted/absolutely positioned exit layers at the viewport. */
+  clip-path: inset(0);
+}
+body.persona-design #experience .experience-save-band {
+  position: absolute;
+  inset-inline: 0;
+  top: var(--selected-row-top);
+  height: var(--selected-row-height);
+  z-index: -1;
+  pointer-events: none;
+  background: repeating-conic-gradient(var(--save-black) 0 25%, var(--save-check) 0 50%) 0 0 / 0.75rem 0.75rem;
+}
+body.persona-design #experience .experience-save-band .experience-save-stars { display: block; }
+body.persona-design #experience .experience-save-menu[data-ready] .experience-save-option { background: transparent; }
+body.persona-design #experience .experience-save-menu[data-ready] .experience-save-option .experience-save-stars { display: none; }
+body.persona-design #experience .experience-save-option[data-leaving] {
+  position: absolute;
+  inset-inline: 0;
+  grid-area: auto;
+  top: var(--experience-exit-top);
+  height: var(--experience-exit-height);
+  pointer-events: none;
+}
+@media (max-width: 600px) {
+  /* Reserve the tallest expanded entry and compact neighbour once, keeping
+     the band, controls and following section still through every selection. */
+  body.persona-design #experience .experience-save-menu[data-ready] .experience-save-list {
+    display: grid;
+    grid-template-rows: var(--experience-compact-height) var(--experience-row-height) var(--experience-compact-height);
+    height: calc(var(--experience-row-height) + 2 * var(--experience-compact-height)) !important;
+  }
+  body.persona-design #experience .experience-save-menu[data-ready] .experience-save-option {
+    height: 100% !important;
+  }
+  body.persona-design #experience .experience-save-menu[data-ready] .experience-save-option[data-leaving] {
+    height: var(--experience-exit-height) !important;
+  }
+}
+/* Measurement must override the responsive row heights, including after resize. */
+body.persona-design #experience .experience-save-menu[data-measuring] .experience-save-option {
+  height: auto !important;
+}
